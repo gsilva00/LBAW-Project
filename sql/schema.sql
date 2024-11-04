@@ -288,27 +288,22 @@ CREATE TABLE UpvoterticleNotification(
     article_id INTEGER REFERENCES ArticlePage (id) ON UPDATE CASCADE NOT NULL
 );
 
--- Indexes
+-- Performance Indexes
 
 --I1
-CREATE UNIQUE INDEX idx_user_username ON Users(username);
+CREATE INDEX i_article_author ON ArticlePage (author_id); 
 --I2
-CREATE INDEX idx_articlepage_createdate ON ArticlePage(create_date DESC);
+CREATE INDEX i_article_tag ON ArticleTag (article_id, tag_id);
 --I3
-CREATE INDEX idx_followuser_useridfollow_followeduserid ON FollowUser(follower_id, following_id);
---I4
-CREATE INDEX idx_topic_name ON Topic(name);
---I5
-CREATE INDEX idx_tag_name ON Tag(name);
---I6
-CREATE INDEX idx_article_tag ON ArticleTag(article_id, tag_id);
+CREATE INDEX i_article_cdate ON ArticlePage(create_date DESC);
+
 
 --Full Text Search Indexes
 ALTER TABLE ArticlePage
 ADD COLUMN tsv tsvector;
 
 UPDATE ArticlePage 
-SET tsv = to_tsvector(COALESCE(title, '') || ' ' || COALESCE(subtitle, '') || ' ' || COALESCE(content, ''));
+SET tsv = to_tsvector(COALESCE(TRIM(title || ' ' || subtitle || ' ' ||content), ''));
 
 CREATE OR REPLACE FUNCTION articlepage_tsv_trigger() RETURNS trigger AS $$
 BEGIN
@@ -321,13 +316,47 @@ CREATE TRIGGER tsvupdate
 BEFORE INSERT OR UPDATE ON ArticlePage
 FOR EACH ROW EXECUTE FUNCTION articlepage_tsv_trigger();
 
-
+--I4
 CREATE INDEX idx_articlepage_tsv ON ArticlePage USING GIN(tsv);
 
---Consultas Full-Text Search
+ALTER TABLE Comment ADD COLUMN tsv tsvector;
+UPDATE Comment SET tsv = to_tsvector(content);
 
--- Functions
+CREATE OR REPLACE FUNCTION update_comment_tsv() RETURNS trigger AS $$
+BEGIN
+    NEW.tsv := to_tsvector(NEW.content);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
+CREATE TRIGGER update_comment_tsv_trigger
+BEFORE INSERT OR UPDATE ON Comment
+FOR EACH ROW EXECUTE FUNCTION update_comment_tsv();
+
+--I5
+CREATE INDEX idx_comment_tsv ON Comment USING GIN(tsv);
+
+ALTER TABLE Reply ADD COLUMN tsv tsvector;
+
+UPDATE Reply SET tsv = to_tsvector(content);
+
+CREATE OR REPLACE FUNCTION update_reply_tsv() RETURNS trigger AS $$
+BEGIN
+    NEW.tsv := to_tsvector(NEW.content);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_reply_tsv_trigger
+BEFORE INSERT OR UPDATE ON Reply
+FOR EACH ROW EXECUTE FUNCTION update_reply_tsv();
+
+--I6
+CREATE INDEX idx_reply_tsv ON Reply USING GIN(tsv);
+
+-- Functions/Triggers
+
+--TR1
 CREATE OR REPLACE FUNCTION notify_comment() RETURNS trigger AS $$
 DECLARE
     author_id INTEGER;
@@ -351,7 +380,7 @@ CREATE TRIGGER comment_notify_trigger
 AFTER INSERT ON Comment
 FOR EACH ROW EXECUTE FUNCTION notify_comment();
 
-
+--TR2
 CREATE OR REPLACE FUNCTION notify_reply() RETURNS trigger AS $$
 DECLARE
     article_author_id INTEGER;
@@ -375,7 +404,7 @@ CREATE TRIGGER reply_notify_trigger
 AFTER INSERT ON Reply
 FOR EACH ROW EXECUTE FUNCTION notify_reply();
 
-
+--TR3
 CREATE OR REPLACE FUNCTION update_edit_date() RETURNS trigger AS $$
 BEGIN
     NEW.edit_date := CURRENT_TIMESTAMP;
@@ -391,8 +420,7 @@ WHEN (OLD.title IS DISTINCT FROM NEW.title OR
       OLD.content IS DISTINCT FROM NEW.content)
 EXECUTE FUNCTION update_edit_date();
 
-
-
+--TR4
 CREATE OR REPLACE FUNCTION prevent_self_follow() RETURNS trigger AS $$
 BEGIN
     IF NEW.follower_id = NEW.following_id THEN
@@ -406,8 +434,7 @@ CREATE TRIGGER prevent_self_follow_trigger
 BEFORE INSERT ON FollowUser
 FOR EACH ROW EXECUTE FUNCTION prevent_self_follow();
 
-
-
+--TR5
 CREATE OR REPLACE FUNCTION prevent_multiple_likes_article() RETURNS trigger AS $$
 BEGIN
     IF EXISTS (SELECT 1 FROM VoteArticle WHERE user_id = NEW.user_id AND article_id = NEW.article_id) THEN
@@ -421,6 +448,7 @@ CREATE TRIGGER prevent_multiple_likes_trigger_article
 BEFORE INSERT ON VoteArticle
 FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_article();
 
+--TR6
 CREATE OR REPLACE FUNCTION prevent_multiple_likes_comment() RETURNS trigger AS $$
 BEGIN
     IF EXISTS (SELECT 1 FROM VoteComment WHERE user_id = NEW.user_id AND comment_id = NEW.comment_id) THEN
@@ -434,6 +462,7 @@ CREATE TRIGGER prevent_multiple_likes_trigger_comment
 BEFORE INSERT ON VoteComment
 FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_comment();
 
+--TR7
 CREATE OR REPLACE FUNCTION prevent_multiple_likes_reply() RETURNS trigger AS $$
 BEGIN
     IF EXISTS (SELECT 1 FROM VoteReply WHERE user_id = NEW.user_id AND reply_id = NEW.reply_id) THEN
@@ -447,6 +476,7 @@ CREATE TRIGGER prevent_multiple_likes_trigger_reply
 BEFORE INSERT ON VoteReply
 FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_reply();
 
+--TR8
 CREATE OR REPLACE FUNCTION handle_report() RETURNS trigger AS $$
 BEGIN
     IF NEW.status = 'accepted' AND NEW.handled_by IS NOT NULL THEN
