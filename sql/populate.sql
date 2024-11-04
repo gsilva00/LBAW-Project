@@ -1,8 +1,40 @@
-INSERT INTO User (id, display_name, username, email, password, profile_picture, description, reputation, upvote_notification, comment_notification, is_banned, is_admin, is_fact_checker) VALUES
+SET DateStyle TO European;
+
+TRUNCATE TABLE Users CASCADE;
+TRUNCATE TABLE FollowUser CASCADE;
+TRUNCATE TABLE Topic CASCADE;
+TRUNCATE TABLE FollowTopic CASCADE;
+TRUNCATE TABLE Tag CASCADE;
+TRUNCATE TABLE FollowTag CASCADE;
+TRUNCATE TABLE ArticlePage CASCADE;
+TRUNCATE TABLE ArticleTag CASCADE;
+TRUNCATE TABLE VoteArticle CASCADE;
+TRUNCATE TABLE FavouriteArcticle CASCADE;
+TRUNCATE TABLE CheckArticle CASCADE;
+TRUNCATE TABLE Comment CASCADE;
+TRUNCATE TABLE VoteComment CASCADE;
+TRUNCATE TABLE Reply CASCADE;
+TRUNCATE TABLE VoteReply CASCADE;
+TRUNCATE TABLE Notifications CASCADE;
+TRUNCATE TABLE CommentNotification CASCADE;
+TRUNCATE TABLE ReplyNotification CASCADE;
+TRUNCATE TABLE UpvoteArticleNotification CASCADE;
+TRUNCATE TABLE UpvoteCommentNotification CASCADE;
+TRUNCATE TABLE UpvoteReplyNotification CASCADE;
+TRUNCATE TABLE Report CASCADE;
+TRUNCATE TABLE ReportArticle CASCADE;
+TRUNCATE TABLE ReportComment CASCADE;
+TRUNCATE TABLE ReportUser CASCADE;
+TRUNCATE TABLE AppealToUnban CASCADE;
+TRUNCATE TABLE AskToBecomeFactChecker CASCADE;
+TRUNCATE TABLE ProposeNewTag CASCADE;
+
+INSERT INTO Users (id, display_name, username, email, password, profile_picture, description, reputation, upvote_notification, comment_notification, is_banned, is_admin, is_fact_checker) VALUES
 (1, 'Alice Johnson', 'alicej', 'alice@example.com', 'password123', 'pic1.jpg', 'Enthusiastic writer', 5, true, true, false, false, true),
 (2, 'Bob Smith', 'bobsmith', 'bob@example.com', 'password123', 'pic2.jpg', 'Tech enthusiast', 3, true, true, false, false, false),
 (3, 'Carol White', 'carolw', 'carol@example.com', 'password123', 'pic3.jpg', 'Fact checker', 2, true, true, false, false, false),
-(4, 'John Admin', 'notAdmin', 'admin@example.com', 'password123', 'pic4.jpg', 'Admin', 4, true, true, false, true, true);
+(4, 'John Admin', 'notAdmin', 'admin@example.com', 'password123', 'pic4.jpg', 'Admin', 4, true, true, false, true, true),
+(5, 'Miguel Sousa', 'miguelS', 'miguels@example.com', 'password123', 'pic5.jpg', 'Portuguese writer', 0, true, true, true, false, false);
 
 INSERT INTO FollowUser (follower_id, following_id) VALUES
 (1, 2),
@@ -29,7 +61,7 @@ INSERT INTO Tag (id, name, is_trending) VALUES
 (3, 'COVID-19', false),
 (4, 'American Elections', true),
 (5, 'Space', false),
-(6, "Vaccines", false);
+(6, 'Vaccines', false);
 
 INSERT INTO FollowTag (user_id, tag_id) VALUES
 (1, 1),
@@ -48,11 +80,11 @@ INSERT INTO ArticleTag (article_id, tag_id) VALUES
 (3, 3),
 (3, 6);
 
-INSERT INTO VoteArticle (user_id, article_id, is_upvote) VALUES
-(1, 1, true),
-(1, 2, true),
-(2, 1, true),
-(3, 2, false);
+INSERT INTO VoteArticle (user_id, article_id, type) VALUES
+(1, 1, 'Upvote'),
+(1, 2, 'Upvote'),
+(2, 1, 'Upvote'),
+(3, 2, 'Downvote');
 
 INSERT INTO FavouriteArcticle (user_id, article_id) VALUES
 (1, 1),
@@ -68,43 +100,33 @@ INSERT INTO Comment (id, content, cmt_date, upvotes, downvotes, is_edited, is_de
 (1, 'Great insights!', '2024-01-02 12:00', 2, 0, false, false, 2, 1),
 (2, 'I disagree with...', '2024-01-03 13:00', 0, 2, false, false, 3, 1);
 
-INSERT INTO VoteComment (user_id, comment_id, is_upvote) VALUES
-(1, 1, true),
-(1, 2, false),
-(2, 1, true),
-(3, 2, false);
+INSERT INTO VoteComment (user_id, comment_id, type) VALUES
+(1, 1, 'Upvote'),
+(1, 2, 'Downvote'),
+(2, 1, 'Upvote'),
+(3, 2, 'Downvote');
 
-INSERT INTO Reply (id, body, rpl_date, upvotes, downvotes, is_edited, is_deleted, author_id, comment_id) VALUES
+INSERT INTO Reply (id, content, rpl_date, upvotes, downvotes, is_edited, is_deleted, author_id, comment_id) VALUES
 (1, 'I see your point!', '2024-01-02 12:30', 3, 0, false, false, 1, 2);
 
-INSERT INTO VoteReply (user_id, reply_id, is_upvote) VALUES
-(1, 1, true),
-(2, 1, true),
-(3, 1, true);
-
-INSERT INTO Notification (id, ntf_date, is_viewed, user_to, user_from) VALUES
-(1, '2024-01-02 12:00', false, 1, 2),
-(2, '2024-01-03 13:00', true, 1, 3),
-(3, '2024-01-03 13:00', false, 2, 3),
-(4, '2024-01-03 13:00', true, 1, 1),
-(5, '2024-01-03 13:00', false, 2, 1),
-(6, '2024-01-03 13:00', false, 1, 2),
-(7, '2024-01-03 13:00', false, 2, 1),
-(8, '2024-01-03 13:00', true, 1, 1),
-(9, '2024-01-03 13:00', false, 2, 1),
-(10, '2024-01-03 13:00', true, 3, 1);
+INSERT INTO VoteReply (user_id, reply_id, type) VALUES
+(1, 1, 'Upvote'),
+(2, 1, 'Upvote'),
+(3, 1, 'Upvote');
 
 
-INSERT INTO NotificationComment (id, ntf_id,comment_id) VALUES
-(1, 1, 1),
-(2, 2, 2);
-
-INSERT INTO NotificationReply (id, ntf_id, reply_id) VALUES
-(1, 3, 1);
+INSERT INTO Notifications (id, ntf_date, is_viewed, user_to, user_from) VALUES
+(4, '20/9/17 0:00', true, 1, 1),
+(5, '23/3/17 0:00', false, 2, 1),
+(6, '23/3/17 0:00', false, 1, 2),
+(7, '8/10/17 0:00', false, 2, 1),
+(8, '20/9/17 0:00', true, 1, 1),
+(9, '11/9/21 0:00', false, 2, 1),
+(10,'8/10/17 0:00', true, 3, 1);
 
 INSERT INTO UpvoteArticleNotification (id, ntf_id, article_id) VALUES
 (1, 4, 1),
-(3, 5, 1),
+(2, 5, 1);
 
 INSERT INTO UpvoteCommentNotification (id, ntf_id, comment_id) VALUES
 (1, 6, 1),
@@ -130,13 +152,13 @@ INSERT INTO ReportUser (id, type, report_id, user_id) VALUES
 (1, 'Violence or Sexual Content', 3, 2);
 
 INSERT INTO AppealToUnban(id , description, user_id) VALUES
-(1, 'I am sorry for my actions', '2024-01-02 12:00', false, 1);
+(1, 'I am sorry for my actions', 5);
 
 INSERT INTO AskToBecomeFactChecker(id, user_id) VALUES
-(1, 'I would like to become a fact checker', '2024-01-02 12:00', false, 2);
+(1, 1);
 
 INSERT INTO ProposeNewTag(id, name, user_id) VALUES
-(1, 'New Tag', 1),
-(2, 'Another Tag', 2);
+(1, 'Política portuguesa', 1),
+(2, 'Guerra na Ucrania', 2);
 
 
