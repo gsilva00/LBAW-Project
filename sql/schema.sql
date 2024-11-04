@@ -31,8 +31,6 @@ DROP TABLE IF EXISTS CommentNotification CASCADE;
 DROP TABLE IF EXISTS UpvoteCommentNotification CASCADE;
 DROP TABLE IF EXISTS UpvoterticleNotification CASCADE;
 
-DROP FUNCTION IF EXISTS articlepage_tsv_trigger();
-
 -- Tables
 
 --R01
@@ -44,12 +42,13 @@ CREATE TABLE Users(
     password VARCHAR(256),
     profile_picture VARCHAR(256) DEFAULT NULL,
     description VARCHAR(300),
-    reputation INT DEFAULT 0,
+    reputation INT DEFAULT 3,
     upvote_notification BOOLEAN DEFAULT TRUE,
     comment_notification BOOLEAN DEFAULT TRUE,
     is_banned BOOLEAN DEFAULT FALSE,
     is_admin BOOLEAN DEFAULT FALSE,
     is_fact_checker BOOLEAN DEFAULT FALSE,
+    is_deleted BOOLEAN DEFAULT FALSE,
     CHECK (reputation BETWEEN 0 AND 5)
 );
 
@@ -173,7 +172,9 @@ CREATE TABLE Reply(
     is_edited BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,
     author_id INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL,
-    comment_id INTEGER REFERENCES Comment (id) ON UPDATE CASCADE NOT NULL
+    comment_id INTEGER REFERENCES Comment (id) ON UPDATE CASCADE NOT NULL,
+    CHECK (upvotes >= 0),
+    CHECK (downvotes >= 0)
 );
 
 --R15
@@ -309,22 +310,156 @@ ADD COLUMN tsv tsvector;
 UPDATE ArticlePage 
 SET tsv = to_tsvector(COALESCE(title, '') || ' ' || COALESCE(subtitle, '') || ' ' || COALESCE(content, ''));
 
-CREATE FUNCTION articlepage_tsv_trigger() RETURNS trigger AS $$
+CREATE OR REPLACE FUNCTION articlepage_tsv_trigger() RETURNS trigger AS $$
 BEGIN
   NEW.tsv := to_tsvector(COALESCE(NEW.title, '') || ' ' || COALESCE(NEW.subtitle, '') || ' ' || COALESCE(NEW.content, ''));
   RETURN NEW;
-END
+END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER tsvupdate
 BEFORE INSERT OR UPDATE ON ArticlePage
 FOR EACH ROW EXECUTE FUNCTION articlepage_tsv_trigger();
 
+
 CREATE INDEX idx_articlepage_tsv ON ArticlePage USING GIN(tsv);
 
 --Consultas Full-Text Search
 
+-- Functions
 
--- Triggers
+CREATE OR REPLACE FUNCTION notify_comment() RETURNS trigger AS $$
+DECLARE
+    author_id INTEGER;
+    notification_id INTEGER;
+BEGIN
+    SELECT author_id INTO author_id FROM ArticlePage WHERE id = NEW.article_id;
 
--- Transactions
+    IF (SELECT comment_notification FROM Users WHERE id = author_id) THEN
+        INSERT INTO Notification (ntf_date, is_viewed, user_to, user_from)
+        VALUES (CURRENT_TIMESTAMP, FALSE, author_id, NEW.author_id)
+        RETURNING id INTO notification_id;
+
+        INSERT INTO CommentNotification (ntf_id, comment_id)
+        VALUES (notification_id, NEW.id);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER comment_notify_trigger
+AFTER INSERT ON Comment
+FOR EACH ROW EXECUTE FUNCTION notify_comment();
+
+
+CREATE OR REPLACE FUNCTION notify_reply() RETURNS trigger AS $$
+DECLARE
+    article_author_id INTEGER;
+    notification_id INTEGER;
+BEGIN
+    SELECT author_id INTO article_author_id FROM ArticlePage WHERE id = (SELECT article_id FROM Comment WHERE id = NEW.comment_id);
+
+    IF (SELECT comment_notification FROM Users WHERE id = article_author_id) THEN
+        INSERT INTO Notification (ntf_date, is_viewed, user_to, user_from)
+        VALUES (CURRENT_TIMESTAMP, FALSE, article_author_id, NEW.author_id)
+        RETURNING id INTO notification_id;
+
+        INSERT INTO ReplyNotification (ntf_id, reply_id)
+        VALUES (notification_id, NEW.id);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER reply_notify_trigger
+AFTER INSERT ON Reply
+FOR EACH ROW EXECUTE FUNCTION notify_reply();
+
+
+CREATE OR REPLACE FUNCTION update_edit_date() RETURNS trigger AS $$
+BEGIN
+    NEW.edit_date := CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_edit_date_trigger
+BEFORE UPDATE ON ArticlePage
+FOR EACH ROW
+WHEN (OLD.title IS DISTINCT FROM NEW.title OR
+      OLD.subtitle IS DISTINCT FROM NEW.subtitle OR
+      OLD.content IS DISTINCT FROM NEW.content)
+EXECUTE FUNCTION update_edit_date();
+
+
+
+CREATE OR REPLACE FUNCTION prevent_self_follow() RETURNS trigger AS $$
+BEGIN
+    IF NEW.follower_id = NEW.following_id THEN
+        RAISE EXCEPTION 'A user cannot follow themselves';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER prevent_self_follow_trigger
+BEFORE INSERT ON FollowUser
+FOR EACH ROW EXECUTE FUNCTION prevent_self_follow();
+
+
+
+CREATE OR REPLACE FUNCTION prevent_multiple_likes_article() RETURNS trigger AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM VoteArticle WHERE user_id = NEW.user_id AND article_id = NEW.article_id) THEN
+        RAISE EXCEPTION 'A user cannot like the same article more than once';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER prevent_multiple_likes_trigger_article
+BEFORE INSERT ON VoteArticle
+FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_article();
+
+CREATE OR REPLACE FUNCTION prevent_multiple_likes_comment() RETURNS trigger AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM VoteComment WHERE user_id = NEW.user_id AND comment_id = NEW.comment_id) THEN
+        RAISE EXCEPTION 'A user cannot like the same comment more than once';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER prevent_multiple_likes_trigger_comment
+BEFORE INSERT ON VoteComment
+FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_comment();
+
+CREATE OR REPLACE FUNCTION prevent_multiple_likes_reply() RETURNS trigger AS $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM VoteReply WHERE user_id = NEW.user_id AND reply_id = NEW.reply_id) THEN
+        RAISE EXCEPTION 'A user cannot like the same reply more than once';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER prevent_multiple_likes_trigger_reply
+BEFORE INSERT ON VoteReply
+FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_reply();
+
+CREATE OR REPLACE FUNCTION handle_report() RETURNS trigger AS $$
+BEGIN
+    IF NEW.status = 'accepted' AND NEW.handled_by IS NOT NULL THEN
+        IF (SELECT reputation FROM Users WHERE id = NEW.user_id) = 0 THEN
+            UPDATE Users SET is_banned = TRUE WHERE id = NEW.user_id;
+        ELSIF (SELECT reputation FROM Users WHERE id = NEW.user_id) > 0 THEN
+            UPDATE Users SET reputation = reputation - 1 WHERE id = NEW.user_id;
+        END IF;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER handle_report_trigger
+AFTER UPDATE ON Report
+FOR EACH ROW EXECUTE FUNCTION handle_report();
