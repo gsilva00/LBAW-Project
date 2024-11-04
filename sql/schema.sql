@@ -94,7 +94,7 @@ CREATE TABLE ArticlePage(
     content VARCHAR(10000),
     create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     edit_date TIMESTAMP DEFAULT NULL,
-    article_image VARCHAR(256),
+    article_image VARCHAR(256) DEFAULT NULL,
     upvotes INTEGER DEFAULT 0,
     downvotes INTEGER DEFAULT 0,
     is_edited BOOLEAN DEFAULT FALSE,
