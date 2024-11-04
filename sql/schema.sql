@@ -24,12 +24,12 @@ DROP TABLE IF EXISTS ReportUser CASCADE;
 DROP TABLE IF EXISTS ProposeNewTag CASCADE;
 DROP TABLE IF EXISTS AppealToUnban CASCADE;
 DROP TABLE IF EXISTS AskToBecomeFactChecker CASCADE;
-DROP TABLE IF EXISTS Notification CASCADE;
+DROP TABLE IF EXISTS Notifications CASCADE;
 DROP TABLE IF EXISTS ReplyNotification CASCADE;
 DROP TABLE IF EXISTS UpvoteReplyNotification CASCADE;
 DROP TABLE IF EXISTS CommentNotification CASCADE;
 DROP TABLE IF EXISTS UpvoteCommentNotification CASCADE;
-DROP TABLE IF EXISTS UpvoterticleNotification CASCADE;
+DROP TABLE IF EXISTS UpvoteArticleNotification CASCADE;
 
 -- Tables
 
@@ -245,47 +245,47 @@ CREATE TABLE AskToBecomeFactChecker(
 );
 
 --R23
-CREATE TABLE Notification(
+CREATE TABLE Notifications(
     id SERIAL PRIMARY KEY,
     ntf_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     is_viewed BOOLEAN DEFAULT FALSE,
-    user_to INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL,
-    user_from INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL
+    user_to INTEGER REFERENCES Users (id) ON UPDATE CASCADE ,
+    user_from INTEGER REFERENCES Users (id) ON UPDATE CASCADE 
 );
 
 --R24    
 CREATE TABLE ReplyNotification(
     id SERIAL PRIMARY KEY,
-    ntf_id INTEGER REFERENCES Notification (id) ON UPDATE CASCADE NOT NULL,
-    reply_id INTEGER REFERENCES Reply (id) ON UPDATE CASCADE NOT NULL
+    ntf_id INTEGER REFERENCES Notifications (id) ON UPDATE CASCADE,
+    reply_id INTEGER REFERENCES Reply (id) ON UPDATE CASCADE 
 );
 
 --R25
 CREATE TABLE UpvoteReplyNotification(
     id SERIAL PRIMARY KEY,
-    ntf_id INTEGER REFERENCES Notification (id) ON UPDATE CASCADE NOT NULL,
-    reply_id INTEGER REFERENCES Reply (id) ON UPDATE CASCADE NOT NULL
+    ntf_id INTEGER REFERENCES Notifications (id) ON UPDATE CASCADE,
+    reply_id INTEGER REFERENCES Reply (id) ON UPDATE CASCADE 
 );
 
 --R26
 CREATE TABLE CommentNotification(
     id SERIAL PRIMARY KEY,
-    ntf_id INTEGER REFERENCES Notification (id) ON UPDATE CASCADE NOT NULL,
-    comment_id INTEGER REFERENCES Comment (id) ON UPDATE CASCADE NOT NULL
+    ntf_id INTEGER REFERENCES Notifications (id) ON UPDATE CASCADE,
+    comment_id INTEGER REFERENCES Comment (id) ON UPDATE CASCADE 
 );
 
 --R27
 CREATE TABLE UpvoteCommentNotification(
     id SERIAL PRIMARY KEY,
-    ntf_id INTEGER REFERENCES Notification (id) ON UPDATE CASCADE NOT NULL,
-    comment_id INTEGER REFERENCES Comment (id) ON UPDATE CASCADE NOT NULL
+    ntf_id INTEGER REFERENCES Notifications (id) ON UPDATE CASCADE,
+    comment_id INTEGER REFERENCES Comment (id) ON UPDATE CASCADE
 );
 
 --R28
-CREATE TABLE UpvoterticleNotification(
+CREATE TABLE UpvoteArticleNotification(
     id SERIAL PRIMARY KEY,
-    ntf_id INTEGER REFERENCES Notification (id) ON UPDATE CASCADE NOT NULL,
-    article_id INTEGER REFERENCES ArticlePage (id) ON UPDATE CASCADE NOT NULL
+    ntf_id INTEGER REFERENCES Notifications (id) ON UPDATE CASCADE,
+    article_id INTEGER REFERENCES ArticlePage (id) ON UPDATE CASCADE
 );
 
 -- Performance Indexes
@@ -359,14 +359,14 @@ CREATE INDEX idx_reply_tsv ON Reply USING GIN(tsv);
 --TR1
 CREATE OR REPLACE FUNCTION notify_comment() RETURNS trigger AS $$
 DECLARE
-    author_id INTEGER;
+    author INTEGER;
     notification_id INTEGER;
 BEGIN
-    SELECT author_id INTO author_id FROM ArticlePage WHERE id = NEW.article_id;
+    SELECT author_id INTO author FROM ArticlePage WHERE id = NEW.article_id;
 
-    IF (SELECT comment_notification FROM Users WHERE id = author_id) THEN
-        INSERT INTO Notification (ntf_date, is_viewed, user_to, user_from)
-        VALUES (CURRENT_TIMESTAMP, FALSE, author_id, NEW.author_id)
+    IF (SELECT comment_notification FROM Users WHERE id = author) THEN
+        INSERT INTO Notifications (ntf_date, is_viewed, user_to, user_from)
+        VALUES (CURRENT_TIMESTAMP, FALSE, author, NEW.author_id)
         RETURNING id INTO notification_id;
 
         INSERT INTO CommentNotification (ntf_id, comment_id)
@@ -389,7 +389,7 @@ BEGIN
     SELECT author_id INTO article_author_id FROM ArticlePage WHERE id = (SELECT article_id FROM Comment WHERE id = NEW.comment_id);
 
     IF (SELECT comment_notification FROM Users WHERE id = article_author_id) THEN
-        INSERT INTO Notification (ntf_date, is_viewed, user_to, user_from)
+        INSERT INTO Notifications (ntf_date, is_viewed, user_to, user_from)
         VALUES (CURRENT_TIMESTAMP, FALSE, article_author_id, NEW.author_id)
         RETURNING id INTO notification_id;
 
