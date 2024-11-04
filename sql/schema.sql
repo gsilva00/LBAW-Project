@@ -31,6 +31,8 @@ DROP TABLE IF EXISTS CommentNotification CASCADE;
 DROP TABLE IF EXISTS UpvoteCommentNotification CASCADE;
 DROP TABLE IF EXISTS UpvoterticleNotification CASCADE;
 
+DROP FUNCTION IF EXISTS articlepage_tsv_trigger();
+
 -- Tables
 
 --R01
@@ -60,26 +62,28 @@ CREATE TABLE FollowUser(
 
 --R08
 CREATE TABLE Topic(
-    name VARCHAR(30) PRIMARY KEY UNIQUE
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(30)
 );
 
 --R09
 CREATE TABLE FollowTopic(
     user_id INTEGER REFERENCES Users (id) ON UPDATE CASCADE,
-    topic_id VARCHAR(30) REFERENCES Topic (name) ON UPDATE CASCADE,
+    topic_id INTEGER REFERENCES Topic (id) ON UPDATE CASCADE,
     PRIMARY KEY(user_id, topic_id)
 );
 
 --R10
 CREATE TABLE Tag(
-    name VARCHAR(30) PRIMARY KEY UNIQUE,
-    isTrending BOOLEAN DEFAULT FALSE
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(30),
+    is_trending BOOLEAN DEFAULT FALSE
 );
 
 --R11
 CREATE TABLE FollowTag(
     user_id INTEGER REFERENCES Users (id) ON UPDATE CASCADE,
-    tag_id VARCHAR(30) REFERENCES Tag (name) ON UPDATE CASCADE,
+    tag_id INTEGER REFERENCES Tag (id) ON UPDATE CASCADE,
     PRIMARY KEY(user_id, tag_id)
 );
 
@@ -96,7 +100,7 @@ CREATE TABLE ArticlePage(
     downvotes INTEGER DEFAULT 0,
     is_edited BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,
-    topic_id VARCHAR(30) REFERENCES Topic (name) ON UPDATE CASCADE NOT NULL,
+    topic_id INTEGER REFERENCES Topic (id) ON UPDATE CASCADE NOT NULL,
     author_id INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL,
     CHECK (edit_date IS NULL OR edit_date >= create_date),
     CHECK (upvotes >= 0),
@@ -106,7 +110,7 @@ CREATE TABLE ArticlePage(
 --R07
 CREATE TABLE ArticleTag(
     article_id INTEGER REFERENCES ArticlePage (id) ON UPDATE CASCADE,
-    tag_id VARCHAR(30) REFERENCES Tag (name) ON UPDATE CASCADE,
+    tag_id INTEGER REFERENCES Tag (id) ON UPDATE CASCADE,
     PRIMARY KEY(article_id, tag_id)
 );
 
@@ -144,8 +148,8 @@ CREATE TABLE Comment(
     downvotes INTEGER DEFAULT 0,
     is_edited BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,  
-    id_author INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL,
-    id_article INTEGER REFERENCES ArticlePage (id) ON UPDATE CASCADE NOT NULL,
+    author_id INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL,
+    article_id INTEGER REFERENCES ArticlePage (id) ON UPDATE CASCADE NOT NULL,
     CHECK (upvotes >= 0),
     CHECK (downvotes >= 0)
 );
@@ -168,8 +172,8 @@ CREATE TABLE Reply(
     downvotes INTEGER DEFAULT 0,
     is_edited BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,
-    id_author INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL,
-    id_comment INTEGER REFERENCES Comment (id) ON UPDATE CASCADE NOT NULL
+    author_id INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL,
+    comment_id INTEGER REFERENCES Comment (id) ON UPDATE CASCADE NOT NULL
 );
 
 --R15
@@ -187,7 +191,7 @@ CREATE TABLE Report(
     description VARCHAR(300),
     report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     is_accepted BOOLEAN DEFAULT FALSE,
-    id_reporter INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL
+    reporter_id INTEGER REFERENCES Users (id) ON UPDATE CASCADE NOT NULL
 );
 
 --R17
@@ -284,6 +288,42 @@ CREATE TABLE UpvoterticleNotification(
 );
 
 -- Indexes
+
+--I1
+CREATE UNIQUE INDEX idx_user_username ON Users(username);
+--I2
+CREATE INDEX idx_articlepage_createdate ON ArticlePage(create_date DESC);
+--I3
+CREATE INDEX idx_followuser_useridfollow_followeduserid ON FollowUser(follower_id, following_id);
+--I4
+CREATE INDEX idx_topic_name ON Topic(name);
+--I5
+CREATE INDEX idx_tag_name ON Tag(name);
+--I6
+CREATE INDEX idx_article_tag ON ArticleTag(article_id, tag_id);
+
+--Full Text Search Indexes
+ALTER TABLE ArticlePage
+ADD COLUMN tsv tsvector;
+
+UPDATE ArticlePage 
+SET tsv = to_tsvector(COALESCE(title, '') || ' ' || COALESCE(subtitle, '') || ' ' || COALESCE(content, ''));
+
+CREATE FUNCTION articlepage_tsv_trigger() RETURNS trigger AS $$
+BEGIN
+  NEW.tsv := to_tsvector(COALESCE(NEW.title, '') || ' ' || COALESCE(NEW.subtitle, '') || ' ' || COALESCE(NEW.content, ''));
+  RETURN NEW;
+END
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tsvupdate
+BEFORE INSERT OR UPDATE ON ArticlePage
+FOR EACH ROW EXECUTE FUNCTION articlepage_tsv_trigger();
+
+CREATE INDEX idx_articlepage_tsv ON ArticlePage USING GIN(tsv);
+
+--Consultas Full-Text Search
+
 
 -- Triggers
 
