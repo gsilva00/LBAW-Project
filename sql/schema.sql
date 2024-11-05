@@ -2,7 +2,7 @@ create schema if not exists lbaw24124;
 SET DateStyle TO European;
 
 -- Drop Tables
-DROP TABLE IF EXISTS Users CASCADE;
+
 DROP TABLE IF EXISTS FollowUser CASCADE;
 DROP TABLE IF EXISTS VoteArticle CASCADE;
 DROP TABLE IF EXISTS FavouriteArcticle CASCADE;
@@ -293,7 +293,7 @@ CREATE TABLE UpvoteArticleNotification(
 --I1
 CREATE INDEX i_article_author ON ArticlePage (author_id); 
 --I2
-CREATE INDEX i_article_tag ON ArticleTag (article_id, tag_id);
+CREATE INDEX i_notifications_date ON Notifications(ntf_date DESC);
 --I3
 CREATE INDEX i_article_cdate ON ArticlePage(create_date DESC);
 
