@@ -13,9 +13,20 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $path = base_path('database/thingy-seed.sql');
+        // Drop existing tables
+        DB::statement('DROP SCHEMA public CASCADE;');
+        DB::statement('CREATE SCHEMA public;');
+
+        // Seed the schema
+        $path = base_path('sql/schema.sql');
         $sql = file_get_contents($path);
         DB::unprepared($sql);
-        $this->command->info('Database seeded!');
+        $this->command->info('Schema seeded!');
+
+        // Seed the data
+        $dataPath = base_path('sql/populate.sql');
+        $dataSql = file_get_contents($dataPath);
+        DB::unprepared($dataSql);
+        $this->command->info('Data populated!');
     }
 }

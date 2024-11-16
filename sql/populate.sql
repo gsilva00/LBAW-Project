@@ -29,12 +29,14 @@ TRUNCATE TABLE AppealToUnban CASCADE;
 TRUNCATE TABLE AskToBecomeFactChecker CASCADE;
 TRUNCATE TABLE ProposeNewTag CASCADE;
 
-INSERT INTO Users (id, display_name, username, email, password, profile_picture, description, reputation, upvote_notification, comment_notification, is_banned, is_admin, is_fact_checker) VALUES
-(1, 'Alice Johnson', 'alicej', 'alice@example.com', 'password123', 'pic1.jpg', 'Enthusiastic writer', 5, true, true, false, false, true),
-(2, 'Bob Smith', 'bobsmith', 'bob@example.com', 'password123', 'pic2.jpg', 'Tech enthusiast', 3, true, true, false, false, false),
-(3, 'Carol White', 'carolw', 'carol@example.com', 'password123', 'pic3.jpg', 'Fact checker', 2, true, true, false, false, false),
-(4, 'John Admin', 'notAdmin', 'admin@example.com', 'password123', 'pic4.jpg', 'Admin', 4, true, true, false, true, true),
-(5, 'Miguel Sousa', 'miguelS', 'miguels@example.com', 'password123', 'pic5.jpg', 'Portuguese writer', 0, true, true, true, false, false);
+-- password: password123
+INSERT INTO Users (display_name, username, email, password, profile_picture, description, reputation, upvote_notification, comment_notification, is_banned, is_admin, is_fact_checker) VALUES
+('Alice Johnson', 'alicej', 'alice@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'pic1.jpg', 'Enthusiastic writer', 5, true, true, false, false, true),
+('Bob Smith', 'bobsmith', 'bob@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'pic2.jpg', 'Tech enthusiast', 3, true, true, false, false, false),
+('Carol White', 'carolw', 'carol@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'pic3.jpg', 'Fact checker', 2, true, true, false, false, false),
+('John Admin', 'notAdmin', 'admin@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'pic4.jpg', 'Admin', 4, true, true, false, true, true),
+('Miguel Sousa', 'miguelS', 'miguels@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'pic5.jpg', 'Portuguese writer', 0, true, true, true, false, false);
+
 
 INSERT INTO FollowUser (follower_id, following_id) VALUES
 (1, 2),

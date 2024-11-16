@@ -3,46 +3,47 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
-use Illuminate\View\View;
-
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
 class RegisterController extends Controller
 {
-    /**
-     * Display a login form.
-     */
-    public function showRegistrationForm(): View
+    public function showRegistrationForm()
     {
         return view('auth.register');
     }
 
-    /**
-     * Register a new user.
-     */
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
-        ]);
+        try {
+            // Validate the request data
+           $request->validate([
+                'username' => 'required|string|max:255|unique:users',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ]);
+            User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password)
+            ]);
 
-        $credentials = $request->only('email', 'password');
-        Auth::attempt($credentials);
-        $request->session()->regenerate();
-        return redirect()->route('cards')
-            ->withSuccess('You have successfully registered & logged in!');
+            $credentials = $request->only('email', 'password');
+            Auth::attempt($credentials);
+            $request->session()->regenerate();
+
+            // Redirect to the welcome page with success message
+            return redirect()->route('welcome')
+                ->withSuccess('You have successfully registered & logged in!');
+        } catch (Exception $e) {
+            // Handle the exception
+            Log::error('Registration error: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 }

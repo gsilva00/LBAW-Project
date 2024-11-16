@@ -3,6 +3,7 @@ SET DateStyle TO European;
 
 -- Drop Tables
 
+DROP TABLE IF EXISTS Users CASCADE;
 DROP TABLE IF EXISTS FollowUser CASCADE;
 DROP TABLE IF EXISTS VoteArticle CASCADE;
 DROP TABLE IF EXISTS FavouriteArcticle CASCADE;
@@ -41,7 +42,7 @@ CREATE TABLE Users(
     email VARCHAR(256) UNIQUE,
     password VARCHAR(256),
     profile_picture VARCHAR(256) DEFAULT NULL,
-    description VARCHAR(300),
+    description VARCHAR(300) DEFAULT NULL,
     reputation INT DEFAULT 3,
     upvote_notification BOOLEAN DEFAULT TRUE,
     comment_notification BOOLEAN DEFAULT TRUE,

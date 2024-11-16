@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -20,14 +21,13 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 // Home
-Route::redirect('/', '/login');
+Route::get('/', [WelcomeController::class, 'show']);
 
 // Cards
 Route::controller(CardController::class)->group(function () {
     Route::get('/cards', 'list')->name('cards');
     Route::get('/cards/{id}', 'show');
 });
-
 
 // API
 Route::controller(CardController::class)->group(function () {
@@ -41,7 +41,6 @@ Route::controller(ItemController::class)->group(function () {
     Route::delete('/api/item/{id}', 'delete');
 });
 
-
 // Authentication
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
@@ -53,3 +52,5 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
 });
+
+Route::get('/welcome', [WelcomeController::class, 'show'])->name('welcome');
