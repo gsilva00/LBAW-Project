@@ -50,6 +50,7 @@ CREATE TABLE Users(
     is_admin BOOLEAN DEFAULT FALSE,
     is_fact_checker BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,
+    remember_token VARCHAR(100) DEFAULT NULL,
     CHECK (reputation BETWEEN 0 AND 5)
 );
 

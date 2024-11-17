@@ -38,7 +38,7 @@ class RegisterController extends Controller
             $request->session()->regenerate();
 
             // Redirect to the welcome page with success message
-            return redirect()->route('welcome')
+            return redirect()->route('homepage')
                 ->withSuccess('You have successfully registered & logged in!');
         } catch (Exception $e) {
             // Handle the exception

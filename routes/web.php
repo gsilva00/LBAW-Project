@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\HomepageController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -21,7 +21,7 @@ use App\Http\Controllers\Auth\RegisterController;
 */
 
 // Home
-Route::get('/', [WelcomeController::class, 'show']);
+Route::get('/', [HomepageController::class, 'show']);
 
 // Cards
 Route::controller(CardController::class)->group(function () {
@@ -53,4 +53,4 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-Route::get('/welcome', [WelcomeController::class, 'show'])->name('welcome');
+Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');

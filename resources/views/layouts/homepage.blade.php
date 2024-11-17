@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
+    <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <style>
         body {
             background-color: black;
@@ -23,16 +24,11 @@
     </style>
 </head>
 <body>
-<h1>Welcome {{ $username ?? 'Guest' }}</h1>
-@if(Auth::check())
-    <form class="button" action="{{ route('logout') }}" method="GET">
-        @csrf
-        <button type="submit">Logout</button>
-    </form>
-@else
-    <a class="button" href="{{ route('login') }}">
-        <button type="button">Login</button>
-    </a>
-@endif
+<header>
+    <h1>{{ config('app.name', 'Laravel') }}</h1>
+</header>
+<main>
+    @yield('content')
+</main>
 </body>
 </html>
