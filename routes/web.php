@@ -54,3 +54,5 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
+
+Route::view('/contacts', 'pages.contacts')->name('contacts');
