@@ -4,31 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="{{ url('js/dropdown.js') }}"> </script>
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-    </style>
+    <link href="{{ url('css/header.css') }}" rel="stylesheet">
+    <link href="{{ url('css/footer.css') }}" rel="stylesheet">
+
+    <link href="{{ url('css/contacts.css') }}" rel="stylesheet">
+    <!--  <link href="{{ url('css/app.css') }}" rel="stylesheet"> -->
 </head>
 <body>
-<header>
-    <h1>{{ config('app.name', 'Laravel') }}</h1>
-</header>
+    @include('pages.header')
 <main>
     @yield('content')
 </main>
+    @include('pages.footer')
 </body>
 </html>
