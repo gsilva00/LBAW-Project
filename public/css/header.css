@@ -13,7 +13,7 @@ h1{
   margin-block: 0.5em;
 }
 
-p{
+a,p{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
 }
@@ -65,9 +65,31 @@ header{
   }
 }
 
+#profile{
+  min-height: 100%;
+  align-content: center;
+}
+
+#profile-button, #search-button{
+  display: flex;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-align: end;
+  padding: 0;
+  align-items: baseline
+}
+
+#profile-button h2, .dropdown-item h2{
+  margin: 0;
+  font-size: 0.9em;
+}
+
 .dropdown-menu {
   display: none;
   position: absolute;
+  top: 3.25em;
+  right: 0;
   background-color: white;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
@@ -78,10 +100,12 @@ header{
 }
 
 .dropdown-item {
-  padding: 8px 16px;
-  text-decoration: none;
+  padding: 0.75em 0.75em;
   display: block;
-  color: black;
+}
+
+#search-menu{
+  top: 6em;
 }
 
 .dropdown-item:hover {

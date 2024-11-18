@@ -6,6 +6,7 @@
     <title><?php echo e(config('app.name', 'Laravel')); ?></title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="<?php echo e(url('js/dropdown.js')); ?>"> </script>
+    <script src="<?php echo e(url('js/searchdropdown.js')); ?>"> </script>
     <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/header.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/footer.css')); ?>" rel="stylesheet">

@@ -9,6 +9,8 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
+use App\Http\Controllers\ProfileController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,3 +58,5 @@ Route::controller(RegisterController::class)->group(function () {
 Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
 
 Route::view('/contacts', 'pages.contacts')->name('contacts');
+
+Route::get('/profile', [ProfileController::class, 'show'])->name('profile');

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  var dropdownButton = document.getElementById('dropdownMenuButton');
+  var dropdownButton = document.getElementById('profile-button');
   var dropdownMenu = document.querySelector('.dropdown-menu');
 
   dropdownButton.addEventListener('click', function() {
