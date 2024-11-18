@@ -14,8 +14,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Drop existing tables
-        DB::statement('DROP SCHEMA public CASCADE;');
-        DB::statement('CREATE SCHEMA public;');
+        DB::statement('DROP SCHEMA lbaw24124 CASCADE;');
+        DB::statement('CREATE SCHEMA lbaw24124;');
+
+        $schemaExists = DB::select("SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'lbaw24124'");
+        if (empty($schemaExists)) {
+            $this->command->error('Schema creation failed!');
+            return;
+        } else {
+            $this->command->info('Schema created successfully!');
+        }
 
         // Seed the schema
         $path = base_path('sql/schema.sql');
