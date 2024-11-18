@@ -9,7 +9,7 @@ TRUNCATE TABLE FollowTag CASCADE;
 TRUNCATE TABLE ArticlePage CASCADE;
 TRUNCATE TABLE ArticleTag CASCADE;
 TRUNCATE TABLE VoteArticle CASCADE;
-TRUNCATE TABLE FavouriteArcticle CASCADE;
+TRUNCATE TABLE FavouriteArticle CASCADE;
 TRUNCATE TABLE CheckArticle CASCADE;
 TRUNCATE TABLE Comment CASCADE;
 TRUNCATE TABLE VoteComment CASCADE;
@@ -88,7 +88,7 @@ INSERT INTO VoteArticle (user_id, article_id, type) VALUES
 (2, 1, 'Upvote'),
 (3, 2, 'Downvote');
 
-INSERT INTO FavouriteArcticle (user_id, article_id) VALUES
+INSERT INTO FavouriteArticle (user_id, article_id) VALUES
 (1, 1),
 (1, 2),
 (2, 1),
