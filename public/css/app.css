@@ -169,3 +169,29 @@ body {
   position: relative;
   top: 0.2em;
 }
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.news-tile {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.news-tile img {
+  max-width: 100%;
+  height: auto;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.news-tile h2 {
+  font-size: 1.2em;
+  margin: 0;
+}

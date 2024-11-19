@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\ArticlePageController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -61,3 +62,5 @@ Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+
+Route::get('/news/{id}', [ArticlePageController::class, 'show'])->name('news.show');

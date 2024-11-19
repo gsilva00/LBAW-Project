@@ -21,7 +21,7 @@ class Tag extends Model
     {
         return $this->belongsToMany(
             ArticlePage::class,
-            'ArticleTag',
+            'articletag',
             'tag_id',
             'article_id'
         );

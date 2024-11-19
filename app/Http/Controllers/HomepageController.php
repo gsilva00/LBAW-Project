@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArticlePage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -15,6 +16,8 @@ class HomepageController extends Controller
         Log::info('HomepageController@show called');
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
-        return view('pages.homepage', ['username' => $username]);
+        $articleItems = ArticlePage::all();
+
+        return view('pages.homepage', ['username' => $username, 'articleItems' => $articleItems]);
     }
 }

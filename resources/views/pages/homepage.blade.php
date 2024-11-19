@@ -12,4 +12,9 @@
             <button type="button">Login</button>
         </a>
     @endif
+    <div class="news-grid">
+        @foreach($articleItems as $article)
+            @include('partials.news_tile', ['news' => $article])
+        @endforeach
+    </div>
 @endsection
