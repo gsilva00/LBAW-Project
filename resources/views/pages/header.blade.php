@@ -1,31 +1,30 @@
 <header>
         <div id="top-part-header">
-            <h1 class="title">{{ config('app.name', 'Laravel') }}</h1>
+            <a href="{{ route('homepage') }}"> <h1 class="title">{{ config('app.name', 'Laravel') }}<h1></a>
             <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
             <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
             <h2><i class='bx bx-book'></i> Followed Topics</h2>
-            <h2 class="profile">
-                <i class='bx bx-user-circle'></i>
-                <div class="dropdown">
+            <div id="profile" class="dropdown">
+                
                     @if(Auth::check())
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            JOAO <!-- Needs to be change to get username -->
+                        <button type="button" id="profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class='bx bx-user-circle'></i>
+                            <h2>{{$username}}</h2> 
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                            <a class="dropdown-item" href="#">Something for admin</a>
+                        <div class="dropdown-menu" aria-labelledby="profile-button">
+                            <a class="dropdown-item" href="{{ route('profile') }}"><h2>See Profile</h2></a>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
+                            <a class="dropdown-item" href="#"><h2>Something for admin</h2></a>
                         </div>
                         <form id="logout-form" action="{{ route('logout') }}" method="GET" style="display: none;">
                         @csrf
                     </form>
                     @else
-                    <a class="button" href="{{ route('login') }}">
-            <           button type="button">Login</button>
+                    <a id="profile-button" href="{{ route('login') }}">
+                        <i class='bx bx-user-circle'></i><h2>Login</h2>
                     </a>
                 @endif
-                </div>
-            </h2>  <!-- Needs to be change to get login/logout -->
+            </div>  <!-- Needs to be change to get login/logout -->
         </div>
         <div id="bottom-part-header">
             <h2><i class='bx bx-home-alt'></i> Homepage</h2>
@@ -37,6 +36,14 @@
             <h2 class="topic">Technology</h2>
             <h2 class="topic">Science</h2>
             <h2><i class='bx bx-news'></i>All Topics</h2>
-            <h2><i class='bx bx-search'></i></h2>
+            <button type="button" id="search-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class='bx bx-search'></i>
+            </button>
+            <div class="dropdown-menu" id="search-menu" aria-labelledby="search-button">
+                <form class="dropdown-item">
+                    <input type="search" placeholder="Search" aria-label="Search">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
         </div>
 </header>

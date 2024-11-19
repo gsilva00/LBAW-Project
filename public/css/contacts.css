@@ -18,6 +18,7 @@
     justify-content: space-between;
     column-gap: 3em;
     margin-inline: 5em;
+    margin-bottom: 2em;
 }
 
 #contacts-content div{
