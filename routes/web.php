@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\HomepageController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +58,6 @@ Route::controller(RegisterController::class)->group(function () {
 
 Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
 
-Route::view('/contacts', 'pages.contacts')->name('contacts');
+Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
