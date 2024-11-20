@@ -1,11 +1,11 @@
 <section id="recent-news-section">
 <p class="title">Most Recent News</p>
 <?php if($recentNews->isNotEmpty()): ?>
-                <?php $__currentLoopData = $recentNews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $news): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php $__currentLoopData = $recentNews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="news-tile">
-                    <a href="<?php echo e(route('news.show', ['id' => $news->id])); ?>">
+                    <a href="<?php echo e(route('article.show', ['id' => $article->id])); ?>">
                         <img src="https://picsum.photos/seed/picsum/200/300" alt="News Image" style="width: 100%; height: auto;">
-                        <p class="title"><?php echo e($news->title); ?></p>
+                        <p class="title"><?php echo e($article->title); ?></p>
                     </a>
                 </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
