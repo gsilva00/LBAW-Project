@@ -41,8 +41,7 @@
             </button>
             <div class="dropdown-menu" id="search-menu" aria-labelledby="search-button">
                 <form class="dropdown-item" action="{{ route('search.show') }}" method="GET">
-                    <input type="search" name="search" placeholder="Search" aria-label="Search">
-                    <button type="submit">Search</button>
+                    @include('partials.search_form')
                 </form>
             </div>
         </div>
