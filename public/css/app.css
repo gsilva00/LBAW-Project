@@ -181,19 +181,47 @@ body {
 
 .news-tile {
   border: 1px solid #ddd;
-  padding: 10px;
+  padding-bottom: 10px;
   border-radius: 5px;
   text-align: center;
 }
 
+.news-tile p{
+  margin: 0;
+  font-family: 'Inria Serif', serif;
+  font-size: 1em;
+  font-weight: 700;
+}
+
 .news-tile img {
   max-width: 100%;
+  object-fit: cover;
   height: auto;
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
 }
 
+#recent-news-section .news-tile a img{
+  max-height: 10em;
+}
+
+#recent-news-section .news-tile{
+  margin-bottom: 2em;
+}
+
 .news-tile h2 {
   font-size: 1.2em;
   margin: 0;
+}
+
+button{
+  border: none;
+  background-color: transparent;
+  display: flex;
+  align-items: flex-start;
+}
+
+.title{
+  font-weight: 500;
+  font-size: 1.15em;
 }
