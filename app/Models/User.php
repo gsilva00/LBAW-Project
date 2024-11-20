@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -55,6 +56,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public static function find(string $username): ?self
+    {
+        $user = self::where('username', $username)->first();
+        if (!$user) {
+            throw new ModelNotFoundException("User not found");
+        }
+        return $user;
+    }
 
     public function ownedArticles(): HasMany
     {

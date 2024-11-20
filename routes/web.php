@@ -61,6 +61,6 @@ Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
 
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-
 Route::get('/news/{id}', [ArticlePageController::class, 'show'])->name('news.show');
+
+Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile');
