@@ -9,6 +9,7 @@
     <div class="news-article">
         <h1>{{ $article->title }}</h1>
         <p>{{ $article->content }}</p>
+        <p><strong>Author:</strong> {{ $authorDisplayName }}</p>
         <p><strong>Topic:</strong> {{ $topic->name }}</p>
         <p><strong>Tags:</strong>
             @foreach($tags as $tag)
