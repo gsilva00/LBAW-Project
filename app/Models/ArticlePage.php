@@ -27,6 +27,8 @@ class ArticlePage extends Model
         'is_deleted',
         'topic_id',
         'author_id',
+        'create_date',
+        'edit_date',
     ];
     protected $attributes = [
         'edit_date' => null,
