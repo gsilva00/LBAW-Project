@@ -12,7 +12,7 @@ class ArticlePageController extends Controller
     {
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
-        $article = ArticlePage::with(['tags', 'topic', 'author'])->findOrFail($id);
+        $article = ArticlePage::with(['tags', 'topic', 'author', 'comments'])->findOrFail($id);
         $referer = $request->headers->get('referer') ?? 'home page';
         $previousPage = $this->getPageNameFromUrl($referer);
         $previousUrl = $referer === 'home page' ? url('/') : $referer;
@@ -24,6 +24,7 @@ class ArticlePageController extends Controller
             'username' => $username,
             'tags' => $article->tags,
             'topic' => $article->topic,
+            'comments' => $article->comments,
             'previousPage' => $previousPage,
             'previousUrl' => $previousUrl,
             'authorDisplayName' => $authorDisplayName

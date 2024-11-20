@@ -25,8 +25,16 @@
                 <span>{{ $tag->name }}</span>@if(!$loop->last), @endif
             @endforeach
         </p>
+        <p><strong>Upvotes: </strong> {{ $article->upvotes}}</p>
+        <p><strong>Downvotes: </strong> {{ $article->downvotes}}</p>
         <div class="image-box">
             <img src="https://picsum.photos/seed/picsum/200/300" alt="News Image" width="200" height="300">
+        </div>
+        <div class="comments-section">
+            <h2>Comments</h2>
+            @foreach($comments as $comment)
+                @include('partials.comment', ['comment' => $comment])
+            @endforeach
         </div>
     </div>
 @endsection
