@@ -1,6 +1,6 @@
 <header>
         <div id="top-part-header">
-            <a href="<?php echo e(route('homepage')); ?>"> <h1 class="title"><?php echo e(config('app.name', 'Laravel')); ?><h1></a>
+            <h1><a href="<?php echo e(route('homepage')); ?>" class="logo"> <?php echo e(config('app.name', 'Laravel')); ?></a></h1>
             <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
             <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
             <h2><i class='bx bx-book'></i> Followed Topics</h2>
@@ -9,10 +9,10 @@
                     <?php if(Auth::check()): ?>
                         <button type="button" id="profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class='bx bx-user-circle'></i>
-                            <h2><?php echo e($username); ?></h2> 
+                            <h2><?php echo e($username); ?></h2>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="profile-button">
-                            <a class="dropdown-item" href="<?php echo e(route('profile')); ?>"><h2>See Profile</h2></a>
+                            <a class="dropdown-item" href="<?php echo e(route('profile', ['username' => $username])); ?>"><h2>See Profile</h2></a>
                             <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
                             <a class="dropdown-item" href="#"><h2>Something for admin</h2></a>
                         </div>

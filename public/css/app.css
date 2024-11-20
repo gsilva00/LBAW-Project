@@ -161,6 +161,8 @@ body {
 
   :root {
     --h2-header-footer-size: 0.75em;
+    --secondary-color: #b7b7b7;
+    --small-text-size: 0.75em;
   }  
 
 

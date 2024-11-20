@@ -1,6 +1,6 @@
 <header>
         <div id="top-part-header">
-            <a href="{{ route('homepage') }}"> <h1 class="title">{{ config('app.name', 'Laravel') }}<h1></a>
+            <h1><a href="{{ route('homepage') }}" class="logo"> {{ config('app.name', 'Laravel') }}</a></h1>
             <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
             <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
             <h2><i class='bx bx-book'></i> Followed Topics</h2>

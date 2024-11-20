@@ -10,7 +10,7 @@
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <link href="{{ url('css/header.css') }}" rel="stylesheet">
     <link href="{{ url('css/footer.css') }}" rel="stylesheet">
-
+    <link href="{{ url('css/articlepage.css') }}" rel="stylesheet">
     <link href="{{ url('css/contacts.css') }}" rel="stylesheet">
     <!--  <link href="{{ url('css/app.css') }}" rel="stylesheet"> -->
 </head>

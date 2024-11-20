@@ -7,13 +7,13 @@ body{
   margin: 0;
 }
 
-h1{
+.logo{
   font-family: 'Salara', sans-serif;
   font-weight: 700;
   margin-block: 0.5em;
 }
 
-a,p{
+span,a,p{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
 }
@@ -41,7 +41,7 @@ header{
   background-color: #696969;
 }
 #bottom-part-header{
-  background-color: #b7b7b7;
+  background-color: var(--secondary-color);
   justify-content: space-between;
 }
 

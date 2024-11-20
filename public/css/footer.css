@@ -5,7 +5,8 @@ footer{
     column-gap: 5em;
     padding: 1em 1.5em;
     position: absolute;
-    width: -webkit-fill-available;;
+    width: -webkit-fill-available;
+    width: -moz-available;
 }
 
 footer h2{

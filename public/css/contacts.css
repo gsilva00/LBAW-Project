@@ -24,7 +24,7 @@
 #contacts-content div{
     width: 30%;
     padding-block: 2em;
-    border-color: #b7b7b7;
+    border-color: var(--secondary-color);
     border-width: 1px;
     border-style: solid;
     background-color: white;

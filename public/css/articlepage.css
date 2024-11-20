@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+.large-rectangle{
+    background-color: var(--secondary-color);
+    padding: 0.75rem 1rem;
+    margin-block: 1rem;
+    list-style: none;
+}
+
+.article-title{
+    font-family: 'Inria Serif', serif;
+    margin-bottom: 0;
+}
+
+.article-credits{
+    display: flex;
+    justify-content: space-between;
+}
+
+.small-text{
+    font-size: var(--small-text-size);
+    font-weight: 300;
+}
+
+.article-subtitle{
+    font-weight: 500;
+    font-size: 1.15em;
+}
+
+.article-text{
+    font-weight: 300;
+    margin-top: 2.5em;
+    padding-bottom: 1.5em;
+}
+
+.border-bottom{
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.tags span:not(:first-of-type){
+    margin-inline: 0.5em;
+}
+
+.article-more-news-wrapper{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin-inline: 4em;
+    column-gap: 3em;
+}
