@@ -11,13 +11,32 @@ class SearchController extends Controller
     public function show(Request $request)
     {
         $authUser = Auth::user();
-
         $searchQuery = $request->input('search');
-        $formattedQuery = str_replace(' ', ' & ', $searchQuery); // Format the query for to_tsquery
-        $articles = ArticlePage::whereRaw("tsv @@ to_tsquery('english', ?)", [$formattedQuery])
-            ->orderByRaw("ts_rank(tsv, to_tsquery('english', ?)) DESC", [$formattedQuery])
-            ->get();
 
+        if (preg_match('/^".*"$/', $searchQuery)) {
+            // Remove the double quotes
+            $exactQuery = trim($searchQuery, '"');
+            $articles = ArticlePage::where('title', 'ILIKE', '%' . $exactQuery . '%')
+                ->orWhere('subtitle', 'ILIKE', '%' . $exactQuery . '%')
+                ->orWhere('content', 'ILIKE', '%' . $exactQuery . '%')
+                ->get();
+        } else {
+            $words = explode(' ', $searchQuery);
+            $tsQuery = implode(' & ', array_map(function($word) {
+                return $word . ':*';
+            }, $words));
+
+            $articles = ArticlePage::whereRaw("tsv @@ to_tsquery('english', ?)", [$tsQuery])
+                ->orWhere(function($query) use ($words) {
+                    foreach ($words as $word) {
+                        $query->orWhere('title', 'ILIKE', '%' . $word . '%')
+                            ->orWhere('subtitle', 'ILIKE', '%' . $word . '%')
+                            ->orWhere('content', 'ILIKE', '%' . $word . '%');
+                    }
+                })
+                ->orderByRaw("ts_rank(tsv, to_tsquery('english', ?)) DESC", [$tsQuery])
+                ->get();
+        }
 
         return view('pages.search', [
             'searchQuery' => $searchQuery,

@@ -300,61 +300,66 @@ CREATE INDEX i_notifications_date ON Notifications(ntf_date DESC);
 CREATE INDEX i_article_cdate ON ArticlePage(create_date DESC);
 
 
---Full Text Search Indexes
+-- Store a column with the full text from ArticlePage
 ALTER TABLE ArticlePage
 ADD COLUMN tsv tsvector;
 
-UPDATE ArticlePage 
-SET tsv = to_tsvector(COALESCE(TRIM(title || ' ' || subtitle || ' ' ||content), ''));
+-- Fill tsv with the concatenated text from title, subtitle, and content
+UPDATE ArticlePage
+SET tsv = setweight(to_tsvector(COALESCE(TRIM(title), '')), 'A') || setweight(to_tsvector(COALESCE(TRIM(subtitle), '')), 'B') || setweight(to_tsvector(COALESCE(TRIM(content), '')), 'C');
 
 CREATE OR REPLACE FUNCTION articlepage_tsv_trigger() RETURNS trigger AS $$
 BEGIN
-  NEW.tsv := to_tsvector(COALESCE(NEW.title, '') || ' ' || COALESCE(NEW.subtitle, '') || ' ' || COALESCE(NEW.content, ''));
-  RETURN NEW;
-END;
+    NEW.tsv := setweight(to_tsvector(COALESCE(TRIM(NEW.title), '')), 'A') || setweight ( to_tsvector ( COALESCE ( TRIM ( NEW.subtitle), '')), 'B') || setweight(to_tsvector(COALESCE(TRIM(NEW.content), '')), 'C');
+RETURN NEW;
+END
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER tsvupdate
 BEFORE INSERT OR UPDATE ON ArticlePage
 FOR EACH ROW EXECUTE FUNCTION articlepage_tsv_trigger();
 
---I4
-CREATE INDEX idx_articlepage_tsv ON ArticlePage USING GIN(tsv);
+CREATE INDEX i_article_tsv ON ArticlePage USING GIN(tsv);
 
-ALTER TABLE Comment ADD COLUMN tsv tsvector;
-UPDATE Comment SET tsv = to_tsvector(content);
+-- Same process as previous table
+ALTER TABLE Reply ADD COLUMN full_text_vector_r tsvector;
 
-CREATE OR REPLACE FUNCTION update_comment_tsv() RETURNS trigger AS $$
+UPDATE Reply SET full_text_vector_r = to_tsvector ( COALESCE (content ));
+
+CREATE OR REPLACE FUNCTION update_reply_full_text() RETURNS trigger AS $$
 BEGIN
-    NEW.tsv := to_tsvector(NEW.content);
-    RETURN NEW;
+    NEW.full_text_vector_r := to_tsvector(COALESCE(NEW.content));
+RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_comment_tsv_trigger
-BEFORE INSERT OR UPDATE ON Comment
-FOR EACH ROW EXECUTE FUNCTION update_comment_tsv();
-
---I5
-CREATE INDEX idx_comment_tsv ON Comment USING GIN(tsv);
-
-ALTER TABLE Reply ADD COLUMN tsv tsvector;
-
-UPDATE Reply SET tsv = to_tsvector(content);
-
-CREATE OR REPLACE FUNCTION update_reply_tsv() RETURNS trigger AS $$
-BEGIN
-    NEW.tsv := to_tsvector(NEW.content);
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_reply_tsv_trigger
+CREATE TRIGGER update_reply_full_text_trigger
 BEFORE INSERT OR UPDATE ON Reply
-FOR EACH ROW EXECUTE FUNCTION update_reply_tsv();
+FOR EACH ROW EXECUTE FUNCTION update_reply_full_text();
+
+CREATE INDEX i_reply_tsv ON Reply USING GIN(full_text_vector_r);
+
+
+-- Same process as previous table
+ALTER TABLE Comment ADD COLUMN full_text_vector tsvector;
+
+UPDATE Comment SET full_text_vector = to_tsvector ( COALESCE (content ));
+
+CREATE OR REPLACE FUNCTION update_comment_full_text() RETURNS trigger AS $$
+BEGIN
+    NEW.full_text_vector := to_tsvector(COALESCE(NEW.content));
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_comment_full_text_trigger
+BEFORE INSERT OR UPDATE ON Comment
+FOR EACH ROW EXECUTE FUNCTION update_comment_full_text();
 
 --I6
-CREATE INDEX idx_reply_tsv ON Reply USING GIN(tsv);
+CREATE INDEX i_comment_tsv ON Comment USING GIN(full_text_vector);
+
+
 
 -- Functions/Triggers
 
