@@ -36,4 +36,9 @@ class Tag extends Model
             'user_id'
         );
     }
+
+    public function scopeTrending($query)
+    {
+        return $query->where('is_trending', true);
+    }
 }

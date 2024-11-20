@@ -64,6 +64,12 @@ Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
 
+// Edit profile
+Route::controller(ProfileController::class)->group(function () {
+    Route::get('/profile/edit', 'edit')->name('profile.edit');
+    Route::post('/profile/edit', 'update')->name('profile.update');
+});
+
 Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile');
 
 Route::get('/search', [SearchController::class, 'show'])->name('search.show');
