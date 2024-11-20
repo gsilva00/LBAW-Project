@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ArticlePageController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CardController;
@@ -61,6 +62,8 @@ Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
 
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 
-Route::get('/news/{id}', [ArticlePageController::class, 'show'])->name('news.show');
+Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
 
 Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile');
+
+Route::get('/search', [SearchController::class, 'show'])->name('search.show');
