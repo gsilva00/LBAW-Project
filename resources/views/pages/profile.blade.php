@@ -3,8 +3,10 @@
 @section('content')
     <div class="container">
         <h1>User Profile</h1>
-        <p>Name: {{ $username }}</p>
-        <p>Email: {{ $usermail }}</p>
-        <!-- Add more user profile information here -->
+        <p>Name: {{ $profileUsername }}</p>
+        <p>Display Name: {{ $displayName }}</p>
+        @if($isOwner)
+            <a href="{{ route('profile', ['username' => $username]) }}"><button>Edit</button></a>
+        @endif
     </div>
 @endsection
