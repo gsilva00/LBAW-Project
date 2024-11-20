@@ -1,0 +1,564 @@
+# OpenAPI Specification for the NewFlow System
+
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: NewFlow Web API
+  description: Web Resources Specification (A7) for NewFlow
+
+servers:
+  - url: https://lbaw24124.fe.up.pt/
+    description: Production server
+
+externalDocs:
+  description: Find more info about the EAP artifact here.
+  url: https://gitlab.up.pt/lbaw/lbaw2425/lbaw24124/-/wikis/eap.md
+
+tags:
+  - name: 'M01: Authentication'
+  - name: 'M02: Individual Profile'
+  - name: 'M03: News'
+  - name: 'M04: Search'
+  - name: 'M05: Topics and Tags'
+  - name: 'M06: Comments'
+  - name: 'M07: Votes'
+  - name: 'M08: Report and Fact Checking'
+  - name: 'M09: Administration and Static Pages'
+
+paths:
+
+#################################### Authentication ####################################
+
+  /login:
+
+    get:
+      operationId: R101
+      summary: 'R101: Login Form'
+      description: 'Provide login form. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '200':
+          description: 'Ok. Show Log-in UI'
+
+    post:
+      operationId: R102
+      summary: 'R102: Login Action'
+      description: 'Processes the login form submission. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+
+      responses:
+        '302':
+          description: 'Redirect after processing the login credentials.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to user profile.'
+                  value: '/home'
+
+                302Error:
+                  description: 'Failed authentication. Redirect to login form.'
+                  value: '/login'
+
+  /logout:
+
+    post:
+      operationId: R103
+      summary: 'R103: Logout Action'
+      description: 'Logout the current authenticated user. Access: USR'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '302':
+          description: 'Redirect after processing logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful logout. Redirect to login form.'
+                  value: '/login'
+
+  /register:
+
+    get:
+      operationId: R104
+      summary: 'R104: Register Form'
+      description: 'Register a new user. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+
+      responses:
+        '200':
+          description: 'Ok. Show Sign-Up UI'
+
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Processes the new user registration form submission. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                confirm_password:
+                  type: string
+                  format: password
+              required:
+                - username
+                - email
+                - password
+                - confirm_password
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful registration. Redirect to home page.'
+                  value: '/home'
+
+                302Failure:
+                  description: 'Failed registration. Redirect to register form.'
+                  value: '/register'
+
+################################## Individual Profile ##################################
+
+  /profile/{username}:
+
+    get:
+      operationId: R201
+      summary: 'R201: View user profile'
+      description: 'Show the individual user profile. Access: GUE, USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: 'Ok. Show User Profile UI.'
+        '404':
+          description: 'Not Found. This user does not exist.'
+
+  /profile/edit:
+
+    get:
+      operationId: R202
+      summary: 'R202: Edit user profile Form'
+      description: 'Show the edit individual user profile page. Access: OWN'
+      tags:
+        - 'M02: Individual Profile'
+      responses:
+        '200':
+          description: 'Ok. Show edit profile UI.'
+        '401':
+          description: 'Unauthorized. You do not possess the valid credentials edit this profile.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                401Success:
+                  description: 'Redirecting to user profile.'
+                  value: '/user/{username}'
+
+    post:
+      operationId: R203
+      summary: 'R203: Edit user profile Action'
+      description: 'Processes and saves the changes made by user. Access: OWN'
+      tags:
+        - 'M02: Individual Profile'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                description:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+                password:
+                  type: string
+                  format: password
+                confirm_password:
+                  type: string
+                  format: password
+              required:
+                - username
+                - email
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Edit successful. Redirect to individual user profile.'
+                  value: '/user/{id}'
+                302Failure:
+                  description: 'Edit failed. Redirect to edit individual user profile.'
+                  value: '/user/edit'
+
+######################################### News #########################################
+
+  /homepage:
+
+    get:
+      operationId: R301
+      summary: 'R301: View Home Page'
+      description: 'Show the Home page. Access: GUE, USR'
+      tags:
+        - 'M03: News'
+      responses:
+        '200':
+          description: 'Success. Display Home Feed.'
+
+  /my_feed/{id}:
+
+    get:
+      operationId: R302
+      summary: 'R302: View User News Feed'
+      description: 'Show the User News Feed page. Access: USR'
+      tags:
+        - 'M03: News'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Display Top News Feed.'
+
+  /top_news:
+
+    get:
+      operationId: R303
+      summary: 'R303: View Top News'
+      description: 'Show the Top News page. Access: GUE, USR'
+      tags:
+        - 'M03: News'
+      responses:
+        '200':
+          description: 'Success. Display Top News Feed.'
+
+  /article/{id}:
+
+    get:
+      operationId: R304
+      summary: 'R303: View News Item'
+      description: 'Show Article page. Access: GUE, USR'
+      tags:
+        - 'M03: News'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Display Article page.'
+        '404':
+          description: 'Not Found. This article does not exist.'
+
+  /create_article:
+
+    get:
+      operationId: R305
+      summary: 'R304: Create News Article Form'
+      description: 'Display create a new article UI. Access: USR'
+      tags:
+        - 'M03: News'
+      responses:
+        '202':
+          description: 'Ok. Show create article UI'
+
+    post:
+      operationId: R306
+      summary: 'R305: Create New Article Action'
+      description: 'Create a new article. Access: USR'
+      tags:
+        - 'M03: News'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                subtitle:
+                  type: string
+                content:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+              required:
+                - title
+                - content
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new article information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. Redirect to the new article page.'
+                  value: '/article/{id}'
+
+                302Failure:
+                  description: 'Failed. Redirect to create article form.'
+                  value: '/create_article'
+
+  /article/edit:
+
+    get:
+      operationId: R307
+      summary: 'R306: Edit article Form'
+      description: 'Show the edit article page. Access: OWN'
+      tags:
+        - 'M03: News'
+      responses:
+        '200':
+          description: 'Ok. Show edit article UI.'
+        '401':
+          description: 'Unauthorized. You do not possess the valid credentials edit this article.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                401Success:
+                  description: 'Redirecting to article page.'
+                  value: '/article/{id}'
+
+    post:
+      operationId: R308
+      summary: 'R307: Edit article Action'
+      description: 'Processes and saves the changes made by user. Access: OWN'
+      tags:
+        - 'M03: News'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                subtitle:
+                  type: string
+                content:
+                  type: string
+                image:
+                  type: string
+                  format: binary
+              required:
+                - title
+                - content
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new article information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Edit successful. Redirect to article page.'
+                  value: '/article/{id}'
+                302Failure:
+                  description: 'Edit failed. Redirect to edit article page.'
+                  value: '/article/edit'
+
+  /article/delete:
+
+    post:
+      operationId: R309
+      summary: 'R308: Delete an article.'
+      description: 'Delete an article action. Access: OWN, ADM'
+      tags:
+        - 'M03: News'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+              required:
+                - id
+
+      responses:
+        '302':
+          description: 'Redirect after deleting user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful delete. Redirect to home page'
+                  value: '/home'
+        '401':
+          description: 'You do not possess the credentials for this action.'
+
+######################################## Search ########################################
+
+  /search/users:
+    get:
+      operationId: R401
+      summary: 'R401: Search users'
+      description: 'Search for users with a given querry. Access: GUE, USR'
+      tags:
+        - 'M04: Search'
+
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: The maximum number of results to return.
+            default: 15
+
+      responses:
+        '200':
+          description: 'Success. Display the search results.'
+        '400':
+          description: 'Bad Request. Missing or invalid query parameter.'
+        '500':
+          description: 'Internel Server Error.'
+
+  /search/articles:
+    get:
+      operationId: R402
+      summary: 'R402: Search articles'
+      description: 'Search for articles with a given querry. Access: GUE, USR'
+      tags:
+        - 'M04: Search'
+
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            description: The maximum number of results to return.
+            default: 15
+
+      responses:
+        '200':
+          description: 'Success. Display the search results.'
+        '400':
+          description: 'Bad Request. Missing or invalid query parameter.'
+        '500':
+          description: 'Internal Server Error.'
+
+#################################### Topics and Tags ###################################
+
+# not part of the vertical prototype
+
+####################################### Comments #######################################
+
+# not part of the vertical prototype
+
+######################################### Votes ########################################
+
+# not part of the vertical prototype
+
+############################### Report and Fact Checking ###############################
+
+# not part of the vertical prototype
+
+############################ Administration and Static Pages ###########################
+
+# not part of the vertical prototype
