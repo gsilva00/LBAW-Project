@@ -14,7 +14,7 @@
     @endif
     <div class="news-grid">
         @foreach($articleItems as $article)
-            @include('partials.news_tile', ['news' => $article])
+            @include('partials.news_tile', ['article' => $article])
         @endforeach
     </div>
 @endsection
