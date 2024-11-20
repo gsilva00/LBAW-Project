@@ -10,6 +10,7 @@
     <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/header.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/footer.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(url('css/trendingtag.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/articlepage.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/contacts.css')); ?>" rel="stylesheet">
     <!--  <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet"> -->

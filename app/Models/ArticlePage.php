@@ -119,4 +119,9 @@ class ArticlePage extends Model
             'id'
         );
     }
+
+    public static function get3MostRecentNews()
+    {
+        return self::select('*')->orderByRaw('COALESCE(edit_date, create_date) DESC')->take(3)->get();
+    }
 }

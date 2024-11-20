@@ -3,49 +3,42 @@
 @section('content')
     <div class="article-more-news-wrapper">
     <section class="article-section">
-    <div class="large-rectangle">
-        <a href="{{ $previousUrl }}">{{ $previousPage }}</a> >
-        <span>{{ $topic->name }}</span> >
-        <span>{{ $article->title }}</span>
+    <div class="large-rectangle breadcrumbs">
+        <a href="{{ $previousUrl }}" class="thin">{{ $previousPage }}</a> >
+        <span class="thin">{{ $topic->name }}</span> >
+        <span class="thin">{{ $article->title }}</span>
     </div>
     <div class="news-article">
         <h1 class="article-title border-bottom" >{{ $article->title }}</h1>
         <div class="article-credits">
             <p class="small-text">By {{ $authorDisplayName }}</p>
-            <p class="small-text">OCTOBER 27th of 2025</p>
-            <button class="small-text">Report News</button>
+            <p class="small-text">Created at: {{ $article->create_date }}</p>
+            <p class="small-text">
+            @if($article->is_edited)
+            Edited at: {{ $article->edit_date }}
+            @else
+                
+            @endif
+            </p>
+            <button id="report-button" class="large-rectangle small-text"><span>Report News</span></button>
         </div>
-        <p class="article-subtitle">A marca iconica da balacha oreo esta de volta so que com mais cacau</p>
-        <p class="small-text">By Getty Images</p>
+        <p class="title">{{ $article->subtitle }}</p>
+        <div class="image-box">
+            <img class="article-image" src="https://picsum.photos/seed/picsum/1200/1300" alt="News Image">
+        </div>
         <p class="article-text border-bottom">{{ $article->content }}</p>
         <div class="large-rectangle tags">
-            <span>Topic:</span>
+            <span class="thin">Topic:</span>
             <span><strong> {{ $topic->name }}</strong></span>
-            <span>Tags:</span>
-        <h1>{{ $article->title }}</h1>
-        <p><strong>Created Date: </strong> {{ $article->create_date }}</p>
-        <p><strong>Edited Date: </strong>
-            @if($article->is_edited)
-                {{ $article->edit_date }}
-            @else
-                No edition yet
-            @endif
-        </p>
-        <p><strong>Subtitle: </strong> {{ $article->subtitle }}</p>
-        <p><strong>Content: </strong>{{ $article->content }}</p>
-        <p><strong>Author:</strong> {{ $authorDisplayName }}</p>
-        <p><strong>Topic:</strong> {{ $topic->name }}</p>
-        <p><strong>Tags:</strong>
+            <span class="thin">Tags:</span>
             @foreach($tags as $tag)
                 <span><strong>{{ $tag->name }}</strong></span>@if(!$loop->last)@endif
             @endforeach
         </div>
-        </p>
-        <p><strong>Upvotes: </strong> {{ $article->upvotes}}</p>
-        <p><strong>Downvotes: </strong> {{ $article->downvotes}}</p>
-        <div class="image-box">
-            <img src="https://picsum.photos/seed/picsum/200/300" alt="News Image" width="200" height="300">
-        </div>
+        
+        <div class="large-rectangle article-votes"><button><i class='bx bx-upvote'></i></button><p><strong>{{ $article->upvotes - $article->downvotes}}</strong></p><button><i class='bx bx-downvote' ></i></button></div>
+    
+
         <div class="comments-section">
             <h2>Comments</h2>
             @foreach($comments as $comment)
@@ -54,8 +47,9 @@
         </div>
     </div>
     </section>
-    <section class="more-news-section">
-        <p>More News</p>
+    <section class="news-tab-section">
+        @include('partials.trending_tags',['trendingTags' => $trendingTags])
+        @include('partials.recent_news',['recentNews' => $recentNews])
     </section>
 </div>
 @endsection

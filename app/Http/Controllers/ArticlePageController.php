@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,7 +18,8 @@ class ArticlePageController extends Controller
         $previousPage = $this->getPageNameFromUrl($referer);
         $previousUrl = $referer === 'home page' ? url('/') : $referer;
         $authorDisplayName = $article->author->display_name ?? 'Unknown';
-
+        $trendingTags = Tag::trending()->take(5)->get();
+        $recentNews = ArticlePage::get3MostRecentNews();
 
         return view('pages.articlePage', [
             'article' => $article,
@@ -27,7 +29,9 @@ class ArticlePageController extends Controller
             'comments' => $article->comments,
             'previousPage' => $previousPage,
             'previousUrl' => $previousUrl,
-            'authorDisplayName' => $authorDisplayName
+            'authorDisplayName' => $authorDisplayName,
+            'trendingTags' => $trendingTags,
+            'recentNews' => $recentNews
         ]);
     }
 
