@@ -11,9 +11,12 @@ class SearchController extends Controller
     public function show(Request $request)
     {
         $authUser = Auth::user();
-        $searchQuery = $request->input('search');
+        $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
 
-        if (preg_match('/^".*"$/', $searchQuery)) {
+        if (empty($searchQuery)) {
+            // Handle empty search query
+            $articles = collect();
+        } elseif (preg_match('/^".*"$/', $searchQuery)) {
             // Remove the double quotes
             $exactQuery = trim($searchQuery, '"');
             $articles = ArticlePage::where('title', 'ILIKE', '%' . $exactQuery . '%')
@@ -22,9 +25,10 @@ class SearchController extends Controller
                 ->get();
         } else {
             $words = explode(' ', $searchQuery);
-            $tsQuery = implode(' & ', array_map(function($word) {
+            $sanitizedWords = array_map(function($word) {
                 return $word . ':*';
-            }, $words));
+            }, $words);
+            $tsQuery = implode(' & ', $sanitizedWords);
 
             $articles = ArticlePage::whereRaw("tsv @@ to_tsquery('english', ?)", [$tsQuery])
                 ->orWhere(function($query) use ($words) {
@@ -43,5 +47,11 @@ class SearchController extends Controller
             'username' => $authUser->username ?? 'Guest',
             'articleItems' => $articles
         ]);
+    }
+
+
+    private function sanitizeSearchQuery($query)
+    {
+        return preg_replace('/[^\w\s"]/', '', $query);
     }
 }
