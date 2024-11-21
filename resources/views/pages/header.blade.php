@@ -31,11 +31,26 @@
             <a href="{{ route('recentnews.show') }}"><h2><i class='bx bx-stopwatch'></i>Most Recent News</h2></a>
             <a href="{{ route('votednews.show') }}"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
             <h2><i class='bx bx-trending-up'></i>Trending Tags</h2>
-            <h2 class="topic">Politcs</h2>   <!-- Needs to be change to get 5 topics from database -->
-            <h2 class="topic">Business</h2>
-            <h2 class="topic">Technology</h2>
-            <h2 class="topic">Science</h2>
+            <h2 class="topic">
+                <a href="{{ route('search.show', ['topics' => ['Politics']]) }}">Politics</a>
+            </h2>
+            <h2 class="topic">
+                <a href="{{ route('search.show', ['topics' => ['Business']]) }}">Business</a>
+            </h2>
+            <h2 class="topic">
+                <a href="{{ route('search.show', ['topics' => ['Technology']]) }}">Technology</a>
+            </h2>
+            <h2 class="topic">
+                <a href="{{ route('search.show', ['topics' => ['Science']]) }}">Science</a>
+            </h2>
             <h2><i class='bx bx-news'></i>All Topics</h2>
-            @include('partials.search',['tags' => $tags, 'topics' => $topics])
+            <button type="button" id="search-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class='bx bx-search'></i>
+            </button>
+            <div class="dropdown-menu" id="search-menu" aria-labelledby="search-button">
+                <form class="dropdown-item" action="{{ route('search.show') }}" method="GET">
+                    @include('partials.search_form')
+                </form>
+            </div>
         </div>
 </header>

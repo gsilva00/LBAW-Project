@@ -29,10 +29,10 @@
         <p class="article-text border-bottom">{{ $article->content }}</p>
         <div class="large-rectangle tags">
             <span class="thin">Topic:</span>
-            <span><strong> {{ $topic->name }}</strong></span>
+            <span><strong><a href="{{ route('search.show', ['topics' => [$topic->name]]) }}">{{ $topic->name }}</a></strong></span>
             <span class="thin">Tags:</span>
             @foreach($tags as $tag)
-                <span><strong>{{ $tag->name }}</strong></span>@if(!$loop->last)@endif
+                <span><strong><a href="{{ route('search.show', ['tags' => [$tag->name]]) }}">{{ $tag->name }}</a></strong></span>@if(!$loop->last)@endif
             @endforeach
         </div>
         
