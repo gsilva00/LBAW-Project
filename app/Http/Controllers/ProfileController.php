@@ -24,6 +24,7 @@ class ProfileController extends Controller
             'profileUsername' => $username,
             'displayName' => $displayName,
             'description' => $description,
+            'profilePicture' => $user->profile_picture,
             'isOwner' => $user->username === $authUser->username
         ]);
     }
@@ -56,7 +57,8 @@ class ProfileController extends Controller
             'display_name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'cur_password' => 'required|string',
-            'new_password' => 'nullable|string|min:8|confirmed'
+            'new_password' => 'nullable|string|min:8|confirmed',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -71,6 +73,12 @@ class ProfileController extends Controller
         $user->email = request('email');
         $user->display_name = request('display_name');
         $user->description = request('description');
+
+        if (request('profile_picture')) {
+            $imageName = time() . '-' . request('profile_picture')->getClientOriginalName() . '.' . request('profile_picture')->extension();
+            request('profile_picture')->move(public_path('images/profile'), $imageName);
+            $user->profile_picture = $imageName;
+        }
 
         if (request('new_password')) {
             $user->password = Hash::make(request('new_password'));

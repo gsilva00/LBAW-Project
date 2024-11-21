@@ -33,7 +33,7 @@ class User extends Authenticatable
     // The model's default values for attributes.
     protected $attributes = [
         'display_name' => null,
-        'profile_picture' => null,
+        'profile_picture' => 'default.jpg',
         'description' => null,
         'reputation' => 3,
         'upvote_notification' => true,

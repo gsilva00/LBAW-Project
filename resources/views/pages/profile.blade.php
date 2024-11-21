@@ -6,8 +6,11 @@
         <p>Name: {{ $profileUsername }}</p>
         <p>Display Name: {{ $displayName }}</p>
         <p>Description: {{ $description }}</p>
+        <p>Profile Picture:</p>
+        <img src="{{ asset('images/profile/' . $profilePicture) }}" alt="profile_picture">
+        <br>
         @if($isOwner)
-            <a href="{{ route('profile.edit')}}"><button>Edit</button></a>
+            <a href="{{ route('profile.edit') }}"><button>Edit</button></a>
         @endif
     </div>
 @endsection
