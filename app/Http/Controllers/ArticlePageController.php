@@ -19,7 +19,7 @@ class ArticlePageController extends Controller
         $previousUrl = $referer === 'home page' ? url('/') : $referer;
         $authorDisplayName = $article->author->display_name ?? 'Unknown';
         $trendingTags = Tag::trending()->take(5)->get();
-        $recentNews = ArticlePage::get3MostRecentNews();
+        $recentNews = ArticlePage::getMostRecentNews(3);
 
         return view('pages.articlePage', [
             'article' => $article,
@@ -31,7 +31,8 @@ class ArticlePageController extends Controller
             'previousUrl' => $previousUrl,
             'authorDisplayName' => $authorDisplayName,
             'trendingTags' => $trendingTags,
-            'recentNews' => $recentNews
+            'recentNews' => $recentNews,
+            'isHomepage' => false
         ]);
     }
 
@@ -45,5 +46,31 @@ class ArticlePageController extends Controller
         $path = $parsedUrl['path'] ?? '';
         $segments = explode('/', trim($path, '/'));
         return end($segments) ?: 'home page';
+    }
+
+    public function showRecentNews()
+    {
+        $user = Auth::user();
+        $username = $user->username ?? 'Guest';
+
+        $recentNews = ArticlePage::getAllRecentNews();
+
+        return view('pages.recent_news', [
+            'username' => $username,
+            'recentNews' => $recentNews
+        ]);
+    }
+
+    public function showVotedNews()
+    {
+        $user = Auth::user();
+        $username = $user->username ?? 'Guest';
+
+        $votedNews = ArticlePage::getArticlesByVotes();
+
+        return view('pages.voted_news', [
+            'username' => $username,
+            'votedNews' => $votedNews
+        ]);
     }
 }

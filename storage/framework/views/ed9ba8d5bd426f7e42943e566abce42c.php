@@ -27,23 +27,15 @@
             </div>  <!-- Needs to be change to get login/logout -->
         </div>
         <div id="bottom-part-header">
-            <h2><i class='bx bx-home-alt'></i> Homepage</h2>
-            <h2><i class='bx bx-stopwatch'></i>Most Recent News</h2>
-            <h2><i class='bx bx-sort'></i> Most Voted News</h2>
+            <a href="<?php echo e(route('homepage')); ?>"><h2><i class='bx bx-home-alt'></i> Homepage</h2></a>
+            <a href="<?php echo e(route('recentnews.show')); ?>"><h2><i class='bx bx-stopwatch'></i>Most Recent News</h2></a>
+            <a href="<?php echo e(route('votednews.show')); ?>"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
             <h2><i class='bx bx-trending-up'></i>Trending Tags</h2>
             <h2 class="topic">Politcs</h2>   <!-- Needs to be change to get 5 topics from database -->
             <h2 class="topic">Business</h2>
             <h2 class="topic">Technology</h2>
             <h2 class="topic">Science</h2>
             <h2><i class='bx bx-news'></i>All Topics</h2>
-            <button type="button" id="search-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class='bx bx-search'></i>
-            </button>
-            <div class="dropdown-menu" id="search-menu" aria-labelledby="search-button">
-                <form class="dropdown-item" action="<?php echo e(route('search.show')); ?>" method="GET">
-                    <input type="search" name="search" placeholder="Search" aria-label="Search">
-                    <button type="submit">Search</button>
-                </form>
-            </div>
+            <?php echo $__env->make('partials.search',['tags' => $tags, 'topics' => $topics], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
 </header><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/pages/header.blade.php ENDPATH**/ ?>

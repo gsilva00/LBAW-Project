@@ -24,7 +24,7 @@
             <button id="report-button" class="large-rectangle small-text"><span>Report News</span></button>
         </div>
         <p class="title"><?php echo e($article->subtitle); ?></p>
-        <div class="image-box">
+        <div>
             <img class="article-image" src="https://picsum.photos/seed/picsum/1200/1300" alt="News Image">
         </div>
         <p class="article-text border-bottom"><?php echo e($article->content); ?></p>
