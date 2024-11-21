@@ -3,7 +3,7 @@
 @section('content')
     <div class="profile-wrapper">
         <section class="profile-container">
-            <img src="https://picsum.photos/seed/picsum/200/300" alt="News Image">
+            <img src="{{ asset('images/profile/' . $profilePicture) }}" alt="profile_picture">
         <div class="profile-info">
         <h1>{{ $displayName }}'s Profile</h1>
         @if($isOwner || $isAdmin)

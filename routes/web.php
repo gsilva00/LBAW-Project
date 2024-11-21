@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AboutusController;
+use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ArticlePageController;
@@ -28,24 +28,6 @@ use App\Http\Controllers\ProfileController;
 
 // Home
 Route::get('/', [HomepageController::class, 'show']);
-
-// Cards
-Route::controller(CardController::class)->group(function () {
-    Route::get('/cards', 'list')->name('cards');
-    Route::get('/cards/{id}', 'show');
-});
-
-// API
-Route::controller(CardController::class)->group(function () {
-    Route::put('/api/cards', 'create');
-    Route::delete('/api/cards/{card_id}', 'delete');
-});
-
-Route::controller(ItemController::class)->group(function () {
-    Route::put('/api/cards/{card_id}', 'create');
-    Route::post('/api/item/{id}', 'update');
-    Route::delete('/api/item/{id}', 'delete');
-});
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -79,4 +61,4 @@ Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->na
 
 Route::get('/voted-news', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
 
-Route::get('/about-us', [AboutusController::class, 'show'])->name('aboutus');
+Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutus');

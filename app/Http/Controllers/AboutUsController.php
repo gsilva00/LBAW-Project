@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 
-class AboutusController extends Controller
+class AboutUsController extends Controller
 {
     public function show()
     {

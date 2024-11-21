@@ -26,13 +26,13 @@ class DatabaseSeeder extends Seeder
         }
 
         // Seed the schema
-        $path = base_path('sql/schema.sql');
+        $path = base_path('database/schema.sql');
         $sql = file_get_contents($path);
         DB::unprepared($sql);
         $this->command->info('Schema seeded!');
 
         // Seed the data
-        $dataPath = base_path('sql/populate.sql');
+        $dataPath = base_path('database/populate.sql');
         $dataSql = file_get_contents($dataPath);
         DB::unprepared($dataSql);
         $this->command->info('Data populated!');
