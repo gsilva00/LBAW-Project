@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutusController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ArticlePageController;
@@ -73,3 +74,9 @@ Route::controller(ProfileController::class)->group(function () {
 Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile');
 
 Route::get('/search', [SearchController::class, 'show'])->name('search.show');
+
+Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('recentnews.show');
+
+Route::get('/voted-news', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
+
+Route::get('/about-us', [AboutusController::class, 'show'])->name('aboutus');

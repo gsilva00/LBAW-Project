@@ -17,15 +17,22 @@ class ProfileController extends Controller
         $user = User::find($username);
         $displayName = $user->display_name;
         $description = $user->description;
+        $isBanned = $user->is_banned;
+        $isAdmin = $user->is_admin;
+        $ownedArticles = $user->ownedArticles()->get();
+
         $authUser = Auth::user();
         $authUsername = $authUser->username ?? 'Guest';
         return view('pages.profile', [
             'username' => $authUsername,
             'profileUsername' => $username,
+            'isBanned' => $isBanned,
+            'isAdmin' => $isAdmin,
             'displayName' => $displayName,
             'description' => $description,
             'profilePicture' => $user->profile_picture,
-            'isOwner' => $user->username === $authUser->username
+            'isOwner' => $user->username === $authUser->username,
+            'ownedArticles' => $ownedArticles
         ]);
     }
 

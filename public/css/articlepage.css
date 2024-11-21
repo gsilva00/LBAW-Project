@@ -51,10 +51,13 @@
 }
 
 .article-more-news-wrapper{
-    display: grid;
-    grid-template-columns: 1fr 15em;
+    display: flex;
     margin-inline: 4em;
     column-gap: 3em;
+}
+
+.article-section{
+    flex: 3;
 }
 
 .article-votes{
@@ -88,12 +91,36 @@
 }
 
 .news-tab-section{
+    flex: 1;
+    grid-area: sidebar;
     position: relative;
-    top: 4em;
+    top: 2em;
     display: flex;
     flex-direction: column;
     row-gap: 3em;
-    margin-bottom: 5em;
+    margin-bottom: 3em;
 }
 
+.first-article {
+    grid-area: first;
+    display: grid;
+    padding-top: 3em;
+    padding-bottom: 3em ;
+}
 
+.sec-articles {
+    grid-area: sec;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 3em;
+    justify-content: space-between;
+    margin-bottom: 4em;
+}
+
+.sec-articles .news-tile{
+    height: 15em;
+}
+
+.sec-articles .news-tile img{
+    height: 12em;
+}

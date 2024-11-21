@@ -1,20 +1,28 @@
 @extends('layouts.homepage')
 
 @section('content')
-    <h1>Welcome {{ $username ?? 'Guest' }}</h1>
-    @if(Auth::check())
-        <form class="button" action="{{ route('logout') }}" method="GET">
-            @csrf
-            <button type="submit">Logout</button>
-        </form>
-    @else
-        <a class="button" href="{{ route('login') }}">
-            <button type="button">Login</button>
-        </a>
-    @endif
-    <div class="news-grid">
-        @foreach($articleItems as $article)
-            @include('partials.news_tile', ['article' => $article])
+<div class="homepage-wrapper">
+    @if($articleItems->isNotEmpty())
+        <div class="first-article">
+        @php
+            $firstArticle = $articleItems->first();
+        @endphp
+        @include('partials.first_tile', [
+            'article' => $firstArticle])
+        </div>
+        <div class="sec-articles">
+        @foreach($articleItems->slice(1) as $article)
+            @include('partials.news_tile', [
+                'article' => $article,
+            ])
         @endforeach
-    </div>
+        </div>
+        @else
+        <p>No articles available.</p>
+    @endif
+    <section class="news-tab-section">
+        @include('partials.trending_tags',['trendingTags' => $trendingTags])
+        @include('partials.recent_news',['recentNews' => $recentNews])
+    </section>
+</div>
 @endsection

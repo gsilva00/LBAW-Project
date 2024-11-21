@@ -1,14 +1,11 @@
 <section id="recent-news-section">
 <p class="title">Most Recent News</p>
 <?php if($recentNews->isNotEmpty()): ?>
+                <div class="<?php echo e($isHomepage ? 'homepage-style' : ''); ?>">
                 <?php $__currentLoopData = $recentNews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <div class="news-tile">
-                    <a href="<?php echo e(route('article.show', ['id' => $article->id])); ?>">
-                        <img src="https://picsum.photos/seed/picsum/200/300" alt="News Image" style="width: 100%; height: auto;">
-                        <p class="title"><?php echo e($article->title); ?></p>
-                    </a>
-                </div>
+                    <?php echo $__env->make('partials.news_tile', ['article' => $article], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
         <?php else: ?>
             <p>No recent news available.</p>
         <?php endif; ?>

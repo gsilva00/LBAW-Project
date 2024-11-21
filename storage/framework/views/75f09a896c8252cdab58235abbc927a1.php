@@ -7,12 +7,17 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="<?php echo e(url('js/dropdown.js')); ?>"> </script>
     <script src="<?php echo e(url('js/searchdropdown.js')); ?>"> </script>
+    <script src="<?php echo e(url('js/filterdropdowntag.js')); ?>"> </script>
+    <script src="<?php echo e(url('js/filterdropdowntopic.js')); ?>"> </script>
     <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/header.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/footer.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(url('css/recentnews.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/trendingtag.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/articlepage.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(url('css/contacts.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(url('css/profile.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(url('css/filter.css')); ?>" rel="stylesheet">
     <!--  <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet"> -->
 </head>
 <body>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -17,7 +18,9 @@ class HomepageController extends Controller
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
         $articleItems = ArticlePage::all();
+        $trendingTags = Tag::trending()->take(5)->get();
+        $recentNews = ArticlePage::getMostRecentNews(2);
 
-        return view('pages.homepage', ['username' => $username, 'articleItems' => $articleItems]);
+        return view('pages.homepage', ['username' => $username, 'articleItems' => $articleItems, 'trendingTags' => $trendingTags, 'recentNews' => $recentNews, 'isHomepage' => true]);
     }
 }
