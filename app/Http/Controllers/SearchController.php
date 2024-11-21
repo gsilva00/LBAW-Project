@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\Tag;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
@@ -12,10 +15,46 @@ class SearchController extends Controller
     {
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
+        $tagNames = $request->input('tags', []);
+        $topicNames = $request->input('topics', []);
 
+        $tags = Tag::whereIn('name', $tagNames)->get();
+        $topics = Topic::whereIn('name', $topicNames)->get();
+
+        $articles = ArticlePage::filterBySearchQuery($searchQuery);
+
+        Log::info('Search tags and topics', [
+            'tags' => $tags->pluck('name')->toArray(),
+            'topics' => $topics->pluck('name')->toArray()
+        ]);
+
+        if($tags->isNotEmpty()) {
+            $articles = $this->filters_tag($articles, $tags);
+        }
+
+
+        if($topics->isNotEmpty()) {
+            $articles = $this->filters_topic($articles, $topics);
+        }
+
+
+        return view('pages.search', [
+            'searchQuery' => $searchQuery,
+            'username' => $authUser->username ?? 'Guest',
+            'articleItems' => $articles,
+            'tags' => $tags,
+            'topics' => $topics,
+        ]);
+    }
+    private function sanitizeSearchQuery($query)
+    {
+        return preg_replace('/[^\w\s"]/', '', $query);
+    }
+
+    private function filters_querry($searchQuery)
+    {
         if (empty($searchQuery)) {
-            // Handle empty search query
-            $articles = collect();
+            $articles = ArticlePage::all();
         } elseif (preg_match('/^".*"$/', $searchQuery)) {
             // Remove the double quotes
             $exactQuery = trim($searchQuery, '"');
@@ -41,17 +80,21 @@ class SearchController extends Controller
                 ->orderByRaw("ts_rank(tsv, to_tsquery('english', ?)) DESC", [$tsQuery])
                 ->get();
         }
-
-        return view('pages.search', [
-            'searchQuery' => $searchQuery,
-            'username' => $authUser->username ?? 'Guest',
-            'articleItems' => $articles
-        ]);
+        return $articles;
     }
 
-
-    private function sanitizeSearchQuery($query)
+    private function filters_tag($articles, $tags)
     {
-        return preg_replace('/[^\w\s"]/', '', $query);
+        return $articles->filter(function($article) use ($tags) {
+            return $article->tags->pluck('id')->intersect($tags->pluck('id'))->isNotEmpty();
+        });
     }
+
+    private function filters_topic($articles, $topics)
+    {
+        return $articles->filter(function($article) use ($topics) {
+            return $topics->pluck('id')->contains($article->topic->id);
+        });
+    }
+
 }

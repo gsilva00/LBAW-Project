@@ -124,4 +124,49 @@ class ArticlePage extends Model
     {
         return self::select('*')->orderByRaw('COALESCE(edit_date, create_date) DESC')->take(3)->get();
     }
+
+    public static function filterBySearchQuery($searchQuery)
+    {
+        if (empty($searchQuery)) {
+            return self::all();
+        } elseif (preg_match('/^".*"$/', $searchQuery)) {
+            $exactQuery = trim($searchQuery, '"');
+            return self::where('title', 'ILIKE', '%' . $exactQuery . '%')
+                ->orWhere('subtitle', 'ILIKE', '%' . $exactQuery . '%')
+                ->orWhere('content', 'ILIKE', '%' . $exactQuery . '%')
+                ->get();
+        } else {
+            $words = explode(' ', $searchQuery);
+            $sanitizedWords = array_map(function($word) {
+                return $word . ':*';
+            }, $words);
+            $tsQuery = implode(' & ', $sanitizedWords);
+
+            return self::whereRaw("tsv @@ to_tsquery('english', ?)", [$tsQuery])
+                ->orWhere(function($query) use ($words) {
+                    foreach ($words as $word) {
+                        $query->orWhere('title', 'ILIKE', '%' . $word . '%')
+                            ->orWhere('subtitle', 'ILIKE', '%' . $word . '%')
+                            ->orWhere('content', 'ILIKE', '%' . $word . '%');
+                    }
+                })
+                ->orderByRaw("ts_rank(tsv, to_tsquery('english', ?)) DESC", [$tsQuery])
+                ->get();
+        }
+    }
+
+    public static function filterByTags($articles, $tags)
+    {
+        return $articles->filter(function($article) use ($tags) {
+            return $article->tags->pluck('id')->intersect($tags->pluck('id'))->isNotEmpty();
+        });
+    }
+
+    private function filterByTopics($articles, $topics)
+    {
+        return $articles->filter(function($article) use ($topics) {
+            return $topics->pluck('id')->contains($article->topic->id);
+        });
+    }
+
 }
