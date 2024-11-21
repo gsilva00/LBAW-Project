@@ -7,9 +7,6 @@ use App\Http\Controllers\ArticlePageController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\CardController;
-use App\Http\Controllers\ItemController;
-
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 
