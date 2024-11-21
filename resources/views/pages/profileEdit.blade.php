@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <h1>Edit User Profile</h1>
-        <form method="POST" action="{{ route('profile.update') }}" >
+        <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
             @csrf
             <label for="username">Username</label>
             <input type="text" name="username" value="{{ old('username', $username) }}">
@@ -60,6 +60,16 @@
             @if ($errors->has('new_password_confirmation'))
                 <span class="error">
                     {{ $errors->first('new_password_confirmation') }}
+                </span>
+            @endif
+
+            <br>
+
+            <label for="profile_picture">Upload Profile Picture</label>
+            <input type="file" name="profile_picture">
+            @if ($errors->has('profile_picture'))
+                <span class="error">
+                    {{ $errors->first('profile_picture') }}
                 </span>
             @endif
 
