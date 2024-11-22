@@ -31,7 +31,7 @@
             <span class="thin">Topic:</span>
             <span><strong><a href="{{ route('search.show', ['topics' => [$topic->name]]) }}">{{ $topic->name }}</a></strong></span>
             <span class="thin">Tags:</span>
-            @foreach($tags as $tag)
+            @foreach($articleTags as $tag)
                 <span><strong><a href="{{ route('search.show', ['tags' => [$tag->name]]) }}">{{ $tag->name }}</a></strong></span>@if(!$loop->last)@endif
             @endforeach
         </div>

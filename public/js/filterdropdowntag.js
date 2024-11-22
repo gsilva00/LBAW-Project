@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var filterButton = document.getElementById('filter-button');
     var filterDropdownMenu = filterButton.parentElement.nextElementSibling;
 
-    filterButton.addEventListener('click', function() {
+    filterButton.addEventListener('click', function(event) {
         event.stopPropagation();
         filterDropdownMenu.classList.toggle('show');
     });
@@ -35,11 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 tagSpan.innerText = tag.name;
                 suggestion.appendChild(tagSpan);
 
-
-                suggestion.addEventListener('click', function() {
+                suggestion.addEventListener('click', function(event) {
                     event.preventDefault();
                     event.stopPropagation();
-                    addTag(tag,tagSuggestions);
+                    addTag(tag);
                     tagInput.value = '';
                     tagSuggestions.innerHTML = '';
                 });
@@ -52,14 +51,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function addTag(tag,tagSuggestions) {
-        const topicSuggestions = document.getElementById('topic-suggestions');
-
+    function addTag(tag) {
         const existingTags = Array.from(selectedTags.getElementsByClassName('tag-block'));
         if (existingTags.some(tagBlock => tagBlock.querySelector('span').innerText.trim() === tag.name)) {
             return;
         }
-
 
         const tagBlock = document.createElement('div');
         tagBlock.classList.add('tag-block');
@@ -72,13 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const removeButton = document.createElement('button');
         removeButton.classList.add('remove');
         removeButton.innerHTML = '&times;';
-        removeButton.addEventListener('click', function() {
+        removeButton.addEventListener('click', function(event) {
             event.stopPropagation();
             selectedTags.removeChild(tagBlock);
-
-            if (selectedTags.children.length == 0) {
-                topicSuggestions.classList.remove('tag-open');
-            }
+            updateHiddenInputs();
         });
 
         tagBlock.appendChild(removeButton);
@@ -87,13 +80,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const hiddenInput = document.createElement('input');
         hiddenInput.type = 'hidden';
         hiddenInput.name = 'tags[]';
-        hiddenInput.value = tag.id;
+        hiddenInput.value = tag.name;
         tagBlock.appendChild(hiddenInput);
 
-        if (selectedTags.children.length > 0) {
-            topicSuggestions.classList.add('tag-open');
-        }
+        updateHiddenInputs();
+    }
 
-        tagSuggestions.classList.remove('show');
+    function updateHiddenInputs() {
+        const hiddenInputs = selectedTags.querySelectorAll('input[type="hidden"]');
+        hiddenInputs.forEach(input => input.remove());
+
+        const tagBlocks = selectedTags.getElementsByClassName('tag-block');
+        Array.from(tagBlocks).forEach(tagBlock => {
+            const tagName = tagBlock.querySelector('span').innerText.trim();
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'tags[]';
+            hiddenInput.value = tagName;
+            selectedTags.appendChild(hiddenInput);
+        });
     }
 });

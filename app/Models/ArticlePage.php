@@ -172,7 +172,7 @@ class ArticlePage extends Model
         });
     }
 
-    private function filterByTopics($articles, $topics)
+    public static function filterByTopics($articles, $topics)
     {
         return $articles->filter(function($article) use ($topics) {
             return $topics->pluck('id')->contains($article->topic->id);

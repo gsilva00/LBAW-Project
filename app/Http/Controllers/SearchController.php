@@ -15,8 +15,11 @@ class SearchController extends Controller
     {
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
-        $tagNames = $request->input('tags', []);
+
+        Log::info('Search query', ['tags' => $request->input('tags', ''), 'topics' => $request->input('topics', '')]);
+
         $topicNames = $request->input('topics', []);
+        $tagNames = $request->input('tags', []);
 
         $tags = Tag::whereIn('name', $tagNames)->get();
         $topics = Topic::whereIn('name', $topicNames)->get();
@@ -29,12 +32,12 @@ class SearchController extends Controller
         ]);
 
         if($tags->isNotEmpty()) {
-            $articles = $this->filters_tag($articles, $tags);
+            $articles = ArticlePage::filterByTags($articles, $tags);
         }
 
 
         if($topics->isNotEmpty()) {
-            $articles = $this->filters_topic($articles, $topics);
+            $articles = ArticlePage::filterByTopics($articles, $topics);
         }
 
 
@@ -42,59 +45,13 @@ class SearchController extends Controller
             'searchQuery' => $searchQuery,
             'username' => $authUser->username ?? 'Guest',
             'articleItems' => $articles,
-            'tags' => $tags,
-            'topics' => $topics,
+            'searchedTags' => $tags,
+            'searchedTopics' => $topics,
         ]);
     }
     private function sanitizeSearchQuery($query)
     {
         return preg_replace('/[^\w\s"]/', '', $query);
-    }
-
-    private function filters_querry($searchQuery)
-    {
-        if (empty($searchQuery)) {
-            $articles = ArticlePage::all();
-        } elseif (preg_match('/^".*"$/', $searchQuery)) {
-            // Remove the double quotes
-            $exactQuery = trim($searchQuery, '"');
-            $articles = ArticlePage::where('title', 'ILIKE', '%' . $exactQuery . '%')
-                ->orWhere('subtitle', 'ILIKE', '%' . $exactQuery . '%')
-                ->orWhere('content', 'ILIKE', '%' . $exactQuery . '%')
-                ->get();
-        } else {
-            $words = explode(' ', $searchQuery);
-            $sanitizedWords = array_map(function($word) {
-                return $word . ':*';
-            }, $words);
-            $tsQuery = implode(' & ', $sanitizedWords);
-
-            $articles = ArticlePage::whereRaw("tsv @@ to_tsquery('english', ?)", [$tsQuery])
-                ->orWhere(function($query) use ($words) {
-                    foreach ($words as $word) {
-                        $query->orWhere('title', 'ILIKE', '%' . $word . '%')
-                            ->orWhere('subtitle', 'ILIKE', '%' . $word . '%')
-                            ->orWhere('content', 'ILIKE', '%' . $word . '%');
-                    }
-                })
-                ->orderByRaw("ts_rank(tsv, to_tsquery('english', ?)) DESC", [$tsQuery])
-                ->get();
-        }
-        return $articles;
-    }
-
-    private function filters_tag($articles, $tags)
-    {
-        return $articles->filter(function($article) use ($tags) {
-            return $article->tags->pluck('id')->intersect($tags->pluck('id'))->isNotEmpty();
-        });
-    }
-
-    private function filters_topic($articles, $topics)
-    {
-        return $articles->filter(function($article) use ($topics) {
-            return $topics->pluck('id')->contains($article->topic->id);
-        });
     }
 
 }

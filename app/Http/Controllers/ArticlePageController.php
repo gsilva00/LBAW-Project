@@ -24,7 +24,7 @@ class ArticlePageController extends Controller
         return view('pages.articlePage', [
             'article' => $article,
             'username' => $username,
-            'tags' => $article->tags,
+            'articleTags' => $article->tags,
             'topic' => $article->topic,
             'comments' => $article->comments,
             'previousPage' => $previousPage,
