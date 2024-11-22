@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     var filterButton = document.getElementById('filter-button');
-    var filterDropdownMenu = filterButton.nextElementSibling;
+    var filterDropdownMenu = filterButton.parentElement.nextElementSibling;
 
     filterButton.addEventListener('click', function() {
         event.stopPropagation();
@@ -39,16 +39,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 suggestion.addEventListener('click', function() {
                     event.preventDefault();
                     event.stopPropagation();
-                    addTag(tag);
+                    addTag(tag,tagSuggestions);
                     tagInput.value = '';
                     tagSuggestions.innerHTML = '';
                 });
+
                 tagSuggestions.appendChild(suggestion);
+                if (tagSuggestions.children.length > 0) {
+                    tagSuggestions.classList.add('show');
+                }
             });
         }
     });
 
-    function addTag(tag) {
+    function addTag(tag,tagSuggestions) {
+        const topicSuggestions = document.getElementById('topic-suggestions');
 
         const existingTags = Array.from(selectedTags.getElementsByClassName('tag-block'));
         if (existingTags.some(tagBlock => tagBlock.querySelector('span').innerText.trim() === tag.name)) {
@@ -65,11 +70,15 @@ document.addEventListener('DOMContentLoaded', function() {
         tagBlock.appendChild(tagSpan);
 
         const removeButton = document.createElement('button');
-        removeButton.classList.add('remove-tag');
+        removeButton.classList.add('remove');
         removeButton.innerHTML = '&times;';
         removeButton.addEventListener('click', function() {
             event.stopPropagation();
             selectedTags.removeChild(tagBlock);
+
+            if (selectedTags.children.length == 0) {
+                topicSuggestions.classList.remove('tag-open');
+            }
         });
 
         tagBlock.appendChild(removeButton);
@@ -80,5 +89,11 @@ document.addEventListener('DOMContentLoaded', function() {
         hiddenInput.name = 'tags[]';
         hiddenInput.value = tag.id;
         tagBlock.appendChild(hiddenInput);
+
+        if (selectedTags.children.length > 0) {
+            topicSuggestions.classList.add('tag-open');
+        }
+
+        tagSuggestions.classList.remove('show');
     }
 });

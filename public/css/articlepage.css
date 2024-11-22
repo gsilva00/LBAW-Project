@@ -8,12 +8,6 @@
     font-weight: 300;
 }
 
-.large-rectangle{
-    background-color: var(--secondary-color);
-    padding: 0.75rem 1rem;
-    list-style: none;
-}
-
 .article-title{
     font-family: 'Inria Serif', serif;
     margin-bottom: 0;

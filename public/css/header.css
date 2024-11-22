@@ -13,7 +13,7 @@ body{
   margin-block: 0.5em;
 }
 
-span,a,p,button{
+span,a,p,button,input{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
 }
@@ -102,10 +102,29 @@ header{
 
 #filter-options{
   display: none;
+  padding-top: 1em;
+  border-top: 1px solid var(--secondary-color);
+  margin-top: 1em;
 }
 
 #filter-options.show{
   display: block;
+}
+
+.filter-option{
+  display: grid;
+  grid-template-areas: "name input" "selected selected";
+  column-gap: 0.5em;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.filter-option label{
+  grid-area: name;
+}
+
+.filter-option input{
+  grid-area: input;
 }
 
 .dropdown-item {
@@ -132,4 +151,23 @@ header{
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   z-index: 1000;
+}
+
+.search-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.5em;
+}
+
+.search-container button{
+  background-color: var(--secondary-color);
+}
+
+.search-container button:hover{
+  background-color: var(--primary-color);
+}
+
+.search-container button i{
+  top: 0.5em;
 }

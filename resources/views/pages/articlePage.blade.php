@@ -20,7 +20,7 @@
                 
             @endif
             </p>
-            <button id="report-button" class="large-rectangle small-text"><span>Report News</span></button>
+            <button id="report-button" class="large-rectangle small-text"><span>Report News</span></button>  <!-- Needs to be implemented -->
         </div>
         <p class="title">{{ $article->subtitle }}</p>
         <div>

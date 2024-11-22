@@ -22,16 +22,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 suggestion.addEventListener('click', function() {
                     event.preventDefault();
                     event.stopPropagation();
-                    addtopic(topic);
+                    addtopic(topic,topicSuggestions);
                     topicInput.value = '';
                     topicSuggestions.innerHTML = '';
                 });
                 topicSuggestions.appendChild(suggestion);
+                if (topicSuggestions.children.length > 0) {
+                    topicSuggestions.classList.add('show');
+                }
             });
         }
     });
 
-    function addtopic(topic) {
+    function addtopic(topic,topicSuggestions) {
 
         const existingtopics = Array.from(selectedtopics.getElementsByClassName('topic-block'));
         if (existingtopics.some(topicBlock => topicBlock.querySelector('span').innerText.trim() === topic.name)) {
@@ -41,14 +44,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const topicBlock = document.createElement('div');
         topicBlock.classList.add('topic-block');
-        tagBlock.classList.add('block');
+        topicBlock.classList.add('block');
         const topicSpan = document.createElement('span');
         topicSpan.classList.add('small-text');
         topicSpan.innerText = topic.name;
         topicBlock.appendChild(topicSpan);
 
         const removeButton = document.createElement('button');
-        removeButton.classList.add('remove-topic');
+        removeButton.classList.add('remove');
         removeButton.innerHTML = '&times;';
         removeButton.addEventListener('click', function() {
             event.stopPropagation();
@@ -63,5 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hiddenInput.name = 'topics[]';
         hiddenInput.value = topic.id;
         topicBlock.appendChild(hiddenInput);
+
+        topicSuggestions.classList.remove('show');
     }
 });
