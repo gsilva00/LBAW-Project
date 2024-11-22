@@ -23,7 +23,7 @@
     <body>
         <main>
             <header>
-                <h1><a href="<?php echo e(url('/cards')); ?>">Thingy!</a></h1>
+                <h1><a href="<?php echo e(url('/homepage')); ?>">NewFlow!</a></h1>
                 <?php if(Auth::check()): ?>
                     <a class="button" href="<?php echo e(url('/logout')); ?>"> Logout </a> <span><?php echo e(Auth::user()->name); ?></span>
                 <?php endif; ?>

@@ -1,9 +1,13 @@
 .profile-info{
-    display: flex;
-    justify-content: flex-start;
-    column-gap: 2em;
-    align-items: center;
-    grid-area: profile_info;
+  display: flex;
+  justify-content: flex-start;
+  column-gap: 2em;
+  align-items: center;
+  grid-area: profile_info;
+}
+
+.profile-info.space-between{
+  justify-content: space-between;
 }
 
 .profile-wrapper{
@@ -42,4 +46,8 @@
 .greyer{
     background-color: var(--primary-color);
     font-weight: 400;
+}
+
+.greyer:hover{
+    background-color: white;
 }

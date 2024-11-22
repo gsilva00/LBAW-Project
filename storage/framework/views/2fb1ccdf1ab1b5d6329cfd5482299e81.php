@@ -30,10 +30,10 @@
         <p class="article-text border-bottom"><?php echo e($article->content); ?></p>
         <div class="large-rectangle tags">
             <span class="thin">Topic:</span>
-            <span><strong> <?php echo e($topic->name); ?></strong></span>
+            <span><strong><a href="<?php echo e(route('search.show', ['topics' => [$topic->name]])); ?>"><?php echo e($topic->name); ?></a></strong></span>
             <span class="thin">Tags:</span>
             <?php $__currentLoopData = $tags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <span><strong><?php echo e($tag->name); ?></strong></span><?php if(!$loop->last): ?><?php endif; ?>
+                <span><strong><a href="<?php echo e(route('search.show', ['tags' => [$tag->name]])); ?>"><?php echo e($tag->name); ?></a></strong></span><?php if(!$loop->last): ?><?php endif; ?>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
         

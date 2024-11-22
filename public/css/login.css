@@ -1,0 +1,10 @@
+.login-register-container{
+    display: flex;
+    justify-content: center;
+    justify-self: center;
+    margin-block: 4em;
+    padding-top: 2em;
+    padding-bottom: 4em;
+    width: 30em;
+    border: 1px solid var(--secondary-color);
+}
