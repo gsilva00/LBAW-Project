@@ -1,6 +1,6 @@
     <a href="{{ route('article.show', ['id' => $article->id]) }}">
     <div class="long-article-container news-tile">
-    <img src="https://picsum.photos/seed/picsum/1200/1300" alt="News Image">
+        <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
     <div class="long-article-title-subtitle">
         <span class="article-title" >{{ $article->title }}</span>
         <div class="article-meta-container">

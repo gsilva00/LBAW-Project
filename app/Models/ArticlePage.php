@@ -32,7 +32,7 @@ class ArticlePage extends Model
     ];
     protected $attributes = [
         'edit_date' => null,
-        'article_image' => null,
+        'article_image' => 'default.jpg',
         'upvotes' => 0,
         'downvotes' => 0,
         'is_edited' => false,

@@ -24,7 +24,7 @@
         </div>
         <p class="title">{{ $article->subtitle }}</p>
         <div>
-            <img class="article-image" src="https://picsum.photos/seed/picsum/1200/1300" alt="News Image">
+            <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
         </div>
         <p class="article-text border-bottom">{{ $article->content }}</p>
         <div class="large-rectangle tags">
