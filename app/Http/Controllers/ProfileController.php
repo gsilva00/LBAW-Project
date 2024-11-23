@@ -15,6 +15,8 @@ class ProfileController extends Controller
     public function show(string $username): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $user = User::find($username);
+        $this->authorize('view', $user);
+
         $displayName = $user->display_name;
         $description = $user->description;
         $isBanned = $user->is_banned;
@@ -42,6 +44,8 @@ class ProfileController extends Controller
     public function edit(): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
     {
         $user = Auth::user();
+        $this->authorize('update', $user);
+
         return view('pages.profileEdit', [
             'username' => $user->username,
             'email' => $user->email,
@@ -57,6 +61,7 @@ class ProfileController extends Controller
     public function update(): \Illuminate\Http\RedirectResponse
     {
         $user = Auth::user();
+        $this->authorize('update', $user);
 
         $validator = Validator::make(request()->all(), [
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,

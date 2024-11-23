@@ -40,7 +40,7 @@ class RegisterController extends Controller
 
             // Redirect to the welcome page with success message
             return redirect()->route('homepage')
-                ->withSuccess('You have successfully registered & logged in!');
+                ->withSuccess('You have successfully registered and logged in!');
         } catch (Exception $e) {
             // Handle the exception
             Log::error('Registration error: ' . $e->getMessage());

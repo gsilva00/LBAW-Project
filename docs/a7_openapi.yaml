@@ -487,7 +487,7 @@ paths:
     get:
       operationId: R401
       summary: 'R401: Search users'
-      description: 'Search for users with a given querry. Access: GUE, USR'
+      description: 'Search for users with a given query. Access: GUE, USR'
       tags:
         - 'M04: Search'
 
@@ -511,13 +511,13 @@ paths:
         '400':
           description: 'Bad Request. Missing or invalid query parameter.'
         '500':
-          description: 'Internel Server Error.'
+          description: 'Internal Server Error.'
 
   /search/articles:
     get:
       operationId: R402
       summary: 'R402: Search articles'
-      description: 'Search for articles with a given querry. Access: GUE, USR'
+      description: 'Search for articles with a given query. Access: GUE, USR'
       tags:
         - 'M04: Search'
 

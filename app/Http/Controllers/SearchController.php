@@ -51,7 +51,7 @@ class SearchController extends Controller
         return preg_replace('/[^\w\s"]/', '', $query);
     }
 
-    private function filters_querry($searchQuery)
+    private function filters_query($searchQuery)
     {
         if (empty($searchQuery)) {
             $articles = ArticlePage::all();

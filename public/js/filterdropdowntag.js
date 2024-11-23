@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var filterButton = document.getElementById('filter-button');
-    var filterDropdownMenu = filterButton.parentElement.nextElementSibling;
+    const filterButton = document.getElementById('filter-button');
+    const filterDropdownMenu = filterButton.parentElement.nextElementSibling;
 
     filterButton.addEventListener('click', function() {
         event.stopPropagation();

@@ -19,7 +19,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (Auth::check()) {
-            return redirect('/homepage');
+            return redirect()->route('homepage');
         } else {
             return view('auth.login');
         }
@@ -38,7 +38,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
  
-            return redirect()->intended('/homepage');
+            return redirect()->intended(route('homepage'));
         }
  
         return back()->withErrors([
@@ -51,6 +51,8 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        $this->authorize('logout', Auth::User());
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
