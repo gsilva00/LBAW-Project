@@ -26,7 +26,9 @@
         <div>
             <img class="article-image" src="https://picsum.photos/seed/picsum/1200/1300" alt="News Image">
         </div>
-        <p class="article-text border-bottom">{{ $article->content }}</p>
+        @foreach($paragraphs as $paragraph)
+            <p class="article-text border-bottom">{{ $paragraph }}</p>
+        @endforeach
         <div class="large-rectangle tags">
             <span class="thin">Topic:</span>
             <span><strong><a href="{{ route('search.show', ['topics' => [$topic->name]]) }}">{{ $topic->name }}</a></strong></span>

@@ -6,6 +6,7 @@ use App\Models\ArticlePage;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ArticlePageController extends Controller
 {
@@ -21,6 +22,10 @@ class ArticlePageController extends Controller
         $trendingTags = Tag::trending()->take(5)->get();
         $recentNews = ArticlePage::getMostRecentNews(3);
 
+        $paragraphs = explode("<?n?n>", $article->content);
+
+        Log::info('Paragraphs: ' . json_encode($paragraphs));
+
         return view('pages.articlePage', [
             'article' => $article,
             'username' => $username,
@@ -32,7 +37,8 @@ class ArticlePageController extends Controller
             'authorDisplayName' => $authorDisplayName,
             'trendingTags' => $trendingTags,
             'recentNews' => $recentNews,
-            'isHomepage' => false
+            'isHomepage' => false,
+            'paragraphs' => $paragraphs
         ]);
     }
 
