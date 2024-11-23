@@ -46,7 +46,7 @@ class SearchController extends Controller
             'topics' => $topics,
         ]);
     }
-    private function sanitizeSearchQuery($query)
+    private function sanitizeSearchQuery($query): string
     {
         return preg_replace('/[^\w\s"]/', '', $query);
     }

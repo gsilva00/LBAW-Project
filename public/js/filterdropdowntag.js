@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             event.stopPropagation();
             selectedTags.removeChild(tagBlock);
 
-            if (selectedTags.children.length == 0) {
+            if (selectedTags.children.length === 0) {
                 topicSuggestions.classList.remove('tag-open');
             }
         });

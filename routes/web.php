@@ -38,9 +38,9 @@ Route::controller(RegisterController::class)->group(function () {
 
 // Profile
 Route::prefix('profile')->controller(ProfileController::class)->group(function () {
+    Route::get('/{username}', 'show')->name('profile');
     Route::get('/edit', 'edit')->name('profile.edit');
     Route::post('/edit', 'update')->name('profile.update');
-    Route::get('/{username}', 'show')->name('profile');
 });
 
 // Article

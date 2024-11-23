@@ -3,11 +3,11 @@
 @section('content')
     <div id="contacts-header">
         <div>
-        <h1>About Us</h1>
-        <p>NewFlow is a news website created by a small team of developers at FEUP. Its goal is to make important information easy to access for both students and professionals, all in a simple web format. In short, NewFlow aims to give up-and-coming and experienced journalists a platform to share their stories with the wider community.</p>
-        <p>"We give you all the knowledge. What do you do with it is in your hands..."</p>
-        <h1>What Are The Perks Of Being With Us?</h1>
-        <p>Well, you can say...</p>
+            <h1>About Us</h1>
+            <p>NewFlow is a news website created by a small team of developers at FEUP. Its goal is to make important information easy to access for both students and professionals, all in a simple web format. In short, NewFlow aims to give up-and-coming and experienced journalists a platform to share their stories with the wider community.</p>
+            <p>"We give you all the knowledge. What do you do with it is in your hands..."</p>
+            <h1>What Are The Perks Of Being With Us?</h1>
+            <p>Well, you can say...</p>
         </div>
     </div>
     <div id="contacts-content">

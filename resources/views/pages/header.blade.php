@@ -5,7 +5,6 @@
         <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
         <h2><i class='bx bx-book'></i> Followed Topics</h2>
         <div id="profile" class="dropdown">
-
             @if(Auth::check())
                 <button type="button" id="profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class='bx bx-user-circle'></i>

@@ -3,8 +3,8 @@
 @section('content')
     <div id="contacts-header">
         <div>
-        <h1>Get in touch</h1>
-        <p>Have questions or feedback? We'd be happy to hear from you. Here's how you can get in touch...</p>
+            <h1>Get in touch</h1>
+            <p>Have questions or feedback? We'd be happy to hear from you. Here's how you can get in touch...</p>
         </div>
     </div>
     <div id="contacts-content">

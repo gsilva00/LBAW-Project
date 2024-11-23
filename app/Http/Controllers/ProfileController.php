@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +13,7 @@ class ProfileController extends Controller
     /**
      * Show the user profile.
      */
-    public function show(string $username): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function show(string $username)
     {
         $user = User::find($username);
         $this->authorize('view', $user);
@@ -41,7 +42,7 @@ class ProfileController extends Controller
     /**
      * Show the user profile edit form.
      */
-    public function edit(): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function edit()
     {
         $user = Auth::user();
         $this->authorize('update', $user);
@@ -58,7 +59,7 @@ class ProfileController extends Controller
     /**
      * Update the user profile.
      */
-    public function update(): \Illuminate\Http\RedirectResponse
+    public function update(): RedirectResponse
     {
         $user = Auth::user();
         $this->authorize('update', $user);
