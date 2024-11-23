@@ -2,15 +2,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const topics = window.topics;
     const topicInput = document.getElementById('topic-input');
     const topicSuggestions = document.getElementById('topic-suggestions');
-    const selectedtopics = document.getElementById('selected-topics');
+    const selectedTopics = document.getElementById('selected-topics');
 
     topicInput.addEventListener('input', function() {
         const query = topicInput.value.toLowerCase();
         topicSuggestions.innerHTML = '';
 
         if (query.length > 0) {
-            const filteredtopics = topics.filter(topic => topic.name.toLowerCase().includes(query));
-            filteredtopics.forEach(topic => {
+            const filteredTopics = topics.filter(topic => topic.name.toLowerCase().includes(query));
+            filteredTopics.forEach(topic => {
                 const suggestion = document.createElement('div');
                 suggestion.classList.add('suggestion');
                 const topicSpan = document.createElement('span');
@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 topicSpan.innerText = topic.name;
                 suggestion.appendChild(topicSpan);
 
-
-                suggestion.addEventListener('click', function() {
+                suggestion.addEventListener('click', function(event) {
                     event.preventDefault();
                     event.stopPropagation();
-                    addtopic(topic,topicSuggestions);
+                    addTopic(topic);
                     topicInput.value = '';
                     topicSuggestions.innerHTML = '';
                 });
+
                 topicSuggestions.appendChild(suggestion);
                 if (topicSuggestions.children.length > 0) {
                     topicSuggestions.classList.add('show');
@@ -34,13 +34,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function addtopic(topic,topicSuggestions) {
-
-        const existingtopics = Array.from(selectedtopics.getElementsByClassName('topic-block'));
-        if (existingtopics.some(topicBlock => topicBlock.querySelector('span').innerText.trim() === topic.name)) {
+    function addTopic(topic) {
+        const existingTopics = Array.from(selectedTopics.getElementsByClassName('topic-block'));
+        if (existingTopics.some(topicBlock => topicBlock.querySelector('span').innerText.trim() === topic.name)) {
             return;
         }
-
 
         const topicBlock = document.createElement('div');
         topicBlock.classList.add('topic-block');
@@ -53,20 +51,36 @@ document.addEventListener('DOMContentLoaded', function() {
         const removeButton = document.createElement('button');
         removeButton.classList.add('remove');
         removeButton.innerHTML = '&times;';
-        removeButton.addEventListener('click', function() {
+        removeButton.addEventListener('click', function(event) {
             event.stopPropagation();
-            selectedtopics.removeChild(topicBlock);
+            selectedTopics.removeChild(topicBlock);
+            updateHiddenInputs();
         });
 
         topicBlock.appendChild(removeButton);
-        selectedtopics.appendChild(topicBlock);
+        selectedTopics.appendChild(topicBlock);
 
         const hiddenInput = document.createElement('input');
         hiddenInput.type = 'hidden';
         hiddenInput.name = 'topics[]';
-        hiddenInput.value = topic.id;
+        hiddenInput.value = topic.name;
         topicBlock.appendChild(hiddenInput);
 
-        topicSuggestions.classList.remove('show');
+        updateHiddenInputs();
+    }
+
+    function updateHiddenInputs() {
+        const hiddenInputs = selectedTopics.querySelectorAll('input[type="hidden"]');
+        hiddenInputs.forEach(input => input.remove());
+
+        const topicBlocks = selectedTopics.getElementsByClassName('topic-block');
+        Array.from(topicBlocks).forEach(topicBlock => {
+            const topicName = topicBlock.querySelector('span').innerText.trim();
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'topics[]';
+            hiddenInput.value = topicName;
+            selectedTopics.appendChild(hiddenInput);
+        });
     }
 });

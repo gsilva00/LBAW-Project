@@ -4,12 +4,12 @@
     <h1>Search Results</h1>
     <p>You searched for: {{ $searchQuery }}</p>
     <p>You searched for these tags:
-        @foreach($tags as $tag)
+        @foreach($searchedTags as $tag)
             <a href="{{ route('search.show', ['tags' => [$tag->name]]) }}">{{ $tag->name }}</a>
         @endforeach
     </p>
     <p>You searched for these topics:
-        @foreach($topics as $topic)
+        @foreach($searchedTopics as $topic)
             <a href="{{ route('search.show', ['topics' => [$topic->name]]) }}">{{ $topic->name }}</a>
         @endforeach
     </p>
