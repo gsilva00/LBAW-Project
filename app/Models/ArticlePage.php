@@ -32,7 +32,7 @@ class ArticlePage extends Model
     ];
     protected $attributes = [
         'edit_date' => null,
-        'article_image' => null,
+        'article_image' => 'default.jpg',
         'upvotes' => 0,
         'downvotes' => 0,
         'is_edited' => false,
@@ -172,7 +172,7 @@ class ArticlePage extends Model
         });
     }
 
-    private function filterByTopics($articles, $topics)
+    public static function filterByTopics($articles, $topics)
     {
         return $articles->filter(function($article) use ($topics) {
             return $topics->pluck('id')->contains($article->topic->id);

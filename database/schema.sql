@@ -39,7 +39,7 @@ CREATE TABLE Users(
     id SERIAL PRIMARY KEY,
     display_name VARCHAR(20) DEFAULT NULL,
     username VARCHAR(20) UNIQUE,
-    email VARCHAR(256) UNIQUE,
+    email VARCHAR(256) DEFAULT 'images/profile/default.jpg',
     password VARCHAR(256),
     profile_picture VARCHAR(256) DEFAULT NULL,
     description VARCHAR(300) DEFAULT NULL,

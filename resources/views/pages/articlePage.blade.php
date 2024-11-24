@@ -24,14 +24,16 @@
         </div>
         <p class="title">{{ $article->subtitle }}</p>
         <div>
-            <img class="article-image" src="https://picsum.photos/seed/picsum/1200/1300" alt="News Image">
+            <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
         </div>
-        <p class="article-text border-bottom">{{ $article->content }}</p>
+        @foreach($paragraphs as $paragraph)
+            <p class="article-text border-bottom">{{ $paragraph }}</p>
+        @endforeach
         <div class="large-rectangle tags">
             <span class="thin">Topic:</span>
             <span><strong><a href="{{ route('search.show', ['topics' => [$topic->name]]) }}">{{ $topic->name }}</a></strong></span>
             <span class="thin">Tags:</span>
-            @foreach($tags as $tag)
+            @foreach($articleTags as $tag)
                 <span><strong><a href="{{ route('search.show', ['tags' => [$tag->name]]) }}">{{ $tag->name }}</a></strong></span>@if(!$loop->last)@endif
             @endforeach
         </div>
