@@ -12,9 +12,11 @@ class Reply extends Model
 {
     use HasFactory;
 
-    const CREATED_AT = 'rpl_date';
-    protected $table = 'reply';
     public $timestamps = false; // No `updated_at` column.
+    const CREATED_AT = 'rpl_date';
+
+    protected $table = 'reply';
+
     protected $fillable = [
         'content',
         'upvotes',
@@ -60,7 +62,7 @@ class Reply extends Model
     {
         return $this->belongsToMany(
             User::class,
-            'VoteReply',
+            'vote_reply',
             'reply_id',
             'user_id'
         )->withPivot('type');

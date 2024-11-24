@@ -48,6 +48,10 @@ class User extends Authenticatable
     // The attributes that should be hidden for serialization to an array or JSON
     protected $hidden = [
         'password',
+        'is_banned',
+        'is_admin',
+        'is_fact_checker',
+        'is_deleted',
         'remember_token',
     ];
 
@@ -112,7 +116,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             User::class,
-            'FollowUser',
+            'follow_user',
             'following_id',
             'follower_id'
         );
@@ -121,7 +125,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             User::class,
-            'FollowUser',
+            'follow_user',
             'follower_id',
             'following_id'
         );
@@ -132,7 +136,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             ArticlePage::class,
-            'VoteArticle',
+            'vote_article',
             'user_id',
             'article_id'
         )->withPivot('type');
@@ -141,7 +145,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             Comment::class,
-            'VoteComment',
+            'vote_comment',
             'user_id',
             'comment_id'
         )->withPivot('type');
@@ -150,7 +154,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             Reply::class,
-            'VoteReply',
+            'vote_reply',
             'user_id',
             'reply_id'
         )->withPivot('type');
@@ -160,7 +164,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             ArticlePage::class,
-            'FavouriteArticle',
+            'favourite_article',
             'user_id',
             'article_id'
         );

@@ -12,10 +12,12 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 class ArticlePage extends Model
 {
     use HasFactory;
+
     const CREATED_AT = 'create_date';
     const UPDATED_AT = 'edit_date';
 
-    protected $table = 'articlepage';
+    protected $table = 'article_page';
+
     protected $fillable = [
         'title',
         'subtitle',
@@ -59,7 +61,7 @@ class ArticlePage extends Model
     {
         return $this->belongsToMany(
             Tag::class,
-            'articletag',
+            'article_tag',
             'article_id',
             'tag_id'
         );
@@ -77,7 +79,7 @@ class ArticlePage extends Model
     {
         return $this->belongsToMany(
             User::class,
-            'VoteArticle',
+            'vote_article',
             'article_id',
             'user_id'
         )->withPivot('type');
@@ -86,7 +88,7 @@ class ArticlePage extends Model
     {
         return $this->belongsToMany(
             User::class,
-            'FavouriteArticle',
+            'favourite_article',
             'article_id',
             'user_id'
         );
@@ -139,13 +141,15 @@ class ArticlePage extends Model
     {
         if (empty($searchQuery)) {
             return self::all();
-        } elseif (preg_match('/^".*"$/', $searchQuery)) {
+        }
+        elseif (preg_match('/^".*"$/', $searchQuery)) {
             $exactQuery = trim($searchQuery, '"');
             return self::where('title', 'ILIKE', '%' . $exactQuery . '%')
                 ->orWhere('subtitle', 'ILIKE', '%' . $exactQuery . '%')
                 ->orWhere('content', 'ILIKE', '%' . $exactQuery . '%')
                 ->get();
-        } else {
+        }
+        else {
             $words = explode(' ', $searchQuery);
             $sanitizedWords = array_map(function($word) {
                 return $word . ':*';

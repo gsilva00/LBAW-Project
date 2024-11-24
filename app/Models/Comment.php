@@ -14,7 +14,9 @@ class Comment extends Model
 
     public $timestamps = false;
     const CREATED_AT = 'cmt_date';
+
     protected $table = 'comment';
+
     protected $fillable = [
         'content',
         'upvotes',
@@ -44,7 +46,7 @@ class Comment extends Model
     {
         return $this->belongsToMany(
             User::class,
-            'VoteComment',
+            'vote_comment',
             'comment_id',
             'user_id'
         )->withPivot('type');

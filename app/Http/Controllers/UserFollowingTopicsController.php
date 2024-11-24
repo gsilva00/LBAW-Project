@@ -11,6 +11,7 @@ class UserFollowingTopicsController extends Controller
     public function show()
     {
         $user = Auth::user();
+        $this->authorize('viewFollowingTopics', $user);
 
         $tags = $user->followedTopics()->get();
         $articles = ArticlePage::all();
