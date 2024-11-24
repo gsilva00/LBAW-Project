@@ -24,10 +24,10 @@
         <!--  <link href="{{ url('css/app.css') }}" rel="stylesheet"> -->
     </head>
     <body>
-            @include('pages.header')
+        @include('pages.header')
         <main>
             @yield('content')
         </main>
-            @include('pages.footer')
+        @include('pages.footer')
     </body>
 </html>

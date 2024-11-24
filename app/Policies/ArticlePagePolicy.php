@@ -16,11 +16,21 @@ class ArticlePagePolicy
      */
     public function before(User $user, $ability): bool|null
     {
-        if ($user->is_admin) {
+        if (Auth::check() && $user->is_admin) {
             return true;
         }
 
         return null;
+    }
+
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(?User $user): bool
+    {
+        // Any user can view a list of articles
+        return true;
     }
 
     /**

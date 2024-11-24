@@ -16,7 +16,7 @@ class CommentPolicy
      */
     public function before(User $user, $ability): bool|null
     {
-        if ($user->is_admin) {
+        if (Auth::check() && $user->is_admin) {
             return true;
         }
 

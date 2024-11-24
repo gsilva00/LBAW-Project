@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -45,15 +46,18 @@ class ProfileController extends Controller
      */
     public function edit()
     {
+        Log::debug('ProfileController@edit called. Loading authorization...');
         $user = Auth::user();
         $this->authorize('update', $user);
+        Log::debug('ProfileController@edit called and authorization passed');
 
-        return view('pages.profileEdit', [
+        return view('pages.profile_edit', [
             'username' => $user->username,
             'email' => $user->email,
             'password' => $user->password,
             'displayName' => $user->display_name,
             'description' => $user->description,
+            'user' => $user,
         ]);
     }
 

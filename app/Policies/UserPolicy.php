@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class UserPolicy
 {
@@ -14,7 +15,7 @@ class UserPolicy
      */
     public function before(User $user, $ability): bool|null
     {
-        if ($user->is_admin) {
+        if (Auth::check() && $user->is_admin) {
             return true;
         }
 
@@ -54,7 +55,7 @@ class UserPolicy
     public function update(User $user, User $model): bool
     {
         // Users can update their own profile
-        return $user->is($model);
+        return Auth::check() && $user->is($model);
     }
 
     /**
@@ -63,7 +64,7 @@ class UserPolicy
     public function delete(User $user, User $model): bool
     {
         // Users can delete their own profile
-        return $user->is($model);
+        return Auth::check() && $user->is($model);
     }
 
 

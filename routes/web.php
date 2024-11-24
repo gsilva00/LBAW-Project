@@ -38,13 +38,20 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
+// Main Dynamic
+Route::get('/search', [SearchController::class, 'show'])->name('search.show');
+Route::get('/following-tags', [UserFollowingTagsController::class, 'show'])->name('followingTags');
+Route::get('/following-topics', [UserFollowingTopicsController::class, 'show'])->name('followingTopics');
 
 // Profile
-Route::prefix('profile')->controller(ProfileController::class)->group(function () {
-    Route::get('/{username}', 'show')->name('profile');
+Route::prefix('profile')->controller
+(ProfileController::class)->group(function () {
+    Route::get('/user/{username}', 'show')->name('profile');
     Route::get('/edit', 'edit')->name('profile.edit');
     Route::post('/edit', 'update')->name('profile.update');
 });
+Route::get('/create-article', [CreateArticleController::class, 'create'])->name('createArticle');
+Route::post('/submit-article', [CreateArticleController::class, 'store'])->name('submitArticle');
 
 // Article
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
@@ -53,12 +60,4 @@ Route::get('/voted-news', [ArticlePageController::class, 'showVotedNews'])->name
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
-Route::get('/search', [SearchController::class, 'show'])->name('search.show');
 Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutus');
-
-Route::get('/following-tags', [UserFollowingTagsController::class, 'show'])->name('followingTags');
-
-Route::get('/following-topics', [UserFollowingTopicsController::class, 'show'])->name('followingTopics');
-
-Route::get('/create-article', [CreateArticleController::class, 'create'])->name('createArticle');
-Route::post('/submit-article', [CreateArticleController::class, 'store'])->name('submitArticle');
