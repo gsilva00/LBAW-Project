@@ -10,6 +10,7 @@ class UserFollowingTagsController extends Controller
     public function show()
     {
         $user = Auth::user();
+        $this->authorize('viewFollowingTags', $user);
 
         $tags = $user->followedTags()->get();
         $articles = ArticlePage::all();

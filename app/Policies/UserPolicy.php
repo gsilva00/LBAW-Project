@@ -67,6 +67,23 @@ class UserPolicy
         return Auth::check() && $user->is($model);
     }
 
+    /**
+     * Determine whether the user can access his followed tags
+     */
+    public function viewFollowingTags(User $user): bool
+    {
+        // Only authenticated users can follow tags
+        return Auth::check();
+    }
+    /**
+     * Determine whether the user can access his followed topics
+     */
+    public function viewFollowingTopics(User $user): bool
+    {
+        // Only authenticated users can follow topics
+        return Auth::check();
+    }
+
 
     /**
      * Determine whether the user can restore the model.

@@ -1,50 +1,51 @@
 SET DateStyle TO European;
 
-TRUNCATE TABLE Users CASCADE;
-TRUNCATE TABLE FollowUser CASCADE;
-TRUNCATE TABLE Topic CASCADE;
+TRUNCATE TABLE users CASCADE;
+TRUNCATE TABLE follow_user CASCADE;
+TRUNCATE TABLE topic CASCADE;
 TRUNCATE TABLE follow_topics CASCADE;
-TRUNCATE TABLE Tag CASCADE;
+TRUNCATE TABLE tag CASCADE;
 TRUNCATE TABLE follow_tags CASCADE;
-TRUNCATE TABLE ArticlePage CASCADE;
-TRUNCATE TABLE ArticleTag CASCADE;
-TRUNCATE TABLE VoteArticle CASCADE;
-TRUNCATE TABLE FavouriteArticle CASCADE;
-TRUNCATE TABLE CheckArticle CASCADE;
-TRUNCATE TABLE Comment CASCADE;
-TRUNCATE TABLE VoteComment CASCADE;
-TRUNCATE TABLE Reply CASCADE;
-TRUNCATE TABLE VoteReply CASCADE;
-TRUNCATE TABLE Notifications CASCADE;
-TRUNCATE TABLE CommentNotification CASCADE;
-TRUNCATE TABLE ReplyNotification CASCADE;
-TRUNCATE TABLE UpvoteArticleNotification CASCADE;
-TRUNCATE TABLE UpvoteCommentNotification CASCADE;
-TRUNCATE TABLE UpvoteReplyNotification CASCADE;
-TRUNCATE TABLE Report CASCADE;
-TRUNCATE TABLE ReportArticle CASCADE;
-TRUNCATE TABLE ReportComment CASCADE;
-TRUNCATE TABLE ReportUser CASCADE;
-TRUNCATE TABLE AppealToUnban CASCADE;
-TRUNCATE TABLE AskToBecomeFactChecker CASCADE;
-TRUNCATE TABLE ProposeNewTag CASCADE;
+TRUNCATE TABLE article_page CASCADE;
+TRUNCATE TABLE article_tag CASCADE;
+TRUNCATE TABLE vote_article CASCADE;
+TRUNCATE TABLE favourite_article CASCADE;
+TRUNCATE TABLE check_article CASCADE;
+TRUNCATE TABLE comment CASCADE;
+TRUNCATE TABLE vote_comment CASCADE;
+TRUNCATE TABLE reply CASCADE;
+TRUNCATE TABLE vote_reply CASCADE;
+TRUNCATE TABLE report CASCADE;
+TRUNCATE TABLE report_user CASCADE;
+TRUNCATE TABLE report_article CASCADE;
+TRUNCATE TABLE report_comment CASCADE;
+TRUNCATE TABLE propose_new_tag CASCADE;
+TRUNCATE TABLE appeal_to_unban CASCADE;
+TRUNCATE TABLE ask_to_become_fact_checker CASCADE;
+TRUNCATE TABLE notifications CASCADE;
+TRUNCATE TABLE comment_notification CASCADE;
+TRUNCATE TABLE reply_notification CASCADE;
+TRUNCATE TABLE upvote_article_notification CASCADE;
+TRUNCATE TABLE upvote_comment_notification CASCADE;
+TRUNCATE TABLE upvote_reply_notification CASCADE;
+
+
 
 -- password: password123
-INSERT INTO Users (display_name, username, email, password, profile_picture, description, reputation, upvote_notification, comment_notification, is_banned, is_admin, is_fact_checker) VALUES
+INSERT INTO users (display_name, username, email, password, profile_picture, description, reputation, upvote_notification, comment_notification, is_banned, is_admin, is_fact_checker) VALUES
 ('Alice Johnson', 'alicej', 'alice@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'default.jpg', 'Enthusiastic writer', 5, true, true, false, false, true),
 ('Bob Smith', 'bobsmith', 'bob@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'default.jpg', 'Tech enthusiast', 3, true, true, false, false, false),
 ('Carol White', 'carolw', 'carol@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'default.jpg', 'Fact checker', 2, true, true, false, false, false),
 ('John Admin', 'notAdmin', 'admin@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'default.jpg', 'Admin', 4, true, true, false, true, true),
 ('Miguel Sousa', 'miguelS', 'miguels@example.com', '$2y$10$42AGNdGmhSAyAIDrAaFJ5upCtIoGTB.1SkcMhhiQUR.Ni1nRd7mDG', 'default.jpg', 'Portuguese writer', 0, true, true, true, false, false);
 
-
-INSERT INTO FollowUser (follower_id, following_id) VALUES
+INSERT INTO follow_user (follower_id, following_id) VALUES
 (1, 2),
 (1, 3),
 (2, 1),
 (3, 1);
 
-INSERT INTO Topic (id, name) VALUES
+INSERT INTO topic (id, name) VALUES
 (1, 'Technology'),
 (2, 'Environment'),
 (3, 'Politics'),
@@ -53,14 +54,13 @@ INSERT INTO Topic (id, name) VALUES
 (6, 'Business'),
 (7, 'Sports');
 
-
 INSERT INTO follow_topics (user_id, topic_id) VALUES
 (1, 1),
 (1, 2),
 (2, 1),
 (3, 3);
 
-INSERT INTO Tag (id, name, is_trending) VALUES
+INSERT INTO tag (id, name, is_trending) VALUES
 (1, 'AI', true),
 (2, 'Climate', false),
 (3, 'COVID-19', false),
@@ -75,7 +75,7 @@ INSERT INTO follow_tags (user_id, tag_id) VALUES
 (2, 1),
 (3, 3);
 
-INSERT INTO ArticlePage (id, title, subtitle, content, create_date, edit_date, article_image, upvotes, downvotes, is_edited, is_deleted, topic_id, author_id) VALUES
+INSERT INTO article_page (id, title, subtitle, content, create_date, edit_date, article_image, upvotes, downvotes, is_edited, is_deleted, topic_id, author_id) VALUES
 (1, 'The Future of AI', 'Innovations in AI', 'The field of artificial intelligence (AI) has seen tremendous growth and innovation over the past few decades. From its early beginnings in the mid-20th century, AI has evolved into a powerful tool that is transforming industries and societies around the world.<?n?n>One of the most significant innovations in AI is the development of machine learning algorithms. These algorithms enable computers to learn from data and make predictions or decisions without being explicitly programmed. This has led to breakthroughs in areas such as image and speech recognition, natural language processing, and autonomous vehicles.<?n?n>Another major innovation is the rise of deep learning, a subset of machine learning that uses neural networks with many layers. Deep learning has achieved remarkable success in tasks that were previously thought to be beyond the reach of computers, such as playing complex games like Go and generating realistic human-like text and images.<?n?n>AI is also driving innovation in healthcare, where it is being used to develop new diagnostic tools, personalize treatment plans, and accelerate drug discovery. For example, AI algorithms can analyze medical images to detect diseases like cancer at an early stage, potentially saving lives.<?n?n>In the business world, AI is being used to optimize operations, improve customer service, and create new products and services. Companies are leveraging AI to analyze large datasets, automate routine tasks, and gain insights that were previously hidden.<?n?n>Despite these advancements, there are still many challenges to overcome. Ethical considerations, such as bias in AI algorithms and the impact of automation on jobs, need to be addressed. Additionally, ensuring the security and privacy of AI systems is crucial as they become more integrated into our daily lives.<?n?n>In conclusion, the innovation of AI is reshaping our world in profound ways. As technology continues to advance, it is essential to navigate the challenges and harness the potential of AI to create a better future for all.', '2024-01-01 10:00', '2024-01-02 11:00', 'default.jpg', 2, 0, true, false, 1, 1),
 (2, 'Climate Change', 'Urgent Action Needed', 'Climate change is no longer a distant threat; it is a present-day crisis, reshaping the planet in real time. Rising temperatures, severe weather patterns, and rising sea levels are altering ecosystems, displacing communities, and threatening agriculture.<?n?n>Scientists have long warned about the dire consequences of continued greenhouse gas emissions. The primary drivers of these emissions—fossil fuel consumption and deforestation—are still accelerating the problem. The harsh reality of these predictions is becoming clearer each year as we witness more frequent and intense natural disasters.<?n?n>From devastating wildfires in California and Australia to catastrophic hurricanes in the Caribbean and the increasing frequency of droughts in Africa, these extreme weather events have caused widespread destruction. In many places, the damage to infrastructure, homes, and livelihoods has been severe, and the effects are not temporary—they have long-lasting consequences.<?n?n>Beyond the immediate damage to human communities, climate change is also endangering biodiversity. Rising ocean temperatures, for example, are bleaching coral reefs and threatening marine life. Likewise, many terrestrial species are struggling to adapt to rapidly changing environments, with some on the brink of extinction.<?n?n>While countries around the world have started implementing measures to combat climate change, including renewable energy adoption and international agreements, the scale of the crisis requires more urgent and transformative action.<?n?n>To avoid the worst impacts, experts argue that global emissions must be significantly reduced, fossil fuel dependence must be curtailed, and industrial practices must evolve. Thankfully, the growing adoption of renewable energy sources such as wind and solar power offers hope, though it will take more than just this to address the full scope of the problem.<?n?n>In conclusion, the fight against climate change is not one that can be left to governments alone. It requires a global effort from individuals, businesses, and policymakers alike. Only through collective action can we hope to slow the damage and build a more sustainable future for generations to come.', '2024-02-01 10:00', NULL, 'default.jpg', 1, 1, false, false, 2, 2),
 (3, 'COVID-19 Vaccines', 'Progress and Challenges', 'COVID-19 vaccines have played a pivotal role in the global response to the pandemic, offering a powerful tool to protect individuals from severe illness and reduce the spread of the virus. Developed in record time, these vaccines have proven to be effective in preventing infection and, more importantly, in significantly lowering the risk of hospitalization and death.<?n?n>Since the first vaccines were rolled out in late 2020, millions of people around the world have received their doses. The rapid development of these vaccines was a scientific triumph, with pharmaceutical companies leveraging years of research on mRNA technology, alongside traditional vaccine methods, to create multiple safe and effective options.<?n?n>As more people get vaccinated, countries have seen a decline in COVID-19 cases, easing pressure on healthcare systems and allowing economies to reopen. However, the global distribution of vaccines has been uneven, with wealthier nations having faster access while low-income countries struggle to secure enough doses. This disparity has highlighted the need for greater international cooperation to ensure equitable vaccine distribution.<?n?n>In addition to their ability to protect against severe disease, vaccines have also contributed to reducing the burden on hospitals and healthcare workers, allowing them to focus on treating other critical conditions. As new variants of the virus, such as Delta and Omicron, emerged, vaccines were updated to enhance their effectiveness against these mutations, offering an added layer of defense.<?n?n>Despite the proven benefits of vaccination, vaccine hesitancy remains a challenge in many parts of the world. Misinformation, mistrust of government health recommendations, and concerns over potential side effects have slowed the uptake in some communities. Public health campaigns, along with clear and transparent communication, have been essential in addressing these concerns.<?n?n>In conclusion, COVID-19 vaccines have been a game-changer in the fight against the pandemic. They are critical not only in saving lives but also in moving the world closer to ending the crisis. Continued efforts are needed to vaccinate as many people as possible, including in underserved regions, to ensure the global community can reach herd immunity and prevent further outbreaks.', '2024-03-01 10:00', NULL, 'default.jpg', 0, 0, false, false, 4, 3),
@@ -87,7 +87,7 @@ INSERT INTO ArticlePage (id, title, subtitle, content, create_date, edit_date, a
 (9, 'The Evolution of Football Tactics', 'From Traditional to Modern Play', 'Football, or soccer as it’s called in some countries, has evolved significantly over the years. What started as a simple game with basic rules has transformed into a highly strategic sport, with teams employing complex tactics to outsmart their opponents. This evolution of football tactics has changed the way the game is played, turning it into a more dynamic and fast-paced spectacle.<?n?n>In the early days of football, teams primarily relied on basic formations, such as the 2-3-5 system, which consisted of two defenders, three midfielders, and five forwards. This attacking style prioritized offense, with the idea of overwhelming the opposition with sheer numbers in the attacking third. However, as teams began to understand the importance of balance between defense and attack, formations started to evolve to provide more stability. By the 1960s, the 4-4-2 formation, which is still commonly used today, became a popular choice, providing a more solid defensive structure while still allowing for attacking opportunities.<?n?n>The 21st century has witnessed even more tactical innovation, with managers like Pep Guardiola, Jurgen Klopp, and Mauricio Pochettino leading the charge in modern football strategies. One of the most influential tactical shifts has been the concept of "possession-based football," popularized by Guardiola during his time at Barcelona. This strategy emphasizes maintaining possession of the ball for long periods to wear down opponents, create space, and control the tempo of the game. Teams like Barcelona, Manchester City, and Bayern Munich have excelled with this approach, making intricate passes and positioning key to breaking down defensive lines.<?n?n>Another significant tactical shift has been the rise of high-pressing football, popularized by Klopp’s Liverpool and Pochettino’s Tottenham Hotspur. The high press involves teams putting pressure on the opponent high up the pitch, often as soon as they lose possession, to win the ball back quickly. This strategy has led to more exciting, fast-paced games, as teams look to regain control through relentless pressing and quick transitions. High pressing demands exceptional fitness, speed, and coordination, and it’s a tactic that has reshaped how modern football is played.<?n?n>As football continues to evolve, tactics will likely keep changing in response to new challenges. The introduction of video assistant referees (VAR) has also impacted tactical decisions, as teams are more cautious about offside positions and penalties, knowing that they can be reviewed. Additionally, the ever-growing importance of data analytics has given managers more insights into player performance, injuries, and match statistics, allowing for more informed tactical decisions. The future of football tactics looks set to be even more dynamic, with greater emphasis on adaptability, versatility, and the use of technology to outsmart opponents.', '2024-01-01 10:00', NULL, 'default.jpg', 0, 0, false, false, 7, 3),
 (10, 'The Global Phenomenon of Football', 'Why It’s the World’s Most Popular Sport', 'Football is widely regarded as the world''s most popular sport, and for good reason. With over 4 billion fans worldwide, the sport transcends cultural, geographic, and social boundaries. From the bustling streets of Rio de Janeiro to the heart of London, football is a universal language that unites people across the globe. The reasons for football’s global appeal are varied, but its simplicity, accessibility, and thrilling nature make it the sport of choice for millions.<?n?n>One of the key factors contributing to football''s popularity is its simplicity. The basic rules of football are easy to understand: two teams compete to score goals, and the team with the most goals wins. This straightforward concept makes the game accessible to people of all ages and skill levels, whether they are playing in a professional league or kicking a ball around in a local park. Unlike sports that require specialized equipment or facilities, football can be played with just a ball and an open space, making it an inclusive sport for all.<?n?n>Football’s international appeal is also tied to its deep-rooted history and cultural significance. The sport has been played in some form for centuries, with its modern version originating in England in the 19th century. Since then, it has spread across continents, becoming a cultural pillar in countries around the world. Major football tournaments, such as the FIFA World Cup, attract millions of viewers from every corner of the globe. The World Cup, held every four years, is the pinnacle of the sport, with teams from diverse nations competing for the ultimate prize. The tournament unites fans from different backgrounds, creating a sense of global camaraderie and pride.<?n?n>The success of international clubs and leagues has also fueled football’s global growth. Iconic teams like Barcelona, Real Madrid, Manchester United, and Bayern Munich have legions of fans worldwide. These clubs have become more than just sports teams; they are symbols of identity and pride for their supporters. The rise of global broadcasting deals and digital platforms has made it easier for fans to watch their favorite teams, regardless of where they live. Social media and online content further amplify the reach of football, with players becoming global superstars with millions of followers.<?n?n>Additionally, football’s ability to bring people together during times of social and political unrest has solidified its place as the world’s most beloved sport. In countries with political instability or economic struggles, football has served as a unifying force, offering hope and entertainment. Major tournaments, like the World Cup or the UEFA Champions League, provide a sense of escape and joy, bringing together people from all walks of life to celebrate their shared love for the game. Football’s power to bring joy and foster community spirit has helped it maintain its position as a global phenomenon.<?n?n>In conclusion, football’s status as the world’s most popular sport is a testament to its simplicity, accessibility, and universal appeal. Whether played on the streets or watched in packed stadiums, the sport has the ability to unite people from all cultures and backgrounds. As the game continues to evolve, football’s global fanbase will likely continue to grow, cementing its place as a symbol of passion, pride, and unity for generations to come.', '2024-01-01 10:00', NULL, 'default.jpg', 0, 0, false, false, 7, 1);
 
-INSERT INTO ArticleTag (article_id, tag_id) VALUES
+INSERT INTO article_tag (article_id, tag_id) VALUES
 (1, 1),
 (2, 2),
 (3, 3),
@@ -102,42 +102,65 @@ INSERT INTO ArticleTag (article_id, tag_id) VALUES
 (9, 7),
 (10, 7);
 
-INSERT INTO VoteArticle (user_id, article_id, type) VALUES
+INSERT INTO vote_article (user_id, article_id, type) VALUES
 (1, 1, 'Upvote'),
 (1, 2, 'Upvote'),
 (2, 1, 'Upvote'),
 (3, 2, 'Downvote');
 
-INSERT INTO FavouriteArticle (user_id, article_id) VALUES
+INSERT INTO favourite_article (user_id, article_id) VALUES
 (1, 1),
 (1, 2),
 (2, 1),
 (3, 2);
 
-INSERT INTO CheckArticle (user_id, article_id, context, verdict) VALUES
+INSERT INTO check_article (user_id, article_id, context, verdict) VALUES
 (1, 2, 'This article is misleading', 'False'),
 (1, 1, 'No Fake information have been written', 'True');
 
-INSERT INTO Comment (id, content, cmt_date, upvotes, downvotes, is_edited, is_deleted, author_id, article_id) VALUES
+INSERT INTO comment (id, content, cmt_date, upvotes, downvotes, is_edited, is_deleted, author_id, article_id) VALUES
 (1, 'Great insights!', '2024-01-02 12:00', 2, 0, false, false, 2, 1),
 (2, 'I disagree with...', '2024-01-03 13:00', 0, 2, false, false, 3, 1);
 
-INSERT INTO VoteComment (user_id, comment_id, type) VALUES
+INSERT INTO vote_comment (user_id, comment_id, type) VALUES
 (1, 1, 'Upvote'),
 (1, 2, 'Downvote'),
 (2, 1, 'Upvote'),
 (3, 2, 'Downvote');
 
-INSERT INTO Reply (id, content, rpl_date, upvotes, downvotes, is_edited, is_deleted, author_id, comment_id) VALUES
+INSERT INTO reply (id, content, rpl_date, upvotes, downvotes, is_edited, is_deleted, author_id, comment_id) VALUES
 (1, 'I see your point!', '2024-01-02 12:30', 3, 0, false, false, 1, 2);
 
-INSERT INTO VoteReply (user_id, reply_id, type) VALUES
+INSERT INTO vote_reply (user_id, reply_id, type) VALUES
 (1, 1, 'Upvote'),
 (2, 1, 'Upvote'),
 (3, 1, 'Upvote');
 
+INSERT INTO report (id, description, report_date, is_accepted, reporter_id) VALUES
+(1, 'This article is spreading fake news', '2024-01-02 12:00', false, 1),
+(2, 'This comment is offensive', '2024-01-03 13:00', false, 1),
+(3, 'This user has violent content', '2024-01-03 13:00', false, 2);
 
-INSERT INTO Notifications (id, ntf_date, is_viewed, user_to, user_from) VALUES
+INSERT INTO report_user (id, type, report_id, user_id) VALUES
+(1, 'Violence or Sexual Content', 3, 2);
+
+INSERT INTO report_article (id, type, report_id, article_id) VALUES
+(1, 'Fact Check', 1, 1);
+
+INSERT INTO report_comment (id, type, report_id, comment_id, reply_id) VALUES
+(1, 'Harassment', 2, 2, NULL);
+
+INSERT INTO propose_new_tag(id, name, user_id) VALUES
+(1, 'Política portuguesa', 1),
+(2, 'Guerra na Ucrania', 2);
+
+INSERT INTO appeal_to_unban(id , description, user_id) VALUES
+(1, 'I am sorry for my actions', 5);
+
+INSERT INTO ask_to_become_fact_checker(id, user_id) VALUES
+(1, 1);
+
+INSERT INTO notifications (id, ntf_date, is_viewed, user_to, user_from) VALUES
 (4, '20/9/17 0:00', true, 1, 1),
 (5, '23/3/17 0:00', false, 2, 1),
 (6, '23/3/17 0:00', false, 1, 2),
@@ -146,41 +169,15 @@ INSERT INTO Notifications (id, ntf_date, is_viewed, user_to, user_from) VALUES
 (9, '11/9/21 0:00', false, 2, 1),
 (10,'8/10/17 0:00', true, 3, 1);
 
-INSERT INTO UpvoteArticleNotification (id, ntf_id, article_id) VALUES
+INSERT INTO upvote_article_notification (id, ntf_id, article_id) VALUES
 (1, 4, 1),
 (2, 5, 1);
 
-INSERT INTO UpvoteCommentNotification (id, ntf_id, comment_id) VALUES
+INSERT INTO upvote_comment_notification (id, ntf_id, comment_id) VALUES
 (1, 6, 1),
 (2, 7, 1);
 
-INSERT INTO UpvoteReplyNotification (id, ntf_id, reply_id) VALUES
+INSERT INTO upvote_reply_notification (id, ntf_id, reply_id) VALUES
 (1, 8, 1),
 (2, 9, 1),
 (3, 10, 1);
-
-INSERT INTO Report (id, description, report_date, is_accepted, reporter_id) VALUES
-(1, 'This article is spreading fake news', '2024-01-02 12:00', false, 1),
-(2, 'This comment is offensive', '2024-01-03 13:00', false, 1),
-(3, 'This user has violent content', '2024-01-03 13:00', false, 2);
-
-INSERT INTO ReportArticle (id, type, report_id, article_id) VALUES
-(1, 'Fact Check', 1, 1);
-
-INSERT INTO ReportComment (id, type, report_id, comment_id, reply_id) VALUES
-(1, 'Harassment', 2, 2, NULL);
-
-INSERT INTO ReportUser (id, type, report_id, user_id) VALUES
-(1, 'Violence or Sexual Content', 3, 2);
-
-INSERT INTO AppealToUnban(id , description, user_id) VALUES
-(1, 'I am sorry for my actions', 5);
-
-INSERT INTO AskToBecomeFactChecker(id, user_id) VALUES
-(1, 1);
-
-INSERT INTO ProposeNewTag(id, name, user_id) VALUES
-(1, 'Política portuguesa', 1),
-(2, 'Guerra na Ucrania', 2);
-
-

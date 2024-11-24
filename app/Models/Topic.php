@@ -11,7 +11,9 @@ class Topic extends Model
 {
     use HasFactory;
     public $timestamps = false;
+
     protected $table = 'topic';
+
     protected $fillable = ['name'];
 
 
@@ -24,7 +26,7 @@ class Topic extends Model
     {
         return $this->belongsToMany(
             User::class,
-            'FollowTopic',
+            'follow_topic',
             'topic_id',
             'user_id'
         );

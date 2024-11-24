@@ -10,8 +10,13 @@ class Tag extends Model
 {
     use HasFactory;
     public $timestamps = false;
+
     protected $table = 'tag';
-    protected $fillable = ['name', 'is_trending'];
+
+    protected $fillable = [
+        'name',
+        'is_trending'
+    ];
     protected $attributes = [
         'is_trending' => false,
     ];
@@ -21,7 +26,7 @@ class Tag extends Model
     {
         return $this->belongsToMany(
             ArticlePage::class,
-            'articletag',
+            'article_tag',
             'tag_id',
             'article_id'
         );
@@ -31,7 +36,7 @@ class Tag extends Model
     {
         return $this->belongsToMany(
             User::class,
-            'FollowTag',
+            'follow_tag',
             'tag_id',
             'user_id'
         );
