@@ -84,6 +84,20 @@ class UserPolicy
         return Auth::check();
     }
 
+    public function viewFollowingAuthors(User $authUser): bool
+    {
+        return Auth::check();
+    }
+
+    /**
+     * Determine wether the user can access the administrator panel
+     */
+    public function viewAdminPanel(User $authUser): bool
+    {
+        // Only admins can view the administrator panel.
+        return false;
+    }
+
 
     /**
      * Determine whether the user can restore the model.

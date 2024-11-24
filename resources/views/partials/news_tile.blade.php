@@ -8,6 +8,7 @@
         <a href="{{ route('editArticle', ['id' => $article->id]) }}" class="large-rectangle small-text"><span>Edit</span></a>
         <form action="{{ route('deleteArticle', ['id' => $article->id]) }}" method="POST" style="display:inline;">
             @csrf
+            @method('DELETE') <!-- HTML forms don't directly support DELETE -->
             <button type="submit" class="large-rectangle small-text greyer"><span>Delete</span></button>
         </form>    </div>
     @endif

@@ -11,6 +11,7 @@ class UserFollowingController extends Controller
     public function followTags()
     {
         $user = Auth::user();
+
         $this->authorize('viewFollowingTags', $user);
 
         $tags = $user->followedTags()->get();
@@ -23,6 +24,7 @@ class UserFollowingController extends Controller
     public function followTopics()
     {
         $user = Auth::user();
+
         $this->authorize('viewFollowingTopics', $user);
 
         $tags = $user->followedTopics()->get();
@@ -35,6 +37,7 @@ class UserFollowingController extends Controller
     public function followAuthors()
     {
         $user = Auth::user();
+
         $this->authorize('viewFollowingAuthors', $user);
 
         $authors = $user->followers()->get();

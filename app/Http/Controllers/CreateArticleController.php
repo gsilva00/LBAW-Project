@@ -40,23 +40,25 @@ class CreateArticleController extends Controller
 
     public function create(){
         $user = Auth::user();
+
         $this->authorize('create', ArticlePage::class);
 
         return view('pages.create_article', ['user' => $user]);
     }
 
-    public function edit(Request $request){
+    public function edit(Request $request, $id){
         $user = Auth::user();
-        $article = ArticlePage::find($request->id);
+        $article = ArticlePage::findOrFail($id);
+
         $this->authorize('update', $article);
 
         return view('pages.edit_article', ['user' => $user, 'article' => $article]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $user = Auth::user();
-        $article = ArticlePage::find($request->id);
+        $article = ArticlePage::findOrFail($id);
 
         $this->authorize('update', $article);
 
@@ -80,10 +82,10 @@ class CreateArticleController extends Controller
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article updated successfully!');
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request, $id)
     {
         $user = Auth::user();
-        $article = ArticlePage::find($request->id);
+        $article = ArticlePage::findOrFail($id);
 
         $this->authorize('delete', $article);
 
@@ -91,7 +93,6 @@ class CreateArticleController extends Controller
         $article->title = '[Deleted]';
         $article->subtitle = 'This is article has been deleted';
         $article->content = '[Deleted]';
-
         $article->save();
 
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article deleted successfully!');
