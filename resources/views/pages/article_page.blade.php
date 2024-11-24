@@ -25,7 +25,7 @@
                 <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
             </div>
             @foreach($paragraphs as $paragraph)
-                <p class="article-text border-bottom">{{ $paragraph }}</p>
+                <p class="thin">{{ $paragraph }}</p>
             @endforeach
             <div class="large-rectangle tags">
                 <span class="thin">Topic:</span>
