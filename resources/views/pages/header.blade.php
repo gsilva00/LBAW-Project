@@ -18,10 +18,10 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
                     <a class="dropdown-item" href="{{ route('profile', ['username' => $user->username]) }}"><h2>See Profile</h2></a>
-                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
                     @if($user->is_admin)
-                        <a class="dropdown-item" href="#"><h2>Something for admin</h2></a>
+                        <a class="dropdown-item" href="#"><h2>Administrator Panel</h2></a>
                     @endif
+                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
                 </div>
                 <form id="logout-form" action="{{ route('logout') }}" method="GET" style="display: none;">
                     @csrf

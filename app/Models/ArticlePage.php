@@ -122,14 +122,14 @@ class ArticlePage extends Model
         );
     }
 
-    public static function getMostRecentNews($howmany)
+    public static function getMostRecentNews($how_many)
     {
-        return self::select('*')->orderByRaw('COALESCE(edit_date, create_date) DESC')->take($howmany)->get();
+        return self::select('*')->orderBy('create_date', 'DESC')->take($how_many)->get();
     }
 
     public static function getAllRecentNews()
     {
-        return self::select('*')->orderByRaw('COALESCE(edit_date, create_date) DESC')->get();
+        return self::select('*')->orderBy('create_date', 'DESC')->get();
     }
 
     public static function getArticlesByVotes()

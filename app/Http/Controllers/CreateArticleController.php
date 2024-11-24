@@ -41,12 +41,15 @@ class CreateArticleController extends Controller
     public function create(){
         $user = Auth::user();
         $this->authorize('create', ArticlePage::class);
+
         return view('pages.create_article', ['user' => $user]);
     }
 
     public function edit(Request $request){
         $user = Auth::user();
         $article = ArticlePage::find($request->id);
+        $this->authorize('update', $article);
+
         return view('pages.edit_article', ['user' => $user, 'article' => $article]);
     }
 
@@ -54,6 +57,8 @@ class CreateArticleController extends Controller
     {
         $user = Auth::user();
         $article = ArticlePage::find($request->id);
+
+        $this->authorize('update', $article);
 
         $request->validate([
             'title' => 'required|string|max:50',
@@ -80,7 +85,7 @@ class CreateArticleController extends Controller
         $user = Auth::user();
         $article = ArticlePage::find($request->id);
 
-        $this->authorize('delete', $user);
+        $this->authorize('delete', $article);
 
         $article->is_deleted = true;
         $article->title = '[Deleted]';
