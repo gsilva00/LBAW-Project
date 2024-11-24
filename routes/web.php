@@ -9,7 +9,7 @@ use App\Http\Controllers\CreateArticleController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\UserFollowingTagsController;
+use App\Http\Controllers\UserFollowingController;
 use App\Http\Controllers\UserFollowingTopicsController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,8 +40,12 @@ Route::controller(RegisterController::class)->group(function () {
 
 // Main Dynamic
 Route::get('/search', [SearchController::class, 'show'])->name('search.show');
-Route::get('/following-tags', [UserFollowingTagsController::class, 'show'])->name('followingTags');
-Route::get('/following-topics', [UserFollowingTopicsController::class, 'show'])->name('followingTopics');
+
+Route::prefix('following')->controller
+(UserFollowingController::class)->group(function () {
+    Route::get('/tags','followingTags')->name('followingTags');
+    Route::get('/topics','followingTopics')->name('followingTopics');
+});
 
 // Profile
 Route::prefix('profile')->controller
