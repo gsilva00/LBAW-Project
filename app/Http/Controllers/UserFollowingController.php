@@ -30,4 +30,6 @@ class UserFollowingController extends Controller
 
         return view('pages.display_articles', ['user' => $user, 'articles' => $articles_followed_tags]);
     }
+
+
 }
