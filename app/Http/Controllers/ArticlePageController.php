@@ -16,7 +16,6 @@ class ArticlePageController extends Controller
         $this->authorize('view', $article);
 
         $user = Auth::user();
-        $username = $user->username ?? 'Guest';
 
         $referer = $request->headers->get('referer') ?? 'home page';
         $previousPage = $this->getPageNameFromUrl($referer);
@@ -32,7 +31,6 @@ class ArticlePageController extends Controller
 
         return view('pages.articlePage', [
             'article' => $article,
-            'username' => $username,
             'articleTags' => $article->tags,
             'topic' => $article->topic,
             'comments' => $article->comments,
@@ -77,13 +75,11 @@ class ArticlePageController extends Controller
     public function showVotedNews()
     {
         $user = Auth::user();
-        $username = $user->username ?? 'Guest';
 
         $votedNews = ArticlePage::getArticlesByVotes();
         $this->authorize('viewAny', ArticlePage::class);
 
         return view('pages.voted_news', [
-            'username' => $username,
             'votedNews' => $votedNews,
             'user' => $user
         ]);

@@ -12,10 +12,10 @@
             @if(Auth::check())
                 <button type="button" id="profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class='bx bx-user-circle'></i>
-                    <h2>{{$username}}</h2>
+                    <h2>{{$user->username}}</h2>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
-                    <a class="dropdown-item" href="{{ route('profile', ['username' => $username]) }}"><h2>See Profile</h2></a>
+                    <a class="dropdown-item" href="{{ route('profile', ['username' => $user->username]) }}"><h2>See Profile</h2></a>
                     <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
                     @if($user->is_admin)
                         <a class="dropdown-item" href="#"><h2>Something for admin</h2></a>

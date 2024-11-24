@@ -13,3 +13,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButton = document.getElementById('filter-button');
+    const filterDropdownMenu = filterButton.parentElement.nextElementSibling;
+
+    filterButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        filterDropdownMenu.classList.toggle('show');
+    });
+
+    // Close the dropdown if clicked outside
+    window.addEventListener('click', function(event) {
+        if (!filterButton.contains(event.target) && !filterDropdownMenu.contains(event.target)) {
+            filterDropdownMenu.classList.remove('show');
+        }
+    });
+});

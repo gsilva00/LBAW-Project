@@ -10,6 +10,6 @@ class AboutUsController extends Controller
     {
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
-        return view('pages.aboutus', ['username' => $username, 'user' => $user]);
+        return view('pages.aboutus', ['user' => $user]);
     }
 }

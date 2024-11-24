@@ -43,7 +43,6 @@ class SearchController extends Controller
 
         return view('pages.search', [
             'searchQuery' => $searchQuery,
-            'username' => $authUser->username ?? 'Guest',
             'articleItems' => $articles,
             'searchedTags' => $tags,
             'searchedTopics' => $topics,

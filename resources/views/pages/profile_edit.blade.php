@@ -10,7 +10,7 @@
                 <h2><strong>General Profile Information</strong></h2>
                 <div class="profile-info">
                     <label for="username"><span>Username</span></label>
-                    <input type="text" name="username" id="username" value="{{ old('username', $username) }}" autocomplete="off">
+                    <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" autocomplete="off">
                     @if ($errors->has('username'))
                         <span class="error">
                             {{ $errors->first('username') }}
@@ -20,7 +20,7 @@
                 <br>
                 <div class="profile-info">
                     <label for="email"><span>Email</span></label>
-                    <input type="email" name="email" id="email" value="{{ old('email', $email) }}" autocomplete="email">
+                    <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" autocomplete="email">
                     @if ($errors->has('email'))
                         <span class="error">
                             {{ $errors->first('email') }}
@@ -30,12 +30,12 @@
                 <br>
                 <div class="profile-info">
                     <label for="display_name"><span>Display Name</span></label>
-                    <input type="text" name="display_name" id="display_name" value="{{ old('display_name', $displayName) }}" autocomplete="name">
+                    <input type="text" name="display_name" id="display_name" value="{{ old('display_name', $user->display_name) }}" autocomplete="name">
                 </div>
                 <br>
                 <div class="profile-info">
                     <label for="description"><span>Description</span></label>
-                    <input type="text" name="description" id="description" value="{{ old('description', $description) }}">
+                    <input type="text" name="description" id="description" value="{{ old('description', $user->description) }}">
                 </div>
                 <br>
                 <div class="profile-info">
