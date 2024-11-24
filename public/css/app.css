@@ -283,3 +283,36 @@ input[type="file"]::file-selector-button{
   padding: 0.75rem 1rem;
   list-style: none;
 }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content {
+  flex: 1;
+}
+
+button .bx{
+  font-size: 1.5em;
+}
+
+textarea{
+  width: 100%;
+}
+
+.greyer{
+  background-color: var(--primary-color);
+  font-weight: 400;
+}
+
+.greyer:hover{
+  background-color: white;
+}
+
+select{
+  background-color: white;
+  height: 3em;
+  width: 15em;
+}

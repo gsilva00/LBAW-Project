@@ -1,13 +1,13 @@
-@extends('layouts.homepage')
 
-@section('title', 'Create Article')
 
-@section('content')
+<?php $__env->startSection('title', 'Create Article'); ?>
+
+<?php $__env->startSection('content'); ?>
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Create a New Article</h1>
 
-            <form id="create-article" class="large-rectangle" action="{{ route('submitArticle') }}" method="POST">
-                @csrf
+            <form id="create-article" class="large-rectangle" action="<?php echo e(route('submitArticle')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
                 <br>
                 <div class="profile-info">
                     <label for="title"><span>Title</span></label>
@@ -34,9 +34,9 @@
                     <label for="content"><span>Topics</span></label>
                     <select class="form-control" id="topics" name="topics[]" required>
                         <option value="No_Topic" selected>No Topic</option>
-                        @foreach($topics as $topic)
-                            <option value="{{ $topic->id }}">{{ $topic->name }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $topics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($topic->id); ?>"><?php echo e($topic->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <br>
@@ -44,14 +44,15 @@
                     <label for="article_picture"><span>Upload Article Picture</span></label>
                     <input type="file" name="article_picture" id="article_picture">
                 </div>
-                @if ($errors->has('article_picture'))
+                <?php if($errors->has('article_picture')): ?>
                     <br>
                     <div class="profile-info">
                         <span class="error">
-                            {{ $errors->first('article_picture') }}
+                            <?php echo e($errors->first('article_picture')); ?>
+
                         </span>
                     </div>
-                @endif
+                <?php endif; ?>
                 <br>
                 <br>
                 <br>
@@ -62,4 +63,5 @@
                 <br>
             </form>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.homepage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/pages/create_article.blade.php ENDPATH**/ ?>

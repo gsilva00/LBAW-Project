@@ -1,7 +1,7 @@
 
 
 <?php $__env->startSection('content'); ?>
-<div class="profile-wrapper login-register-container">
+<div class="login-register-container">
     <form method="POST" action="<?php echo e(route('login')); ?>">
         <?php echo e(csrf_field()); ?>
 
@@ -9,13 +9,16 @@
         <div class="profile-info space-between">
             <label for="email"><span>E-mail</span></label>
             <input id="email" type="email" name="email" value="<?php echo e(old('email')); ?>" required autofocus autocomplete="email">
-            <?php if($errors->has('email')): ?>
+        </div>
+        <?php if($errors->has('email')): ?>
+        <br>
+            <div class="profile-info">
                 <span class="error">
                   <?php echo e($errors->first('email')); ?>
 
                 </span>
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php endif; ?>
         <br>
         <div class="profile-info space-between">
             <label for="password" ><span>Password</span></label>
@@ -27,6 +30,15 @@
                 </span>
             <?php endif; ?>
         </div>
+        <?php if($errors->has('password')): ?>
+            <br>
+            <div class="profile-info">
+            <span class="error">
+                <?php echo e($errors->first('password')); ?>
+
+            </span>
+            </div>
+        <?php endif; ?>
         <br>
         <div class="profile-info">
             <input type="checkbox" name="remember" id="rebember" <?php echo e(old('remember') ? 'checked' : ''); ?>>

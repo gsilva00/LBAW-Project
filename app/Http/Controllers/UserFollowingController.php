@@ -17,7 +17,7 @@ class UserFollowingController extends Controller
         $articles = ArticlePage::all();
         $articles_followed_tags = ArticlePage::filterByTags($articles, $tags);
 
-        return view('pages.display_articles', ['user' => $user, 'articles' => $articles_followed_tags]);
+        return view('pages.followedtags', ['user' => $user, 'articles' => $articles_followed_tags, 'followedtags' => $tags]);
     }
 
     public function followTopics()
@@ -25,11 +25,11 @@ class UserFollowingController extends Controller
         $user = Auth::user();
         $this->authorize('viewFollowingTopics', $user);
 
-        $tags = $user->followedTopics()->get();
+        $topics = $user->followedTopics()->get();
         $articles = ArticlePage::all();
-        $articles_followed_tags = ArticlePage::filterByTopics($articles, $tags);
+        $articles_followed_topics = ArticlePage::filterByTopics($articles, $topics);
 
-        return view('pages.followedtopics', ['user' => $user, 'articles' => $articles_followed_tags]);
+        return view('pages.followedtopics', ['user' => $user, 'articles' => $articles_followed_topics, 'followedtopics' => $topics]);
     }
 
     public function followAuthors()

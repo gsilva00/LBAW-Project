@@ -3,7 +3,7 @@
         <img src="<?php echo e(asset('images/article/' . $article->article_image)); ?>" alt="News Image">
         <p class="title"><?php echo e($article->title); ?></p>
     </a>
-    <?php if(empty($noButtons) || !$noButtons): ?>
+    <?php if(!$article->is_deleted): ?>
     <div class="float-container">
     <button class="large-rectangle small-text"><span>Edit</span></button>
     <button class="large-rectangle small-text greyer"><span>Delete</span></button>

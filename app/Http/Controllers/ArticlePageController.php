@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\Topic;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -84,4 +85,33 @@ class ArticlePageController extends Controller
             'user' => $user
         ]);
     }
+
+    public function showTopic($name)
+    {
+        $user = Auth::user();
+        $topic = Topic::where('name', $name)->firstOrFail();
+        $articles = $topic->articles()->get();
+        $this->authorize('viewAny', ArticlePage::class);
+
+        return view('pages.topic_page', [
+            'topic' => $topic,
+            'articles' => $articles,
+            'user' => $user
+        ]);
+    }
+
+    public function showTag($name)
+    {
+        $user = Auth::user();
+        $tag = Tag::where('name', $name)->firstOrFail();
+        $articles = $tag->articles()->get();
+        $this->authorize('viewAny', ArticlePage::class);
+
+        return view('pages.tag_page', [
+            'tag' => $tag,
+            'articles' => $articles,
+            'user' => $user
+        ]);
+    }
+
 }

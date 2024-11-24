@@ -3,7 +3,7 @@
         <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
         <p class="title">{{ $article->title }}</p>
     </a>
-    @if(empty($noButtons) || !$noButtons)
+    @if(!$article->is_deleted)
     <div class="float-container">
     <button class="large-rectangle small-text"><span>Edit</span></button>
     <button class="large-rectangle small-text greyer"><span>Delete</span></button>

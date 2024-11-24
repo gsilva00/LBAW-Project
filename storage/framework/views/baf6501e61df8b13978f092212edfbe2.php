@@ -40,13 +40,13 @@
             <?php endif; ?>
 
             <?php if($isOwner): ?>
-                <a href="<?php echo e(route('createArticle')); ?>"><button class="large-rectangle small-text greyer">Create New Article</button></a>  <!--Need to do action here -->
+                <a href="<?php echo e(route('createArticle')); ?>"><button class="large-rectangle small-text">Create New Article</button></a>  <!--Need to do action here -->
             <?php endif; ?>
 
         </div>
 
         <?php if($ownedArticles->isNotEmpty()): ?>
-            <div class="sec-articles">
+            <div class="sec-articles profile-page">
                 <?php $__currentLoopData = $ownedArticles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <?php echo $__env->make('partials.news_tile', [
                             'article' => $article,

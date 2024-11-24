@@ -11,7 +11,7 @@
         <script src="<?php echo e(url('js/searchdropdown.js')); ?>"> </script>
         <script src="<?php echo e(url('js/filterdropdowntag.js')); ?>"> </script>
         <script src="<?php echo e(url('js/filterdropdowntopic.js')); ?>"> </script>
-        <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet">
+        <script src="<?php echo e(url('js/tagcreatearticle.js')); ?>"> </script>
         <link href="<?php echo e(url('css/header.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/footer.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/login.css')); ?>" rel="stylesheet">
@@ -21,13 +21,16 @@
         <link href="<?php echo e(url('css/contacts.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/profile.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/filter.css')); ?>" rel="stylesheet">
+        <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet">
         <!--  <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet"> -->
     </head>
     <body>
-        <?php echo $__env->make('pages.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-        <main>
-            <?php echo $__env->yieldContent('content'); ?>
-        </main>
-        <?php echo $__env->make('pages.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <div class="wrapper">
+            <?php echo $__env->make('pages.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+            <main class="content">
+                <?php echo $__env->yieldContent('content'); ?>
+            </main>
+            <?php echo $__env->make('pages.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        </div>
     </body>
 </html><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/layouts/homepage.blade.php ENDPATH**/ ?>

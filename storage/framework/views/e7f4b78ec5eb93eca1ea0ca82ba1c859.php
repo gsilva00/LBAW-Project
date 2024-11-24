@@ -11,24 +11,30 @@
                 <div class="profile-info">
                     <label for="username"><span>Username</span></label>
                     <input type="text" name="username" id="username" value="<?php echo e(old('username', $user->username)); ?>" autocomplete="off">
-                    <?php if($errors->has('username')): ?>
+                </div>
+                <?php if($errors->has('username')): ?>
+                    <br>
+                    <div class="profile-info">
                         <span class="error">
                             <?php echo e($errors->first('username')); ?>
 
                         </span>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
                 <br>
                 <div class="profile-info">
                     <label for="email"><span>Email</span></label>
                     <input type="email" name="email" id="email" value="<?php echo e(old('email', $user->email)); ?>" autocomplete="email">
-                    <?php if($errors->has('email')): ?>
+                </div>
+                <?php if($errors->has('email')): ?>
+                <br>
+                    <div class="profile-info">
                         <span class="error">
-                            <?php echo e($errors->first('email')); ?>
+                        <?php echo e($errors->first('email')); ?>
 
                         </span>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
                 <br>
                 <div class="profile-info">
                     <label for="display_name"><span>Display Name</span></label>
@@ -44,48 +50,60 @@
                 <div class="profile-info">
                     <label for="profile_picture"><span>Upload Profile Picture</span></label>
                     <input type="file" name="profile_picture" id="profile_picture">
-                    <?php if($errors->has('profile_picture')): ?>
+                </div>
+                <?php if($errors->has('profile_picture')): ?>
+                    <br>
+                    <div class="profile-info">
                         <span class="error">
                             <?php echo e($errors->first('profile_picture')); ?>
 
                         </span>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
                 <br>
                 <p class="small-text">* Write password to confirm any changes to profile</p>
                 <div class="profile-info">
                     <label for="cur_password"><span>Current Password</span></label>
                     <input type="password" name="cur_password" id="cur_password" placeholder="password">
-                    <?php if($errors->has('cur_password')): ?>
+                </div>
+                <?php if($errors->has('cur_password')): ?>
+                    <br>
+                    <div class="profile-info">
                         <span class="error">
                             <?php echo e($errors->first('cur_password')); ?>
 
                         </span>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
                 <br>
                 <h2><strong>Optional: Change Password</strong></h2>
                 <div class="profile-info">
                     <label for="new_password"><span>New Password</span></label>
                     <input type="password" name="new_password" id="new_password" placeholder="new password">
-                    <?php if($errors->has('new_password')): ?>
-                        <span class="error">
+                </div>
+                <?php if($errors->has('new_password')): ?>
+                    <br>
+                    <div class="profile-info">
+                    <span class="error">
                             <?php echo e($errors->first('new_password')); ?>
 
                         </span>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
                 <br>
                 <div class="profile-info">
                     <label for="new_password_confirmation"><span>Confirm Password</span></label>
                     <input type="password" name="new_password_confirmation" id="new_password_confirmation" placeholder="new password">
-                    <?php if($errors->has('new_password_confirmation')): ?>
+                </div>
+                <?php if($errors->has('new_password_confirmation')): ?>
+                    <br>
+                    <div class="profile-info">
                         <span class="error">
                             <?php echo e($errors->first('new_password_confirmation')); ?>
 
                         </span>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
                 <br>
                 <br>
                 <br>
@@ -106,13 +124,16 @@
                 <div class="profile-info">
                     <label for="cur_password_delete"><span>Current Password</span></label>
                     <input type="password" name="cur_password_delete" id="cur_password_delete" placeholder="password">
-                    <?php if($errors->has('cur_password')): ?>
+                </div>
+                <?php if($errors->has('cur_password_delete')): ?>
+                    <br>
+                    <div class="profile-info">
                         <span class="error">
-                            <?php echo e($errors->first('cur_password')); ?>
+                            <?php echo e($errors->first('cur_password_delete')); ?>
 
                         </span>
-                    <?php endif; ?>
-                </div>
+                    </div>
+                <?php endif; ?>
                 <?php endif; ?>
                 <br>
                 <div class="profile-info">

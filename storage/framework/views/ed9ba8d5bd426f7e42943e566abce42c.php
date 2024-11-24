@@ -1,7 +1,9 @@
 <header>
     <div id="top-part-header">
         <h1><a href="<?php echo e(route('homepage')); ?>" class="logo"> <?php echo e(config('app.name', 'Laravel')); ?></a></h1>
-        <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
+        <a href="<?php echo e(route('followingAuthors')); ?>">
+            <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
+        </a>
         <a href="<?php echo e(route('followingTags')); ?>">
             <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
         </a>
@@ -37,18 +39,26 @@
         <a href="<?php echo e(route('votednews.show')); ?>"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
         <h2><i class='bx bx-trending-up'></i>Trending Tags</h2>
         <h2 class="topic">
-            <a href="<?php echo e(route('search.show', ['topics' => ['Politics']])); ?>">Politics</a>
+            <a href="<?php echo e(route('topic.show', ['name' => 'Politics'])); ?>">Politics</a>
         </h2>
         <h2 class="topic">
-            <a href="<?php echo e(route('search.show', ['topics' => ['Business']])); ?>">Business</a>
+            <a href="<?php echo e(route('topic.show', ['name' => 'Business'])); ?>">Business</a>
         </h2>
         <h2 class="topic">
-            <a href="<?php echo e(route('search.show', ['topics' => ['Technology']])); ?>">Technology</a>
+            <a href="<?php echo e(route('topic.show', ['name' => 'Technology'])); ?>">Technology</a>
         </h2>
         <h2 class="topic">
-            <a href="<?php echo e(route('search.show', ['topics' => ['Science']])); ?>">Science</a>
+            <a href="<?php echo e(route('topic.show', ['name' => 'Science'])); ?>">Science</a>
         </h2>
-        <h2><i class='bx bx-news'></i>All Topics</h2>
+        <button type="button" id="all-topics-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class='bx bx-news'></i>
+            <h2>All Topics</h2>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="all-topics-button">
+            <?php $__currentLoopData = $topics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <a class="dropdown-item" href="<?php echo e(route('topic.show', ['name' => $topic->name])); ?>"><h2><?php echo e($topic->name); ?></h2></a>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
         <?php echo $__env->make('partials.search',['tags' => $tags, 'topics' => $topics], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </div>
 </header><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/pages/header.blade.php ENDPATH**/ ?>
