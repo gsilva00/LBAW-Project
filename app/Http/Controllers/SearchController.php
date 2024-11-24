@@ -50,7 +50,7 @@ class SearchController extends Controller
             'user' => $authUser
         ]);
     }
-    private function sanitizeSearchQuery($query)
+    private function sanitizeSearchQuery($query): string
     {
         return preg_replace('/[^\w\s"]/', '', $query);
     }

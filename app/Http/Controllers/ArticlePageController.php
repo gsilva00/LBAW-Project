@@ -12,12 +12,16 @@ class ArticlePageController extends Controller
 {
     public function show(Request $request, $id)
     {
+        $article = ArticlePage::with(['tags', 'topic', 'author', 'comments'])->findOrFail($id);
+        $this->authorize('view', $article);
+
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
-        $article = ArticlePage::with(['tags', 'topic', 'author', 'comments'])->findOrFail($id);
+
         $referer = $request->headers->get('referer') ?? 'home page';
         $previousPage = $this->getPageNameFromUrl($referer);
         $previousUrl = $referer === 'home page' ? url('/') : $referer;
+
         $authorDisplayName = $article->author->display_name ?? 'Unknown';
         $trendingTags = Tag::trending()->take(5)->get();
         $recentNews = ArticlePage::getMostRecentNews(3);
@@ -61,6 +65,7 @@ class ArticlePageController extends Controller
         $username = $user->username ?? 'Guest';
 
         $recentNews = ArticlePage::getAllRecentNews();
+        $this->authorize('viewAny', ArticlePage::class);
 
         return view('pages.recent_news', [
             'username' => $username,
@@ -75,6 +80,7 @@ class ArticlePageController extends Controller
         $username = $user->username ?? 'Guest';
 
         $votedNews = ArticlePage::getArticlesByVotes();
+        $this->authorize('viewAny', ArticlePage::class);
 
         return view('pages.voted_news', [
             'username' => $username,

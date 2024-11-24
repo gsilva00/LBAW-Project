@@ -12,7 +12,7 @@ class HomepageController extends Controller
     /**
      * Show the welcome page.
      */
-    public function show(): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function show()
     {
         Log::info('HomepageController@show called');
         $user = Auth::user();

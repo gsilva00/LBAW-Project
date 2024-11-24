@@ -9,7 +9,6 @@
             <h2><i class='bx bx-book'></i> Followed Topics</h2>
         </a>
         <div id="profile" class="dropdown">
-
             @if(Auth::check())
                 <button type="button" id="profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class='bx bx-user-circle'></i>

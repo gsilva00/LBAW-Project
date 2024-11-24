@@ -16,10 +16,10 @@ class LoginController extends Controller
     /**
      * Display a login form.
      */
-    public function showLoginForm()
+    public function showLoginForm(): RedirectResponse|View
     {
         if (Auth::check()) {
-            return redirect('/homepage');
+            return redirect()->route('homepage');
         } else {
             return view('auth.login');
         }
@@ -38,7 +38,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
  
-            return redirect()->intended('/homepage');
+            return redirect()->intended(route('homepage'));
         }
  
         return back()->withErrors([
@@ -56,5 +56,6 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('login')
             ->withSuccess('You have logged out successfully!');
-    } 
+    }
+
 }

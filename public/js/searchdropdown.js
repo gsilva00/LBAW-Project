@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var searchButton = document.getElementById('search-button');
-    var searchDropdownMenu = searchButton.nextElementSibling;
+    const searchButton = document.getElementById('search-button');
+    const searchDropdownMenu = searchButton.nextElementSibling;
 
     searchButton.addEventListener('click', function() {
         searchDropdownMenu.classList.toggle('show');

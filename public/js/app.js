@@ -59,7 +59,7 @@ function addEventListeners() {
     let id = this.closest('article').getAttribute('data-id');
     let description = this.querySelector('input[name=description]').value;
   
-    if (description != '')
+    if (description !== '')
       sendAjaxRequest('put', '/api/cards/' + id, {description: description}, itemAddedHandler);
   
     event.preventDefault();
@@ -74,7 +74,7 @@ function addEventListeners() {
   function sendCreateCardRequest(event) {
     let name = this.querySelector('input[name=name]').value;
   
-    if (name != '')
+    if (name !== '')
       sendAjaxRequest('put', '/api/cards/', {name: name}, cardAddedHandler);
   
     event.preventDefault();
@@ -84,11 +84,11 @@ function addEventListeners() {
     let item = JSON.parse(this.responseText);
     let element = document.querySelector('li.item[data-id="' + item.id + '"]');
     let input = element.querySelector('input[type=checkbox]');
-    element.checked = item.done == "true";
+    element.checked = item.done === "true";
   }
   
   function itemAddedHandler() {
-    if (this.status != 200) window.location = '/';
+    if (this.status !== 200) window.location = '/';
     let item = JSON.parse(this.responseText);
   
     // Create the new item
@@ -104,21 +104,21 @@ function addEventListeners() {
   }
   
   function itemDeletedHandler() {
-    if (this.status != 200) window.location = '/';
+    if (this.status !== 200) window.location = '/';
     let item = JSON.parse(this.responseText);
     let element = document.querySelector('li.item[data-id="' + item.id + '"]');
     element.remove();
   }
   
   function cardDeletedHandler() {
-    if (this.status != 200) window.location = '/';
+    if (this.status !== 200) window.location = '/';
     let card = JSON.parse(this.responseText);
     let article = document.querySelector('article.card[data-id="'+ card.id + '"]');
     article.remove();
   }
   
   function cardAddedHandler() {
-    if (this.status != 200) window.location = '/';
+    if (this.status !== 200) window.location = '/';
     let card = JSON.parse(this.responseText);
   
     // Create the new card
