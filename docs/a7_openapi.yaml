@@ -76,7 +76,7 @@ paths:
               examples:
                 302Success:
                   description: 'Successful authentication. Redirect to user profile.'
-                  value: '/home'
+                  value: '/homepage'
 
                 302Error:
                   description: 'Failed authentication. Redirect to login form.'
@@ -156,7 +156,7 @@ paths:
               example:
                 302Success:
                   description: 'Successful registration. Redirect to home page.'
-                  value: '/home'
+                  value: '/homepage'
 
                 302Failure:
                   description: 'Failed registration. Redirect to register form.'
@@ -164,7 +164,7 @@ paths:
 
 ################################## Individual Profile ##################################
 
-  /profile/{username}:
+  /profile/user/{username}:
 
     get:
       operationId: R201
@@ -224,17 +224,20 @@ paths:
               properties:
                 username:
                   type: string
-                name:
+                display_name:
                   type: string
                 email:
                   type: string
                   format: email
                 description:
                   type: string
-                image:
+                profile_picture:
                   type: string
                   format: binary
-                password:
+                cur_password:
+                  type: string
+                  format: password
+                new_password:
                   type: string
                   format: password
                 confirm_password:
@@ -243,6 +246,7 @@ paths:
               required:
                 - username
                 - email
+                - cur_password
 
       responses:
         '302':
@@ -254,10 +258,10 @@ paths:
               example:
                 302Success:
                   description: 'Edit successful. Redirect to individual user profile.'
-                  value: '/user/{id}'
+                  value: '/profile/user/{username}'
                 302Failure:
                   description: 'Edit failed. Redirect to edit individual user profile.'
-                  value: '/user/edit'
+                  value: '/profile/user/edit'
 
 ######################################### News #########################################
 
@@ -273,7 +277,7 @@ paths:
         '200':
           description: 'Success. Display Home Feed.'
 
-  /my_feed/{id}:
+  /my_feed:
 
     get:
       operationId: R302
@@ -281,19 +285,11 @@ paths:
       description: 'Show the User News Feed page. Access: USR'
       tags:
         - 'M03: News'
-
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-
       responses:
         '200':
           description: 'Success. Display Top News Feed.'
 
-  /top_news:
+  /most-voted:
 
     get:
       operationId: R303
@@ -327,7 +323,7 @@ paths:
         '404':
           description: 'Not Found. This article does not exist.'
 
-  /create_article:
+  /create-article:
 
     get:
       operationId: R305
@@ -375,14 +371,14 @@ paths:
                 type: string
               example:
                 302Success:
-                  description: 'Successful. Redirect to the new article page.'
-                  value: '/article/{id}'
+                  description: 'Successful. Redirect to the user profile.'
+                  value: '/profile/user/{username}'
 
                 302Failure:
                   description: 'Failed. Redirect to create article form.'
                   value: '/create_article'
 
-  /article/edit:
+  /edit-article/{id}:
 
     get:
       operationId: R307
@@ -390,19 +386,19 @@ paths:
       description: 'Show the edit article page. Access: OWN'
       tags:
         - 'M03: News'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
       responses:
         '200':
           description: 'Ok. Show edit article UI.'
         '401':
           description: 'Unauthorized. You do not possess the valid credentials edit this article.'
-          headers:
-            Location:
-              schema:
-                type: string
-              example:
-                401Success:
-                  description: 'Redirecting to article page.'
-                  value: '/article/{id}'
 
     post:
       operationId: R308
@@ -440,13 +436,13 @@ paths:
                 type: string
               example:
                 302Success:
-                  description: 'Edit successful. Redirect to article page.'
-                  value: '/article/{id}'
+                  description: 'Edit successful. Redirect to the user profile.'
+                  value: '/profile/user/{username}'
                 302Failure:
                   description: 'Edit failed. Redirect to edit article page.'
-                  value: '/article/edit'
+                  value: '/edit-article/{id}'
 
-  /article/delete:
+  /delete-article/{id}:
 
     post:
       operationId: R309
@@ -476,8 +472,8 @@ paths:
                 type: string
               example:
                 302Success:
-                  description: 'Successful delete. Redirect to home page'
-                  value: '/home'
+                  description: 'Successful delete. Redirect to user profile'
+                  value: '/profile/user/{username}'
         '401':
           description: 'You do not possess the credentials for this action.'
 

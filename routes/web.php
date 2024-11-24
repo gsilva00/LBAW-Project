@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Home
-Route::get('/', [HomepageController::class, 'show'])->name('homepage');
+Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -60,7 +60,7 @@ Route::post('/submit-article', [CreateArticleController::class, 'store'])->name(
 // Article
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
 Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('recentnews.show');
-Route::get('/voted-news', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
+Route::get('/most-voted', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
