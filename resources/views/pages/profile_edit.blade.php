@@ -85,7 +85,7 @@
                 <br>
                 <div class="profile-info">
                     <span>Don't forget to save after alterations:</span>
-                    <button type="submit" class="large-rectangle small-text greyer">Save</button> <!-- TODO HIGHLIGHT IN RED IF PASSWORD NOT INPUTTED -->
+                    <button type="submit" class="large-rectangle small-text greyer">Save</button> <!-- TODO HIGHLIGHT IN RED IF PASSWORD NOT INPUTTED (HARD TO SEE OTHERWISE) -->
                     <br>
                     <span>Do you want to erase this account?</span>
                     <button class="large-rectangle small-text greyer"> Delete This Account </button>  <!-- TODO action here -->

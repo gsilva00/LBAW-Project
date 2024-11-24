@@ -40,6 +40,6 @@ class CreateArticleController extends Controller
 
     public function create(){
         $user = Auth::user();
-        return view('pages.createArticle', ['user' => $user]);
+        return view('pages.create_article', ['user' => $user]);
     }
 }

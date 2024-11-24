@@ -17,6 +17,6 @@ class UserFollowingTopicsController extends Controller
         $articles = ArticlePage::all();
         $articles_followed_tags = ArticlePage::filterByTopics($articles, $tags);
 
-        return view('pages.displayArticles', ['user' => $user, 'articles' => $articles_followed_tags]);
+        return view('pages.display_articles', ['user' => $user, 'articles' => $articles_followed_tags]);
     }
 }

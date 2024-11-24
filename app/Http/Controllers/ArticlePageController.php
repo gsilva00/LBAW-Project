@@ -29,7 +29,7 @@ class ArticlePageController extends Controller
 
         Log::info('Paragraphs: ' . json_encode($paragraphs));
 
-        return view('pages.articlePage', [
+        return view('pages.article_page', [
             'article' => $article,
             'articleTags' => $article->tags,
             'topic' => $article->topic,
