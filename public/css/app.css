@@ -190,6 +190,7 @@ body {
   font-family: 'Inria Serif', serif;
   font-size: 1em;
   font-weight: 700;
+  padding-left: 1em;
 }
 
 .news-tile img {

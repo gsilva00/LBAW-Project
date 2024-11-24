@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function addTag(tag) {
+
+        const topicSuggestions = document.getElementById('topic-suggestions');
+
         const existingTags = Array.from(selectedTags.getElementsByClassName('tag-block'));
         if (existingTags.some(tagBlock => tagBlock.querySelector('span').innerText.trim() === tag.name)) {
             return;
@@ -54,6 +57,11 @@ document.addEventListener('DOMContentLoaded', function() {
         removeButton.addEventListener('click', function(event) {
             event.stopPropagation();
             selectedTags.removeChild(tagBlock);
+
+            if (selectedTags.children.length === 1) {
+                topicSuggestions.classList.remove('tag-open');
+            }
+
             updateHiddenInputs();
         });
 
@@ -65,6 +73,11 @@ document.addEventListener('DOMContentLoaded', function() {
         hiddenInput.name = 'tags[]';
         hiddenInput.value = tag.name;
         tagBlock.appendChild(hiddenInput);
+
+        if (selectedTags.children.length > 0) {
+            topicSuggestions.classList.add('tag-open');
+            
+        }
 
         updateHiddenInputs();
     }

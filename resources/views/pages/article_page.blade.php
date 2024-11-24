@@ -22,7 +22,7 @@
             </div>
             <p class="title">{{ $article->subtitle }}</p>
             <div>
-                <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
+                <img class="article-image" src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
             </div>
             @foreach($paragraphs as $paragraph)
                 <p class="thin">{{ $paragraph }}</p>

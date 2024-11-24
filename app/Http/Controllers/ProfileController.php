@@ -29,6 +29,7 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         return view('pages.profile', [
             'userprofile' => $user,
+            'isAdmin' => $authUser->is_admin,
             'isOwner' => $user->username === $authUser->username,
             'ownedArticles' => $ownedArticles,
             'user' => $authUser,
@@ -42,11 +43,13 @@ class ProfileController extends Controller
     {
         Log::debug('ProfileController@edit called. Loading authorization...');
         $user = Auth::user();
+        $authUser = Auth::user();
         $this->authorize('update', $user);
         Log::debug('ProfileController@edit called and authorization passed');
 
         return view('pages.profile_edit', [
             'user' => $user,
+            'isOwner' => $user->username === $authUser->username,
         ]);
     }
 
