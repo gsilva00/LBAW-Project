@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\CreateArticleController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ArticlePageController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UserFollowingTagsController;
+use App\Http\Controllers\UserFollowingTopicsController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -59,3 +62,10 @@ Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->na
 Route::get('/voted-news', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
 
 Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutus');
+
+Route::get('/following-tags', [UserFollowingTagsController::class, 'show'])->name('followingTags');
+
+Route::get('/following-topics', [UserFollowingTopicsController::class, 'show'])->name('followingTopics');
+
+Route::get('/create-article', [CreateArticleController::class, 'create'])->name('createArticle');
+Route::post('/submit-article', [CreateArticleController::class, 'store'])->name('submitArticle');

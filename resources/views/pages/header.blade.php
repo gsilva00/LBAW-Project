@@ -2,8 +2,12 @@
     <div id="top-part-header">
         <h1><a href="{{ route('homepage') }}" class="logo"> {{ config('app.name', 'Laravel') }}</a></h1>
         <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
-        <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
-        <h2><i class='bx bx-book'></i> Followed Topics</h2>
+        <a href="{{ route('followingTags') }}">
+            <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
+        </a>
+        <a href="{{ route('followingTopics') }}">
+            <h2><i class='bx bx-book'></i> Followed Topics</h2>
+        </a>
         <div id="profile" class="dropdown">
 
             @if(Auth::check())
@@ -14,7 +18,9 @@
                 <div class="dropdown-menu" aria-labelledby="profile-button">
                     <a class="dropdown-item" href="{{ route('profile', ['username' => $username]) }}"><h2>See Profile</h2></a>
                     <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
-                    <a class="dropdown-item" href="#"><h2>Something for admin</h2></a>
+                    @if($user->is_admin)
+                        <a class="dropdown-item" href="#"><h2>Something for admin</h2></a>
+                    @endif
                 </div>
                 <form id="logout-form" action="{{ route('logout') }}" method="GET" style="display: none;">
                     @csrf

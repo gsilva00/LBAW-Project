@@ -9,17 +9,17 @@
         @if($isOwner || $isAdmin)
             <a href="{{ route('profile.edit')}}"><button class="large-rectangle small-text greyer">Edit Profile</button></a>  <!--Need to do action here IF ITS ADMIN EDITING NOT ITS OWN ACCOUNT -->
         @endif
-        @if($isAdmin)
+        <!--@if($isAdmin)
             <button class="large-rectangle small-text greyer">
             @if($isBanned)
-                Unban User  <!--Need to do action here -->
+                Unban User
             @else
-                Ban User    <!--Need to do action here -->
+                Ban User
             @endif
             </button>
 
-            <button class="large-rectangle small-text greyer"> Delete User </button>  <!--Need to do action here -->
-        @endif
+            <button class="large-rectangle small-text greyer"> Delete User </button>
+        @endif -->
         </div>
         <div id="rest-profile-info">
         @if($isOwner)
@@ -40,7 +40,7 @@
         @endif
 
         @if($isOwner)
-            <a href="{{ route('profile.edit')}}"><button class="large-rectangle small-text greyer">Create New Article</button></a>  <!--Need to do action here -->
+            <a href="{{ route('createArticle')}}"><button class="large-rectangle small-text greyer">Create New Article</button></a>  <!--Need to do action here -->
         @endif
 
     </div>

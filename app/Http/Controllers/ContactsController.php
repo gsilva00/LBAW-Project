@@ -10,6 +10,6 @@ class ContactsController extends Controller
     {
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
-        return view('pages.contacts', ['username' => $username]);
+        return view('pages.contacts', ['username' => $username, 'user' => $user]);
     }
 }

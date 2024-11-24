@@ -3,9 +3,9 @@ SET DateStyle TO European;
 TRUNCATE TABLE Users CASCADE;
 TRUNCATE TABLE FollowUser CASCADE;
 TRUNCATE TABLE Topic CASCADE;
-TRUNCATE TABLE FollowTopic CASCADE;
+TRUNCATE TABLE follow_topics CASCADE;
 TRUNCATE TABLE Tag CASCADE;
-TRUNCATE TABLE FollowTag CASCADE;
+TRUNCATE TABLE follow_tags CASCADE;
 TRUNCATE TABLE ArticlePage CASCADE;
 TRUNCATE TABLE ArticleTag CASCADE;
 TRUNCATE TABLE VoteArticle CASCADE;
@@ -53,7 +53,7 @@ INSERT INTO Topic (id, name) VALUES
 (6, 'Business');
 
 
-INSERT INTO FollowTopic (user_id, topic_id) VALUES
+INSERT INTO follow_topics (user_id, topic_id) VALUES
 (1, 1),
 (1, 2),
 (2, 1),
@@ -67,16 +67,16 @@ INSERT INTO Tag (id, name, is_trending) VALUES
 (5, 'Space', false),
 (6, 'Vaccines', false);
 
-INSERT INTO FollowTag (user_id, tag_id) VALUES
+INSERT INTO follow_tags (user_id, tag_id) VALUES
 (1, 1),
 (1, 2),
 (2, 1),
 (3, 3);
 
-INSERT INTO ArticlePage (id, title, subtitle, content, create_date, edit_date, article_image, upvotes, downvotes, is_edited, is_deleted, topic_id, author_id) VALUES
-                                                                                                                                                                  (1, 'The Future of AI', 'Innovations in AI', 'The field of artificial intelligence (AI) has seen tremendous growth and innovation over the past few decades. From its early beginnings in the mid-20th century, AI has evolved into a powerful tool that is transforming industries and societies around the world.<?n?n>One of the most significant innovations in AI is the development of machine learning algorithms. These algorithms enable computers to learn from data and make predictions or decisions without being explicitly programmed. This has led to breakthroughs in areas such as image and speech recognition, natural language processing, and autonomous vehicles.<?n?n>Another major innovation is the rise of deep learning, a subset of machine learning that uses neural networks with many layers. Deep learning has achieved remarkable success in tasks that were previously thought to be beyond the reach of computers, such as playing complex games like Go and generating realistic human-like text and images.<?n?n>AI is also driving innovation in healthcare, where it is being used to develop new diagnostic tools, personalize treatment plans, and accelerate drug discovery. For example, AI algorithms can analyze medical images to detect diseases like cancer at an early stage, potentially saving lives.<?n?n>In the business world, AI is being used to optimize operations, improve customer service, and create new products and services. Companies are leveraging AI to analyze large datasets, automate routine tasks, and gain insights that were previously hidden.<?n?n>Despite these advancements, there are still many challenges to overcome. Ethical considerations, such as bias in AI algorithms and the impact of automation on jobs, need to be addressed. Additionally, ensuring the security and privacy of AI systems is crucial as they become more integrated into our daily lives.<?n?n>In conclusion, the innovation of AI is reshaping our world in profound ways. As technology continues to advance, it is essential to navigate the challenges and harness the potential of AI to create a better future for all.', '2024-01-01 10:00', '2024-01-02 11:00', 'default.jpg', 2, 0, true, false, 1, 1),
-                                                                                                                                                                  (2, 'Climate Change', 'Urgent Action Needed', 'Discussion on CC...', '2024-02-01 10:00', NULL, 'default.jpg', 1, 1, false, false, 2, 2),
-(3, 'COVID-19 Vaccines', 'Progress and Challenges', 'Latest updates on vaccines...', '2024-03-01 10:00', NULL, 'default.jpg', 50, 10, false, false, 4, 3);
+INSERT INTO ArticlePage (title, subtitle, content, create_date, edit_date, article_image, upvotes, downvotes, is_edited, is_deleted, topic_id, author_id) VALUES
+                                                                                                                                                                  ('The Future of AI', 'Innovations in AI', 'The field of artificial intelligence (AI) has seen tremendous growth and innovation over the past few decades. From its early beginnings in the mid-20th century, AI has evolved into a powerful tool that is transforming industries and societies around the world.<?n?n>One of the most significant innovations in AI is the development of machine learning algorithms. These algorithms enable computers to learn from data and make predictions or decisions without being explicitly programmed. This has led to breakthroughs in areas such as image and speech recognition, natural language processing, and autonomous vehicles.<?n?n>Another major innovation is the rise of deep learning, a subset of machine learning that uses neural networks with many layers. Deep learning has achieved remarkable success in tasks that were previously thought to be beyond the reach of computers, such as playing complex games like Go and generating realistic human-like text and images.<?n?n>AI is also driving innovation in healthcare, where it is being used to develop new diagnostic tools, personalize treatment plans, and accelerate drug discovery. For example, AI algorithms can analyze medical images to detect diseases like cancer at an early stage, potentially saving lives.<?n?n>In the business world, AI is being used to optimize operations, improve customer service, and create new products and services. Companies are leveraging AI to analyze large datasets, automate routine tasks, and gain insights that were previously hidden.<?n?n>Despite these advancements, there are still many challenges to overcome. Ethical considerations, such as bias in AI algorithms and the impact of automation on jobs, need to be addressed. Additionally, ensuring the security and privacy of AI systems is crucial as they become more integrated into our daily lives.<?n?n>In conclusion, the innovation of AI is reshaping our world in profound ways. As technology continues to advance, it is essential to navigate the challenges and harness the potential of AI to create a better future for all.', '2024-01-01 10:00', '2024-01-02 11:00', 'default.jpg', 2, 0, true, false, 1, 1),
+                                                                                                                                                                  ('Climate Change', 'Urgent Action Needed', 'Discussion on CC...', '2024-02-01 10:00', NULL, 'default.jpg', 1, 1, false, false, 2, 2),
+('COVID-19 Vaccines', 'Progress and Challenges', 'Latest updates on vaccines...', '2024-03-01 10:00', NULL, 'default.jpg', 50, 10, false, false, 4, 3);
 
 INSERT INTO ArticleTag (article_id, tag_id) VALUES
 (1, 1),

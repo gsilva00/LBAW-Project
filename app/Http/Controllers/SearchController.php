@@ -47,6 +47,7 @@ class SearchController extends Controller
             'articleItems' => $articles,
             'searchedTags' => $tags,
             'searchedTopics' => $topics,
+            'user' => $authUser
         ]);
     }
     private function sanitizeSearchQuery($query)
