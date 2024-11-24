@@ -32,7 +32,8 @@ class ProfileController extends Controller
             'description' => $description,
             'profilePicture' => $user->profile_picture,
             'isOwner' => $user->username === $authUser->username,
-            'ownedArticles' => $ownedArticles
+            'ownedArticles' => $ownedArticles,
+            'user' => $authUser,
         ]);
     }
 

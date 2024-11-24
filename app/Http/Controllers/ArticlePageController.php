@@ -38,7 +38,8 @@ class ArticlePageController extends Controller
             'trendingTags' => $trendingTags,
             'recentNews' => $recentNews,
             'isHomepage' => false,
-            'paragraphs' => $paragraphs
+            'paragraphs' => $paragraphs,
+            'user' => $user
         ]);
     }
 
@@ -63,7 +64,8 @@ class ArticlePageController extends Controller
 
         return view('pages.recent_news', [
             'username' => $username,
-            'recentNews' => $recentNews
+            'recentNews' => $recentNews,
+            'user' => $user
         ]);
     }
 
@@ -76,7 +78,8 @@ class ArticlePageController extends Controller
 
         return view('pages.voted_news', [
             'username' => $username,
-            'votedNews' => $votedNews
+            'votedNews' => $votedNews,
+            'user' => $user
         ]);
     }
 }

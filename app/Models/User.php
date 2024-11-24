@@ -93,7 +93,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             Topic::class,
-            'FollowTopic',
+            'follow_topics',
             'user_id',
             'topic_id'
         );
@@ -102,7 +102,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             Tag::class,
-            'FollowTag',
+            'follow_tags',
             'user_id',
             'tag_id'
         );
@@ -210,4 +210,7 @@ class User extends Authenticatable
             'user_from'
         );
     }
+
+
+
 }

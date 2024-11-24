@@ -3,9 +3,9 @@ SET DateStyle TO European;
 TRUNCATE TABLE Users CASCADE;
 TRUNCATE TABLE FollowUser CASCADE;
 TRUNCATE TABLE Topic CASCADE;
-TRUNCATE TABLE FollowTopic CASCADE;
+TRUNCATE TABLE follow_topics CASCADE;
 TRUNCATE TABLE Tag CASCADE;
-TRUNCATE TABLE FollowTag CASCADE;
+TRUNCATE TABLE follow_tags CASCADE;
 TRUNCATE TABLE ArticlePage CASCADE;
 TRUNCATE TABLE ArticleTag CASCADE;
 TRUNCATE TABLE VoteArticle CASCADE;
@@ -54,7 +54,7 @@ INSERT INTO Topic (id, name) VALUES
 (7, 'Sports');
 
 
-INSERT INTO FollowTopic (user_id, topic_id) VALUES
+INSERT INTO follow_topics (user_id, topic_id) VALUES
 (1, 1),
 (1, 2),
 (2, 1),
@@ -69,7 +69,7 @@ INSERT INTO Tag (id, name, is_trending) VALUES
 (6, 'Vaccines', false),
 (7, 'Football', true);
 
-INSERT INTO FollowTag (user_id, tag_id) VALUES
+INSERT INTO follow_tags (user_id, tag_id) VALUES
 (1, 1),
 (1, 2),
 (2, 1),

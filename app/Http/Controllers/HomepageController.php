@@ -21,6 +21,6 @@ class HomepageController extends Controller
         $trendingTags = Tag::trending()->take(5)->get();
         $recentNews = ArticlePage::getMostRecentNews(2);
 
-        return view('pages.homepage', ['username' => $username, 'articleItems' => $articleItems, 'trendingTags' => $trendingTags, 'recentNews' => $recentNews, 'isHomepage' => true]);
+        return view('pages.homepage', ['username' => $username, 'articleItems' => $articleItems, 'trendingTags' => $trendingTags, 'recentNews' => $recentNews, 'isHomepage' => true, 'user' => $user]);
     }
 }
