@@ -43,8 +43,8 @@ Route::get('/search', [SearchController::class, 'show'])->name('search.show');
 
 Route::prefix('following')->controller
 (UserFollowingController::class)->group(function () {
-    Route::get('/tags','followingTags')->name('followingTags');
-    Route::get('/topics','followingTopics')->name('followingTopics');
+    Route::get('/tags','followTags')->name('followingTags');
+    Route::get('/topics','followTopics')->name('followingTopics');
 });
 
 // Profile
