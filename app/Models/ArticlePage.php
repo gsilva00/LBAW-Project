@@ -183,4 +183,9 @@ class ArticlePage extends Model
         });
     }
 
+    public static function getAllArticlesNonDeleted()
+    {
+        return self::where('is_deleted', false)->get();
+    }
+
 }

@@ -45,6 +45,7 @@ Route::prefix('following')->controller
 (UserFollowingController::class)->group(function () {
     Route::get('/tags','followTags')->name('followingTags');
     Route::get('/topics','followTopics')->name('followingTopics');
+    Route::get('/authors','followAuthors')->name('followingAuthors');
 });
 
 // Profile
@@ -54,8 +55,14 @@ Route::prefix('profile')->controller
     Route::get('/edit', 'edit')->name('profile.edit');
     Route::post('/edit', 'update')->name('profile.update');
 });
-Route::get('/create-article', [CreateArticleController::class, 'create'])->name('createArticle');
-Route::post('/submit-article', [CreateArticleController::class, 'store'])->name('submitArticle');
+
+Route::controller(CreateArticleController::class)->group(function () {
+    Route::get('/create-article', 'create')->name('createArticle');
+    Route::post('/submit-article', 'store')->name('submitArticle');
+    Route::get('/edit-article/{id}', 'edit')->name('editArticle');
+    Route::post('/edit-article/{id}', 'update')->name('updateArticle');
+    Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
+});
 
 // Article
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');

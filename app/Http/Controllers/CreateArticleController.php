@@ -35,11 +35,61 @@ class CreateArticleController extends Controller
         $article->topic_id = 1;
         $article->save();
 
-        return redirect()->route('profile', ['user' => $user])->with('success', 'Article created successfully!');
+        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article created successfully!');
     }
 
     public function create(){
         $user = Auth::user();
+        $this->authorize('create', ArticlePage::class);
         return view('pages.create_article', ['user' => $user]);
     }
+
+    public function edit(Request $request){
+        $user = Auth::user();
+        $article = ArticlePage::find($request->id);
+        return view('pages.edit_article', ['user' => $user, 'article' => $article]);
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        $article = ArticlePage::find($request->id);
+
+        $request->validate([
+            'title' => 'required|string|max:50',
+            'subtitle' => 'required|string|max:50',
+            'content' => 'string|max:10000',
+        ]);
+
+        Log::info('CreateArticleController@show', [
+            'title' => $request->input('title'),
+            'subtitle' => $request->input('subtitle'),
+            'content' => $request->input('content')
+        ]);
+
+        $article->title = $request->input('title');
+        $article->subtitle = $request->input('subtitle');
+        $article->content = $request->input('content');
+        $article->save();
+
+        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article updated successfully!');
+    }
+
+    public function delete(Request $request)
+    {
+        $user = Auth::user();
+        $article = ArticlePage::find($request->id);
+
+        $this->authorize('delete', $user);
+
+        $article->is_deleted = true;
+        $article->title = '[Deleted]';
+        $article->subtitle = 'This is article has been deleted';
+        $article->content = '[Deleted]';
+
+        $article->save();
+
+        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article deleted successfully!');
+    }
+
 }
