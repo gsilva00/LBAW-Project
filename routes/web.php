@@ -45,6 +45,7 @@ Route::prefix('following')->controller
 (UserFollowingController::class)->group(function () {
     Route::get('/tags','followTags')->name('followingTags');
     Route::get('/topics','followTopics')->name('followingTopics');
+    Route::get('/authors','followAuthors')->name('followingAuthors');
 });
 
 // Profile
