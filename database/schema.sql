@@ -110,7 +110,7 @@ CREATE TABLE article_page(
 
 --R07
 CREATE TABLE article_tag(
-    article_id INTEGER REFERENCES article_page (id) ON UPDATE CASCADE,
+    article_id INTEGER REFERENCES article_page (id) ON UPDATE CASCADE ON DELETE CASCADE,
     tag_id INTEGER REFERENCES tag (id) ON UPDATE CASCADE,
     PRIMARY KEY(article_id, tag_id)
 );

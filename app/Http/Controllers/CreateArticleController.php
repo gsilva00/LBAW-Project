@@ -40,6 +40,7 @@ class CreateArticleController extends Controller
 
     public function create(){
         $user = Auth::user();
+        $this->authorize('create', ArticlePage::class);
         return view('pages.create_article', ['user' => $user]);
     }
 
@@ -79,12 +80,14 @@ class CreateArticleController extends Controller
         $user = Auth::user();
         $article = ArticlePage::find($request->id);
 
-        if ($article->comments()->exists()) {
-            $article->is_deleted = true;
-            $article->save();
-        } else {
-            $article->delete();
-        }
+        $this->authorize('delete', $user);
+
+        $article->is_deleted = true;
+        $article->title = '[Deleted]';
+        $article->subtitle = 'This is article has been deleted';
+        $article->content = '[Deleted]';
+
+        $article->save();
 
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article deleted successfully!');
     }
