@@ -5,8 +5,10 @@
     </a>
     @if(empty($noButtons) || !$noButtons)
     <div class="float-container">
-    <button class="large-rectangle small-text"><span>Edit</span></button>
-    <button class="large-rectangle small-text greyer"><span>Delete</span></button>
-    </div>
+        <a href="{{ route('editArticle', ['id' => $article->id]) }}" class="large-rectangle small-text"><span>Edit</span></a>
+        <form action="{{ route('deleteArticle', ['id' => $article->id]) }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit" class="large-rectangle small-text greyer"><span>Delete</span></button>
+        </form>    </div>
     @endif
 </div>
