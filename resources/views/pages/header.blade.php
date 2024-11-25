@@ -1,15 +1,6 @@
 <header>
     <div id="top-part-header">
         <h1><a href="{{ route('homepage') }}" class="logo"> {{ config('app.name', 'Laravel') }}</a></h1>
-        <a href="{{ route('followingAuthors') }}">
-            <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
-        </a>
-        <a href="{{ route('followingTags') }}">
-            <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
-        </a>
-        <a href="{{ route('followingTopics') }}">
-            <h2><i class='bx bx-book'></i> Followed Topics</h2>
-        </a>
         <a href="{{ route('userFeed') }}">
             <h2><i class='bx bx-book'></i> User's feed</h2>
         </a>
