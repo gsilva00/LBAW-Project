@@ -134,6 +134,10 @@ class CreateArticleController extends Controller
 
         $this->authorize('delete', $article);
 
+        $article->title = '[Deleted]';
+        $article->subtitle = '[Deleted]';
+        $article->content = '[Deleted]';
+        $article->article_image = 'images/article/default.png';
         $article->is_deleted = true;
         $article->save();
 

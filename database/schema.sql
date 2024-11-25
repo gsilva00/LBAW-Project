@@ -1,4 +1,4 @@
-create schema if not exists lbaw24124;
+CREATE SCHEMA IF NOT EXISTS lbaw24124;
 SET DateStyle TO European;
 
 -- Drop Tables
@@ -39,9 +39,9 @@ CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     display_name VARCHAR(20) DEFAULT NULL,
     username VARCHAR(20) UNIQUE,
-    email VARCHAR(256) DEFAULT 'images/profile/default.jpg',
+    email VARCHAR(256) UNIQUE,
     password VARCHAR(256),
-    profile_picture VARCHAR(256) DEFAULT NULL,
+    profile_picture VARCHAR(256) DEFAULT 'images/profile/default.jpg',
     description VARCHAR(300) DEFAULT NULL,
     reputation INT DEFAULT 3,
     upvote_notification BOOLEAN DEFAULT TRUE,
@@ -96,7 +96,7 @@ CREATE TABLE article_page(
     content VARCHAR(10000),
     create_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     edit_date TIMESTAMP DEFAULT NULL,
-    article_image VARCHAR(256) DEFAULT NULL,
+    article_image VARCHAR(256) DEFAULT 'images/article/default.png',
     upvotes INTEGER DEFAULT 0,
     downvotes INTEGER DEFAULT 0,
     is_edited BOOLEAN DEFAULT FALSE,

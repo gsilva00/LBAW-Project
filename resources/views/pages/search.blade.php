@@ -7,12 +7,12 @@
     <p class="small-text">You searched for: {{ $searchQuery }}</p>
     <p class="small-text">You searched for these tags:
         @foreach($searchedTags as $tag)
-            <a href="{{ route('search.show', ['tags' => [$tag->name]]) }}">{{ $tag->name }}</a>
+            <a href="{{ route('search', ['tags' => [$tag->name]]) }}">{{ $tag->name }}</a>
         @endforeach
     </p>
     <p class="small-text">You searched for these topics:
         @foreach($searchedTopics as $topic)
-            <a href="{{ route('search.show', ['topics' => [$topic->name]]) }}">{{ $topic->name }}</a>
+            <a href="{{ route('search', ['topics' => [$topic->name]]) }}">{{ $topic->name }}</a>
         @endforeach
     </p>
     </div>

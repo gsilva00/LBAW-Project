@@ -4,7 +4,7 @@
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Edit User Profile</h1>
         <section class="profile-container">
-            <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('updateProfile') }}" enctype="multipart/form-data">
                 @csrf
                 <br>
                 <h2><strong>General Profile Information</strong></h2>
@@ -96,7 +96,7 @@
                 <br>
                 <div class="profile-info">
                     <span>Do you want to erase this account?</span>
-                    <form action="{{ route('profile.delete', ['id' => $user->id]) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('deleteProfile', ['id' => $user->id]) }}" method="POST" style="display:inline;">
                         @csrf
                         <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
                     </form>

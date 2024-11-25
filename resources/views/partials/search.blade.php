@@ -2,7 +2,7 @@
     <i class='bx bx-search'></i>
 </button>
 <div class="dropdown-menu" id="search-menu" aria-labelledby="search-button">
-    <form class="dropdown-item" action="{{ route('search.show') }}" method="GET">
+    <form class="dropdown-item" action="{{ route('search') }}" method="GET">
         <div class="search-container">
         <button type="button" id="filter-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="button-for-filter">
             <i class='bx bx-filter-alt'></i>

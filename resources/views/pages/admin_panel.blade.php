@@ -4,7 +4,7 @@
     <div class="recent-news-wrapper">
         <h1 class="large-rectangle">Admin Panel</h1>
         <h2 class="large-rectangle">Create New User</h2>
-        <form class="large-rectangle" id="createFullUserForm" method="POST" action="{{ route('adminPanel.createUser') }}" enctype="multipart/form-data">
+        <form class="large-rectangle" id="createFullUserForm" method="POST" action="{{ route('adminCreateUser') }}" enctype="multipart/form-data">
             @csrf
             <br>
             <div class="profile-info">
@@ -88,7 +88,7 @@
                 @include('partials.user_tile_list', ['users' => $users])
             </div>
             @if($hasMorePages)
-                <button id="see-more-users" data-page-num="{{ $currPageNum+1 }}" data-url="{{ route('more.users') }}">Load More</button>
+                <button id="see-more-users" data-page-num="{{ $currPageNum+1 }}" data-url="{{ route('moreUsers') }}">Load More</button>
             @endif
         </div>
         <div id="another-section">

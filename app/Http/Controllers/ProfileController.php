@@ -110,6 +110,18 @@ class ProfileController extends Controller
 
         $this->authorize('delete', $authUser);
 
+        $targetUser->display_name = '[Deleted User]';
+        $targetUser->username = '[Deleted User]';
+        $targetUser->email = '[deleted]@[deleted].com';
+        $targetUser->password = '<PASSWORD>';
+        $targetUser->profile_picture = 'images/profile/default.jpg';
+        $targetUser->description = 'This user account has been deleted.';
+        $targetUser->reputation = 0;
+        $targetUser->upvote_notification = false;
+        $targetUser->comment_notification = false;
+        $targetUser->is_banned = false;
+        $targetUser->is_admin = false;
+        $targetUser->is_fact_checker = false;
         $targetUser->is_deleted = true;
         $targetUser->save();
 

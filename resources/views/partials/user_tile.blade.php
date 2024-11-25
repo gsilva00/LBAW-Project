@@ -3,10 +3,10 @@
     <div class="profile-info">
         <h2>{{ $user->display_name }}</h2>
 
-        <a href="{{ route('profile.edit', ['username' => $user->username]) }}">
+        <a href="{{ route('editProfile', ['username' => $user->username]) }}">
             <button class="large-rectangle small-text greyer">Edit Profile</button>
         </a>
-        <form action="{{ route('profile.delete', ['id' => $user->id]) }}" method="POST" style="display:inline;">
+        <form action="{{ route('deleteProfile', ['id' => $user->id]) }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
         </form>

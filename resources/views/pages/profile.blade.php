@@ -7,7 +7,7 @@
             <div class="profile-info">
                 <h1>{{ $userprofile->display_name }}'s Profile</h1>
                 @if($isOwner || $isAdmin)
-                    <a href="{{ route('profile.edit')}}"><button class="large-rectangle small-text greyer">Edit Profile</button></a>  <!--Need to do action here IF ITS ADMIN EDITING NOT ITS OWN ACCOUNT -->
+                    <a href="{{ route('editProfile')}}"><button class="large-rectangle small-text greyer">Edit Profile</button></a>  <!--Need to do action here IF ITS ADMIN EDITING NOT ITS OWN ACCOUNT -->
                 @endif
                 <!--@if($user->isAdmin)
                     <button class="large-rectangle small-text greyer">

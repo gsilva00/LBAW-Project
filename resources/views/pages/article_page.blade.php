@@ -5,7 +5,7 @@
         <section class="article-section">
             <div class="large-rectangle breadcrumbs">
                 <a href="{{ $previousUrl }}" class="thin">{{ $previousPage }}</a> >
-                <span class="thin"><a href="{{ route('topic.show', ['name' => $topic->name]) }}">{{ $topic->name }}</a></span>
+                <span class="thin"><a href="{{ route('showTopic', ['name' => $topic->name]) }}">{{ $topic->name }}</a></span>
                 <span class="thin">{{ $article->is_deleted ? '[Deleted]' : $article->title }}</span>
             </div>
             <div class="news-article">
@@ -40,10 +40,10 @@
                 @endif
                 <div class="large-rectangle tags">
                     <span class="thin">Topic:</span>
-                    <span><strong><a href="{{ route('topic.show', ['name' => $topic->name]) }}">{{ $topic->name }}</a></strong></span>
+                    <span><strong><a href="{{ route('showTopic', ['name' => $topic->name]) }}">{{ $topic->name }}</a></strong></span>
                     <span class="thin">Tags:</span>
                     @foreach($articleTags as $tag)
-                        <span><strong><a href="{{ route('tag.show', ['name' => $tag->name]) }}">{{ $tag->name }}</a></strong></span>@if(!$loop->last)@endif
+                        <span><strong><a href="{{ route('showTag', ['name' => $tag->name]) }}">{{ $tag->name }}</a></strong></span>@if(!$loop->last)@endif
                     @endforeach
                 </div>
 

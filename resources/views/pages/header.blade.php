@@ -29,20 +29,20 @@
     </div>
     <div id="bottom-part-header">
         <a href="{{ route('homepage') }}"><h2><i class='bx bx-home-alt'></i> Homepage</h2></a>
-        <a href="{{ route('recentnews.show') }}"><h2><i class='bx bx-stopwatch'></i>Most Recent News</h2></a>
-        <a href="{{ route('votednews.show') }}"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
-        <a href="{{ route('trendingtags') }}"><h2><i class='bx bx-trending-up'></i>Trending Tags</h2></a>
+        <a href="{{ route('showRecentNews') }}"><h2><i class='bx bx-stopwatch'></i>Most Recent News</h2></a>
+        <a href="{{ route('showVotedNews') }}"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
+        <a href="{{ route('showTrendingTags') }}"><h2><i class='bx bx-trending-up'></i>Trending Tags</h2></a>
         <h2 class="topic">
-            <a href="{{ route('topic.show', ['name' => 'Politics']) }}">Politics</a>
+            <a href="{{ route('showTopic', ['name' => 'Politics']) }}">Politics</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('topic.show', ['name' => 'Business']) }}">Business</a>
+            <a href="{{ route('showTopic', ['name' => 'Business']) }}">Business</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('topic.show', ['name' => 'Technology']) }}">Technology</a>
+            <a href="{{ route('showTopic', ['name' => 'Technology']) }}">Technology</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('topic.show', ['name' => 'Science']) }}">Science</a>
+            <a href="{{ route('showTopic', ['name' => 'Science']) }}">Science</a>
         </h2>
         <button type="button" id="all-topics-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class='bx bx-news'></i>
@@ -50,7 +50,7 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="all-topics-button">
             @foreach($topics as $topic)
-                <a class="dropdown-item" href="{{ route('topic.show', ['name' => $topic->name]) }}"><h2>{{ $topic->name }}</h2></a>
+                <a class="dropdown-item" href="{{ route('showTopic', ['name' => $topic->name]) }}"><h2>{{ $topic->name }}</h2></a>
             @endforeach
         </div>
         @include('partials.search',['tags' => $tags, 'topics' => $topics])

@@ -11,7 +11,6 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserFollowingController;
-use App\Http\Controllers\UserFollowingTopicsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,7 +39,7 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 // Main Dynamic
-Route::get('/search', [SearchController::class, 'show'])->name('search.show');
+Route::get('/search', [SearchController::class, 'show'])->name('search');
 
 Route::get('/user-feed', [UserFollowingController::class, 'showUserFeed'])->name('userFeed');
 
@@ -55,15 +54,18 @@ Route::prefix('following')->controller
 Route::prefix('profile')->controller
 (ProfileController::class)->group(function () {
     Route::get('/user/{username}', 'show')->name('profile');
-    Route::get('/edit', 'edit')->name('profile.edit');
-    Route::post('/edit', 'update')->name('profile.update');
-    Route::post('/delete/{id}', 'delete')->name('profile.delete');
+    Route::get('/edit', 'edit')->name('editProfile');
+    Route::post('/edit', 'update')->name('updateProfile');
+    Route::post('/delete/{id}', 'delete')->name('deleteProfile');
 });
 
 // Administrator Panel
-Route::get('/admin-panel', [AdminPanelController::class, 'show'])->name('adminPanel');
-Route::post('/admin-panel/create-user', [AdminPanelController::class, 'createFullUser'])->name('adminPanel.createUser');
-Route::get('/more-users', [AdminPanelController::class, 'moreUsers'])->name('more.users');
+Route::prefix('admin-panel')->controller
+(AdminPanelController::class)->group(function () {
+    Route::get('/', 'show')->name('adminPanel');
+    Route::post('/create-user', 'createFullUser')->name('adminCreateUser');
+    Route::get('/more-users', 'moreUsers')->name('moreUsers');
+});
 
 // Article
 Route::controller(CreateArticleController::class)->group(function () {
@@ -74,13 +76,13 @@ Route::controller(CreateArticleController::class)->group(function () {
     Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
 });
 
-Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
-Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('recentnews.show');
-Route::get('/most-voted', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
-Route::get('/trending-tags-news', [ArticlePageController::class, 'showTrendingTagsNews'])->name('trendingtags');
-Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('topic.show');
-Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('tag.show');
+Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('showArticle');
+Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('showRecentNews');
+Route::get('/most-voted', [ArticlePageController::class, 'showVotedNews'])->name('showVotedNews');
+Route::get('/trending-tags-news', [ArticlePageController::class, 'showTrendingTagsNews'])->name('showTrendingTags');
+Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('showTopic');
+Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('showTag');
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
-Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutus');
+Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutUs');
