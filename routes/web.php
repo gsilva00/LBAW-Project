@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\ArticlePageController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
