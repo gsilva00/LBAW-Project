@@ -3,9 +3,11 @@
 @section('title', 'Edit Article')
 
 @section('content')
-<div class="profile-wrapper">
+    <script src="{{ url('js/tageditarticle.js') }}"> </script>
+
+    <div class="profile-wrapper">
         <h1 class="large-rectangle">Edit a New Article</h1>
-    <form class="large-rectangle" action="{{ route('updateArticle', ['id' => $article->id]) }}" method="POST">
+    <form class="large-rectangle" action="{{ route('updateArticle', ['id' => $article->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <br>
         <div class="profile-info">
@@ -32,9 +34,9 @@
                 <div class="profile-info">
                     <label for="content"><span>Topics</span></label>
                     <select class="form-control" id="topics" name="topics[]" required>
-                        <option value="No_Topic" selected>No Topic</option>
+                        <option value="No_Topic" {{ $article->topic_id == 'No_Topic' ? 'selected' : '' }}>No Topic</option>
                         @foreach($topics as $topic)
-                            <option value="{{ $topic->id }}">{{ $topic->name }}</option>
+                            <option value="{{ $topic->id }}" {{ $article->topic_id == $topic->id ? 'selected' : '' }}>{{ $topic->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -63,4 +65,7 @@
 </div>
 <br>
 <br>
+<script>
+    window.initialTags = @json($article->tags);
+</script>
 @endsection

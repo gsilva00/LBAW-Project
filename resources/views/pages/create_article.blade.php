@@ -3,6 +3,8 @@
 @section('title', 'Create Article')
 
 @section('content')
+    <script src="{{ url('js/tagcreatearticle.js') }}"> </script>
+
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Create a New Article</h1>
 
