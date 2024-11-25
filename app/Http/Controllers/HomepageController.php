@@ -16,7 +16,7 @@ class HomepageController extends Controller
     {
         Log::info('HomepageController@show called');
         $user = Auth::user();
-        $articleItems = ArticlePage::all();
+        $articleItems = ArticlePage::getAllArticlesNonDeleted();
         $trendingTags = Tag::trending()->take(5)->get();
         $recentNews = ArticlePage::getMostRecentNews(2);
 

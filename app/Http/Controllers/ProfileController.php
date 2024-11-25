@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArticlePage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -22,6 +23,7 @@ class ProfileController extends Controller
         $this->authorize('view', $user);
 
         $ownedArticles = $user->ownedArticles()->get();
+        $ownedArticles = ArticlePage::filterDeletedArticles($ownedArticles);
 
         Log::info('ProfileController@show called', [
             'user' => $user,
