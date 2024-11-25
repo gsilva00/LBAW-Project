@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\ArticlePageController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -10,7 +11,6 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserFollowingController;
-use App\Http\Controllers\UserFollowingTopicsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,11 +54,22 @@ Route::prefix('profile')->controller
     Route::get('/user/{username}', 'show')->name('profile');
     Route::get('/edit', 'edit')->name('profile.edit');
     Route::post('/edit', 'update')->name('profile.update');
+    Route::delete('/delete/{id}', 'delete')->name('profile.delete');
 });
-Route::get('/create-article', [CreateArticleController::class, 'create'])->name('createArticle');
-Route::post('/submit-article', [CreateArticleController::class, 'store'])->name('submitArticle');
+
+// Administrator Panel
+Route::get('/admin-panel', [AdminPanelController::class, 'show'])->name('adminPanel');
+Route::get('/more-users', [AdminPanelController::class, 'moreUsers'])->name('more.users');
 
 // Article
+Route::controller(CreateArticleController::class)->group(function () {
+    Route::get('/create-article', 'create')->name('createArticle');
+    Route::post('/submit-article', 'store')->name('submitArticle');
+    Route::get('/edit-article/{id}', 'edit')->name('editArticle');
+    Route::post('/edit-article/{id}', 'update')->name('updateArticle');
+    Route::delete('/delete-article/{id}', 'delete')->name('deleteArticle');
+});
+
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
 Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('recentnews.show');
 Route::get('/voted-news', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');

@@ -7,11 +7,13 @@
          <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-        <script src="{{ url('js/dropdown.js') }}"> </script>
-        <script src="{{ url('js/searchdropdown.js') }}"> </script>
-        <script src="{{ url('js/filterdropdowntag.js') }}"> </script>
-        <script src="{{ url('js/filterdropdowntopic.js') }}"> </script>
+        <script src="{{ url('js/dropdown.js') }}" defer> </script>
+        <script src="{{ url('js/searchdropdown.js') }}" defer> </script>
+        <script src="{{ url('js/filterdropdowntag.js') }}" defer> </script>
+        <script src="{{ url('js/filterdropdowntopic.js') }}" defer> </script>
+        <script src="{{ url('js/adminpanel.js') }}" defer></script>
         <script src="{{ url('js/tagcreatearticle.js') }}"> </script>
+        <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link href="{{ url('css/header.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
         <link href="{{ url('css/login.css') }}" rel="stylesheet">

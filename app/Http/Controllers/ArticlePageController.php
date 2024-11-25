@@ -14,6 +14,7 @@ class ArticlePageController extends Controller
     public function show(Request $request, $id)
     {
         $article = ArticlePage::with(['tags', 'topic', 'author', 'comments'])->findOrFail($id);
+
         $this->authorize('view', $article);
 
         $user = Auth::user();
@@ -63,9 +64,9 @@ class ArticlePageController extends Controller
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
 
-        $recentNews = ArticlePage::getAllRecentNews();
         $this->authorize('viewAny', ArticlePage::class);
 
+        $recentNews = ArticlePage::getAllRecentNews();
         return view('pages.recent_news', [
             'username' => $username,
             'recentNews' => $recentNews,
@@ -77,9 +78,9 @@ class ArticlePageController extends Controller
     {
         $user = Auth::user();
 
-        $votedNews = ArticlePage::getArticlesByVotes();
         $this->authorize('viewAny', ArticlePage::class);
 
+        $votedNews = ArticlePage::getArticlesByVotes();
         return view('pages.voted_news', [
             'votedNews' => $votedNews,
             'user' => $user
