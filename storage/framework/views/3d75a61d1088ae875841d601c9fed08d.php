@@ -11,7 +11,14 @@
         <div class="news-article">
             <h1 class="article-title border-bottom" ><?php echo e($article->title); ?></h1>
             <div class="article-credits">
-                <p class="small-text">By <a href="<?php echo e(route('profile', ['username' => $article->author->username])); ?>"><?php echo e($authorDisplayName); ?></a></p>            <p class="small-text">Created at: <?php echo e($article->create_date); ?></p>
+                <p class="small-text">
+                    By
+                    <?php if($article->is_deleted): ?>
+                        Anonymous
+                    <?php else: ?>
+                        <a href="<?php echo e(route('profile', ['username' => $article->author->username])); ?>"><?php echo e($authorDisplayName); ?></a>
+                    <?php endif; ?>
+                </p>
                 <p class="small-text">
                 <?php if($article->is_edited): ?>
                     Edited at: <?php echo e($article->edit_date); ?>
@@ -30,10 +37,10 @@
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             <div class="large-rectangle tags">
                 <span class="thin">Topic:</span>
-                <span><strong><a href="<?php echo e(route('search.show', ['topics' => [$topic->name]])); ?>"><?php echo e($topic->name); ?></a></strong></span>
+                <span><strong><a href="<?php echo e(route('topic.show', ['name' => $topic->name])); ?>"><?php echo e($topic->name); ?></a></strong></span>
                 <span class="thin">Tags:</span>
                 <?php $__currentLoopData = $articleTags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <span><strong><a href="<?php echo e(route('search.show', ['tags' => [$tag->name]])); ?>"><?php echo e($tag->name); ?></a></strong></span><?php if(!$loop->last): ?><?php endif; ?>
+                    <span><strong><a href="<?php echo e(route('tag.show', ['name' => $tag->name])); ?>"><?php echo e($tag->name); ?></a></strong></span><?php if(!$loop->last): ?><?php endif; ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 

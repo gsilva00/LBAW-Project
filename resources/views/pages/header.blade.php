@@ -31,7 +31,7 @@
         <a href="{{ route('homepage') }}"><h2><i class='bx bx-home-alt'></i> Homepage</h2></a>
         <a href="{{ route('recentnews.show') }}"><h2><i class='bx bx-stopwatch'></i>Most Recent News</h2></a>
         <a href="{{ route('votednews.show') }}"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
-        <h2><i class='bx bx-trending-up'></i>Trending Tags</h2>
+        <a href="{{ route('trendingtags') }}"><h2><i class='bx bx-trending-up'></i>Trending Tags</h2></a>
         <h2 class="topic">
             <a href="{{ route('topic.show', ['name' => 'Politics']) }}">Politics</a>
         </h2>

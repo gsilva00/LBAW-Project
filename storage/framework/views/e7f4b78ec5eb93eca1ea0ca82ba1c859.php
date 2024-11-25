@@ -138,7 +138,11 @@
                 <br>
                 <div class="profile-info">
                     <span>Do you want to erase this account?</span>
-                    <button class="large-rectangle small-text greyer"> Delete This Account </button>  <!-- TODO action here -->
+                    <form action="<?php echo e(route('profile.delete', ['id' => $user->id])); ?>" method="POST" style="display:inline;">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('DELETE'); ?> <!-- HTML forms don't directly support DELETE -->
+                        <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
+                    </form>
                 </div>
                 <br>
             </form>
