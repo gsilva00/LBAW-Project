@@ -10,30 +10,18 @@
             <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="email">
         </div>
         @if ($errors->has('email'))
-        <br>
-            <div class="profile-info">
-                <span class="error">
-                  {{ $errors->first('email') }}
-                </span>
-            </div>
+            @include('partials.error_popup', ['field' => 'email'])
         @endif
         <br>
         <div class="profile-info space-between">
             <label for="password" ><span>Password</span></label>
             <input id="password" type="password" name="password" required>
             @if ($errors->has('password'))
-                <span class="error">
-                    {{ $errors->first('password') }}
-                </span>
+                @include('partials.error_popup', ['field' => 'password'])
             @endif
         </div>
         @if ($errors->has('password'))
-            <br>
-            <div class="profile-info">
-            <span class="error">
-                {{ $errors->first('password') }}
-            </span>
-            </div>
+            @include('partials.error_popup', ['field' => 'password'])
         @endif
         <br>
         <div class="profile-info">
@@ -48,11 +36,7 @@
             <a class="large-rectangle small-text" href="{{ route('register') }}">Register</a>
         </div>
         <br>
-        @if (session('success'))
-            <p class="success">
-                {{ session('success') }}
-            </p>
-        @endif
+        @include('partials.success_message')
     </form>
 </div>
 @endsection

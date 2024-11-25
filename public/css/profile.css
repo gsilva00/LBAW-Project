@@ -25,6 +25,28 @@
   justify-content: start;
 }
 
+.profile-container-admin{
+  display: grid;
+  grid-template-areas: "profile_image profile_info";
+  column-gap: 2em;
+  padding: 1em;
+  margin-block: 1em;
+  background-color: var(--secondary-color);
+  justify-content: start;
+}
+
+.profile-container-admin div{
+  grid-area: profile_info;
+}
+
+.profile-container-admin img{
+  grid-area: profile_image;
+  width: 5em;
+  height: 5em;
+  object-fit: cover;
+  object-position: center;
+}
+
 .profile-container img{
   grid-area: profile_image;
   width: 10em;
@@ -41,4 +63,9 @@
   max-width: 40em; /* Ensure the text does not overflow the container */
   text-overflow: ellipsis;
   display: block;
+}
+
+#users-section{
+  height: 550px;
+  overflow-y: scroll;
 }

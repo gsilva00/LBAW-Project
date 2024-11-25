@@ -1,22 +1,18 @@
 @extends('layouts.homepage')
 
 @section('content')
-    <div class="content">
-        <h2>Users:</h2>
-        <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+    <div class="recent-news-wrapper">
+        <h1 class="large-rectangle">Admin Panel</h1>
+        <h2 class="large-rectangle">Create New User</h2>
+        <form class="large-rectangle" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
             @csrf
-            <h3>Create New User</h3>
+            <br>
             <div class="profile-info">
                 <label for="username"><span>Username</span></label>
                 <input type="text" name="username" id="username" value="{{ old('username') }}" placeholder="Enter username" autocomplete="off" required>
             </div>
             @if ($errors->has('username'))
-                <br>
-                <div class="profile-info">
-                    <span class="error">
-                        {{ $errors->first('username') }}
-                    </span>
-                </div>
+                @include('partials.error_popup', ['field' => 'username'])
             @endif
             <br>
             <div class="profile-info">
@@ -24,12 +20,7 @@
                 <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Enter email" autocomplete="email" required>
             </div>
             @if ($errors->has('email'))
-                <br>
-                <div class="profile-info">
-                    <span class="error">
-                    {{ $errors->first('email') }}
-                    </span>
-                </div>
+                @include('partials.error_popup', ['field' => 'email'])
             @endif
             <br>
             <div class="profile-info">
@@ -53,12 +44,7 @@
                 <input type="file" name="profile_picture" id="profile_picture">
             </div>
             @if ($errors->has('profile_picture'))
-                <br>
-                <div class="profile-info">
-                    <span class="error">
-                        {{ $errors->first('profile_picture') }}
-                    </span>
-                </div>
+                @include('partials.error_popup', ['field' => 'profile_picture'])
             @endif
             <br>
             <div class="profile-info">
@@ -66,57 +52,47 @@
                 <input type="number" name="reputation" id="reputation" value="{{ old('reputation', 3) }}" min="0" max="5">
             </div>
             @if ($errors->has('reputation'))
-                <br>
-                <div class="profile-info">
-                <span class="error">
-                    {{ $errors->first('reputation') }}
-                </span>
-                </div>
+                @include('partials.error_popup', ['field' => 'reputation'])
             @endif
             <br>
             <div class="profile-info">
-                <label for="upvote_notification">
-                    <input type="checkbox" name="upvote_notification" id="upvote_notification" {{ old('upvote_notification', true) ? 'checked' : '' }}>
-                    <span>Receive Upvote Notifications</span>
-                </label>
+                <input type="checkbox" name="upvote_notification" id="upvote_notification" {{ old('upvote_notification', true) ? 'checked' : '' }}>
+                <label for="upvote_notification"><span>Receive Upvote Notifications</span></label>
             </div>
             <br>
             <div class="profile-info">
-                <label for="comment_notification">
                     <input type="checkbox" name="comment_notification" id="comment_notification" {{ old('comment_notification', true) ? 'checked' : '' }}>
-                    <span>Receive Comment Notifications</span>
-                </label>
+                    <label for="comment_notification"><span>Receive Comment Notifications</span></label>
             </div>
             <br>
             <div class="profile-info">
-                <label for="is_admin">
                     <input type="checkbox" name="is_admin" id="is_admin" {{ old('is_admin') ? 'checked' : '' }}>
-                    <span>Is Admin</span>
-                </label>
+                    <label for="is_admin"><span>Is Admin</span></label>
             </div>
             <br>
             <div class="profile-info">
-                <label for="is_fact_checker">
                     <input type="checkbox" name="is_fact_checker" id="is_fact_checker" {{ old('is_fact_checker') ? 'checked' : '' }}>
-                    <span>Is Fact Checker</span>
-                </label>
+                    <label for="is_fact_checker"><span>Is Fact Checker</span></label>
             </div>
+            <br>
+            <br>
             <br>
             <div class="profile-info">
                 <button type="submit" class="large-rectangle small-text greyer">Create</button> <!-- TODO HIGHLIGHT IN RED IF PASSWORD NOT INPUTTED (HARD TO SEE OTHERWISE) -->
             </div>
         </form>
         <br>
-        <div id="users-section" style="height: 800px; overflow-y: scroll;"> <!-- Make the height 2 or 3 users, or more if the user cards are made shorter -->
-            <ul id="user-list">
+        <h2 class="large-rectangle">Users:</h2>
+        <div id="users-section"> <!-- Make the height 2 or 3 users, or more if the user cards are made shorter -->
+            <div id="user-list">
                 @include('partials.user_tile_list', ['users' => $users])
-            </ul>
+            </div>
             @if($hasMorePages)
                 <button id="see-more-users" data-page-num="{{ $currPageNum+1 }}" data-url="{{ route('more.users') }}">Load More</button>
             @endif
         </div>
         <div id="another-section">
-            <h2>Another Section to prove the scroll is working</h2>
+            <!-- <h2>Another Section to prove the scroll is working</h2> -->
         </div>
     </div>
 @endsection

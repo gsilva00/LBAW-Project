@@ -15,6 +15,7 @@
         <script src="<?php echo e(url('js/adminpanel.js')); ?>" defer></script>
         <script src="<?php echo e(url('js/userfeed.js')); ?>" defer></script>
         <script src="<?php echo e(url('js/tagcreatearticle.js')); ?>"> </script>
+        <script src="<?php echo e(url('js/popup.js')); ?>"> </script>
         <link href="<?php echo e(url('css/userfeed.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/header.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/footer.css')); ?>" rel="stylesheet">
@@ -25,6 +26,7 @@
         <link href="<?php echo e(url('css/contacts.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/profile.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/filter.css')); ?>" rel="stylesheet">
+        <link href="<?php echo e(url('css/popup.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet">
     </head>
     <body>

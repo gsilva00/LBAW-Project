@@ -13,12 +13,7 @@
                     <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" autocomplete="off" disabled>
                 </div>
                 @if ($errors->has('username'))
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            {{ $errors->first('username') }}
-                        </span>
-                    </div>
+                    @include('partials.error_popup', ['field' => 'username'])
                 @endif
                 <br>
                 <div class="profile-info">
@@ -26,12 +21,7 @@
                     <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" autocomplete="email">
                 </div>
                 @if ($errors->has('email'))
-                <br>
-                    <div class="profile-info">
-                        <span class="error">
-                        {{ $errors->first('email') }}
-                        </span>
-                    </div>
+                    @include('partials.error_popup', ['field' => 'email'])
                 @endif
                 <br>
                 <div class="profile-info">
@@ -50,12 +40,7 @@
                     <input type="file" name="profile_picture" id="profile_picture">
                 </div>
                 @if ($errors->has('profile_picture'))
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            {{ $errors->first('profile_picture') }}
-                        </span>
-                    </div>
+                    @include('partials.error_popup', ['field' => 'profile_picture'])
                 @endif
                 <br>
                 <p class="small-text">* Write password to confirm any changes to profile</p>
@@ -64,12 +49,7 @@
                     <input type="password" name="cur_password" id="cur_password" placeholder="Password">
                 </div>
                 @if ($errors->has('cur_password'))
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            {{ $errors->first('cur_password') }}
-                        </span>
-                    </div>
+                    @include('partials.error_popup', ['field' => 'cur_password'])
                 @endif
                 <br>
                 <h2><strong>Optional: Change Password</strong></h2>
@@ -78,12 +58,7 @@
                     <input type="password" name="new_password" id="new_password" placeholder="New Password">
                 </div>
                 @if ($errors->has('new_password'))
-                    <br>
-                    <div class="profile-info">
-                    <span class="error">
-                            {{ $errors->first('new_password') }}
-                        </span>
-                    </div>
+                    @include('partials.error_popup', ['field' => 'new_password'])
                 @endif
                 <br>
                 <div class="profile-info">
@@ -91,12 +66,7 @@
                     <input type="password" name="new_password_confirmation" id="new_password_confirmation" placeholder="New Password">
                 </div>
                 @if ($errors->has('new_password_confirmation'))
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            {{ $errors->first('new_password_confirmation') }}
-                        </span>
-                    </div>
+                    @include('partials.error_popup', ['field' => 'new_password_confirmation'])
                 @endif
                 <br>
                 <br>
@@ -120,12 +90,7 @@
                     <input type="password" name="cur_password_delete" id="cur_password_delete" placeholder="password">
                 </div>
                 @if ($errors->has('cur_password_delete'))
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            {{ $errors->first('cur_password_delete') }}
-                        </span>
-                    </div>
+                    @include('partials.error_popup', ['field' => 'cur_password_delete'])
                 @endif
                 @endif
                 <br>
