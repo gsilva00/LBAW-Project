@@ -17,6 +17,3 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-
-# Don't include compile views in the repository
-/storage/framework/views
