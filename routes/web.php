@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Home
-Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
+Route::get('/', [HomepageController::class, 'show'])->name('homepage');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
