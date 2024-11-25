@@ -12,6 +12,7 @@
         <script src="{{ url('js/filterdropdowntag.js') }}" defer> </script>
         <script src="{{ url('js/filterdropdowntopic.js') }}" defer> </script>
         <script src="{{ url('js/adminpanel.js') }}" defer></script>
+        <script src="{{ url('js/userfeed.js') }}" defer></script>
         <script src="{{ url('js/tagcreatearticle.js') }}"> </script>
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link href="{{ url('css/header.css') }}" rel="stylesheet">
@@ -24,7 +25,6 @@
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/filter.css') }}" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
-        <!--  <link href="{{ url('css/app.css') }}" rel="stylesheet"> -->
     </head>
     <body>
         <div class="wrapper">

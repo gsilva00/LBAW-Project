@@ -67,6 +67,15 @@ class UserPolicy
         return Auth::check() && $authUser->is($targetUser);
     }
 
+
+    /**
+     * Determine whether the user can access his user feed
+     */
+    public function viewUserFeed(User $authUser): bool
+    {
+        return Auth::check();
+    }
+
     /**
      * Determine whether the user can access his followed tags
      */

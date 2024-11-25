@@ -37,7 +37,9 @@ class UserFollowingController extends Controller
     public function followTopics(Request $request)
     {
         $user = Auth::user();
+
         $this->authorize('viewFollowingTopics', $user);
+
         $topics = $user->followedTopics()->get();
         $articles = ArticlePage::all();
         $articles_followed_topics = ArticlePage::filterByTopics($articles, $topics);
@@ -80,13 +82,18 @@ class UserFollowingController extends Controller
     public function showUserFeed(Request $request)
     {
         $user = Auth::user();
-        $articles = ArticlePage::all();
+
+        $this->authorize('viewUserFeed', $user);
 
         if ($request->ajax()) {
             Log::info("AJAX request");
+            $articles = ArticlePage::all();
             return view('partials.articles_list', ['articles' => $articles]);
         }
 
-        return view('pages.user_feed', ['articles' => $articles, 'user' => $user]);
+        return view('pages.user_feed', [
+            'user' => $user,
+            'articles' => []
+        ]);
     }
 }
