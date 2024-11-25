@@ -4,7 +4,7 @@
     <div class="recent-news-wrapper">
         <h1 class="large-rectangle">Admin Panel</h1>
         <h2 class="large-rectangle">Create New User</h2>
-        <form class="large-rectangle" method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+        <form class="large-rectangle" id="createFullUserForm" method="POST" action="{{ route('adminPanel.createUser') }}" enctype="multipart/form-data">
             @csrf
             <br>
             <div class="profile-info">
@@ -56,34 +56,34 @@
             @endif
             <br>
             <div class="profile-info">
-                <input type="checkbox" name="upvote_notification" id="upvote_notification" {{ old('upvote_notification', true) ? 'checked' : '' }}>
+                <input type="checkbox" name="upvote_notification" id="upvote_notification" value="1" {{ old('upvote_notification', true) ? 'checked' : '' }}>
                 <label for="upvote_notification"><span>Receive Upvote Notifications</span></label>
             </div>
             <br>
             <div class="profile-info">
-                    <input type="checkbox" name="comment_notification" id="comment_notification" {{ old('comment_notification', true) ? 'checked' : '' }}>
-                    <label for="comment_notification"><span>Receive Comment Notifications</span></label>
+                <input type="checkbox" name="comment_notification" id="comment_notification" value="1" {{ old('comment_notification', true) ? 'checked' : '' }}>
+                <label for="comment_notification"><span>Receive Comment Notifications</span></label>
             </div>
             <br>
             <div class="profile-info">
-                    <input type="checkbox" name="is_admin" id="is_admin" {{ old('is_admin') ? 'checked' : '' }}>
-                    <label for="is_admin"><span>Is Admin</span></label>
+                <input type="checkbox" name="is_admin" id="is_admin" value="1" {{ old('is_admin') ? 'checked' : '' }}>
+                <label for="is_admin"><span>Is Admin</span></label>
             </div>
             <br>
             <div class="profile-info">
-                    <input type="checkbox" name="is_fact_checker" id="is_fact_checker" {{ old('is_fact_checker') ? 'checked' : '' }}>
-                    <label for="is_fact_checker"><span>Is Fact Checker</span></label>
+                <input type="checkbox" name="is_fact_checker" id="is_fact_checker" value="1" {{ old('is_fact_checker') ? 'checked' : '' }}>
+                <label for="is_fact_checker"><span>Is Fact Checker</span></label>
             </div>
             <br>
             <br>
             <br>
             <div class="profile-info">
-                <button type="submit" class="large-rectangle small-text greyer">Create</button> <!-- TODO HIGHLIGHT IN RED IF PASSWORD NOT INPUTTED (HARD TO SEE OTHERWISE) -->
+                <button type="submit" class="large-rectangle small-text greyer">Create</button>
             </div>
         </form>
         <br>
         <h2 class="large-rectangle">Users:</h2>
-        <div id="users-section"> <!-- Make the height 2 or 3 users, or more if the user cards are made shorter -->
+        <div id="users-section">
             <div id="user-list">
                 @include('partials.user_tile_list', ['users' => $users])
             </div>

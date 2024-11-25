@@ -3,46 +3,54 @@ function seeMoreUsers() {
     const button = document.getElementById('see-more-users');
     const userList = document.getElementById('user-list');
 
-    if (button && userList) {
-        button.addEventListener('click',function () {
-            const url = button.getAttribute('data-url');
-            const pageNum = button.getAttribute('data-page-num');
-
-            fetch(`${url}?page=${pageNum}`, {
-                method: "GET"
-            })
-                .then(response => response.json())
-                .then(data => {
-                    // When hasMorePages is false for the first time, at least one user is still returned (see AdminPanelController.php)
-                    userList.insertAdjacentHTML('beforeend', data.html);
-                    button.setAttribute('data-page-num', (parseInt(pageNum) + 1).toString());
-
-                    if (!data.hasMorePages) {
-                        button.style.display = 'none';
-                        userList.insertAdjacentHTML('beforeend', '<p>No more users to show.</p>');
-                    }
-                })
-                .catch(error => console.error('Error fetching more users:', error));
-        });
+    if (!button || !userList) {
+        console.error('Missing elements for \'see more\'');
+        return;
     }
-    else {
-        console.error('Missing elements for \'see more\' users');
-    }
+
+    button.addEventListener('click',function () {
+        const url = button.getAttribute('data-url');
+        const pageNum = button.getAttribute('data-page-num');
+
+        fetch(`${url}?page=${pageNum}`, {
+            method: "GET"
+        })
+        .then(response => response.json())
+        .then(data => {
+            // When hasMorePages is false for the first time, at least one user is still returned (see AdminPanelController.php)
+            userList.insertAdjacentHTML('beforeend', data.html);
+            button.setAttribute('data-page-num', (parseInt(pageNum) + 1).toString());
+
+            if (!data.hasMorePages) {
+                button.style.display = 'none';
+                userList.insertAdjacentHTML('beforeend', '<p>No more users to show.</p>');
+            }
+        })
+        .catch(error => console.error('Error fetching more users:', error));
+    });
 }
 
 seeMoreUsers();
 
-
-// Create full user functionality
+// Admin's create user
 function createFullUser() {
-    const form = document.querySelector('form'); // Adjust the selector if needed to target the correct form
+    const form = document.getElementById('createFullUserForm');
+
+    if (!form) {
+        console.error('Missing form element');
+        return;
+    }
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
         const formData = new FormData(form);
 
-        // Frontend validation
+        /*console.log('Form Data:');
+        formData.forEach((value, key) => {
+            console.log(`${key}: ${value}`);
+        });*/
+
         if (!validateFormData(formData)) {
             return;
         }
@@ -57,9 +65,8 @@ function createFullUser() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('User created successfully!');
-                    form.reset();
-                    // Optionally, you could add the new user to the user list dynamically here.
+                    alert(data.message);
+                    form.reset(); // Reset form fields content
                 } else {
                     displayErrors(data.errors);
                 }
@@ -74,18 +81,20 @@ function createFullUser() {
         const password = formData.get('password');
 
         const usernameRegex = /^[a-zA-Z0-9_-]+$/;
-        const displayNameRegex = /^[a-zA-Z0-9_-]+$/;
+        const displayNameRegex = /^[a-zA-Z0-9 _-]+$/;
 
-        if (!usernameRegex.test(username) || !displayNameRegex.test(displayName)) {
-            alert('Username and Display Name should only contain letters, numbers, dashes, and underscores.');
+        if (!usernameRegex.test(username)) {
+            alert('Username should only contain letters, numbers, dashes, and underscores.');
             return false;
         }
-
+        if (!displayNameRegex.test(displayName)) {
+            alert('Display Name should only contain letters, numbers, spaces, dashes, and underscores.');
+            return false;
+        }
         if (!email) {
             alert('Email is required.');
             return false;
         }
-
         if (!password || password.length < 8) {
             alert('Password should be at least 8 characters long.');
             return false;
