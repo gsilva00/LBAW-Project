@@ -10,7 +10,7 @@
                 <h2><strong>General Profile Information</strong></h2>
                 <div class="profile-info">
                     <label for="username"><span>Username</span></label>
-                    <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" autocomplete="off">
+                    <input type="text" name="username" id="username" value="{{ old('username', $user->username) }}" autocomplete="off" disabled>
                 </div>
                 @if ($errors->has('username'))
                     <br>
@@ -61,7 +61,7 @@
                 <p class="small-text">* Write password to confirm any changes to profile</p>
                 <div class="profile-info">
                     <label for="cur_password"><span>Current Password</span></label>
-                    <input type="password" name="cur_password" id="cur_password" placeholder="password">
+                    <input type="password" name="cur_password" id="cur_password" placeholder="Password">
                 </div>
                 @if ($errors->has('cur_password'))
                     <br>
@@ -75,7 +75,7 @@
                 <h2><strong>Optional: Change Password</strong></h2>
                 <div class="profile-info">
                     <label for="new_password"><span>New Password</span></label>
-                    <input type="password" name="new_password" id="new_password" placeholder="new password">
+                    <input type="password" name="new_password" id="new_password" placeholder="New Password">
                 </div>
                 @if ($errors->has('new_password'))
                     <br>
@@ -88,7 +88,7 @@
                 <br>
                 <div class="profile-info">
                     <label for="new_password_confirmation"><span>Confirm Password</span></label>
-                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" placeholder="new password">
+                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" placeholder="New Password">
                 </div>
                 @if ($errors->has('new_password_confirmation'))
                     <br>
@@ -133,7 +133,6 @@
                     <span>Do you want to erase this account?</span>
                     <form action="{{ route('profile.delete', ['id' => $user->id]) }}" method="POST" style="display:inline;">
                         @csrf
-                        @method('DELETE') <!-- HTML forms don't directly support DELETE -->
                         <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
                     </form>
                 </div>
