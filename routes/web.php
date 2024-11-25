@@ -56,11 +56,12 @@ Route::prefix('profile')->controller
     Route::get('/user/{username}', 'show')->name('profile');
     Route::get('/edit', 'edit')->name('profile.edit');
     Route::post('/edit', 'update')->name('profile.update');
-    Route::delete('/delete/{id}', 'delete')->name('profile.delete');
+    Route::post('/delete/{id}', 'delete')->name('profile.delete');
 });
 
 // Administrator Panel
 Route::get('/admin-panel', [AdminPanelController::class, 'show'])->name('adminPanel');
+Route::post('/admin-panel/create-user', [AdminPanelController::class, 'createFullUser'])->name('adminPanel.createUser');
 Route::get('/more-users', [AdminPanelController::class, 'moreUsers'])->name('more.users');
 
 // Article
@@ -69,7 +70,7 @@ Route::controller(CreateArticleController::class)->group(function () {
     Route::post('/submit-article', 'store')->name('submitArticle');
     Route::get('/edit-article/{id}', 'edit')->name('editArticle');
     Route::post('/edit-article/{id}', 'update')->name('updateArticle');
-    Route::delete('/delete-article/{id}', 'delete')->name('deleteArticle');
+    Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
 });
 
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
