@@ -45,6 +45,7 @@ Route::prefix('following')->controller
 (UserFollowingController::class)->group(function () {
     Route::get('/tags','followTags')->name('followingTags');
     Route::get('/topics','followTopics')->name('followingTopics');
+    Route::get('/authors','followAuthors')->name('followingAuthors');
 });
 
 // Profile
@@ -61,6 +62,8 @@ Route::post('/submit-article', [CreateArticleController::class, 'store'])->name(
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
 Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('recentnews.show');
 Route::get('/voted-news', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
+Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('topic.show');
+Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('tag.show');
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');

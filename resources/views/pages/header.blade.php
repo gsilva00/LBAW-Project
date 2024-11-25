@@ -1,7 +1,9 @@
 <header>
     <div id="top-part-header">
         <h1><a href="{{ route('homepage') }}" class="logo"> {{ config('app.name', 'Laravel') }}</a></h1>
-        <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
+        <a href="{{ route('followingAuthors') }}">
+            <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
+        </a>
         <a href="{{ route('followingTags') }}">
             <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
         </a>
@@ -37,18 +39,26 @@
         <a href="{{ route('votednews.show') }}"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
         <h2><i class='bx bx-trending-up'></i>Trending Tags</h2>
         <h2 class="topic">
-            <a href="{{ route('search.show', ['topics' => ['Politics']]) }}">Politics</a>
+            <a href="{{ route('topic.show', ['name' => 'Politics']) }}">Politics</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('search.show', ['topics' => ['Business']]) }}">Business</a>
+            <a href="{{ route('topic.show', ['name' => 'Business']) }}">Business</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('search.show', ['topics' => ['Technology']]) }}">Technology</a>
+            <a href="{{ route('topic.show', ['name' => 'Technology']) }}">Technology</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('search.show', ['topics' => ['Science']]) }}">Science</a>
+            <a href="{{ route('topic.show', ['name' => 'Science']) }}">Science</a>
         </h2>
-        <h2><i class='bx bx-news'></i>All Topics</h2>
+        <button type="button" id="all-topics-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class='bx bx-news'></i>
+            <h2>All Topics</h2>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="all-topics-button">
+            @foreach($topics as $topic)
+                <a class="dropdown-item" href="{{ route('topic.show', ['name' => $topic->name]) }}"><h2>{{ $topic->name }}</h2></a>
+            @endforeach
+        </div>
         @include('partials.search',['tags' => $tags, 'topics' => $topics])
     </div>
 </header>

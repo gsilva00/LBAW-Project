@@ -11,7 +11,7 @@
         <script src="{{ url('js/searchdropdown.js') }}"> </script>
         <script src="{{ url('js/filterdropdowntag.js') }}"> </script>
         <script src="{{ url('js/filterdropdowntopic.js') }}"> </script>
-        <link href="{{ url('css/app.css') }}" rel="stylesheet">
+        <script src="{{ url('js/tagcreatearticle.js') }}"> </script>
         <link href="{{ url('css/header.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
         <link href="{{ url('css/login.css') }}" rel="stylesheet">
@@ -21,13 +21,16 @@
         <link href="{{ url('css/contacts.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/filter.css') }}" rel="stylesheet">
+        <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <!--  <link href="{{ url('css/app.css') }}" rel="stylesheet"> -->
     </head>
     <body>
-        @include('pages.header')
-        <main>
-            @yield('content')
-        </main>
-        @include('pages.footer')
+        <div class="wrapper">
+            @include('pages.header')
+            <main class="content">
+                @yield('content')
+            </main>
+            @include('pages.footer')
+        </div>
     </body>
 </html>

@@ -42,12 +42,3 @@
   text-overflow: ellipsis;
   display: block;
 }
-
-.greyer{
-    background-color: var(--primary-color);
-    font-weight: 400;
-}
-
-.greyer:hover{
-    background-color: white;
-}

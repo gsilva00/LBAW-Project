@@ -215,6 +215,9 @@ class User extends Authenticatable
         );
     }
 
-
+    public function filterByFollowingUsers($users)
+    {
+        return ArticlePage::whereIn('author_id', $users->pluck('id'))->get();
+    }
 
 }

@@ -35,7 +35,7 @@ class CreateArticleController extends Controller
         $article->topic_id = 1;
         $article->save();
 
-        return redirect()->route('profile', ['user' => $user])->with('success', 'Article created successfully!');
+        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article created successfully!');
     }
 
     public function create(){

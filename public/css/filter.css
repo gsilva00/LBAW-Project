@@ -7,6 +7,18 @@
     background-color: white;
     z-index: 1000;
 }
+ 
+/*Para o create-article só*/
+#tag-create-article-suggestions{
+    top: 38.3em;
+    left: 10.2em;
+    width: 0;
+}
+
+#tag-create-article-suggestions.show{
+    width: 12em;
+}
+/* -------------------------*/
 
 #tag-suggestions{
     top: 8.5em;
