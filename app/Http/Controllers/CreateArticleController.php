@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\Tag;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -15,25 +17,31 @@ class CreateArticleController extends Controller
         Log::info('CreateArticleController@show', [
             'title' => $request->input('title'),
             'subtitle' => $request->input('subtitle'),
-            'content' => $request->input('content')
+            'content' => $request->input('content'),
+            'tags' => $request->input('tags'),
+            'topics' => $request->input('topics')
         ]);
 
         $request->validate([
             'title' => 'required|string|max:50',
             'subtitle' => 'required|string|max:50',
             'content' => 'string|max:10000',
-
+            'topics' => 'required|exists:topic,id',
         ]);
 
         Log::info('CreateArticleController@show: validation passed');
+        $topicId = intval($request->input('topics')[0]);
 
         $article = new ArticlePage();
         $article->title = $request->input('title');
         $article->subtitle = $request->input('subtitle');
         $article->content = $request->input('content');
         $article->author_id = Auth::id();
-        $article->topic_id = 1;
+        $article->topic_id = $topicId;
         $article->save();
+
+        $tagIds = Tag::searchByArrayNames($request->input('tags', []));
+        $article->tags()->sync($tagIds);
 
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article created successfully!');
     }

@@ -46,4 +46,15 @@ class Tag extends Model
     {
         return $query->where('is_trending', true);
     }
+
+    public static function searchByArrayNames($tags)
+    {
+        $tagIds = [];
+        foreach ($tags as $tagName) {
+            $tag = Tag::where('name', $tagName)->first();
+            $tagIds[] = $tag->id;
+        }
+        return $tagIds;
+    }
+
 }

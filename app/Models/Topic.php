@@ -31,4 +31,11 @@ class Topic extends Model
             'user_id'
         );
     }
+
+    public static function findTopicByName($topic)
+    {
+        return Topic::where('name', $topic)->first();
+    }
+
+
 }
