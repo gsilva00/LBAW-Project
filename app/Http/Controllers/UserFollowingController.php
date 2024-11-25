@@ -5,42 +5,81 @@ namespace App\Http\Controllers;
 use App\Models\ArticlePage;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+
 
 class UserFollowingController extends Controller
 {
-    public function followTags()
+    public function followTags(Request $request)
     {
         $user = Auth::user();
-        $this->authorize('viewFollowingTags', $user);
-
         $tags = $user->followedTags()->get();
         $articles = ArticlePage::all();
         $articles_followed_tags = ArticlePage::filterByTags($articles, $tags);
 
-        return view('pages.display_articles', ['user' => $user, 'articles' => $articles_followed_tags]);
+        Log::info('UserFollowingController@followTags', [
+            'tags' => $tags,
+            'articles' => $articles_followed_tags,
+        ]);
+
+        if ($request->ajax()) {
+            Log::info("AJAX request");
+            return view('partials.articles_list', ['articles' => $articles_followed_tags]);
+        }
+
+        return view('pages.display_articles', ['articles' => $articles_followed_tags, 'user' => $user]);
     }
 
-    public function followTopics()
+    public function followTopics(Request $request)
     {
         $user = Auth::user();
-        $this->authorize('viewFollowingTopics', $user);
-
-        $tags = $user->followedTopics()->get();
+        $topics = $user->followedTopics()->get();
         $articles = ArticlePage::all();
-        $articles_followed_tags = ArticlePage::filterByTopics($articles, $tags);
+        $articles_followed_topics = ArticlePage::filterByTopics($articles, $topics);
 
-        return view('pages.followedtopics', ['user' => $user, 'articles' => $articles_followed_tags]);
+        Log::info('UserFollowingController@followTopics', [
+            'tags' => $topics,
+            'articles' => $articles_followed_topics,
+        ]);
+
+        if ($request->ajax()) {
+            Log::info("AJAX request");
+            return view('partials.articles_list', ['articles' => $articles_followed_topics]);
+        }
+
+        return view('pages.followedtopics', ['articles' => $articles_followed_topics, 'user' => $user]);
     }
 
-    public function followAuthors()
+    public function followAuthors(Request $request)
     {
         $user = Auth::user();
-        $this->authorize('viewFollowingAuthors', $user);
-
         $authors = $user->followers()->get();
         $articles = User::filterByFollowingUsers($authors);
 
-        return view('pages.display_articles', ['user' => $user, 'articles' => $articles]);
+        Log::info('UserFollowingController@followAuthors', [
+            'authors' => $authors,
+            'articles' => $articles,
+        ]);
+
+        if ($request->ajax()) {
+            Log::info("AJAX request");
+            return view('partials.articles_list', ['articles' => $articles]);
+        }
+
+        return view('pages.display_articles', ['articles' => $articles, 'user' => $user]);
     }
 
+    public function showUserFeed(Request $request)
+    {
+        $user = Auth::user();
+        $articles = ArticlePage::all();
+
+        if ($request->ajax()) {
+            Log::info("AJAX request");
+            return view('partials.articles_list', ['articles' => $articles]);
+        }
+
+        return view('pages.user_feed', ['articles' => $articles, 'user' => $user]);
+    }
 }

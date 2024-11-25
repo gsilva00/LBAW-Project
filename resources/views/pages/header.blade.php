@@ -10,6 +10,9 @@
         <a href="{{ route('followingTopics') }}">
             <h2><i class='bx bx-book'></i> Followed Topics</h2>
         </a>
+        <a href="{{ route('userFeed') }}">
+            <h2><i class='bx bx-book'></i> User's feed</h2>
+        </a>
         <div id="profile" class="dropdown">
             @if(Auth::check())
                 <button type="button" id="profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
