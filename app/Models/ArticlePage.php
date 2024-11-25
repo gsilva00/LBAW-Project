@@ -124,39 +124,48 @@ class ArticlePage extends Model
 
     public static function getMostRecentNews($how_many)
     {
-        return self::select('*')->orderBy('create_date', 'DESC')->take($how_many)->get();
+        return self::where('is_deleted', false)
+            ->orderBy('create_date', 'DESC')
+            ->take($how_many)
+            ->get();
     }
 
     public static function getAllRecentNews()
     {
-        return self::select('*')->orderBy('create_date', 'DESC')->get();
+        return self::where('is_deleted', false)
+            ->orderBy('create_date', 'DESC')
+            ->get();
     }
 
     public static function getArticlesByVotes()
     {
-        return self::select('*')->orderByRaw('(upvotes - downvotes) DESC')->get();
+        return self::where('is_deleted', false)
+            ->orderByRaw('(upvotes - downvotes) DESC')
+            ->get();
     }
 
     public static function filterBySearchQuery($searchQuery)
     {
         if (empty($searchQuery)) {
-            return self::all();
-        }
-        elseif (preg_match('/^".*"$/', $searchQuery)) {
+            return self::where('is_deleted', false)->get();
+        } elseif (preg_match('/^".*"$/', $searchQuery)) {
             $exactQuery = trim($searchQuery, '"');
-            return self::where('title', 'ILIKE', '%' . $exactQuery . '%')
-                ->orWhere('subtitle', 'ILIKE', '%' . $exactQuery . '%')
-                ->orWhere('content', 'ILIKE', '%' . $exactQuery . '%')
+            return self::where('is_deleted', false)
+                ->where(function($query) use ($exactQuery) {
+                    $query->where('title', 'ILIKE', '%' . $exactQuery . '%')
+                        ->orWhere('subtitle', 'ILIKE', '%' . $exactQuery . '%')
+                        ->orWhere('content', 'ILIKE', '%' . $exactQuery . '%');
+                })
                 ->get();
-        }
-        else {
+        } else {
             $words = explode(' ', $searchQuery);
             $sanitizedWords = array_map(function($word) {
                 return $word . ':*';
             }, $words);
             $tsQuery = implode(' & ', $sanitizedWords);
 
-            return self::whereRaw("tsv @@ to_tsquery('english', ?)", [$tsQuery])
+            return self::where('is_deleted', false)
+                ->whereRaw("tsv @@ to_tsquery('english', ?)", [$tsQuery])
                 ->orWhere(function($query) use ($words) {
                     foreach ($words as $word) {
                         $query->orWhere('title', 'ILIKE', '%' . $word . '%')
@@ -172,20 +181,27 @@ class ArticlePage extends Model
     public static function filterByTags($articles, $tags)
     {
         return $articles->filter(function($article) use ($tags) {
-            return $article->tags->pluck('id')->intersect($tags->pluck('id'))->isNotEmpty();
+            return !$article->is_deleted && $article->tags->pluck('id')->intersect($tags->pluck('id'))->isNotEmpty();
         });
     }
 
     public static function filterByTopics($articles, $topics)
     {
         return $articles->filter(function($article) use ($topics) {
-            return $topics->pluck('id')->contains($article->topic->id);
+            return !$article->is_deleted && $topics->pluck('id')->contains($article->topic->id);
         });
     }
 
     public static function getAllArticlesNonDeleted()
     {
         return self::where('is_deleted', false)->get();
+    }
+
+    public static function filterDeletedArticles($articles)
+    {
+        return $articles->filter(function($article) {
+            return !$article->is_deleted;
+        });
     }
 
 }
