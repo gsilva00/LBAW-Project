@@ -17,7 +17,7 @@
                     @endif
                     <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
                 </div>
-                <form id="logout-form" action="{{ route('logout') }}" method="GET" style="display: none;">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
             @else
@@ -25,7 +25,7 @@
                     <i class='bx bx-user-circle'></i><h2>Login</h2>
                 </a>
             @endif
-        </div>  <!-- Needs to be change to get login/logout -->
+        </div>
     </div>
     <div id="bottom-part-header">
         <a href="{{ route('homepage') }}"><h2><i class='bx bx-home-alt'></i> Homepage</h2></a>

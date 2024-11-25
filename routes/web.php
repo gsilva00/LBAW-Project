@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
-use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\ArticlePageController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserFollowingController;
+use App\Http\Controllers\UserFollowingTopicsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,7 +31,7 @@ Route::get('/', [HomepageController::class, 'show'])->name('homepage');
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
-    Route::get('/logout', 'logout')->name('logout')->middleware('auth');
+    Route::post('/logout', 'logout')->name('logout')->middleware('auth');
 });
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
@@ -67,7 +67,7 @@ Route::get('/more-users', [AdminPanelController::class, 'moreUsers'])->name('mor
 // Article
 Route::controller(CreateArticleController::class)->group(function () {
     Route::get('/create-article', 'create')->name('createArticle');
-    Route::post('/submit-article', 'store')->name('submitArticle');
+    Route::post('/create-article', 'store')->name('submitArticle');
     Route::get('/edit-article/{id}', 'edit')->name('editArticle');
     Route::post('/edit-article/{id}', 'update')->name('updateArticle');
     Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
