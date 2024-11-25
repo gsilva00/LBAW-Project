@@ -37,7 +37,7 @@ class UserPolicy
     public function view(?User $authUser, User $targetUser): bool
     {
         // Any user can view profiles
-        return true;
+        return !$targetUser->is_deleted;
     }
 
     /**
@@ -95,11 +95,12 @@ class UserPolicy
 
     public function viewFollowingAuthors(User $authUser): bool
     {
+        // Only authenticated users can follow authors
         return Auth::check();
     }
 
     /**
-     * Determine wether the user can access the administrator panel
+     * Determine whether the user can access the administrator panel
      */
     public function viewAdminPanel(User $authUser): bool
     {
@@ -107,22 +108,4 @@ class UserPolicy
         return false;
     }
 
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $authUser, User $targetUser): bool
-    {
-        // Only admins can revert soft-deleted profiles.
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $authUser, User $targetUser): bool
-    {
-        // Only admins can permanently delete a user from the database.
-        return false;
-    }
 }

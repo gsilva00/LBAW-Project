@@ -130,7 +130,7 @@ class ArticlePageController extends Controller
 
         $trendingTagsNewsCount = $trendingTags->sum('articles_count');
 
-        return view('pages.trending_tags_news', [
+        return view('pages.trending_tags', [
             'trendingTags' => $trendingTags,
             'trendingTagsNewsCount' => $trendingTagsNewsCount,
             'user' => $user

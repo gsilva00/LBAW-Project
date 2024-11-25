@@ -19,6 +19,7 @@ class ProfileController extends Controller
     public function show(string $username)
     {
         $user = User::find($username);
+        $authUser = Auth::user();
 
         $this->authorize('view', $user);
 
@@ -30,28 +31,28 @@ class ProfileController extends Controller
             'ownedArticles' => $ownedArticles,
         ]);*/
 
-        $authUser = Auth::user();
         return view('pages.profile', [
-            'userprofile' => $user,
+            'user' => $authUser,
+            'profileUser' => $user,
             'isAdmin' => $authUser->is_admin,
             'isOwner' => $user->username === $authUser->username,
             'ownedArticles' => $ownedArticles,
-            'user' => $authUser,
         ]);
     }
 
     /**
      * Show the user profile edit form.
      */
-    public function edit()
+    public function edit(string $username)
     {
-        $user = Auth::user();
+        $user = User::find($username);
         $authUser = Auth::user();
 
         $this->authorize('update', $user);
 
-        return view('pages.profile_edit', [
-            'user' => $user,
+        return view('pages.edit_profile', [
+            'user' => $authUser,
+            'profileUser' => $user,
             'isOwner' => $user->username === $authUser->username,
         ]);
     }
@@ -59,9 +60,10 @@ class ProfileController extends Controller
     /**
      * Update the user profile.
      */
-    public function update(): RedirectResponse
+    public function update(string $username): RedirectResponse
     {
-        $user = Auth::user();
+        $authUser = Auth::user();
+        $user = User::find($username);
 
         $this->authorize('update', $user);
 
@@ -70,7 +72,7 @@ class ProfileController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'display_name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
-            'cur_password' => 'required|string',
+            'cur_password' => $authUser->is_admin ? 'nullable|string' : 'required|string',
             'new_password' => 'nullable|string|min:8|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -79,7 +81,7 @@ class ProfileController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        if (!Hash::check(request('cur_password'), $user->password)) {
+        if (!$authUser->is_admin && !Hash::check(request('cur_password'), $user->password)) {
             return redirect()->back()->withErrors(['cur_password' => 'Current password is incorrect'])->withInput();
         }
 

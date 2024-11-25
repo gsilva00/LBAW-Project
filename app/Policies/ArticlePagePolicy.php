@@ -68,23 +68,4 @@ class ArticlePagePolicy
         return Auth::check() && $articlePage->author()->is($user) && !$user->is_banned;
     }
 
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, User $model): bool
-    {
-        // Only admins can revert soft-deleted articles.
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, User $model): bool
-    {
-        // Only admins can permanently delete an article from the database.
-        return false;
-    }
-
 }

@@ -3,32 +3,21 @@
 @section('content')
     <div class="profile-wrapper">
         <section class="profile-container">
-            <img src="{{ asset('images/profile/' . $userprofile->profile_picture) }}" alt="profile_picture">
+            <img src="{{ asset('images/profile/' . $profileUser->profile_picture) }}" alt="profile_picture">
             <div class="profile-info">
-                <h1>{{ $userprofile->display_name }}'s Profile</h1>
+                <h1>{{ $profileUser->display_name }}'s Profile</h1>
                 @if($isOwner || $isAdmin)
-                    <a href="{{ route('editProfile')}}"><button class="large-rectangle small-text greyer">Edit Profile</button></a>  <!--Need to do action here IF ITS ADMIN EDITING NOT ITS OWN ACCOUNT -->
+                    <a href="{{ route('editProfile', ['username' => $profileUser->username])}}"><button class="large-rectangle small-text greyer">Edit Profile</button></a>  <!--Need to do action here IF ITS ADMIN EDITING NOT ITS OWN ACCOUNT -->
                 @endif
-                <!--@if($user->isAdmin)
-                    <button class="large-rectangle small-text greyer">
-                    @if($user->isBanned)
-                        Unban User
-                    @else
-                        Ban User
-                    @endif
-                    </button>
-
-                    <button class="large-rectangle small-text greyer"> Delete User </button>
-                @endif -->
             </div>
             <div id="rest-profile-info">
                 @if($isOwner)
                     <span class="small-text"> Your username:</span>
-                    <span><strong> {{ $userprofile->username }} </strong></span>
+                    <span><strong> {{ $profileUser->username }} </strong></span>
                 @endif
 
                 <p class="small-text">Description:</p>
-                <span>{{ $userprofile->description }}</span>
+                <span>{{ $profileUser->description }}</span>
             </div>
         </section>
 
@@ -36,7 +25,7 @@
             @if($isOwner)
                 <h2> Your articles</h2>
             @else
-                <h2> Articles by {{ $userprofile->display_name }}</h2>
+                <h2> Articles by {{ $profileUser->display_name }}</h2>
             @endif
 
             @if($isOwner)
