@@ -37,7 +37,7 @@ class CreateArticleController extends Controller
         $article = new ArticlePage();
         $article->title = $request->input('title');
         $article->subtitle = $request->input('subtitle');
-        $article->content = $request->input('content');
+        $article->content = str_replace("\n", "<?n?n>", $request->input('content'));
         $article->author_id = Auth::id();
         $article->topic_id = $topicId;
 
