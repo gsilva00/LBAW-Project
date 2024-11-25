@@ -272,7 +272,7 @@ paths:
                   value: '/profile/edit/{username}'
 
   /profile/delete/{id}:
-    delete:
+    post:
       operationId: R204
       summary: 'R204: Delete user profile'
       description: 'Delete the individual user profile. Access: OWN, ADM'
