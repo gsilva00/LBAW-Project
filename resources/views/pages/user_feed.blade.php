@@ -1,20 +1,21 @@
 @extends('layouts.homepage')
 
 @section('content')
-    <div class="container mt-5">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary active" data-url="{{ route('followingTags') }}">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked> Followed Tags
+    <br>
+    <div class="recent-news-wrapper">
+        <div class="feed-options-container" data-toggle="buttons">
+            <label class="feed-option active" data-url="{{ route('followingTags') }}">
+                <input type="radio" name="feed-options" checked> <i class='bx bx-purchase-tag'></i>Followed Tags
             </label>
-            <label class="btn btn-secondary" data-url="{{ route('followingTopics') }}">
-                <input type="radio" name="options" id="option2" autocomplete="off"> Followed Topics
+            <label class="feed-option" data-url="{{ route('followingTopics') }}">
+                <input type="radio" name="feed-options"><i class='bx bx-book'></i> Followed Topics
             </label>
-            <label class="btn btn-secondary" data-url="{{ route('followingAuthors') }}">
-                <input type="radio" name="options" id="option3" autocomplete="off"> Followed Authors
+            <label class="feed-option" data-url="{{ route('followingAuthors') }}">
+                <input type="radio" name="feed-options"><i class='bx bx-heart'></i>  Followed Authors
             </label>
         </div>
-
-        <div id="articles" class="mt-4">
+        <br>
+        <div id="articles">
             <div class="recent-news-container">
                 @foreach($articles as $article)
                     @include('partials.long_news_tile', [

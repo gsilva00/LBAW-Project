@@ -1,13 +1,19 @@
 function addEventListeners() {
-    document.querySelectorAll('input[type=radio][name=options]').forEach(radio => {
+    document.querySelectorAll('input[type=radio][name=feed-options]').forEach(radio => {
         radio.addEventListener('change', function() {
-            const url = this.parentElement.getAttribute('data-url');
+            for (let label of document.querySelectorAll('.feed-option')) {
+                label.classList.remove('active');
+            }
+            
+            optionLabel = this.parentElement;
+            optionLabel.classList.add('active');
+            const url = optionLabel.getAttribute('data-url');
             loadArticles(url);
         });
     });
 
     // Load default articles on page load
-    const defaultUrl = document.querySelector('.btn-secondary.active').getAttribute('data-url');
+    const defaultUrl = document.querySelector('.feed-option.active').getAttribute('data-url');
     loadArticles(defaultUrl);
 }
 

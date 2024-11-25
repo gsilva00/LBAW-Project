@@ -13,7 +13,7 @@ body{
   margin-block: 0.5em;
 }
 
-span,a,p,button,input, textarea{
+span,a,p,button,input, textarea, label{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
 }

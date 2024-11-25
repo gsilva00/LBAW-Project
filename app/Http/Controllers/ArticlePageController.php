@@ -115,4 +115,22 @@ class ArticlePageController extends Controller
         ]);
     }
 
+    public function showTrendingTagsNews()
+    {
+        $user = Auth::user();
+        $trendingTags = Tag::where('is_trending', true)
+        ->withCount(['articles' => function ($query) {
+            $query->where('is_deleted', false);
+        }])
+        ->get();
+
+        $trendingTagsNewsCount = $trendingTags->sum('articles_count');
+
+        return view('pages.trending_tags_news', [
+            'trendingTags' => $trendingTags,
+            'trendingTagsNewsCount' => $trendingTagsNewsCount,
+            'user' => $user
+        ]);
+    }
+
 }

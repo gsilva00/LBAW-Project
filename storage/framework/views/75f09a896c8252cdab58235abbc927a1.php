@@ -7,11 +7,14 @@
          <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
         <title><?php echo e(config('app.name', 'Laravel')); ?></title>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-        <script src="<?php echo e(url('js/dropdown.js')); ?>"> </script>
-        <script src="<?php echo e(url('js/searchdropdown.js')); ?>"> </script>
-        <script src="<?php echo e(url('js/filterdropdowntag.js')); ?>"> </script>
-        <script src="<?php echo e(url('js/filterdropdowntopic.js')); ?>"> </script>
+        <script src="<?php echo e(url('js/dropdown.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/searchdropdown.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/filterdropdowntag.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/filterdropdowntopic.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/adminpanel.js')); ?>" defer></script>
+        <script src="<?php echo e(url('js/userfeed.js')); ?>" defer></script>
         <script src="<?php echo e(url('js/tagcreatearticle.js')); ?>"> </script>
+        <link href="<?php echo e(url('css/userfeed.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/header.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/footer.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/login.css')); ?>" rel="stylesheet">
@@ -22,7 +25,6 @@
         <link href="<?php echo e(url('css/profile.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/filter.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet">
-        <!--  <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet"> -->
     </head>
     <body>
         <div class="wrapper">

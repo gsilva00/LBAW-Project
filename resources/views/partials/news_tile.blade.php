@@ -3,7 +3,7 @@
         <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
         <p class="title">{{ $article->title }}</p>
     </a>
-    @if(!$article->is_deleted)
+    @if(!$article->is_deleted && Auth::check() && Auth::user()->id === $article->author_id)
     <div class="float-container">
         <a href="{{ route('editArticle', ['id' => $article->id]) }}" class="large-rectangle small-text"><span>Edit</span></a>
         <form action="{{ route('deleteArticle', ['id' => $article->id]) }}" method="POST" style="display:inline;">

@@ -75,6 +75,7 @@ Route::controller(CreateArticleController::class)->group(function () {
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
 Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('recentnews.show');
 Route::get('/voted-news', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
+Route::get('/trending-tags-news', [ArticlePageController::class, 'showTrendingTagsNews'])->name('trendingtags');
 Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('topic.show');
 Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('tag.show');
 

@@ -1,0 +1,31 @@
+.feed-options-container{
+    display: flex;
+    width: fit-content;
+    margin-inline: auto;
+    column-gap: 0.5em;
+}
+
+.feed-options-container label input{
+    display: none;
+}
+
+.feed-options-container label{
+    background-color: var(--secondary-color);
+    padding-inline: 1em;
+    padding-block: 0.75em;
+    align-self: center;
+}
+
+.feed-options-container label:hover{
+    background-color: var(--primary-color);
+}
+
+.feed-options-container label.active{
+    border: 3px solid var(--primary-color);
+}
+
+.feed-options-container label .bx{
+    font-size: 1.2em;
+    padding-right: 0.5em;
+}
+

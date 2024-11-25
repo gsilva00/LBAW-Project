@@ -1,26 +1,26 @@
-@extends('layouts.homepage')
 
-@section('title', 'Edit Article')
 
-@section('content')
+<?php $__env->startSection('title', 'Edit Article'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="profile-wrapper">
         <h1 class="large-rectangle">Edit a New Article</h1>
-    <form class="large-rectangle" action="{{ route('updateArticle', ['id' => $article->id]) }}" method="POST">
-        @csrf
+    <form class="large-rectangle" action="<?php echo e(route('updateArticle', ['id' => $article->id])); ?>" method="POST">
+        <?php echo csrf_field(); ?>
         <br>
         <div class="profile-info">
             <label for="title"><span>Title</span></label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ $article->title }}" placeholder="title" required>
+            <input type="text" class="form-control" id="title" name="title" value="<?php echo e($article->title); ?>" placeholder="title" required>
         </div>
         <br>
         <div class="profile-info">
             <label for="subtitle"><span>Subtitle</span></label>
-            <input type="text" class="form-control" id="subtitle" name="subtitle" value="{{ $article->subtitle }}" placeholder="subtitle" required>
+            <input type="text" class="form-control" id="subtitle" name="subtitle" value="<?php echo e($article->subtitle); ?>" placeholder="subtitle" required>
         </div>
         <br>
         <div class="profile-info">
             <label for="content"><span>Content</span></label>
-            <textarea class="form-control" id="content" name="content" rows="10" placeholder="content" required>{{ $article->content }}</textarea>
+            <textarea class="form-control" id="content" name="content" rows="10" placeholder="content" required><?php echo e($article->content); ?></textarea>
         </div>
         <br>
         <div class="profile-info">
@@ -33,9 +33,9 @@
                     <label for="content"><span>Topics</span></label>
                     <select class="form-control" id="topics" name="topics[]" required>
                         <option value="No_Topic" selected>No Topic</option>
-                        @foreach($topics as $topic)
-                            <option value="{{ $topic->id }}">{{ $topic->name }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $topics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($topic->id); ?>"><?php echo e($topic->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
                 <br>
@@ -43,14 +43,15 @@
                     <label for="article_picture"><span>Upload Article Picture</span></label>
                     <input type="file" name="article_picture" id="article_picture">
                 </div>
-                @if ($errors->has('article_picture'))
+                <?php if($errors->has('article_picture')): ?>
                     <br>
                     <div class="profile-info">
                         <span class="error">
-                            {{ $errors->first('article_picture') }}
+                            <?php echo e($errors->first('article_picture')); ?>
+
                         </span>
                     </div>
-                @endif
+                <?php endif; ?>
                 <br>
                 <br>
                 <br>
@@ -63,4 +64,5 @@
 </div>
 <br>
 <br>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.homepage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/pages/edit_article.blade.php ENDPATH**/ ?>

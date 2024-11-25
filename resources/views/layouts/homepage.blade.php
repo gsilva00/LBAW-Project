@@ -14,7 +14,7 @@
         <script src="{{ url('js/adminpanel.js') }}" defer></script>
         <script src="{{ url('js/userfeed.js') }}" defer></script>
         <script src="{{ url('js/tagcreatearticle.js') }}"> </script>
-        <link href="{{ url('css/app.css') }}" rel="stylesheet">
+        <link href="{{ url('css/userfeed.css') }}" rel="stylesheet">
         <link href="{{ url('css/header.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
         <link href="{{ url('css/login.css') }}" rel="stylesheet">
