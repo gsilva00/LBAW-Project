@@ -6,7 +6,7 @@
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Create a New Article</h1>
 
-            <form id="create-article" class="large-rectangle" action="{{ route('submitArticle') }}" method="POST">
+            <form id="create-article" class="large-rectangle" action="{{ route('submitArticle') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <br>
                 <div class="profile-info">

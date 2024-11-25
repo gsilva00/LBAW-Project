@@ -19,7 +19,8 @@ class CreateArticleController extends Controller
             'subtitle' => $request->input('subtitle'),
             'content' => $request->input('content'),
             'tags' => $request->input('tags'),
-            'topics' => $request->input('topics')
+            'topics' => $request->input('topics'),
+            'article_picture' => $request->file('article_picture'),
         ]);
 
         $request->validate([
@@ -27,6 +28,7 @@ class CreateArticleController extends Controller
             'subtitle' => 'required|string|max:50',
             'content' => 'string|max:10000',
             'topics' => 'required|exists:topic,id',
+            'article_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
         Log::info('CreateArticleController@show: validation passed');
@@ -38,6 +40,13 @@ class CreateArticleController extends Controller
         $article->content = $request->input('content');
         $article->author_id = Auth::id();
         $article->topic_id = $topicId;
+
+        if ($request->hasFile('article_picture')) {
+            $imageName = time() . '-' . $request->file('article_picture')->getClientOriginalName();
+            $request->file('article_picture')->move(public_path('images/article'), $imageName);
+            $article->article_image = $imageName;
+        }
+
         $article->save();
 
         $tagIds = Tag::searchByArrayNames($request->input('tags', []));
