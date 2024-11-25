@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\Topic;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,7 @@ class ArticlePageController extends Controller
     public function show(Request $request, $id)
     {
         $article = ArticlePage::with(['tags', 'topic', 'author', 'comments'])->findOrFail($id);
+
         $this->authorize('view', $article);
 
         $user = Auth::user();
@@ -62,9 +64,9 @@ class ArticlePageController extends Controller
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
 
-        $recentNews = ArticlePage::getAllRecentNews();
         $this->authorize('viewAny', ArticlePage::class);
 
+        $recentNews = ArticlePage::getAllRecentNews();
         return view('pages.recent_news', [
             'username' => $username,
             'recentNews' => $recentNews,
@@ -76,12 +78,41 @@ class ArticlePageController extends Controller
     {
         $user = Auth::user();
 
-        $votedNews = ArticlePage::getArticlesByVotes();
         $this->authorize('viewAny', ArticlePage::class);
 
+        $votedNews = ArticlePage::getArticlesByVotes();
         return view('pages.voted_news', [
             'votedNews' => $votedNews,
             'user' => $user
         ]);
     }
+
+    public function showTopic($name)
+    {
+        $user = Auth::user();
+        $topic = Topic::where('name', $name)->firstOrFail();
+        $articles = $topic->articles()->get();
+        $this->authorize('viewAny', ArticlePage::class);
+
+        return view('pages.topic_page', [
+            'topic' => $topic,
+            'articles' => $articles,
+            'user' => $user
+        ]);
+    }
+
+    public function showTag($name)
+    {
+        $user = Auth::user();
+        $tag = Tag::where('name', $name)->firstOrFail();
+        $articles = $tag->articles()->get();
+        $this->authorize('viewAny', ArticlePage::class);
+
+        return view('pages.tag_page', [
+            'tag' => $tag,
+            'articles' => $articles,
+            'user' => $user
+        ]);
+    }
+
 }

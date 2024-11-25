@@ -13,7 +13,7 @@ body{
   margin-block: 0.5em;
 }
 
-span,a,p,button,input{
+span,a,p,button,input, textarea{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
 }
@@ -21,6 +21,12 @@ span,a,p,button,input{
 h2{
   font-family: 'Inter', sans-serif;
   font-weight: 600;
+}
+
+h2 a{
+  font-weight: 600;
+  position: relative;
+  top: 0.3em;
 }
 
 header{
@@ -71,7 +77,7 @@ header{
   align-content: center;
 }
 
-#profile-button, #search-button{
+#profile-button, #search-button, #all-topics-button{
   display: flex;
   border: none;
   background-color: transparent;
@@ -81,7 +87,7 @@ header{
   align-items: baseline
 }
 
-#profile-button h2, .dropdown-item h2{
+#profile-button h2, .dropdown-item h2, #all-topics-button h2{
   margin: 0;
   font-size: 0.9em;
 }
@@ -170,4 +176,9 @@ header{
 
 .search-container button i{
   top: 0.5em;
+}
+
+#all-topics-button + .dropdown-menu{
+  top: 5.9em;
+  right: 5em;
 }

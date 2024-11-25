@@ -13,9 +13,9 @@ class UserPolicy
      *
      * When null, the authorization check falls through to the respective policy method.
      */
-    public function before(User $user, $ability): bool|null
+    public function before(User $authUser, $ability): bool|null
     {
-        if (Auth::check() && $user->is_admin) {
+        if (Auth::check() && $authUser->is_admin) {
             return true;
         }
 
@@ -25,7 +25,7 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(?User $user): bool
+    public function viewAny(?User $authUser): bool
     {
         // Admins can view list of Users (profiles)
         return false;
@@ -34,7 +34,7 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(?User $user, User $model): bool
+    public function view(?User $authUser, User $targetUser): bool
     {
         // Any user can view profiles
         return true;
@@ -43,7 +43,7 @@ class UserPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $authUser): bool
     {
         // Admins can create new users.
         return false;
@@ -52,25 +52,34 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $authUser, User $targetUser): bool
     {
         // Users can update their own profile
-        return Auth::check() && $user->is($model);
+        return Auth::check() && $authUser->is($targetUser);
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $authUser, User $targetUser): bool
     {
         // Users can delete their own profile
-        return Auth::check() && $user->is($model);
+        return Auth::check() && $authUser->is($targetUser);
+    }
+
+
+    /**
+     * Determine whether the user can access his user feed
+     */
+    public function viewUserFeed(User $authUser): bool
+    {
+        return Auth::check();
     }
 
     /**
      * Determine whether the user can access his followed tags
      */
-    public function viewFollowingTags(User $user): bool
+    public function viewFollowingTags(User $authUser): bool
     {
         // Only authenticated users can follow tags
         return Auth::check();
@@ -78,17 +87,31 @@ class UserPolicy
     /**
      * Determine whether the user can access his followed topics
      */
-    public function viewFollowingTopics(User $user): bool
+    public function viewFollowingTopics(User $authUser): bool
     {
         // Only authenticated users can follow topics
         return Auth::check();
+    }
+
+    public function viewFollowingAuthors(User $authUser): bool
+    {
+        return Auth::check();
+    }
+
+    /**
+     * Determine wether the user can access the administrator panel
+     */
+    public function viewAdminPanel(User $authUser): bool
+    {
+        // Only admins can view the administrator panel.
+        return false;
     }
 
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, User $model): bool
+    public function restore(User $authUser, User $targetUser): bool
     {
         // Only admins can revert soft-deleted profiles.
         return false;
@@ -97,7 +120,7 @@ class UserPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, User $model): bool
+    public function forceDelete(User $authUser, User $targetUser): bool
     {
         // Only admins can permanently delete a user from the database.
         return false;

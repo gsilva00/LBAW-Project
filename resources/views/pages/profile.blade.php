@@ -40,13 +40,13 @@
             @endif
 
             @if($isOwner)
-                <a href="{{ route('createArticle')}}"><button class="large-rectangle small-text greyer">Create New Article</button></a>  <!--Need to do action here -->
+                <a href="{{ route('createArticle')}}"><button class="large-rectangle small-text">Create New Article</button></a>  <!--Need to do action here -->
             @endif
 
         </div>
 
         @if($ownedArticles->isNotEmpty())
-            <div class="sec-articles">
+            <div class="sec-articles profile-page">
                 @foreach($ownedArticles as $article)
                         @include('partials.news_tile', [
                             'article' => $article,

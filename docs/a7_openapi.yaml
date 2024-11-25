@@ -186,7 +186,7 @@ paths:
         '404':
           description: 'Not Found. This user does not exist.'
 
-  /profile/edit:
+  /profile/edit/{username}:
 
     get:
       operationId: R202
@@ -194,19 +194,27 @@ paths:
       description: 'Show the edit individual user profile page. Access: OWN'
       tags:
         - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+
       responses:
         '200':
           description: 'Ok. Show edit profile UI.'
-        '401':
-          description: 'Unauthorized. You do not possess the valid credentials edit this profile.'
+        '403':
+          description: 'Unauthorized. You do not possess the valid credentials to edit your profile.'
           headers:
             Location:
               schema:
                 type: string
               example:
-                401Success:
-                  description: 'Redirecting to user profile.'
-                  value: '/user/{username}'
+                403Success:
+                  description: 'Redirecting to login page.'
+                  value: '/login'
 
     post:
       operationId: R203
@@ -261,7 +269,40 @@ paths:
                   value: '/profile/user/{username}'
                 302Failure:
                   description: 'Edit failed. Redirect to edit individual user profile.'
-                  value: '/profile/user/edit'
+                  value: '/profile/edit/{username}'
+
+  /profile/delete/{id}:
+    delete:
+      operationId: R204
+      summary: 'R204: Delete user profile'
+      description: 'Delete the individual user profile. Access: OWN, ADM'
+      tags:
+        - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '302':
+          description: 'Redirect after deleting user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                    302Success:
+                      description: 'Successful delete. Redirect to login form.'
+                      value: '/login'
+
+                    302Failure:
+                      description: 'Failure to delete. Redirect to user profile.'
+                      value: '/profile/user'
+        '403':
+          description: 'You do not possess the credentials for this action.'
 
 ######################################### News #########################################
 
@@ -277,7 +318,7 @@ paths:
         '200':
           description: 'Success. Display Home Feed.'
 
-  /my_feed:
+  /user_feed:
 
     get:
       operationId: R302
@@ -287,25 +328,27 @@ paths:
         - 'M03: News'
       responses:
         '200':
-          description: 'Success. Display Top News Feed.'
+          description: 'Success. Display User News Feed.'
+        '403':
+          description: 'You do not possess the credentials for this action.'
 
   /most-voted:
 
     get:
       operationId: R303
-      summary: 'R303: View Top News'
+      summary: 'R303: View Most Voted News'
       description: 'Show the Top News page. Access: GUE, USR'
       tags:
         - 'M03: News'
       responses:
         '200':
-          description: 'Success. Display Top News Feed.'
+          description: 'Success. Display Most Voted News Feed.'
 
   /article/{id}:
 
     get:
       operationId: R304
-      summary: 'R303: View News Item'
+      summary: 'R304: View News Item'
       description: 'Show Article page. Access: GUE, USR'
       tags:
         - 'M03: News'
@@ -327,17 +370,27 @@ paths:
 
     get:
       operationId: R305
-      summary: 'R304: Create News Article Form'
+      summary: 'R305: Create News Article Form'
       description: 'Display create a new article UI. Access: USR'
       tags:
         - 'M03: News'
       responses:
         '202':
-          description: 'Ok. Show create article UI'
+          description: 'Ok. Show create article UI.'
+        '403':
+          description: 'Unauthorized. You don not possess the credentials to create an article.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to login page.'
+                  value: '/login'
 
     post:
       operationId: R306
-      summary: 'R305: Create New Article Action'
+      summary: 'R306: Create New Article Action'
       description: 'Create a new article. Access: USR'
       tags:
         - 'M03: News'
@@ -360,6 +413,7 @@ paths:
                   format: binary
               required:
                 - title
+                - subtitle
                 - content
 
       responses:
@@ -382,7 +436,7 @@ paths:
 
     get:
       operationId: R307
-      summary: 'R306: Edit article Form'
+      summary: 'R307: Edit article Form'
       description: 'Show the edit article page. Access: OWN'
       tags:
         - 'M03: News'
@@ -397,12 +451,12 @@ paths:
       responses:
         '200':
           description: 'Ok. Show edit article UI.'
-        '401':
+        '403':
           description: 'Unauthorized. You do not possess the valid credentials edit this article.'
 
     post:
       operationId: R308
-      summary: 'R307: Edit article Action'
+      summary: 'R308: Edit article Action'
       description: 'Processes and saves the changes made by user. Access: OWN'
       tags:
         - 'M03: News'
@@ -446,7 +500,7 @@ paths:
 
     post:
       operationId: R309
-      summary: 'R308: Delete an article.'
+      summary: 'R309: Delete an article.'
       description: 'Delete an article action. Access: OWN, ADM'
       tags:
         - 'M03: News'
@@ -474,74 +528,110 @@ paths:
                 302Success:
                   description: 'Successful delete. Redirect to user profile'
                   value: '/profile/user/{username}'
-        '401':
+        '403':
           description: 'You do not possess the credentials for this action.'
 
 ######################################## Search ########################################
 
-  /search/users:
+  /search:
     get:
       operationId: R401
-      summary: 'R401: Search users'
-      description: 'Search for users with a given query. Access: GUE, USR'
+      summary: 'R401: Search'
+      description: 'Show the search results page. Access: GUE, USR'
       tags:
         - 'M04: Search'
-
       parameters:
-        - name: query
-          in: query
-          required: true
+        - in: query
+          name: query
           schema:
             type: string
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-            description: The maximum number of results to return.
-            default: 15
-
-      responses:
-        '200':
-          description: 'Success. Display the search results.'
-        '400':
-          description: 'Bad Request. Missing or invalid query parameter.'
-        '500':
-          description: 'Internal Server Error.'
-
-  /search/articles:
-    get:
-      operationId: R402
-      summary: 'R402: Search articles'
-      description: 'Search for articles with a given query. Access: GUE, USR'
-      tags:
-        - 'M04: Search'
-
-      parameters:
-        - name: query
-          in: query
           required: true
-          schema:
-            type: string
-        - name: limit
-          in: query
-          required: false
-          schema:
-            type: integer
-            description: The maximum number of results to return.
-            default: 15
-
+          description: 'The search query string'
       responses:
         '200':
-          description: 'Success. Display the search results.'
+          description: 'Success. Display search results.'
         '400':
-          description: 'Bad Request. Missing or invalid query parameter.'
+          description: 'Bad Request. Invalid search query.'
         '500':
-          description: 'Internal Server Error.'
+          description: 'Internal Server Error. Unable to process search query.'
 
 #################################### Topics and Tags ###################################
 
-# not part of the vertical prototype
+  /following/tags:
+    get:
+      operationId: R501
+      summary: 'R501: View Followed Tags Feed'
+      description: 'Show the followed tags feed. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      responses:
+        '200':
+          description: 'Success. Display followed tags.'
+
+  /following/topics:
+    get:
+      operationId: R502
+      summary: 'R502: View Followed Topics Feed'
+      description: 'Show the followed topics feed. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      responses:
+        '200':
+          description: 'Success. Display followed topics.'
+
+  /following/authors:
+    get:
+      operationId: R503
+      summary: 'R503: View Followed Authors Feed'
+      description: 'Show the followed authors feed. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      responses:
+        '200':
+          description: 'Success. Display followed authors feed.'
+
+  /topic/{name}:
+    get:
+      operationId: R504
+      summary: 'R504: View Topic'
+      description: 'Show the topic page. Access: GUE, USR'
+      tags:
+        - 'M05: Topics and Tags'
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the topic'
+      responses:
+        '200':
+          description: 'Success. Display topic page.'
+        '404':
+          description: 'Not Found. Topic does not exist.'
+
+  /tag/{name}:
+    get:
+      operationId: R505
+      summary: 'R505: View Tag'
+      description: 'Show the tag page. Access: GUE, USR'
+      tags:
+        - 'M05: Topics and Tags'
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the tag'
+      responses:
+        '200':
+          description: 'Success. Display tag page.'
+        '404':
+          description: 'Not Found. Tag does not exist.'
 
 ####################################### Comments #######################################
 
@@ -557,4 +647,46 @@ paths:
 
 ############################ Administration and Static Pages ###########################
 
-# not part of the vertical prototype
+  /admin-panel:
+    get:
+      operationId: R901
+      summary: 'R901: View Admin Panel'
+      description: 'Show the admin panel page. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display admin panel.'
+
+  /more-users:
+    get:
+      operationId: R902
+      summary: 'R902: View More Users'
+      description: 'Show the more users page. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more users.'
+
+  /contacts:
+    get:
+      operationId: R903
+      summary: 'R903: View Contacts'
+      description: 'Show the contacts page. Access: GUE, USR'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display contacts page.'
+
+  /about-us:
+    get:
+      operationId: R904
+      summary: 'R904: View About Us'
+      description: 'Show the about us page. Access: GUE, USR'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display about us page.'

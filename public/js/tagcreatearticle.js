@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const tags = window.tags;
-    const tagInput = document.getElementById('tag-input');
-    const tagSuggestions = document.getElementById('tag-suggestions');
-    const selectedTags = document.getElementById('selected-tags');
+    const tagInput = document.getElementById('tag-create-article-input');
+    const tagSuggestions = document.getElementById('tag-create-article-suggestions');
+    const selectedTags = document.getElementById('selected-create-article-tags');
 
     tagInput.addEventListener('input', function() {
         const query = tagInput.value.toLowerCase();
@@ -36,8 +36,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function addTag(tag) {
 
-        const topicSuggestions = document.getElementById('topic-suggestions');
-
         const existingTags = Array.from(selectedTags.getElementsByClassName('tag-block'));
         if (existingTags.some(tagBlock => tagBlock.querySelector('span').innerText.trim() === tag.name)) {
             return;
@@ -46,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const tagBlock = document.createElement('div');
         tagBlock.classList.add('tag-block');
         tagBlock.classList.add('block');
+        tagBlock.classList.add('greyer');
         const tagSpan = document.createElement('span');
         tagSpan.classList.add('small-text');
         tagSpan.innerText = tag.name;
@@ -58,10 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
             event.stopPropagation();
             selectedTags.removeChild(tagBlock);
 
-            if (selectedTags.children.length === 1) {
-                topicSuggestions.classList.remove('tag-open');
-            }
-
             updateHiddenInputs();
         });
 
@@ -73,11 +68,6 @@ document.addEventListener('DOMContentLoaded', function() {
         hiddenInput.name = 'tags[]';
         hiddenInput.value = tag.name;
         tagBlock.appendChild(hiddenInput);
-
-        if (selectedTags.children.length > 0) {
-            topicSuggestions.classList.add('tag-open');
-            
-        }
 
         updateHiddenInputs();
     }

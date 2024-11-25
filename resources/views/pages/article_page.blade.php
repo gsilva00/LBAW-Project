@@ -11,7 +11,14 @@
         <div class="news-article">
             <h1 class="article-title border-bottom" >{{ $article->title }}</h1>
             <div class="article-credits">
-                <p class="small-text">By <a href="{{ route('profile', ['username' => $article->author->username]) }}">{{ $authorDisplayName }}</a></p>            <p class="small-text">Created at: {{ $article->create_date }}</p>
+                <p class="small-text">
+                    By
+                    @if($article->is_deleted)
+                        Anonymous
+                    @else
+                        <a href="{{ route('profile', ['username' => $article->author->username]) }}">{{ $authorDisplayName }}</a>
+                    @endif
+                </p>
                 <p class="small-text">
                 @if($article->is_edited)
                     Edited at: {{ $article->edit_date }}
@@ -22,10 +29,10 @@
             </div>
             <p class="title">{{ $article->subtitle }}</p>
             <div>
-                <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
+                <img class="article-image" src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
             </div>
             @foreach($paragraphs as $paragraph)
-                <p class="article-text border-bottom">{{ $paragraph }}</p>
+                <p class="thin">{{ $paragraph }}</p>
             @endforeach
             <div class="large-rectangle tags">
                 <span class="thin">Topic:</span>

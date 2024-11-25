@@ -31,7 +31,7 @@ Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'showLoginForm')->name('login');
     Route::post('/login', 'authenticate');
-    Route::get('/logout', 'logout')->name('logout')->middleware('auth');
+    Route::post('/logout', 'logout')->name('logout')->middleware('auth');
 });
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
@@ -41,10 +41,13 @@ Route::controller(RegisterController::class)->group(function () {
 // Main Dynamic
 Route::get('/search', [SearchController::class, 'show'])->name('search.show');
 
+Route::get('/user-feed', [UserFollowingController::class, 'showUserFeed'])->name('userFeed');
+
 Route::prefix('following')->controller
 (UserFollowingController::class)->group(function () {
     Route::get('/tags','followTags')->name('followingTags');
     Route::get('/topics','followTopics')->name('followingTopics');
+    Route::get('/authors','followAuthors')->name('followingAuthors');
 });
 
 // Profile
@@ -53,14 +56,27 @@ Route::prefix('profile')->controller
     Route::get('/user/{username}', 'show')->name('profile');
     Route::get('/edit', 'edit')->name('profile.edit');
     Route::post('/edit', 'update')->name('profile.update');
+    Route::post('/delete/{id}', 'delete')->name('profile.delete');
 });
-Route::get('/create-article', [CreateArticleController::class, 'create'])->name('createArticle');
-Route::post('/submit-article', [CreateArticleController::class, 'store'])->name('submitArticle');
+
+// Administrator Panel
+Route::get('/admin-panel', [AdminPanelController::class, 'show'])->name('adminPanel');
+Route::get('/more-users', [AdminPanelController::class, 'moreUsers'])->name('more.users');
 
 // Article
+Route::controller(CreateArticleController::class)->group(function () {
+    Route::get('/create-article', 'create')->name('createArticle');
+    Route::post('/create-article', 'store')->name('submitArticle');
+    Route::get('/edit-article/{id}', 'edit')->name('editArticle');
+    Route::post('/edit-article/{id}', 'update')->name('updateArticle');
+    Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
+});
+
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('article.show');
 Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('recentnews.show');
 Route::get('/most-voted', [ArticlePageController::class, 'showVotedNews'])->name('votednews.show');
+Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('topic.show');
+Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('tag.show');
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');

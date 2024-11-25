@@ -1,7 +1,7 @@
 @extends('layouts.homepage')
 
 @section('content')
-<div class="profile-wrapper login-register-container">
+<div class="login-register-container">
     <form method="POST" action="{{ route('register') }}">
         @csrf
         <h1>Register</h1>

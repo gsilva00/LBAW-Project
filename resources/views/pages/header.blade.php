@@ -1,12 +1,8 @@
 <header>
     <div id="top-part-header">
         <h1><a href="{{ route('homepage') }}" class="logo"> {{ config('app.name', 'Laravel') }}</a></h1>
-        <h2><i class='bx bx-heart'></i> Followed Authors' News</h2>
-        <a href="{{ route('followingTags') }}">
-            <h2><i class='bx bx-purchase-tag'></i> Followed Tags</h2>
-        </a>
-        <a href="{{ route('followingTopics') }}">
-            <h2><i class='bx bx-book'></i> Followed Topics</h2>
+        <a href="{{ route('userFeed') }}">
+            <h2><i class='bx bx-book'></i> User's feed</h2>
         </a>
         <div id="profile" class="dropdown">
             @if(Auth::check())
@@ -16,12 +12,12 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
                     <a class="dropdown-item" href="{{ route('profile', ['username' => $user->username]) }}"><h2>See Profile</h2></a>
-                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
                     @if($user->is_admin)
-                        <a class="dropdown-item" href="#"><h2>Something for admin</h2></a>
+                        <a class="dropdown-item" href="{{ route('adminPanel') }}"><h2>Administrator Panel</h2></a>
                     @endif
+                    <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
                 </div>
-                <form id="logout-form" action="{{ route('logout') }}" method="GET" style="display: none;">
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     @csrf
                 </form>
             @else
@@ -29,7 +25,7 @@
                     <i class='bx bx-user-circle'></i><h2>Login</h2>
                 </a>
             @endif
-        </div>  <!-- Needs to be change to get login/logout -->
+        </div>
     </div>
     <div id="bottom-part-header">
         <a href="{{ route('homepage') }}"><h2><i class='bx bx-home-alt'></i> Homepage</h2></a>
@@ -37,18 +33,26 @@
         <a href="{{ route('votednews.show') }}"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
         <h2><i class='bx bx-trending-up'></i>Trending Tags</h2>
         <h2 class="topic">
-            <a href="{{ route('search.show', ['topics' => ['Politics']]) }}">Politics</a>
+            <a href="{{ route('topic.show', ['name' => 'Politics']) }}">Politics</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('search.show', ['topics' => ['Business']]) }}">Business</a>
+            <a href="{{ route('topic.show', ['name' => 'Business']) }}">Business</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('search.show', ['topics' => ['Technology']]) }}">Technology</a>
+            <a href="{{ route('topic.show', ['name' => 'Technology']) }}">Technology</a>
         </h2>
         <h2 class="topic">
-            <a href="{{ route('search.show', ['topics' => ['Science']]) }}">Science</a>
+            <a href="{{ route('topic.show', ['name' => 'Science']) }}">Science</a>
         </h2>
-        <h2><i class='bx bx-news'></i>All Topics</h2>
+        <button type="button" id="all-topics-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class='bx bx-news'></i>
+            <h2>All Topics</h2>
+        </button>
+        <div class="dropdown-menu" aria-labelledby="all-topics-button">
+            @foreach($topics as $topic)
+                <a class="dropdown-item" href="{{ route('topic.show', ['name' => $topic->name]) }}"><h2>{{ $topic->name }}</h2></a>
+            @endforeach
+        </div>
         @include('partials.search',['tags' => $tags, 'topics' => $topics])
     </div>
 </header>

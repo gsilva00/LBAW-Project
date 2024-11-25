@@ -26,12 +26,6 @@
     font-weight: 300;
 }
 
-.article-text{
-    font-weight: 300;
-    margin-top: 2.5em;
-    padding-bottom: 1.5em;
-}
-
 .border-bottom{
     border-bottom: 2px solid var(--secondary-color);
 }
@@ -105,16 +99,68 @@
 .sec-articles {
     grid-area: sec;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
     column-gap: 3em;
+    row-gap: 2em;
     justify-content: space-between;
+    justify-items: center;
     margin-bottom: 4em;
+}
+
+@media (max-width: 55em) {
+    .sec-articles {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 55em) {
+    .sec-articles {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 80em) {
+    .sec-articles {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (min-width: 110em) {
+    .sec-articles {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+
+@media (min-width: 140em) {
+    .sec-articles {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
 }
 
 .sec-articles .news-tile{
     height: 15em;
+    width: 23em;
 }
 
 .sec-articles .news-tile img{
     height: 12em;
+}
+
+.float-container{
+    position: relative;
+    justify-content: space-between;
+    top: -14.2em;
+}
+
+.news-tile .float-container{
+    display: none;
+}
+
+.profile-page .news-tile .float-container{
+    display: flex;
+}
+
+
+#create-article{
+    padding: 2em;
+    margin-bottom: 2em;
 }

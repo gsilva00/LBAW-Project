@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,11 +13,12 @@ use Illuminate\Support\Facades\Validator;
 class ProfileController extends Controller
 {
     /**
-     * Show the user profile.
+     * Show the user's profile.
      */
     public function show(string $username)
     {
         $user = User::find($username);
+
         $this->authorize('view', $user);
 
         $ownedArticles = $user->ownedArticles()->get();
@@ -29,6 +31,7 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         return view('pages.profile', [
             'userprofile' => $user,
+            'isAdmin' => $authUser->is_admin,
             'isOwner' => $user->username === $authUser->username,
             'ownedArticles' => $ownedArticles,
             'user' => $authUser,
@@ -40,13 +43,14 @@ class ProfileController extends Controller
      */
     public function edit()
     {
-        Log::debug('ProfileController@edit called. Loading authorization...');
         $user = Auth::user();
+        $authUser = Auth::user();
+
         $this->authorize('update', $user);
-        Log::debug('ProfileController@edit called and authorization passed');
 
         return view('pages.profile_edit', [
             'user' => $user,
+            'isOwner' => $user->username === $authUser->username,
         ]);
     }
 
@@ -56,6 +60,7 @@ class ProfileController extends Controller
     public function update(): RedirectResponse
     {
         $user = Auth::user();
+
         $this->authorize('update', $user);
 
         $validator = Validator::make(request()->all(), [
@@ -94,5 +99,26 @@ class ProfileController extends Controller
         $user->save();
 
         return redirect()->route('profile', ['username' => $user->username]);
+    }
+
+    public function delete(Request $request, $targetUserId)
+    {
+        $authUser = Auth::user();
+        $targetUser = User::findOrFail($targetUserId);
+
+        $this->authorize('delete', $authUser);
+
+        $targetUser->is_deleted = true;
+        $targetUser->save();
+
+        if ($authUser->id === $targetUser->id) {
+            Auth::logout();  // Log out the user
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect('/')->with('success', 'Your account has been deleted successfully.');
+        }
+
+        return redirect()->route('admin-panel')->with('success', 'User account deleted successfully!');
     }
 }
