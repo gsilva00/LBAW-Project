@@ -68,8 +68,11 @@ class CreateArticleController extends Controller
         $article = ArticlePage::findOrFail($id);
 
         $this->authorize('update', $article);
+        $tags = Tag::searchByArticleId($id);
 
-        return view('pages.edit_article', ['user' => $user, 'article' => $article]);
+        $article->content = str_replace('<?n?n>', "\n", $article->content);
+
+        return view('pages.edit_article', ['user' => $user, 'article' => $article, 'tags' => $tags]);
     }
 
     public function update(Request $request, $id)
@@ -83,7 +86,11 @@ class CreateArticleController extends Controller
             'title' => 'required|string|max:50',
             'subtitle' => 'required|string|max:50',
             'content' => 'string|max:10000',
+            'topics' => 'required|exists:topic,id',
         ]);
+
+        $topicId = intval($request->input('topics')[0]);
+
 
         Log::info('CreateArticleController@show', [
             'title' => $request->input('title'),
@@ -93,8 +100,29 @@ class CreateArticleController extends Controller
 
         $article->title = $request->input('title');
         $article->subtitle = $request->input('subtitle');
-        $article->content = $request->input('content');
+        $article->content = str_replace("\n", "<?n?n>", $request->input('content'));
+        $article->topic_id = $topicId;
+
+        if ($request->hasFile('article_picture')) {
+            $imageName = time() . '-' . $request->file('article_picture')->getClientOriginalName();
+            $request->file('article_picture')->move(public_path('images/article'), $imageName);
+            $article->article_image = $imageName;
+        }
+
         $article->save();
+
+        Log::info('EditArticleController@show', [
+            'title' => $request->input('title'),
+            'subtitle' => $request->input('subtitle'),
+            'content' => $request->input('content'),
+            'tags' => $request->input('tags'),
+            'topics' => $request->input('topics'),
+            'article_picture' => $request->file('article_picture'),
+        ]);
+
+        Tag::removeAllTagsByArticleId($id);
+        $tagIds = Tag::searchByArrayNames($request->input('tags', []));
+        $article->tags()->sync($tagIds);
 
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article updated successfully!');
     }
@@ -107,9 +135,6 @@ class CreateArticleController extends Controller
         $this->authorize('delete', $article);
 
         $article->is_deleted = true;
-        $article->title = '[Deleted]';
-        $article->subtitle = 'This is article has been deleted';
-        $article->content = '[Deleted]';
         $article->save();
 
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article deleted successfully!');

@@ -57,4 +57,21 @@ class Tag extends Model
         return $tagIds;
     }
 
+    public static function removeAllTagsByArticleId($articleId)
+    {
+        $article = ArticlePage::find($articleId);
+        if ($article) {
+            $article->tags()->detach();
+        }
+    }
+
+    public static function searchByArticleId($articleId)
+    {
+        $tags = Tag::whereHas('articles', function ($query) use ($articleId) {
+            $query->where('article_id', $articleId);
+        })->get();
+        return $tags;
+    }
+
+
 }
