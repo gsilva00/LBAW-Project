@@ -41,6 +41,8 @@ Route::controller(RegisterController::class)->group(function () {
 // Main Dynamic
 Route::get('/search', [SearchController::class, 'show'])->name('search.show');
 
+Route::get('/user-feed', [UserFollowingController::class, 'showUserFeed'])->name('userFeed');
+
 Route::prefix('following')->controller
 (UserFollowingController::class)->group(function () {
     Route::get('/tags','followTags')->name('followingTags');
