@@ -14,14 +14,16 @@ class CreateArticleController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        Log::info('CreateArticleController@show', [
+        /*Log::info('CreateArticleController@show', [
             'title' => $request->input('title'),
             'subtitle' => $request->input('subtitle'),
             'content' => $request->input('content'),
             'tags' => $request->input('tags'),
             'topics' => $request->input('topics'),
             'article_picture' => $request->file('article_picture'),
-        ]);
+        ]);*/
+
+        $this->authorize('create', ArticlePage::class);
 
         $request->validate([
             'title' => 'required|string|max:50',
@@ -31,7 +33,7 @@ class CreateArticleController extends Controller
             'article_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
-        Log::info('CreateArticleController@show: validation passed');
+        /*Log::info('CreateArticleController@show: validation passed');*/
         $topicId = intval($request->input('topics')[0]);
 
         $article = new ArticlePage();
@@ -68,6 +70,7 @@ class CreateArticleController extends Controller
         $article = ArticlePage::findOrFail($id);
 
         $this->authorize('update', $article);
+
         $tags = Tag::searchByArticleId($id);
 
         $article->content = str_replace('<?n?n>', "\n", $article->content);
@@ -92,11 +95,11 @@ class CreateArticleController extends Controller
         $topicId = intval($request->input('topics')[0]);
 
 
-        Log::info('CreateArticleController@show', [
+        /*Log::info('CreateArticleController@show', [
             'title' => $request->input('title'),
             'subtitle' => $request->input('subtitle'),
             'content' => $request->input('content')
-        ]);
+        ]);*/
 
         $article->title = $request->input('title');
         $article->subtitle = $request->input('subtitle');
@@ -111,14 +114,14 @@ class CreateArticleController extends Controller
 
         $article->save();
 
-        Log::info('EditArticleController@show', [
+        /*Log::info('EditArticleController@show', [
             'title' => $request->input('title'),
             'subtitle' => $request->input('subtitle'),
             'content' => $request->input('content'),
             'tags' => $request->input('tags'),
             'topics' => $request->input('topics'),
             'article_picture' => $request->file('article_picture'),
-        ]);
+        ]);*/
 
         Tag::removeAllTagsByArticleId($id);
         $tagIds = Tag::searchByArrayNames($request->input('tags', []));

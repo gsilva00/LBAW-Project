@@ -43,7 +43,7 @@ CREATE TABLE users(
     password VARCHAR(256),
     profile_picture VARCHAR(256) DEFAULT 'images/profile/default.jpg',
     description VARCHAR(300) DEFAULT NULL,
-    reputation INT DEFAULT 3,
+    reputation INTEGER DEFAULT 3,
     upvote_notification BOOLEAN DEFAULT TRUE,
     comment_notification BOOLEAN DEFAULT TRUE,
     is_banned BOOLEAN DEFAULT FALSE,

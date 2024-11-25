@@ -25,10 +25,10 @@ class ProfileController extends Controller
         $ownedArticles = $user->ownedArticles()->get();
         $ownedArticles = ArticlePage::filterDeletedArticles($ownedArticles);
 
-        Log::info('ProfileController@show called', [
+        /*Log::info('ProfileController@show called', [
             'user' => $user,
             'ownedArticles' => $ownedArticles,
-        ]);
+        ]);*/
 
         $authUser = Auth::user();
         return view('pages.profile', [
@@ -108,7 +108,7 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         $targetUser = User::findOrFail($targetUserId);
 
-        $this->authorize('delete', $authUser);
+        $this->authorize('delete', $targetUser);
 
         $targetUser->display_name = '[Deleted User]';
         $targetUser->username = '[Deleted User]';

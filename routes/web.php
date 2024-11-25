@@ -25,7 +25,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Home
-Route::get('/', [HomepageController::class, 'show'])->name('homepage');
+Route::redirect('/', '/homepage');
+Route::get('/homepage', [HomepageController::class, 'show'])->name('homepage');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -54,8 +55,8 @@ Route::prefix('following')->controller
 Route::prefix('profile')->controller
 (ProfileController::class)->group(function () {
     Route::get('/user/{username}', 'show')->name('profile');
-    Route::get('/edit', 'edit')->name('editProfile');
-    Route::post('/edit', 'update')->name('updateProfile');
+    Route::get('/edit/{username}', 'edit')->name('editProfile');
+    Route::post('/edit/{username}', 'update')->name('updateProfile');
     Route::post('/delete/{id}', 'delete')->name('deleteProfile');
 });
 
@@ -79,7 +80,7 @@ Route::controller(CreateArticleController::class)->group(function () {
 Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('showArticle');
 Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('showRecentNews');
 Route::get('/most-voted', [ArticlePageController::class, 'showVotedNews'])->name('showVotedNews');
-Route::get('/trending-tags-news', [ArticlePageController::class, 'showTrendingTagsNews'])->name('showTrendingTags');
+Route::get('/trending-tags', [ArticlePageController::class, 'showTrendingTags'])->name('showTrendingTags');
 Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('showTopic');
 Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('showTag');
 

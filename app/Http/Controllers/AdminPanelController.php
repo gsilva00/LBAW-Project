@@ -15,11 +15,11 @@ class AdminPanelController extends Controller
      * Show the administrator panel.
      * - Uses pagination to show user list.
      */
-    public function show(User $user)
+    public function show()
     {
         $user = Auth::user();
 
-        $this->authorize('viewAdminPanel', $user);
+        $this->authorize('viewAdminPanel', User::class);
 
         $users = User::where([
             ['is_admin', false],
@@ -41,6 +41,8 @@ class AdminPanelController extends Controller
      */
     public function moreUsers(Request $request): JsonResponse
     {
+        $this->authorize('viewAdminPanel', User::class);
+
         $page = $request->get('page', 1);
         $users = User::where([
             ['is_admin', false],
@@ -74,7 +76,6 @@ class AdminPanelController extends Controller
             'is_admin' => 'nullable|boolean',
             'is_fact_checker' => 'nullable|boolean',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,

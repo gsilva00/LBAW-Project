@@ -16,7 +16,10 @@ class SearchController extends Controller
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
 
-        Log::info('Search query', ['tags' => $request->input('tags', ''), 'topics' => $request->input('topics', '')]);
+        /*Log::info('Search query', [
+            'tags' => $request->input('tags', ''),
+            'topics' => $request->input('topics', '')
+        ]);*/
 
         $topicNames = $request->input('topics', []);
         $tagNames = $request->input('tags', []);
@@ -26,17 +29,17 @@ class SearchController extends Controller
 
         $articles = ArticlePage::filterBySearchQuery($searchQuery);
 
-        Log::info('Search tags and topics', [
+        /*Log::info('Search tags and topics', [
             'tags' => $tags->pluck('name')->toArray(),
             'topics' => $topics->pluck('name')->toArray()
-        ]);
+        ]);*/
 
-        if($tags->isNotEmpty()) {
+        if ($tags->isNotEmpty()) {
             $articles = ArticlePage::filterByTags($articles, $tags);
         }
 
 
-        if($topics->isNotEmpty()) {
+        if ($topics->isNotEmpty()) {
             $articles = ArticlePage::filterByTopics($articles, $topics);
         }
 

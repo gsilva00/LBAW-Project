@@ -29,7 +29,7 @@ class ArticlePageController extends Controller
 
         $paragraphs = explode("<?n?n>", $article->content);
 
-        Log::info('Paragraphs: ' . json_encode($paragraphs));
+        /*Log::info('Paragraphs: ' . json_encode($paragraphs));*/
 
         return view('pages.article_page', [
             'article' => $article,
@@ -92,6 +92,7 @@ class ArticlePageController extends Controller
         $user = Auth::user();
         $topic = Topic::where('name', $name)->firstOrFail();
         $articles = $topic->articles()->get();
+
         $this->authorize('viewAny', ArticlePage::class);
 
         return view('pages.topic_page', [
@@ -106,6 +107,7 @@ class ArticlePageController extends Controller
         $user = Auth::user();
         $tag = Tag::where('name', $name)->firstOrFail();
         $articles = $tag->articles()->get();
+
         $this->authorize('viewAny', ArticlePage::class);
 
         return view('pages.tag_page', [
@@ -115,7 +117,7 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function showTrendingTagsNews()
+    public function showTrendingTags()
     {
         $user = Auth::user();
         $trendingTags = Tag::where('is_trending', true)
@@ -123,6 +125,8 @@ class ArticlePageController extends Controller
             $query->where('is_deleted', false);
         }])
         ->get();
+
+        $this->authorize('viewAny', ArticlePage::class);
 
         $trendingTagsNewsCount = $trendingTags->sum('articles_count');
 

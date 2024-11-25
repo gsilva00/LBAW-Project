@@ -14,12 +14,19 @@ class HomepageController extends Controller
      */
     public function show()
     {
-        Log::info('HomepageController@show called');
+        // Log::info('HomepageController show function called');
         $user = Auth::user();
+
         $articleItems = ArticlePage::getAllArticlesNonDeleted();
         $trendingTags = Tag::trending()->take(5)->get();
         $recentNews = ArticlePage::getMostRecentNews(2);
 
-        return view('pages.homepage', ['articleItems' => $articleItems, 'trendingTags' => $trendingTags, 'recentNews' => $recentNews, 'isHomepage' => true, 'user' => $user]);
+        return view('pages.homepage', [
+            'articleItems' => $articleItems,
+            'trendingTags' => $trendingTags,
+            'recentNews' => $recentNews,
+            'isHomepage' => true,
+            'user' => $user
+        ]);
     }
 }

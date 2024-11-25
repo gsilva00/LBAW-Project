@@ -21,13 +21,14 @@ class UserFollowingController extends Controller
         $articles = ArticlePage::all();
         $articles_followed_tags = ArticlePage::filterByTags($articles, $tags);
 
-        Log::info('UserFollowingController@followTags', [
+        /*Log::info('UserFollowingController@followTags', [
             'tags' => $tags,
             'articles' => $articles_followed_tags,
-        ]);
+        ]);*/
 
         if ($request->ajax()) {
-            Log::info("AJAX request");
+            /*Log::info("AJAX request");*/
+
             return view('partials.articles_list', ['articles' => $articles_followed_tags]);
         }
 
@@ -44,13 +45,14 @@ class UserFollowingController extends Controller
         $articles = ArticlePage::all();
         $articles_followed_topics = ArticlePage::filterByTopics($articles, $topics);
 
-        Log::info('UserFollowingController@followTopics', [
+        /*Log::info('UserFollowingController@followTopics', [
             'tags' => $topics,
             'articles' => $articles_followed_topics,
-        ]);
+        ]);*/
 
         if ($request->ajax()) {
-            Log::info("AJAX request");
+            /*Log::info("AJAX request");*/
+
             return view('partials.articles_list', ['articles' => $articles_followed_topics]);
         }
 
@@ -66,13 +68,14 @@ class UserFollowingController extends Controller
         $authors = $user->followers()->get();
         $articles = User::filterByFollowingUsers($authors);
 
-        Log::info('UserFollowingController@followAuthors', [
+        /*Log::info('UserFollowingController@followAuthors', [
             'authors' => $authors,
             'articles' => $articles,
-        ]);
+        ]);*/
 
         if ($request->ajax()) {
-            Log::info("AJAX request");
+            /*Log::info("AJAX request");*/
+
             return view('partials.articles_list', ['articles' => $articles]);
         }
 
@@ -86,8 +89,9 @@ class UserFollowingController extends Controller
         $this->authorize('viewUserFeed', $user);
 
         if ($request->ajax()) {
-            Log::info("AJAX request");
+            /*Log::info("AJAX request");*/
             $articles = ArticlePage::all();
+
             return view('partials.articles_list', ['articles' => $articles]);
         }
 

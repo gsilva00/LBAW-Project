@@ -25,14 +25,14 @@ class RegisterController extends Controller
                 'username' => 'required|string|max:255|unique:users',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
-            ]);
+           ]);
 
-            User::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'display_name' => $request->username
-            ]);
+           User::create([
+               'username' => $request->username,
+               'email' => $request->email,
+               'password' => Hash::make($request->password),
+               'display_name' => $request->username
+           ]);
 
             $credentials = $request->only('email', 'password');
             Auth::attempt($credentials);
@@ -44,6 +44,7 @@ class RegisterController extends Controller
         } catch (Exception $e) {
             // Handle the exception
             Log::error('Registration error: ' . $e->getMessage());
+
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
