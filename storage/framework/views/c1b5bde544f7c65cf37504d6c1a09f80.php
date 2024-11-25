@@ -8,8 +8,8 @@
         <a href="<?php echo e(route('editArticle', ['id' => $article->id])); ?>" class="large-rectangle small-text"><span>Edit</span></a>
         <form action="<?php echo e(route('deleteArticle', ['id' => $article->id])); ?>" method="POST" style="display:inline;">
             <?php echo csrf_field(); ?>
-            <?php echo method_field('DELETE'); ?> <!-- HTML forms don't directly support DELETE -->
             <button type="submit" class="large-rectangle small-text greyer"><span>Delete</span></button>
-        </form>    </div>
+        </form>
+    </div>
     <?php endif; ?>
 </div><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/partials/news_tile.blade.php ENDPATH**/ ?>

@@ -10,16 +10,10 @@
                 <h2><strong>General Profile Information</strong></h2>
                 <div class="profile-info">
                     <label for="username"><span>Username</span></label>
-                    <input type="text" name="username" id="username" value="<?php echo e(old('username', $user->username)); ?>" autocomplete="off">
+                    <input type="text" name="username" id="username" value="<?php echo e(old('username', $user->username)); ?>" autocomplete="off" disabled>
                 </div>
                 <?php if($errors->has('username')): ?>
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            <?php echo e($errors->first('username')); ?>
-
-                        </span>
-                    </div>
+                    <?php echo $__env->make('partials.error_popup', ['field' => 'username'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endif; ?>
                 <br>
                 <div class="profile-info">
@@ -27,13 +21,7 @@
                     <input type="email" name="email" id="email" value="<?php echo e(old('email', $user->email)); ?>" autocomplete="email">
                 </div>
                 <?php if($errors->has('email')): ?>
-                <br>
-                    <div class="profile-info">
-                        <span class="error">
-                        <?php echo e($errors->first('email')); ?>
-
-                        </span>
-                    </div>
+                    <?php echo $__env->make('partials.error_popup', ['field' => 'email'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endif; ?>
                 <br>
                 <div class="profile-info">
@@ -52,57 +40,33 @@
                     <input type="file" name="profile_picture" id="profile_picture">
                 </div>
                 <?php if($errors->has('profile_picture')): ?>
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            <?php echo e($errors->first('profile_picture')); ?>
-
-                        </span>
-                    </div>
+                    <?php echo $__env->make('partials.error_popup', ['field' => 'profile_picture'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endif; ?>
                 <br>
                 <p class="small-text">* Write password to confirm any changes to profile</p>
                 <div class="profile-info">
                     <label for="cur_password"><span>Current Password</span></label>
-                    <input type="password" name="cur_password" id="cur_password" placeholder="password">
+                    <input type="password" name="cur_password" id="cur_password" placeholder="Password">
                 </div>
                 <?php if($errors->has('cur_password')): ?>
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            <?php echo e($errors->first('cur_password')); ?>
-
-                        </span>
-                    </div>
+                    <?php echo $__env->make('partials.error_popup', ['field' => 'cur_password'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endif; ?>
                 <br>
                 <h2><strong>Optional: Change Password</strong></h2>
                 <div class="profile-info">
                     <label for="new_password"><span>New Password</span></label>
-                    <input type="password" name="new_password" id="new_password" placeholder="new password">
+                    <input type="password" name="new_password" id="new_password" placeholder="New Password">
                 </div>
                 <?php if($errors->has('new_password')): ?>
-                    <br>
-                    <div class="profile-info">
-                    <span class="error">
-                            <?php echo e($errors->first('new_password')); ?>
-
-                        </span>
-                    </div>
+                    <?php echo $__env->make('partials.error_popup', ['field' => 'new_password'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endif; ?>
                 <br>
                 <div class="profile-info">
                     <label for="new_password_confirmation"><span>Confirm Password</span></label>
-                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" placeholder="new password">
+                    <input type="password" name="new_password_confirmation" id="new_password_confirmation" placeholder="New Password">
                 </div>
                 <?php if($errors->has('new_password_confirmation')): ?>
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            <?php echo e($errors->first('new_password_confirmation')); ?>
-
-                        </span>
-                    </div>
+                    <?php echo $__env->make('partials.error_popup', ['field' => 'new_password_confirmation'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endif; ?>
                 <br>
                 <br>
@@ -126,13 +90,7 @@
                     <input type="password" name="cur_password_delete" id="cur_password_delete" placeholder="password">
                 </div>
                 <?php if($errors->has('cur_password_delete')): ?>
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            <?php echo e($errors->first('cur_password_delete')); ?>
-
-                        </span>
-                    </div>
+                    <?php echo $__env->make('partials.error_popup', ['field' => 'cur_password_delete'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <?php endif; ?>
                 <?php endif; ?>
                 <br>
@@ -140,7 +98,6 @@
                     <span>Do you want to erase this account?</span>
                     <form action="<?php echo e(route('profile.delete', ['id' => $user->id])); ?>" method="POST" style="display:inline;">
                         <?php echo csrf_field(); ?>
-                        <?php echo method_field('DELETE'); ?> <!-- HTML forms don't directly support DELETE -->
                         <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
                     </form>
                 </div>

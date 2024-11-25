@@ -11,33 +11,18 @@
             <input id="email" type="email" name="email" value="<?php echo e(old('email')); ?>" required autofocus autocomplete="email">
         </div>
         <?php if($errors->has('email')): ?>
-        <br>
-            <div class="profile-info">
-                <span class="error">
-                  <?php echo e($errors->first('email')); ?>
-
-                </span>
-            </div>
+            <?php echo $__env->make('partials.error_popup', ['field' => 'email'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <?php endif; ?>
         <br>
         <div class="profile-info space-between">
             <label for="password" ><span>Password</span></label>
             <input id="password" type="password" name="password" required>
             <?php if($errors->has('password')): ?>
-                <span class="error">
-                    <?php echo e($errors->first('password')); ?>
-
-                </span>
+                <?php echo $__env->make('partials.error_popup', ['field' => 'password'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <?php endif; ?>
         </div>
         <?php if($errors->has('password')): ?>
-            <br>
-            <div class="profile-info">
-            <span class="error">
-                <?php echo e($errors->first('password')); ?>
-
-            </span>
-            </div>
+            <?php echo $__env->make('partials.error_popup', ['field' => 'password'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <?php endif; ?>
         <br>
         <div class="profile-info">
@@ -52,12 +37,7 @@
             <a class="large-rectangle small-text" href="<?php echo e(route('register')); ?>">Register</a>
         </div>
         <br>
-        <?php if(session('success')): ?>
-            <p class="success">
-                <?php echo e(session('success')); ?>
-
-            </p>
-        <?php endif; ?>
+        <?php echo $__env->make('partials.success_message', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </form>
 </div>
 <?php $__env->stopSection(); ?>

@@ -45,12 +45,7 @@
                     <input type="file" name="article_picture" id="article_picture">
                 </div>
                 @if ($errors->has('article_picture'))
-                    <br>
-                    <div class="profile-info">
-                        <span class="error">
-                            {{ $errors->first('article_picture') }}
-                        </span>
-                    </div>
+                    @include('partials.error_popup', ['field' => 'article_picture'])
                 @endif
                 <br>
                 <br>

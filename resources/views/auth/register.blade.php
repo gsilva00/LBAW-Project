@@ -9,9 +9,7 @@
             <label for="Username"><span>Username</span></label>
             <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus autocomplete="off">
             @if ($errors->has('username'))
-              <span class="error">
-                  {{ $errors->first('username') }}
-              </span>
+                @include('partials.error_popup', ['field' => 'username'])
             @endif
         </div>
         <br>
@@ -19,9 +17,7 @@
             <label for="email"><span>E-Mail</span></label>
             <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email">
             @if ($errors->has('email'))
-              <span class="error">
-                  {{ $errors->first('email') }}
-              </span>
+                @include('partials.error_popup', ['field' => 'email'])
             @endif
         </div>
         <br>
@@ -29,9 +25,7 @@
             <label for="password"><span>Password</span></label>
             <input id="password" type="password" name="password" required>
             @if ($errors->has('password'))
-              <span class="error">
-                  {{ $errors->first('password') }}
-              </span>
+                @include('partials.error_popup', ['field' => 'password'])
             @endif
         </div>
         <br>
