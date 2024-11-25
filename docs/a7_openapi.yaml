@@ -633,6 +633,17 @@ paths:
         '404':
           description: 'Not Found. Tag does not exist.'
 
+  /trending-tags:
+    get:
+      operationId: R506
+      summary: 'R506: View Trending Tags'
+      description: 'Show the trending tags page. Access: GUE, USR'
+      tags:
+        - 'M05: Topics and Tags'
+      responses:
+        '200':
+          description: 'Success. Display trending tags page.'
+
 ####################################### Comments #######################################
 
 # not part of the vertical prototype
@@ -662,17 +673,79 @@ paths:
     get:
       operationId: R902
       summary: 'R902: View More Users'
-      description: 'Show the more users page. Access: ADM'
+      description: 'Show more users for the admin panel page. Access: ADM'
       tags:
         - 'M09: Administration and Static Pages'
       responses:
         '200':
-          description: 'Success. Display more users.'
+          description: 'Success. Display more users in admin panel.'
+
+  /create-user:
+    post:
+      operationId: R903
+      summary: 'R903: Create Custom User Action'
+      description: 'Create a new custom user. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                display_name:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                reputation:
+                  type: integer
+                upvote_notifications:
+                  type: boolean
+                upvoteNotifications:
+                  type: bool
+                commentNotifications:
+                  type: bool
+                isAdmin:
+                  type: bool
+                isFactChecker:
+                  type: bool
+                image:
+                  type: string
+                  format: binary
+              required:
+                - username
+                - email
+                - password
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new custom user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. Redirect to admin panel.'
+                  value: '/admin-panel'
+                302Failure:
+                  description: 'Failed. Redirect to admin panel.'
+                  value: '/admin-panel'
+        '403':
+          description: 'You do not possess the credentials for this action.'
 
   /contacts:
     get:
-      operationId: R903
-      summary: 'R903: View Contacts'
+      operationId: R904
+      summary: 'R904: View Contacts'
       description: 'Show the contacts page. Access: GUE, USR'
       tags:
         - 'M09: Administration and Static Pages'
@@ -682,8 +755,8 @@ paths:
 
   /about-us:
     get:
-      operationId: R904
-      summary: 'R904: View About Us'
+      operationId: R905
+      summary: 'R905: View About Us'
       description: 'Show the about us page. Access: GUE, USR'
       tags:
         - 'M09: Administration and Static Pages'
