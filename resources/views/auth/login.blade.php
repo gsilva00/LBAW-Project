@@ -38,6 +38,9 @@
             </div>
             <br>
             @include('partials.success_message')
+            @if(session('error'))
+                @include('partials.error_popup', ['field' => 'error'])
+            @endif
         </form>
     </div>
 @endsection

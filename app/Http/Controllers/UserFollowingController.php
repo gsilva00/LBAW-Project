@@ -86,7 +86,10 @@ class UserFollowingController extends Controller
     {
         $user = Auth::user();
 
-        $this->authorize('viewUserFeed', $user);
+        if (Auth::guest() || !Auth::user()->can('viewUserFeed', $user)) {
+            return redirect()->route('login')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
+        }
+
 
         if ($request->ajax()) {
             /*Log::info("AJAX request");*/

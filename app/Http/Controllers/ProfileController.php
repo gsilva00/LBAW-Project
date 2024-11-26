@@ -34,8 +34,8 @@ class ProfileController extends Controller
         return view('pages.profile', [
             'user' => $authUser,
             'profileUser' => $user,
-            'isAdmin' => $authUser->is_admin,
-            'isOwner' => $user->username === $authUser->username,
+            'isAdmin' => $authUser ? $authUser->is_admin : false,
+            'isOwner' => $authUser && $user->username === $authUser->username,
             'ownedArticles' => $ownedArticles,
         ]);
     }
@@ -48,7 +48,9 @@ class ProfileController extends Controller
         $user = User::find($username);
         $authUser = Auth::user();
 
-        $this->authorize('update', $user);
+        if (Auth::guest() || !Auth::user()->can('update', $user)) {
+            return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
+        }
 
         return view('pages.edit_profile', [
             'user' => $authUser,
@@ -65,7 +67,9 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         $user = User::find($username);
 
-        $this->authorize('update', $user);
+        if (Auth::guest() || !Auth::user()->can('update', $user)) {
+            return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to edit that profile.');
+        }
 
         $validator = Validator::make(request()->all(), [
             'username' => 'required|string|max:255|unique:users,username,' . $user->id,
@@ -102,7 +106,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('profile', ['username' => $user->username]);
+        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Profile updated successfully!');
     }
 
     public function delete(Request $request, $targetUserId)
