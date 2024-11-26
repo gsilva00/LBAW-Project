@@ -1,4 +1,4 @@
-@extends('layouts.homepage')
+@extends('layouts.app')
 
 @section('content')
     <div class="articles-wrapper">

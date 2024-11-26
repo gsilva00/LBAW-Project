@@ -1,4 +1,6 @@
-@extends('layouts.homepage')
+@extends('layouts.app')
+
+@section('title', $article->is_deleted ? '[Deleted]' : $article->title)
 
 @section('content')
     <div class="article-more-news-wrapper">

@@ -1,4 +1,12 @@
-@extends('layouts.homepage')
+@extends('layouts.app')
+
+@section('title')
+    @if($isOwner)
+        Your Profile
+    @else
+        {{ $profileUser->display_name }}'s Profile
+    @endif
+@endsection
 
 @section('content')
     <div class="profile-wrapper">
@@ -7,7 +15,9 @@
             <div class="profile-info">
                 <h1>{{ $profileUser->display_name }}'s Profile</h1>
                 @if($isOwner || $isAdmin)
-                    <a href="{{ route('editProfile', ['username' => $profileUser->username])}}"><button class="large-rectangle small-text greyer">Edit Profile</button></a>  <!--Need to do action here IF ITS ADMIN EDITING NOT ITS OWN ACCOUNT -->
+                    <a href="{{ route('editProfile', ['username' => $profileUser->username])}}">
+                        <button class="large-rectangle small-text greyer">Edit Profile</button>
+                    </a>
                 @endif
             </div>
             <div id="rest-profile-info">
@@ -29,7 +39,9 @@
             @endif
 
             @if($isOwner)
-                <a href="{{ route('createArticle')}}"><button class="large-rectangle small-text">Create New Article</button></a>  <!--Need to do action here -->
+                <a href="{{ route('createArticle')}}">
+                    <button class="large-rectangle small-text">Create New Article</button>
+                </a>
             @endif
 
         </div>
@@ -37,9 +49,9 @@
         @if($ownedArticles->isNotEmpty())
             <div class="sec-articles profile-page">
                 @foreach($ownedArticles as $article)
-                        @include('partials.news_tile', [
-                            'article' => $article,
-                        ])
+                    @include('partials.news_tile', [
+                        'article' => $article,
+                    ])
                 @endforeach
             </div>
         @else

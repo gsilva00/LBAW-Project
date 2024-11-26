@@ -1,4 +1,6 @@
-@extends('layouts.homepage')
+@extends('layouts.app')
+
+@section('title', 'User Feed')
 
 @section('content')
     <br>
@@ -11,7 +13,7 @@
                 <input type="radio" name="feed-options"><i class='bx bx-book'></i> Followed Topics
             </label>
             <label class="feed-option" data-url="{{ route('followingAuthors') }}">
-                <input type="radio" name="feed-options"><i class='bx bx-heart'></i>  Followed Authors
+                <input type="radio" name="feed-options"><i class='bx bx-heart'></i> Followed Authors
             </label>
         </div>
         <br>

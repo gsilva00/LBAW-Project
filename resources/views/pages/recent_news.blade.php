@@ -1,4 +1,6 @@
-@extends('layouts.homepage')
+@extends('layouts.app')
+
+@section('title', 'Most Recent News')
 
 @section('content')
     <div class="recent-news-wrapper">

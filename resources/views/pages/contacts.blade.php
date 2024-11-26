@@ -1,4 +1,6 @@
-@extends('layouts.homepage')
+@extends('layouts.app')
+
+@section('title', 'Contacts')
 
 @section('content')
     <div id="contacts-header">
@@ -14,7 +16,7 @@
             <p>Call us at +351 891 639</p>
         </div>
         <div id="contacts-mail">
-            <i class='bx bx-envelope' ></i>
+            <i class='bx bx-envelope'></i>
             <h2>Email</h2>
             <p>Send us an email at newflowcontacts@up.pt</p>
         </div>

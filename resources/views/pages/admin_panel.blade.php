@@ -1,8 +1,10 @@
-@extends('layouts.homepage')
+@extends('layouts.app')
+
+@section('title', 'Admin Panel')
 
 @section('content')
     <div class="recent-news-wrapper">
-        <h1 class="large-rectangle">Admin Panel</h1>
+        <h1 class="large-rectangle">Administrator Panel</h1>
         <h2 class="large-rectangle">Create New User</h2>
         <form class="large-rectangle" id="createFullUserForm" method="POST" action="{{ route('adminCreateUser') }}" enctype="multipart/form-data">
             @csrf

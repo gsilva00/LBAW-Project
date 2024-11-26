@@ -2,7 +2,7 @@
     <div id="top-part-header">
         <h1><a href="{{ route('homepage') }}" class="logo"> {{ config('app.name', 'Laravel') }}</a></h1>
         <a href="{{ route('userFeed') }}">
-            <h2><i class='bx bx-book'></i> User's feed</h2>
+            <h2><i class='bx bx-book'></i> User Feed</h2>
         </a>
         <div id="profile" class="dropdown">
             @if(Auth::check())

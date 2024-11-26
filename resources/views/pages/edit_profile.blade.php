@@ -1,4 +1,6 @@
-@extends('layouts.homepage')
+@extends('layouts.app')
+
+@section('title', 'Edit Profile')
 
 @section('content')
     <div class="profile-wrapper">
@@ -11,7 +13,8 @@
                 <div class="profile-info">
                     <label for="username"><span>Username</span></label>
                     <input type="text" name="username" id="username" value="{{ $profileUser->username }}" autocomplete="off" disabled>
-                    <input type="hidden" name="username" value="{{ $profileUser->username }}"> <!-- So that the username value is actually submitted (disabled inputs aren't submitted) -->
+                    <input type="hidden" name="username" value="{{ $profileUser->username }}">
+                    <!-- So that the username value is actually submitted (disabled inputs aren't submitted) -->
                 </div>
                 @if ($errors->has('username'))
                     @include('partials.error_popup', ['field' => 'username'])
@@ -83,11 +86,11 @@
                 <br>
                 <div class="profile-info">
                     <span>Don't forget to save after alterations:</span>
-                    <button type="submit" class="large-rectangle small-text greyer">Save</button> <!-- TODO HIGHLIGHT IN RED IF PASSWORD NOT INPUTTED (HARD TO SEE OTHERWISE) -->
+                    <button type="submit" class="large-rectangle small-text greyer">Save</button>
                 </div>
             </form>
-            </section>
-            <section class="profile-container">
+        </section>
+        <section class="profile-container">
             <form>
                 @csrf
                 <br>
