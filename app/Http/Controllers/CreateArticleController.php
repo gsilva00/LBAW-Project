@@ -8,33 +8,37 @@ use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class CreateArticleController extends Controller
 {
     public function store(Request $request)
     {
         $user = Auth::user();
-        /*Log::info('CreateArticleController@show', [
-            'title' => $request->input('title'),
-            'subtitle' => $request->input('subtitle'),
-            'content' => $request->input('content'),
-            'tags' => $request->input('tags'),
-            'topics' => $request->input('topics'),
-            'article_picture' => $request->file('article_picture'),
-        ]);*/
 
         $this->authorize('create', ArticlePage::class);
 
-        $request->validate([
-            'title' => 'required|string|max:50',
-            'subtitle' => 'required|string|max:50',
-            'content' => 'string|max:10000',
-            'topics' => 'required|exists:topic,id',
-            'article_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'required|string|max:50',
+                'subtitle' => 'required|string|max:50',
+                'content' => 'string|max:10000',
+                'topics' => 'required|exists:topic,id',
+                'article_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            ], [
+                'topics.required' => 'Please choose a topic.',
+                'topics.exists' => 'The selected topic is invalid.',
+            ]);
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator)->withInput();
+        }
 
-        /*Log::info('CreateArticleController@show: validation passed');*/
-        $topicId = intval($request->input('topics')[0]);
+        $topics = $request->input('topics');
+        if (in_array('No_Topic', $topics)) {
+            return redirect()->back()->withErrors(['topics' => 'Please choose a valid topic.'])->withInput();
+        }
+
+        $topicId = intval($topics[0]);
 
         $article = new ArticlePage();
         $article->title = $request->input('title');

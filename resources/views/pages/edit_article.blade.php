@@ -34,7 +34,6 @@
             <div class="profile-info">
                 <label for="content"><span>Topics</span></label>
                 <select class="form-control" id="topics" name="topics[]" required>
-                    <option value="No_Topic" {{ $article->topic_id == 'No_Topic' ? 'selected' : '' }}>No Topic</option>
                     @foreach($topics as $topic)
                         <option value="{{ $topic->id }}" {{ $article->topic_id == $topic->id ? 'selected' : '' }}>{{ $topic->name }}</option>
                     @endforeach
