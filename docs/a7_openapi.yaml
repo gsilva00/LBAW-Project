@@ -213,8 +213,8 @@ paths:
                 type: string
               example:
                 403Success:
-                  description: 'Redirecting to login page.'
-                  value: '/login'
+                  description: 'Redirecting to home page.'
+                  value: '/homepage'
 
     post:
       operationId: R203
@@ -378,7 +378,7 @@ paths:
         '202':
           description: 'Ok. Show create article UI.'
         '403':
-          description: 'Unauthorized. You don not possess the credentials to create an article.'
+          description: 'Unauthorized. You do not possess the credentials to create an article.'
           headers:
             Location:
               schema:

@@ -34,8 +34,8 @@ class ProfileController extends Controller
         return view('pages.profile', [
             'user' => $authUser,
             'profileUser' => $user,
-            'isAdmin' => $authUser->is_admin,
-            'isOwner' => $user->username === $authUser->username,
+            'isAdmin' => $authUser ? $authUser->is_admin : false,
+            'isOwner' => $authUser && $user->username === $authUser->username,
             'ownedArticles' => $ownedArticles,
         ]);
     }
@@ -102,7 +102,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return redirect()->route('profile', ['username' => $user->username]);
+        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Profile updated successfully!');
     }
 
     public function delete(Request $request, $targetUserId)
