@@ -7,7 +7,7 @@
         <section class="article-section">
             <div class="large-rectangle breadcrumbs">
                 <a href="{{ $previousUrl }}" class="thin">{{ $previousPage }}</a> >
-                <span class="thin"><a href="{{ route('showTopic', ['name' => $topic->name]) }}">{{ $topic->name }}</a></span>
+                <span class="thin"><a href="{{ route('showTopic', ['name' => $topic->name]) }}">{{ $topic->name }}</a></span> >
                 <span class="thin">{{ $article->is_deleted ? '[Deleted]' : $article->title }}</span>
             </div>
             <div class="news-article">
