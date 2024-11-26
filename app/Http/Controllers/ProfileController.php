@@ -112,9 +112,18 @@ class ProfileController extends Controller
 
         $this->authorize('delete', $targetUser);
 
+        $request->validate([
+            'cur_password_delete' => $authUser->is_admin ? 'nullable|string' : 'required|string',
+        ]);
+
+        // Check the password if the user is not an admin
+        if (!$authUser->is_admin && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
+            return redirect()->back()->withErrors(['cur_password_delete' => 'Current password is incorrect'])->withInput();
+        }
+
         $targetUser->display_name = '[Deleted User]';
-        $targetUser->username = '[Deleted User]';
-        $targetUser->email = '[deleted]@[deleted].com';
+        $targetUser->username = '[deleted_user_' . $targetUserId . ']';
+        $targetUser->email = '[deleted_user_' . $targetUserId . ']@example.com';
         $targetUser->password = '<PASSWORD>';
         $targetUser->profile_picture = 'images/profile/default.jpg';
         $targetUser->description = 'This user account has been deleted.';
@@ -135,6 +144,6 @@ class ProfileController extends Controller
             return redirect('/')->with('success', 'Your account has been deleted successfully.');
         }
 
-        return redirect()->route('admin-panel')->with('success', 'User account deleted successfully!');
+        return redirect()->route('adminPanel')->with('success', 'User account deleted successfully!');
     }
 }

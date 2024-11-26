@@ -91,8 +91,8 @@
             </form>
         </section>
         <section class="profile-container">
-            <form>
-                @csrf
+            <form action="{{ route('deleteProfile', ['id' => $profileUser->id]) }}" method="POST" style="display:inline;">
+            @csrf
                 <br>
                 <h2><strong>Delete account</strong></h2>
                 @if($isOwner)
@@ -108,10 +108,7 @@
                 <br>
                 <div class="profile-info">
                     <span>Do you want to erase this account?</span>
-                    <form action="{{ route('deleteProfile', ['id' => $profileUser->id]) }}" method="POST" style="display:inline;">
-                        @csrf
-                        <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
-                    </form>
+                    <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
                 </div>
                 <br>
             </form>
