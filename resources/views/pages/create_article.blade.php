@@ -35,11 +35,16 @@
             <div class="profile-info">
                 <label for="content"><span>Topics</span></label>
                 <select class="form-control" id="topics" name="topics[]" required>
-                    <option value="No_Topic" selected>No Topic</option>
+                    <option value="" disabled selected>Select a topic</option>
                     @foreach($topics as $topic)
                         <option value="{{ $topic->id }}">{{ $topic->name }}</option>
                     @endforeach
                 </select>
+                @if ($errors->has('topics'))
+                    <div class="error-message">
+                        {{ $errors->first('topics') }}
+                    </div>
+                @endif
             </div>
             <br>
             <div class="profile-info">
