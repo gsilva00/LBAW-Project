@@ -206,7 +206,7 @@ paths:
         '200':
           description: 'Ok. Show edit profile UI.'
         '403':
-          description: 'Unauthorized. You do not possess the valid credentials to edit your profile.'
+          description: 'Unauthorized. You do not possess the valid credentials to access that page.'
           headers:
             Location:
               schema:
@@ -222,6 +222,13 @@ paths:
       description: 'Processes and saves the changes made by user. Access: OWN'
       tags:
         - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
 
       requestBody:
         required: true
@@ -270,6 +277,16 @@ paths:
                 302Failure:
                   description: 'Edit failed. Redirect to edit individual user profile.'
                   value: '/profile/edit/{username}'
+        '403':
+          description: 'Unauthorized. You do not possess the valid credentials to edit that profile.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to home page.'
+                  value: '/homepage'
 
   /profile/delete/{id}:
     post:
@@ -294,13 +311,13 @@ paths:
               schema:
                 type: string
                 example:
-                    302Success:
-                      description: 'Successful delete. Redirect to login form.'
-                      value: '/login'
+                  302Success:
+                    description: 'Successful delete. Redirect to login form.'
+                    value: '/login'
 
-                    302Failure:
-                      description: 'Failure to delete. Redirect to user profile.'
-                      value: '/profile/user'
+                  302Failure:
+                    description: 'Failure to delete. Redirect to user profile.'
+                    value: '/profile/user'
         '403':
           description: 'You do not possess the credentials for this action.'
 
@@ -330,7 +347,15 @@ paths:
         '200':
           description: 'Success. Display User News Feed.'
         '403':
-          description: 'You do not possess the credentials for this action.'
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to login page'
+                  value: '/login'
 
   /most-voted:
 
@@ -461,6 +486,13 @@ paths:
       tags:
         - 'M03: News'
 
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
       requestBody:
         required: true
         content:
@@ -504,6 +536,13 @@ paths:
       description: 'Delete an article action. Access: OWN, ADM'
       tags:
         - 'M03: News'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
 
       requestBody:
         required: true
@@ -668,6 +707,16 @@ paths:
       responses:
         '200':
           description: 'Success. Display admin panel.'
+        '403':
+          description: 'Unauthorized. You do not possess the valid credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to home page.'
+                  value: '/homepage'
 
   /more-users:
     get:
@@ -710,13 +759,13 @@ paths:
                 upvote_notifications:
                   type: boolean
                 upvoteNotifications:
-                  type: bool
+                  type: boolean
                 commentNotifications:
-                  type: bool
+                  type: boolean
                 isAdmin:
-                  type: bool
+                  type: boolean
                 isFactChecker:
-                  type: bool
+                  type: boolean
                 image:
                   type: string
                   format: binary
