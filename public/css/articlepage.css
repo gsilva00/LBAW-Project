@@ -48,7 +48,7 @@
     flex: 3;
 }
 
-.article-votes{
+.fit-block{
     width: fit-content;
     padding-block: 0;
     display: flex;
@@ -58,17 +58,12 @@
     align-items: center;
 }
 
-.article-votes i{
+.fit-block i{
     top: 0;
 }
 
 .news-article{
     display: grid;
-}
-
-#report-button{
-    padding-block: 0.5em;
-    height: fit-content;
 }
 
 .article-image{
@@ -164,4 +159,27 @@
 #create-article{
     padding: 2em;
     margin-bottom: 2em;
+}
+
+.comment-input-container{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 1em;
+    align-items: end;
+}
+
+.comment-input{
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+}
+
+.article-actions{
+    display: flex;
+    justify-content: end;
+    column-gap: 1em;
+}
+
+.fit-block.favorite{
+    padding-block: 0.69em;
 }

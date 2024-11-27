@@ -21,10 +21,10 @@
         @else
             <p>No articles available.</p>
         @endif
-        <section class="news-tab-section">
+        <nav class="news-tab-section">
             @include('partials.trending_tags',['trendingTags' => $trendingTags])
             @include('partials.recent_news',['recentNews' => $recentNews])
-        </section>
+        </nav>
     </div>
     @if(session('error'))
         @include('partials.error_popup', ['field' => 'error'])

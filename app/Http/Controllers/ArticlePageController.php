@@ -13,7 +13,7 @@ class ArticlePageController extends Controller
 {
     public function show(Request $request, $id)
     {
-        $article = ArticlePage::with(['tags', 'topic', 'author', 'comments'])->findOrFail($id);
+        $article = ArticlePage::with(['tags', 'topic', 'author', 'comments', 'comments.replies'])->findOrFail($id);
 
         $this->authorize('view', $article);
 
@@ -133,6 +133,17 @@ class ArticlePageController extends Controller
         return view('pages.trending_tags', [
             'trendingTags' => $trendingTags,
             'trendingTagsNewsCount' => $trendingTagsNewsCount,
+            'user' => $user
+        ]);
+    }
+
+    public function showSavedArticles()
+    {
+        $user = Auth::user();
+        $savedArticles = $user->favouriteArticles;
+
+        return view('pages.saved_articles', [
+            'savedArticles' => $savedArticles,
             'user' => $user
         ]);
     }

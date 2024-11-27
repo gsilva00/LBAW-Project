@@ -1,8 +1,13 @@
 <div class="pop-up">
     <i class='bx bx-error-circle'></i>
     <span class="error">
-        <?php echo e($errors->first($field)); ?>
+        <?php if(isset($field) && $errors->has($field)): ?>
+            <?php echo e($errors->first($field)); ?>
 
+        <?php elseif(session('error')): ?>
+            <?php echo e(session('error')); ?>
+
+        <?php endif; ?>
     </span>
     <button type="button" id="close-message-button" onclick="closeMessage()">
         <i class='bx bx-x'></i>

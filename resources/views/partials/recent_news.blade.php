@@ -1,5 +1,5 @@
 <section id="recent-news-section">
-    <p class="title">Most Recent News</p>
+    <a href="{{ route('showRecentNews') }}"><h2 class="title">Most Recent News</h2></a>
     @if($recentNews->isNotEmpty())
         <div class="{{ $isHomepage ? 'homepage-style' : ''}}">
             @foreach($recentNews as $article)

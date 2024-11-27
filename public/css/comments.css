@@ -1,0 +1,58 @@
+.comment{
+    display: grid;
+    grid-template-areas: "image name-date"
+                          "image comment-content"
+                          "image comment-actions";
+    grid-template-columns: auto 1fr;
+    column-gap: 1em;
+    margin-top: 2em;
+}
+
+.comment img{
+    grid-area: image;
+    width: 3em;
+    height: 3em;
+    object-fit: cover;
+    object-position: center;
+}
+
+.comment .name-date{
+    grid-area: name-date;
+    column-gap: 1em;
+}
+
+.comment .comment-votes{
+    padding: 0;
+    justify-self: start;
+}
+
+.comment .comment-actions{
+    grid-area: comment-actions;
+    display: flex;
+    justify-content: flex-start;
+    column-gap: 1em;
+    margin-top: 1em;
+}
+
+button .remove-position{
+    position: static;
+    top:0;
+}
+
+.reply{
+    position: relative;
+    margin-block: 1em;
+    left: 4em;
+    display: none;
+}
+
+.see-replies-button{
+    position: relative;
+    left: 4.8em;
+    margin-block: 1em;
+}
+
+.reply.show{
+    display: block;
+}
+

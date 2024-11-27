@@ -59,6 +59,9 @@
     gap: 5px;
     margin-top: 0.5em;
     margin-bottom: 1em;
+}
+
+.selected-maxwidth{
     max-width: 21em;
 }
 

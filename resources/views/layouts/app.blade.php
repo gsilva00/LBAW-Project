@@ -15,6 +15,7 @@
         </title>
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link href="{{ url('css/userfeed.css') }}" rel="stylesheet">
+        <link href="{{ url('css/comments.css') }}" rel="stylesheet">
         <link href="{{ url('css/header.css') }}" rel="stylesheet">
         <link href="{{ url('css/footer.css') }}" rel="stylesheet">
         <link href="{{ url('css/login.css') }}" rel="stylesheet">
@@ -34,6 +35,9 @@
         <script src="{{ url('js/adminpanel.js') }}" defer></script>
         <script src="{{ url('js/userfeed.js') }}" defer></script>
         <script src="{{ url('js/popup.js') }}"> </script>
+        <script src="{{ url('js/replies.js') }}"> </script>
+        <script src="{{ url('js/unfollowtag.js') }}"> </script>
+        <script src="{{ url('js/unfollowtopic.js') }}"> </script>
     </head>
     <body>
         <div class="wrapper">
