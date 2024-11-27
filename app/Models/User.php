@@ -220,4 +220,13 @@ class User extends Authenticatable
         return ArticlePage::whereIn('author_id', $users->pluck('id'))->get();
     }
 
+    public function getVoteTypeOnArticle(ArticlePage $article): int
+    {
+        $vote = $this->votedArticles()->where('article_id', $article->id)->first();
+        if ($vote) {
+            return $vote->pivot->type === 'Upvote' ? 1 : -1;
+        }
+        return 0;
+    }
+
 }

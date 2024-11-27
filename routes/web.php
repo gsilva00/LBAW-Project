@@ -84,6 +84,9 @@ Route::get('/trending-tags', [ArticlePageController::class, 'showTrendingTags'])
 Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('showTopic');
 Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('showTag');
 
+Route::post('/article/{id}/upvote', [ArticlePageController::class, 'upvote'])->name('article.upvote');
+Route::post('/article/{id}/downvote', [ArticlePageController::class, 'downvote'])->name('article.downvote');
+
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutUs');

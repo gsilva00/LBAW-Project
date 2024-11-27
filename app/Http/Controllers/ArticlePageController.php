@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ArticlePage;
 use App\Models\Topic;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -28,6 +29,9 @@ class ArticlePageController extends Controller
         $recentNews = ArticlePage::getMostRecentNews(3);
 
         $paragraphs = explode("<?n?n>", $article->content);
+        $voteArticle = $user ? $user->getVoteTypeOnArticle($article) : 0;
+
+        Log::info('Vote Article: ' . json_encode($voteArticle));
 
         /*Log::info('Paragraphs: ' . json_encode($paragraphs));*/
 
@@ -43,7 +47,8 @@ class ArticlePageController extends Controller
             'recentNews' => $recentNews,
             'isHomepage' => false,
             'paragraphs' => $paragraphs,
-            'user' => $user
+            'user' => $user,
+            'voteArticle' => $voteArticle,
         ]);
     }
 
@@ -134,6 +139,75 @@ class ArticlePageController extends Controller
             'trendingTags' => $trendingTags,
             'trendingTagsNewsCount' => $trendingTagsNewsCount,
             'user' => $user
+        ]);
+    }
+
+    public function upvote(Request $request, $id)
+    {
+        Log::info('Upvote request: ' . json_encode($request->all()));
+        $user = Auth::user();
+        $article = ArticlePage::findOrFail($id);
+
+        $vote = $user->votedArticles()->where('article_id', $id)->first();
+        $voteStatus = 0;
+
+        if ($vote) {
+            if ($vote->pivot->type === 'Upvote') {
+                $user->votedArticles()->detach($id);
+                $article->upvotes -= 1;
+                $voteStatus = 0;
+            } else {
+                $vote->pivot->type = 'Upvote';
+                $vote->pivot->save();
+                $article->upvotes += 1;
+                $article->downvotes -= 1;
+                $voteStatus = 1;
+            }
+        } else {
+            $user->votedArticles()->attach($id, ['type' => 'Upvote']);
+            $article->upvotes += 1;
+            $voteStatus = 1;
+        }
+
+        $article->save();
+
+        return response()->json([
+            'article' => $article,
+            'voteStatus' => $voteStatus
+        ]);
+    }
+
+    public function downvote(Request $request, $id)
+    {
+        $user = Auth::user();
+        $article = ArticlePage::findOrFail($id);
+
+        $vote = $user->votedArticles()->where('article_id', $id)->first();
+        $voteStatus = 0;
+
+        if ($vote) {
+            if ($vote->pivot->type === 'Downvote') {
+                $user->votedArticles()->detach($id);
+                $article->downvotes -= 1;
+                $voteStatus = 0;
+            } else {
+                $vote->pivot->type = 'Downvote';
+                $vote->pivot->save();
+                $article->downvotes += 1;
+                $article->upvotes -= 1;
+                $voteStatus = -1;
+            }
+        } else {
+            $user->votedArticles()->attach($id, ['type' => 'Downvote']);
+            $article->downvotes += 1;
+            $voteStatus = -1;
+        }
+
+        $article->save();
+
+        return response()->json([
+            'article' => $article,
+            'voteStatus' => $voteStatus
         ]);
     }
 

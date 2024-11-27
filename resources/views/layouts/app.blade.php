@@ -34,6 +34,7 @@
         <script src="{{ url('js/adminpanel.js') }}" defer></script>
         <script src="{{ url('js/userfeed.js') }}" defer></script>
         <script src="{{ url('js/popup.js') }}"> </script>
+        <script src="{{ url('js/articlepage.js') }}" defer></script>
     </head>
     <body>
         <div class="wrapper">
