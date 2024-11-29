@@ -95,6 +95,9 @@ Route::post('/tag/{tag}/unfollow', [TagController::class, 'unfollowTag'])->name(
 Route::post('/topic/{topic}/follow', [TopicController::class, 'followTopic'])->name('topic.follow');
 Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic'])->name('topic.unfollow');
 
+Route::post('/article/{id}/upvote', [ArticlePageController::class, 'upvote'])->name('article.upvote');
+Route::post('/article/{id}/downvote', [ArticlePageController::class, 'downvote'])->name('article.downvote');
+
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutUs');

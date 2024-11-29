@@ -34,10 +34,11 @@
         <script src="{{ url('js/filterdropdowntopic.js') }}" defer> </script>
         <script src="{{ url('js/adminpanel.js') }}" defer></script>
         <script src="{{ url('js/userfeed.js') }}" defer></script>
-        <script src="{{ url('js/popup.js') }}"> </script>
-        <script src="{{ url('js/replies.js') }}"> </script>
-        <script src="{{ url('js/unfollowtag.js') }}"> </script>
-        <script src="{{ url('js/unfollowtopic.js') }}"> </script>
+        <script src="{{ url('js/popup.js') }}" defer> </script>
+        <script src="{{ url('js/articlepage.js') }}" defer></script>
+        <script src="{{ url('js/replies.js') }}" defer> </script>
+        <script src="{{ url('js/unfollowtag.js') }}" defer> </script>
+        <script src="{{ url('js/unfollowtopic.js') }}" defer> </script>
     </head>
     <body>
         <div class="wrapper">

@@ -4,7 +4,7 @@ function addEventListeners() {
             for (let label of document.querySelectorAll('.feed-option')) {
                 label.classList.remove('active');
             }
-            
+
             optionLabel = this.parentElement;
             optionLabel.classList.add('active');
             const url = optionLabel.getAttribute('data-url');
@@ -33,3 +33,7 @@ function loadArticles(url) {
 }
 
 addEventListeners();
+
+
+
+
