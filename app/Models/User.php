@@ -102,14 +102,23 @@ class User extends Authenticatable
             'topic_id'
         );
     }
+
+    public function hasFollowedTopic($topic) {
+        return $this->followedTopics->contains($topic);
+    }
+
     public function followedTags(): BelongsToMany
     {
         return $this->belongsToMany(
-            Tag::class,
+            topic::class,
             'follow_tags',
             'user_id',
             'tag_id'
         );
+    }
+
+    public function hasFollowedTag($tag) {
+        return $this->followedTags->contains($tag);
     }
 
     public function followers(): BelongsToMany
@@ -129,6 +138,10 @@ class User extends Authenticatable
             'follower_id',
             'following_id'
         );
+    }
+
+    public function isFollowing($user) {
+        return $this->following->contains($user);
     }
 
     // Votes and favorites

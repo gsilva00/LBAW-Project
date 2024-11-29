@@ -12,6 +12,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
                     <a class="dropdown-item" href="{{ route('profile', ['username' => $user->username]) }}"><h2>See Profile</h2></a>
+                    <a class="dropdown-item" href="{{ route('showSavedArticles') }}"><h2>Saved Articles</h2></a>
                     @if($user->is_admin)
                         <a class="dropdown-item" href="{{ route('adminPanel') }}"><h2>Administrator Panel</h2></a>
                     @endif
@@ -44,9 +45,9 @@
         <h2 class="topic">
             <a href="{{ route('showTopic', ['name' => 'Science']) }}">Science</a>
         </h2>
-        <button type="button" id="all-topics-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button class="h2" type="button" id="all-topics-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class='bx bx-news'></i>
-            <h2>All Topics</h2>
+            <span>All Topics</span>
         </button>
         <div class="dropdown-menu" aria-labelledby="all-topics-button">
             @foreach($topics as $topic)

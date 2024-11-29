@@ -19,6 +19,14 @@
                         <button class="large-rectangle small-text greyer">Edit Profile</button>
                     </a>
                 @endif
+                @if(Auth::check() && !$isOwner)
+                <form id="follow-user-form" method="POST">
+                    @csrf
+                    <button type="button" id="follow-user-button" class="large-rectangle small-text greyer">
+                        {{ Auth::user()->isFollowing($user) ? 'Unfollow User' : 'Follow User' }}
+                    </button>
+                </form>
+                @endif
             </div>
             <div id="rest-profile-info">
                 @if($isOwner)
@@ -29,8 +37,58 @@
                 <p class="small-text">Description:</p>
                 <span>{{ $profileUser->description }}</span>
             </div>
-        </section>
+            </section>
+            @if($isOwner || $isAdmin)
+            <section>
+                <h2 id="favoriteTopicTitle">Favorite Topics</h2>
+                @if($profileUser->followedTopics->isEmpty())
+                    <div class="not-available-container">
+                        <p>No favorite topics.</p>
+                    </div>
+                @else
+                        <div class="selected">
+                    @foreach($profileUser->followedTopics as $topic)
+                        <div class="block">
+                            <span>{{ $topic->name }}</span><button class="remove" data-url="{{ route('topic.unfollow', $topic) }}" data-topic-id="{{ $topic->id }}">&times;</button>
+                        </div>
+                    @endforeach
+                        </div>
+                @endif
+            </section>
+            <section>
+                <h2 id="favoriteTagTitle">Favorite Tags</h2>
+                @if($profileUser->followedTags->isEmpty())
+                    <div class="not-available-container">
+                        <p>No favorite tags.</p>
+                    </div>
+                @else
+                    <div class="selected">
+                        @foreach($profileUser->followedTags as $tag)
+                            <div class="block">
+                                <span>{{ $tag->name }}</span><button class="remove" data-url="{{ route('tag.unfollow', $tag) }}" data-tag-id="{{ $tag->id }}">&times;</button>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </section>
 
+            <section>
+                <h2>Favorite Authors</h2>
+                @if($profileUser->following->isEmpty())
+                <div class="not-available-container">
+                        <p>No favorite authors.</p>
+                    </div>
+                @else
+                <div id="users-section">
+                <div id="user-list">
+                        @foreach($profileUser->following as $favauthor)
+                            @include('partials.user_tile', ['user' => $favauthor])
+                        @endforeach
+                </div>
+                </div>
+                @endif
+            </section>
+        @endif
         <div class="profile-info">
             @if($isOwner)
                 <h2> Your articles</h2>

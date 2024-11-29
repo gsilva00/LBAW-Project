@@ -31,7 +31,7 @@
                 <input type="text" id="tag-create-article-input" placeholder="Type to search tags...">
                 <div id="tag-create-article-suggestions" class="suggestions"></div>
             </div>
-            <div id="selected-create-article-tags" class="selected"></div>
+            <div id="selected-create-article-tags" class="selected selected-maxwidth"></div>
             <div class="profile-info">
                 <label for="content"><span>Topics</span></label>
                 <select class="form-control" id="topics" name="topics[]" required>

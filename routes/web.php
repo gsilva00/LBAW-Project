@@ -10,6 +10,8 @@ use App\Http\Controllers\CreateArticleController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\TopicController;
 use App\Http\Controllers\UserFollowingController;
 use Illuminate\Support\Facades\Route;
 
@@ -83,6 +85,15 @@ Route::get('/most-voted', [ArticlePageController::class, 'showVotedNews'])->name
 Route::get('/trending-tags', [ArticlePageController::class, 'showTrendingTags'])->name('showTrendingTags');
 Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('showTopic');
 Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('showTag');
+Route::get('/saved-articles', [ArticlePageController::class, 'showSavedArticles'])->name('showSavedArticles');
+
+// Tag
+Route::post('/tag/{tag}/follow', [TagController::class, 'followTag'])->name('tag.follow');
+Route::post('/tag/{tag}/unfollow', [TagController::class, 'unfollowTag'])->name('tag.unfollow');
+
+// Topic
+Route::post('/topic/{topic}/follow', [TopicController::class, 'followTopic'])->name('topic.follow');
+Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic'])->name('topic.unfollow');
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');

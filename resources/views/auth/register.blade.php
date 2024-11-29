@@ -6,7 +6,7 @@
             @csrf
             <h1>Register</h1>
             <div class="profile-info space-between">
-                <label for="Username"><span>Username</span></label>
+                <label for="username"><span>Username</span></label>
                 <input id="username" type="text" name="username" value="{{ old('username') }}" required autofocus
                        autocomplete="off">
                 @if ($errors->has('username'))

@@ -87,7 +87,7 @@ header{
   align-items: baseline
 }
 
-#profile-button h2, .dropdown-item h2, #all-topics-button h2{
+#profile-button h2, .dropdown-item h2, #all-topics-button span{
   margin: 0;
   font-size: 0.9em;
 }
