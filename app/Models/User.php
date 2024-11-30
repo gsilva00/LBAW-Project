@@ -242,4 +242,9 @@ class User extends Authenticatable
         return 0;
     }
 
+    public function isFavouriteArticle(ArticlePage $article): bool
+    {
+        return $this->favouriteArticles()->where('article_id', $article->id)->exists();
+    }
+
 }

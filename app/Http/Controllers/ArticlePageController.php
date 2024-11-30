@@ -31,6 +31,8 @@ class ArticlePageController extends Controller
         $paragraphs = explode("<?n?n>", $article->content);
         $voteArticle = $user ? $user->getVoteTypeOnArticle($article) : 0;
 
+        $favourite = $user->isFavouriteArticle($article);
+
         Log::info('Vote Article: ' . json_encode($voteArticle));
 
         /*Log::info('Paragraphs: ' . json_encode($paragraphs));*/
@@ -49,6 +51,7 @@ class ArticlePageController extends Controller
             'paragraphs' => $paragraphs,
             'user' => $user,
             'voteArticle' => $voteArticle,
+            'favourite' => $favourite
         ]);
     }
 
@@ -219,6 +222,27 @@ class ArticlePageController extends Controller
         return response()->json([
             'article' => $article,
             'voteStatus' => $voteStatus
+        ]);
+    }
+
+    public function favourite(Request $request, $id)
+    {
+        $user = Auth::user();
+        $isFavourite = $request->input('isFavourite');
+
+        Log::info("Saved");
+
+        if ($isFavourite) {
+            $user->favouriteArticles()->detach($id);
+            $favouriteStatus = 0;
+        } else {
+            Log::info("Entrei");
+            $user->favouriteArticles()->attach($id);
+            $favouriteStatus = 1;
+        }
+
+        return response()->json([
+            'favouriteStatus' => $favouriteStatus
         ]);
     }
 

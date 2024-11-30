@@ -49,13 +49,14 @@
                         <span><strong><a href="{{ route('showTag', ['name' => $tag->name]) }}">{{ $tag->name }}</a></strong></span>@if(!$loop->last)@endif
                     @endforeach
                 </div>
-                <div class="article-actions">      
-                        @if(Auth::check() && $user->favouriteArticles->contains($article->id))
-                        <button class="small-rectangle fit-block favorite" title="Save Article"><i class='bx bxs-star'></i><span>Saved
+                <div class="article-actions">
+                    <button class="small-rectangle fit-block favorite" title="Save Article" data-favorite-url="{{ route('article.favourite', ['id' => $article->id]) }}">
+                        @if(Auth::check() && $favourite)
+                            <i class='bx bxs-star'></i><span>Saved</span>
                         @else
-                        <button class="small-rectangle fit-block favorite" title="Save Article"><i class='bx bx-star'></i><span> Save Article
+                            <i class='bx bx-star'></i><span>Save Article</span>
                         @endif
-                    </span></button>
+                    </button>
                                     <div class="large-rectangle article-votes">
                     <button id="upvote-button" data-upvote-url="{{ route('article.upvote', ['id' => $article->id]) }}">
                     @if($voteArticle == 1)
