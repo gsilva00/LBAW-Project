@@ -39,6 +39,7 @@
         <script src="{{ url('js/replies.js') }}" defer> </script>
         <script src="{{ url('js/unfollowtag.js') }}" defer> </script>
         <script src="{{ url('js/unfollowtopic.js') }}" defer> </script>
+        <script src="{{ url('js/articlevote.js') }}" defer> </script>
     </head>
     <body>
         <div class="wrapper">

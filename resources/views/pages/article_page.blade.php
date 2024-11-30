@@ -57,21 +57,21 @@
                         @endif
                     </span></button>
                                     <div class="large-rectangle article-votes">
-                    <button id="upvote-button">
-                        @if($voteArticle == 1)
+                    <button id="upvote-button" data-upvote-url="{{ route('article.upvote', ['id' => $article->id]) }}">
+                    @if($voteArticle == 1)
                             <i class='bx bxs-upvote'></i>
                         @else
                             <i class='bx bx-upvote'></i>
                         @endif
-                    </button>
-                    <p><strong>{{ $article->upvotes - $article->downvotes }}</strong></p>
-                    <button id="downvote-button">
-                        @if($voteArticle == -1)
-                            <i class='bx bxs-downvote'></i>
-                        @else
-                            <i class='bx bx-downvote'></i>
-                        @endif
-                    </button>
+                </button>
+                <p><strong>{{ $article->upvotes - $article->downvotes }}</strong></p>
+                <button id="downvote-button" data-downvote-url="{{ route('article.downvote', ['id' => $article->id]) }}">
+                    @if($voteArticle == -1)
+                        <i class='bx bxs-downvote'></i>
+                    @else
+                        <i class='bx bx-downvote'></i>
+                    @endif
+                </button>
                 </div>
                 </div>
 
@@ -119,68 +119,7 @@
         </nav>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('upvote-button').addEventListener('click', function() {
-                console.log('Upvote button clicked');
-                fetch('{{ route("article.upvote", ["id" => $article->id]) }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: '_token={{ csrf_token() }}'
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message) {
-                            alert(data.message);
-                        } else {
-                            document.querySelector('.article-votes p strong').textContent = data.article.upvotes - data.article.downvotes;
-                            if (data.voteStatus === 1) {
-                                document.querySelector('#upvote-button i').classList.remove('bx-upvote');
-                                document.querySelector('#upvote-button i').classList.add('bxs-upvote');
-                                document.querySelector('#downvote-button i').classList.remove('bxs-downvote');
-                                document.querySelector('#downvote-button i').classList.add('bx-downvote');
-                            } else {
-                                document.querySelector('#upvote-button i').classList.remove('bxs-upvote');
-                                document.querySelector('#upvote-button i').classList.add('bx-upvote');
-                            }
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
+    <script src="{{ url('js/article_vote.js') }}" defer></script>
 
-            document.getElementById('downvote-button').addEventListener('click', function() {
-                console.log('Downvote button clicked');
-                fetch('{{ route("article.downvote", ["id" => $article->id]) }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: '_token={{ csrf_token() }}'
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message) {
-                            alert(data.message);
-                        } else {
-                            document.querySelector('.article-votes p strong').textContent = data.article.upvotes - data.article.downvotes;
-                            if (data.voteStatus === -1) {
-                                document.querySelector('#downvote-button i').classList.remove('bx-downvote');
-                                document.querySelector('#downvote-button i').classList.add('bxs-downvote');
-                                document.querySelector('#upvote-button i').classList.remove('bxs-upvote');
-                                document.querySelector('#upvote-button i').classList.add('bx-upvote');
-                            } else {
-                                document.querySelector('#downvote-button i').classList.remove('bxs-downvote');
-                                document.querySelector('#downvote-button i').classList.add('bx-downvote');
-                            }
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
-            });
-        });
-    </script>
 
 @endsection
