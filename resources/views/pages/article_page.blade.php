@@ -56,10 +56,7 @@
                         <button class="small-rectangle fit-block favorite" title="Save Article"><i class='bx bx-star'></i><span> Save Article
                         @endif
                     </span></button>
-                    <div class="small-rectangle fit-block"><button title="upvote article"><i class='bx bx-upvote'></i></button><span><strong>{{ $article->upvotes - $article->downvotes}}</strong></span><button title="downvote article"><i class='bx bx-downvote' ></i></button></div>
-                </div>
-
-                <div class="large-rectangle article-votes">
+                                    <div class="large-rectangle article-votes">
                     <button id="upvote-button">
                         @if($voteArticle == 1)
                             <i class='bx bxs-upvote'></i>
@@ -76,6 +73,9 @@
                         @endif
                     </button>
                 </div>
+                </div>
+
+
 
                 <div class="comments-section">
                     <h2>Comments</h2>
