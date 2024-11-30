@@ -98,6 +98,7 @@ Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic']
 Route::post('/article/{id}/upvote', [ArticlePageController::class, 'upvote'])->name('article.upvote');
 Route::post('/article/{id}/downvote', [ArticlePageController::class, 'downvote'])->name('article.downvote');
 Route::post('/article/{id}/favourite', [ArticlePageController::class, 'favourite'])->name('article.favourite');
+Route::post('/article/{id}/writecomment', [ArticlePageController::class, 'writeComment'])->name('article.writecomment');
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');

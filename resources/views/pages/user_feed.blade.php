@@ -18,7 +18,7 @@
         </div>
         <br>
         <div id="articles">
-            <div class="recent-news-container">
+            <div id="comment-form" class="recent-news-container">
                 @foreach($articles as $article)
                     @include('partials.long_news_tile', [
                         'article' => $article,

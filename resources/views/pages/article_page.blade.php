@@ -80,7 +80,7 @@
 
                 <div class="comments-section">
                     <h2>Comments</h2>
-                    <form class="comment">
+                    <form id="comment-form" class="comment" action="{{ route('article.writecomment', ['id' => $article->id]) }}">
                         @if(Auth::guest() || $user->is_deleted)
                             <img src="{{ asset('images/profile/default.jpg') }}" alt="profile_picture">
                         @else
@@ -94,23 +94,9 @@
                     </form>
                     <br>
                     <br>
-                    @if($comments->isEmpty())
-                        <div class="not-available-container">
-                            <p>No comments available.</p>
-                        </div>
-                    @else
-                        @foreach($comments as $comment)
-                            @include('partials.comment', ['comment' => $comment, 'replies' => $comment->replies, 'user' => $user])
-                            @if($comment->replies->isNotEmpty())
-                                <button class="small-rectangle see-replies-button" title="See replies"><i class='bx bx-chevron-down remove-position' ></i><span>{{ $comment->replies->count() }} {{ $comment->replies->count() > 1 ? 'Answers' : 'Answer' }}</span></button>
-                                <div class="reply">
-                                @foreach($comment->replies as $reply)
-                                    @include('partials.comment', ['comment' => $reply])
-                                @endforeach
-                                </div>
-                            @endif
-                        @endforeach
-                    @endif
+                    <div class="comments-list">
+                        @include('partials.comments', ['comments' => $comments, 'user' => $user, 'article' => $article])
+                    </div>
                 </div>
             </div>
         </section>

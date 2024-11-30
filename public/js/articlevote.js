@@ -105,3 +105,53 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Error:', error));
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const commentForm = document.getElementById('comment-form');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    commentForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const commentInput = commentForm.querySelector('.comment-input');
+        const commentText = commentInput.value;
+
+        if (commentText.trim() === '') {
+            alert('Comment cannot be empty.');
+            return;
+        }
+
+        const url = commentForm.getAttribute('action');
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: new URLSearchParams({
+                '_token': csrfToken,
+                'comment': commentText
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.json();
+            })
+            .then(data => {
+                const commentsSection = document.querySelector('.comments-section');
+                const commentsList = commentsSection.querySelector('.comments-list');
+                if (commentsList) {
+                    commentsList.innerHTML = data.commentsView; // Update only the comments list
+                } else {
+                    console.error('Error: .comments-list element not found');
+                }
+                commentInput.value = ''; // Clear the input field
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update comments. See console for details.');
+            });
+    });
+});
