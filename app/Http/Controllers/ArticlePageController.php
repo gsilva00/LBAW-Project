@@ -32,7 +32,7 @@ class ArticlePageController extends Controller
         $paragraphs = explode("<?n?n>", $article->content);
         $voteArticle = $user ? $user->getVoteTypeOnArticle($article) : 0;
 
-        $favourite = $user->isFavouriteArticle($article);
+        $favourite = $user ? $user->isFavouriteArticle($article) : false;
 
         /*Log::info('Paragraphs: ' . json_encode($paragraphs));*/
 
