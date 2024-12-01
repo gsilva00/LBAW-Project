@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CommentNotification extends Notification
+class CommentNotification extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $table = 'comment_notification';
@@ -17,8 +19,6 @@ class CommentNotification extends Notification
         'comment_id',
     ];
 
-    // Override default values (since there are none) of the base class/model/table
-    protected $attributes = [];
 
     public function notification(): BelongsTo
     {

@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ReportArticle extends Report
+class ReportArticle extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $table = 'report_article';
@@ -20,6 +23,7 @@ class ReportArticle extends Report
     protected $attributes = [
         'type' => 'Fact Check', // Default to one of the allowed values
     ];
+
 
     /**
      * Get the article that was reported

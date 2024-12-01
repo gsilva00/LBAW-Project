@@ -47,7 +47,7 @@ class Tag extends Model
         return $query->where('is_trending', true);
     }
 
-    public static function searchByArrayNames($tags)
+    public static function searchByArrayNames($tags): array
     {
         $tagIds = [];
         foreach ($tags as $tagName) {
@@ -57,7 +57,7 @@ class Tag extends Model
         return $tagIds;
     }
 
-    public static function removeAllTagsByArticleId($articleId)
+    public static function removeAllTagsByArticleId($articleId): void
     {
         $article = ArticlePage::find($articleId);
         if ($article) {
@@ -67,10 +67,9 @@ class Tag extends Model
 
     public static function searchByArticleId($articleId)
     {
-        $tags = Tag::whereHas('articles', function ($query) use ($articleId) {
+        return Tag::whereHas('articles', function ($query) use ($articleId) {
             $query->where('article_id', $articleId);
         })->get();
-        return $tags;
     }
 
 

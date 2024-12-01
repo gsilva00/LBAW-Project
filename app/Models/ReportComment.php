@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ReportComment extends Report
+class ReportComment extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $table = 'report_comment';
@@ -21,6 +24,7 @@ class ReportComment extends Report
     protected $attributes = [
         'type' => 'Spam', // Default to one of the allowed values
     ];
+
 
     /**
      * Retrieve the reported comment or reply.

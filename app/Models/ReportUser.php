@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ReportUser extends Report
+class ReportUser extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     protected $table = 'report_user';
@@ -19,6 +23,7 @@ class ReportUser extends Report
     protected $attributes = [
         'type' => 'Harassment', // Default to one of the allowed values
     ];
+
 
     /**
      * Get the user that was reported

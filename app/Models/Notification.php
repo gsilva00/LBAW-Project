@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Notification extends Model
 {
@@ -26,6 +27,7 @@ class Notification extends Model
         'is_viewed' => false,
     ];
 
+
     /**
      * Get the user that sent the notification.
      */
@@ -42,4 +44,25 @@ class Notification extends Model
         return $this->belongsTo(User::class, 'user_to');
     }
 
+
+    // Get respective subclass entry for a base class entry
+    public function getSpecificNotification(): HasOne|null
+    {
+        $ntfTypes = [
+            CommentNotification::class,
+            ReplyNotification::class,
+            UpvoteArticleNotification::class,
+            UpvoteCommentNotification::class,
+            UpvoteReplyNotification::class
+        ];
+
+        foreach ($ntfTypes as $type) {
+            $equivSubEntry = $this->hasOne($type, 'ntf_id')->first();
+            if ($equivSubEntry) {
+                return $equivSubEntry;
+            }
+        }
+
+        return null;
+    }
 }

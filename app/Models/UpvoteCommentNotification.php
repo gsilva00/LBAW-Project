@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UpvoteCommentNotification extends Notification
+class UpvoteCommentNotification extends Model
 {
     public $timestamps = false;
 
