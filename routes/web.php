@@ -95,10 +95,17 @@ Route::post('/tag/{tag}/unfollow', [TagController::class, 'unfollowTag'])->name(
 Route::post('/topic/{topic}/follow', [TopicController::class, 'followTopic'])->name('topic.follow');
 Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic'])->name('topic.unfollow');
 
-Route::post('/article/{id}/upvote', [ArticlePageController::class, 'upvote'])->name('article.upvote');
-Route::post('/article/{id}/downvote', [ArticlePageController::class, 'downvote'])->name('article.downvote');
+Route::post('/article/{id}/upvoteArticle', [ArticlePageController::class, 'upvoteArticle'])->name('article.upvoteArticle');
+Route::post('/article/{id}/downvoteArticle', [ArticlePageController::class, 'downvoteArticle'])->name('article.downvoteArticle');
 Route::post('/article/{id}/favourite', [ArticlePageController::class, 'favourite'])->name('article.favourite');
 Route::post('/article/{id}/writecomment', [ArticlePageController::class, 'writeComment'])->name('article.writecomment');
+
+Route::post('/comment/{id}/upvoteComment', [ArticlePageController::class, 'upvoteComment'])->name('comment.upvoteComment');
+Route::post('/comment/{id}/downvoteComment', [ArticlePageController::class, 'downvoteComment'])->name('comment.downvoteComment');
+
+Route::post('/comment/{id}/upvoteReply', [ArticlePageController::class, 'upvoteReply'])->name('comment.upvoteReply');
+Route::post('/comment/{id}/downvoteReply', [ArticlePageController::class, 'downvoteReply'])->name('comment.downvoteReply');
+
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
 use App\Models\Comment;
+use App\Models\Reply;
 use App\Models\Topic;
 use App\Models\Tag;
 use App\Models\User;
@@ -155,14 +156,12 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function upvote(Request $request, $id)
+    public function upvoteArticle($id)
     {
-        Log::info('Upvote request: ' . json_encode($request->all()));
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
         $vote = $user->votedArticles()->where('article_id', $id)->first();
-        $voteStatus = 0;
 
         if ($vote) {
             if ($vote->pivot->type === 'Upvote') {
@@ -190,13 +189,12 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function downvote(Request $request, $id)
+    public function downvoteArticle($id)
     {
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
         $vote = $user->votedArticles()->where('article_id', $id)->first();
-        $voteStatus = 0;
 
         if ($vote) {
             if ($vote->pivot->type === 'Downvote') {
@@ -270,6 +268,167 @@ class ArticlePageController extends Controller
             'commentsView' => $commentsView,
         ]);
     }
+
+    public function upvoteComment(Request $request, $id)
+    {
+
+        Log::info("Id: " . $id);
+
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $comment = Comment::findOrFail($id);
+
+        $vote = $comment->voters()->where('user_id', $user->id)->first();
+
+        if ($vote) {
+            if ($vote->pivot->type === 'Upvote') {
+                $comment->voters()->detach($user->id);
+                $comment->upvotes--;
+                $isUpvoted = false;
+            } else {
+                $vote->pivot->type = 'Upvote';
+                $vote->pivot->save();
+                $comment->upvotes++;
+                $comment->downvotes--;
+                $isUpvoted = true;
+            }
+        } else {
+            $comment->voters()->attach($user->id, ['type' => 'Upvote']);
+            $comment->upvotes++;
+            $isUpvoted = true;
+        }
+
+        $comment->save();
+
+        return response()->json([
+            'comment' => $comment,
+            'isUpvoted' => $isUpvoted,
+        ]);
+    }
+
+    public function downvoteComment($id)
+    {
+        Log::info("Id: " . $id);
+
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $comment = Comment::findOrFail($id);
+
+        $vote = $comment->voters()->where('user_id', $user->id)->first();
+
+        if ($vote) {
+            if ($vote->pivot->type === 'Downvote') {
+                $comment->voters()->detach($user->id);
+                $comment->downvotes--;
+                $isDownvoted = false;
+            } else {
+                $vote->pivot->type = 'Downvote';
+                $vote->pivot->save();
+                $comment->downvotes++;
+                $comment->upvotes--;
+                $isDownvoted = true;
+            }
+        } else {
+            $comment->voters()->attach($user->id, ['type' => 'Downvote']);
+            $comment->downvotes++;
+            $isDownvoted = true;
+        }
+
+        $comment->save();
+
+        return response()->json([
+            'comment' => $comment,
+            'isDownvoted' => $isDownvoted,
+        ]);
+    }
+
+    public function upvoteReply($id)
+    {
+        Log::info("Id: " . $id);
+
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $reply = Reply::findOrFail($id);
+
+        $vote = $reply->voters()->where('user_id', $user->id)->first();
+
+        if ($vote) {
+            if ($vote->pivot->type === 'Upvote') {
+                $reply->voters()->detach($user->id);
+                $reply->upvotes--;
+                $isUpvoted = false;
+            } else {
+                $vote->pivot->type = 'Upvote';
+                $vote->pivot->save();
+                $reply->upvotes++;
+                $reply->downvotes--;
+                $isUpvoted = true;
+            }
+        } else {
+            $reply->voters()->attach($user->id, ['type' => 'Upvote']);
+            $reply->upvotes++;
+            $isUpvoted = true;
+        }
+
+        $reply->save();
+
+        return response()->json([
+            'reply' => $reply,
+            'isUpvoted' => $isUpvoted,
+        ]);
+    }
+
+    public function downvoteReply($id){
+        Log::info("Id: " . $id);
+
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $reply = Reply::findOrFail($id);
+
+        $vote = $reply->voters()->where('user_id', $user->id)->first();
+
+        if ($vote) {
+            if ($vote->pivot->type === 'Downvote') {
+                $reply->voters()->detach($user->id);
+                $reply->downvotes--;
+                $isDownvoted = false;
+            } else {
+                $vote->pivot->type = 'Downvote';
+                $vote->pivot->save();
+                $reply->downvotes++;
+                $reply->upvotes--;
+                $isDownvoted = true;
+            }
+        } else {
+            $reply->voters()->attach($user->id, ['type' => 'Downvote']);
+            $reply->downvotes++;
+            $isDownvoted = true;
+        }
+
+        $reply->save();
+
+        return response()->json([
+            'reply' => $reply,
+            'isDownvoted' => $isDownvoted,
+        ]);
+    }
+
 }
 
 

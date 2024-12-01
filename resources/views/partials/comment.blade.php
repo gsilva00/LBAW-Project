@@ -1,4 +1,4 @@
-<div class="comment">
+<div class="comment" data-is-reply="{{ $isReply ? 'true' : 'false' }}">
     <img src="{{ $comment->is_deleted ? asset('images/profile/default.jpg') : asset('images/profile/' . $comment->author->profile_picture) }}" alt="profile_picture">
     <div class="profile-info name-date">
     <p><strong>
@@ -18,7 +18,21 @@
     <span>{{ $article->is_deleted ? '[Deleted]' : $comment->content }}
     </span>
     <div class="comment-actions">
-    <div class="large-rectangle fit-block comment-votes"><button><i class='bx bx-upvote' title="upvote comment"></i></button><span>{{ $comment->upvotes - $comment->downvotes}}</span><button title="upvote comment"><i class='bx bx-downvote' ></i></button></div>
+    <div class="large-rectangle fit-block comment-votes">
+        @php
+            $user = Auth::user();
+            $isUpvoted = $user ? $comment->isUpvotedBy($user) : false;
+            $isDownvoted = $user ? $comment->isDownvotedBy($user) : false;
+        @endphp
+
+        <button class="upvote-comment-button" data-comment-id="{{ $comment->id }}">
+            <i class='bx {{ $isUpvoted ? "bxs-upvote" : "bx-upvote" }}' title="upvote comment"></i>
+        </button>
+        <span id="comment-{{ $comment->id }}" class="upvote-count">{{ $comment->upvotes - $comment->downvotes }}</span>
+        <button class="downvote-comment-button" data-comment-id="{{ $comment->id }}" title="downvote comment">
+            <i class='bx {{ $isDownvoted ? "bxs-downvote" : "bx-downvote" }}' title="downvote comment"></i>
+        </button>
+    </div>
     <button class="small-rectangle" title="reply comment"><i class='bx bx-message remove-position'></i><span>Reply</span></button>
     <button class="small-rectangle" title="report comment"><i class='bx bx-flag remove-position' ></i><span>Report</span></button>
     </div>

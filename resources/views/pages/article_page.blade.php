@@ -58,7 +58,7 @@
                         @endif
                     </button>
                                     <div class="large-rectangle article-votes">
-                    <button id="upvote-button" data-upvote-url="{{ route('article.upvote', ['id' => $article->id]) }}">
+                    <button id="upvote-button" data-upvote-url="{{ route('article.upvoteArticle', ['id' => $article->id]) }}">
                     @if($voteArticle == 1)
                             <i class='bx bxs-upvote'></i>
                         @else
@@ -66,7 +66,7 @@
                         @endif
                 </button>
                 <p><strong>{{ $article->upvotes - $article->downvotes }}</strong></p>
-                <button id="downvote-button" data-downvote-url="{{ route('article.downvote', ['id' => $article->id]) }}">
+                <button id="downvote-button" data-downvote-url="{{ route('article.downvoteArticle', ['id' => $article->id]) }}">
                     @if($voteArticle == -1)
                         <i class='bx bxs-downvote'></i>
                     @else
