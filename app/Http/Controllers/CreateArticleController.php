@@ -114,7 +114,12 @@ class CreateArticleController extends Controller
 
         if ($request->hasFile('file')) {
             $fileController = new FileController();
-            $imageName = $fileController->uploadImage($request, 'article');
+            if ($article->article_image !== 'default.jpg') {
+                $imageName = $fileController->uploadImage($request, 'article', $article->article_image);
+            }
+            else {
+                $imageName = $fileController->uploadImage($request, 'article');
+            }
             $article->article_image = $imageName;
         }
 
