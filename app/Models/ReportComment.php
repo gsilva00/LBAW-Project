@@ -26,6 +26,7 @@ class ReportComment extends Model
     ];
 
 
+    // Relationships
     /**
      * Retrieve the reported comment or reply.
      */
@@ -40,11 +41,13 @@ class ReportComment extends Model
         return null; // Will not happen (due to schema constraints)
     }
 
-    /**
-     * Get the base report associated with this user report.
-     */
     public function report(): BelongsTo
     {
         return $this->belongsTo(Report::class, 'report_id');
     }
+
+
+    // Querying
+    // ...
+
 }

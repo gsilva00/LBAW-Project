@@ -6,26 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class CommentNotification extends Model
+class ProposeNewTag extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
-
-    protected $table = 'comment_notification';
+    protected $table = 'propose_new_tag';
 
     protected $fillable = [
-        'ntf_id',
-        'comment_id',
+        'name',
+        'user_id',
     ];
 
 
     // Relationships
-    public function notification(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Notification::class, 'ntf_id');
+        return $this->belongsTo(
+            User::class,
+            'user_id'
+        );
     }
-
 
     // Querying
     // ...

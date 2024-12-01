@@ -34,6 +34,7 @@ class Reply extends Model
     ];
 
 
+    // Relationships
     public function author(): BelongsTo
     {
         return $this->belongsTo(
@@ -67,5 +68,9 @@ class Reply extends Model
             'user_id'
         )->withPivot('type');
     }
+
+
+    // Querying
+    // ...
 
 }

@@ -34,6 +34,7 @@ class Comment extends Model
     ];
 
 
+    // Relationships
     public function author(): BelongsTo
     {
         return $this->belongsTo(
@@ -67,4 +68,8 @@ class Comment extends Model
             'comment_id'
         );
     }
+
+    // Querying
+    // ...
+
 }

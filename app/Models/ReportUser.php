@@ -25,19 +25,19 @@ class ReportUser extends Model
     ];
 
 
-    /**
-     * Get the user that was reported
-     */
+    // Relationships
     public function reportedUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    /**
-     * Get the base report associated with this user report.
-     */
     public function report(): BelongsTo
     {
         return $this->belongsTo(Report::class, 'report_id');
     }
+
+
+    // Querying
+    // ...
+
 }

@@ -17,8 +17,14 @@ class ReplyNotification extends Model
     ];
 
 
+    // Relationships
     public function notification(): BelongsTo
     {
         return $this->belongsTo(Notification::class, 'ntf_id');
     }
+
+
+    // Querying
+    // ...
+
 }

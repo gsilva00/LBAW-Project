@@ -22,6 +22,7 @@ class Tag extends Model
     ];
 
 
+    // Relationships
     public function articles(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -42,6 +43,8 @@ class Tag extends Model
         );
     }
 
+
+    // Querying
     public function scopeTrending($query)
     {
         return $query->where('is_trending', true);

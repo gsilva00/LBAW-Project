@@ -42,6 +42,7 @@ class ArticlePage extends Model
     ];
 
 
+    // Relationships
     public function author(): BelongsTo
     {
         return $this->belongsTo(
@@ -122,6 +123,8 @@ class ArticlePage extends Model
         );
     }
 
+
+    // Querying
     public static function getMostRecentNews($how_many)
     {
         return self::where('is_deleted', false)

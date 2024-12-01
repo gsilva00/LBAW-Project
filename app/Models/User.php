@@ -62,15 +62,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public static function find(string $username): ?self
-    {
-        $user = self::where('username', $username)->first();
-        if (!$user) {
-            throw new ModelNotFoundException("User not found");
-        }
-        return $user;
-    }
 
+    // Relationships
     public function ownedArticles(): HasMany
     {
         return $this->hasMany(
@@ -93,7 +86,7 @@ class User extends Authenticatable
         );
     }
 
-
+    // - Follows
     public function followedTopics(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -104,10 +97,6 @@ class User extends Authenticatable
         );
     }
 
-    public function hasFollowedTopic($topic) {
-        return $this->followedTopics->contains($topic);
-    }
-
     public function followedTags(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -116,10 +105,6 @@ class User extends Authenticatable
             'user_id',
             'tag_id'
         );
-    }
-
-    public function hasFollowedTag($tag) {
-        return $this->followedTags->contains($tag);
     }
 
     public function followers(): BelongsToMany
@@ -141,11 +126,7 @@ class User extends Authenticatable
         );
     }
 
-    public function isFollowing($user) {
-        return $this->following->contains($user);
-    }
-
-    // Votes and favorites
+    // - Votes and favorites
     public function votedArticles(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -184,7 +165,7 @@ class User extends Authenticatable
         );
     }
 
-    // Reports
+    // - Reports
     public function reportsSent(): HasMany
     {
         return $this->hasMany(
@@ -193,7 +174,7 @@ class User extends Authenticatable
         );
     }
 
-    // Proposals, Appeals and Requests
+    // - Proposals, Appeals and Requests
     public function tagProposals(): HasMany
     {
         return $this->hasMany(
@@ -213,20 +194,43 @@ class User extends Authenticatable
         );
     }
 
-    // Notifications
+    // - Notifications
     public function notificationsReceived(): HasMany
     {
         return $this->hasMany(
-            Notifications::class,
+            Notification::class,
             'user_to'
         );
     }
     public function notificationsSent(): HasMany
     {
         return $this->hasMany(
-            Notifications::class,
+            Notification::class,
             'user_from'
         );
+    }
+
+
+    // Querying
+    public static function find(string $username): ?self
+    {
+        $user = self::where('username', $username)->first();
+        if (!$user) {
+            throw new ModelNotFoundException("User not found");
+        }
+        return $user;
+    }
+
+    public function hasFollowedTopic($topic) {
+        return $this->followedTopics->contains($topic);
+    }
+
+    public function hasFollowedTag($tag) {
+        return $this->followedTags->contains($tag);
+    }
+
+    public function isFollowing($user) {
+        return $this->following->contains($user);
     }
 
     public static function filterByFollowingUsers($users)

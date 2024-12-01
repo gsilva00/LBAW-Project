@@ -16,11 +16,14 @@ class UpvoteArticleNotification extends Model
         'article_id',
     ];
 
-    // Override default values (since there are none) of the base class/model/table
-    protected $attributes = [];
 
+    // Relationships
     public function notification(): BelongsTo
     {
         return $this->belongsTo(Notification::class, 'ntf_id');
     }
+
+    // Querying
+    // ...
+
 }

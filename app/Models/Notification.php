@@ -28,23 +28,19 @@ class Notification extends Model
     ];
 
 
-    /**
-     * Get the user that sent the notification.
-     */
+    // Relationships
     public function sender(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_from');
     }
 
-    /**
-     * Get the user that received the notification.
-     */
     public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_to');
     }
 
 
+    // Querying
     // Get respective subclass entry for a base class entry
     public function getSpecificNotification(): HasOne|null
     {
@@ -65,4 +61,5 @@ class Notification extends Model
 
         return null;
     }
+
 }

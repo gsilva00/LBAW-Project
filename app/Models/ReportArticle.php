@@ -25,19 +25,19 @@ class ReportArticle extends Model
     ];
 
 
-    /**
-     * Get the article that was reported
-     */
+    // Relationships
     public function reportedArticle(): BelongsTo
     {
         return $this->belongsTo(ArticlePage::class, 'article_id');
     }
 
-    /**
-     * Get the base report associated with this user report.
-     */
     public function report(): BelongsTo
     {
         return $this->belongsTo(Report::class, 'report_id');
     }
+
+
+    // Querying
+    // ...
+
 }
