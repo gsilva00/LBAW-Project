@@ -47,9 +47,9 @@ class CreateArticleController extends Controller
         $article->author_id = Auth::id();
         $article->topic_id = $topicId;
 
-        if ($request->hasFile('article_picture')) {
-            $imageName = time() . '-' . $request->file('article_picture')->getClientOriginalName();
-            $request->file('article_picture')->move(public_path('images/article'), $imageName);
+        if ($request->hasFile('file')) {
+            $fileController = new FileController();
+            $imageName = $fileController->uploadImage($request, 'article');
             $article->article_image = $imageName;
         }
 
@@ -112,9 +112,9 @@ class CreateArticleController extends Controller
         $article->content = str_replace("\n", "<?n?n>", $request->input('content'));
         $article->topic_id = $topicId;
 
-        if ($request->hasFile('article_picture')) {
-            $imageName = time() . '-' . $request->file('article_picture')->getClientOriginalName();
-            $request->file('article_picture')->move(public_path('images/article'), $imageName);
+        if ($request->hasFile('file')) {
+            $fileController = new FileController();
+            $imageName = $fileController->uploadImage($request, 'article');
             $article->article_image = $imageName;
         }
 

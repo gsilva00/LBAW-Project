@@ -94,9 +94,9 @@ class ProfileController extends Controller
         $user->display_name = request('display_name');
         $user->description = request('description');
 
-        if (request('profile_picture')) {
-            $imageName = time() . '-' . request('profile_picture')->getClientOriginalName();
-            request('profile_picture')->move(public_path('images/profile'), $imageName);
+        if (request('file')) {
+            $fileController = new FileController();
+            $imageName = $fileController->uploadImage(request(), 'profile');
             $user->profile_picture = $imageName;
         }
 
