@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 commentInput.value = '';
                 upvoteComment();
                 downvoteComment();
+                showReplies();
 
             })
             .catch(error => {
@@ -164,12 +165,11 @@ function upvoteComment() {
         button.addEventListener('click', function (event) {
             event.preventDefault();
             const isReply = this.closest('.comment').dataset.isReply === 'true';
-            if (isReply) return;
-
             const commentId = this.dataset.commentId;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = isReply ? `/reply/${commentId}/upvoteReply` : `/comment/${commentId}/upvoteComment`;
 
-            fetch(`/comment/${commentId}/upvoteComment`, {
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -182,12 +182,13 @@ function upvoteComment() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.comment) {
-                        const upvoteCount = document.querySelector(`#comment-${data.comment.id}`);
+                    if (data.comment || data.reply) {
+                        const item = data.comment || data.reply;
+                        const upvoteCount = document.querySelector(`#comment-${item.id}`);
                         if (upvoteCount) {
-                            upvoteCount.textContent = data.comment.upvotes - data.comment.downvotes;
+                            upvoteCount.textContent = item.upvotes - item.downvotes;
                         } else {
-                            console.error(`Element with ID comment-${data.comment.id} not found.`);
+                            console.error(`Element with ID comment-${item.id} not found.`);
                         }
 
                         const upvoteIcon = this.querySelector('i');
@@ -216,12 +217,11 @@ function downvoteComment() {
         button.addEventListener('click', function (event) {
             event.preventDefault();
             const isReply = this.closest('.comment').dataset.isReply === 'true';
-            if (isReply) return;
-
             const commentId = this.dataset.commentId;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = isReply ? `/reply/${commentId}/downvoteReply` : `/comment/${commentId}/downvoteComment`;
 
-            fetch(`/comment/${commentId}/downvoteComment`, {
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -234,12 +234,13 @@ function downvoteComment() {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.comment) {
-                        const upvoteCount = document.querySelector(`#comment-${data.comment.id}`);
+                    if (data.comment || data.reply) {
+                        const item = data.comment || data.reply;
+                        const upvoteCount = document.querySelector(`#comment-${item.id}`);
                         if (upvoteCount) {
-                            upvoteCount.textContent = data.comment.upvotes - data.comment.downvotes;
+                            upvoteCount.textContent = item.upvotes - item.downvotes;
                         } else {
-                            console.error(`Element with ID comment-${data.comment.id} not found.`);
+                            console.error(`Element with ID comment-${item.id} not found.`);
                         }
 
                         const downvoteIcon = this.querySelector('i');
@@ -263,8 +264,23 @@ function downvoteComment() {
     });
 }
 
+function showReplies() {
+    const buttons = document.querySelectorAll('.see-replies-button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const repliesContainer = this.nextElementSibling;
+            const chevron = button.querySelector('i');
+            chevron.classList.toggle('bx-chevron-down');
+            chevron.classList.toggle('bx-chevron-up');
+            repliesContainer.classList.toggle('show');
+        });
+    });
+}
+
+
 upvoteComment();
 downvoteComment();
+showReplies();
 
 
 

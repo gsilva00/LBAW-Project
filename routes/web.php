@@ -103,8 +103,8 @@ Route::post('/article/{id}/writecomment', [ArticlePageController::class, 'writeC
 Route::post('/comment/{id}/upvoteComment', [ArticlePageController::class, 'upvoteComment'])->name('comment.upvoteComment');
 Route::post('/comment/{id}/downvoteComment', [ArticlePageController::class, 'downvoteComment'])->name('comment.downvoteComment');
 
-Route::post('/comment/{id}/upvoteReply', [ArticlePageController::class, 'upvoteReply'])->name('comment.upvoteReply');
-Route::post('/comment/{id}/downvoteReply', [ArticlePageController::class, 'downvoteReply'])->name('comment.downvoteReply');
+Route::post('/reply/{id}/upvoteReply', [ArticlePageController::class, 'upvoteReply'])->name('comment.upvoteReply');
+Route::post('/reply/{id}/downvoteReply', [ArticlePageController::class, 'downvoteReply'])->name('comment.downvoteReply');
 
 
 // Static Pages
