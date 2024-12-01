@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Notification extends Model
 {
@@ -21,6 +20,10 @@ class Notification extends Model
         'is_viewed',
         'user_to',
         'user_from',
+    ];
+
+    protected $attributes = [
+        'is_viewed' => false,
     ];
 
     /**

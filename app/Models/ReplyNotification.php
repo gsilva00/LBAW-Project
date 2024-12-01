@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
-namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ReplyNotification extends Model
+class ReplyNotification extends Notification
 {
-    use HasFactory;
+    public $timestamps = false;
 
     protected $table = 'reply_notification';
 
@@ -18,6 +16,9 @@ class ReplyNotification extends Model
         'ntf_id',
         'reply_id',
     ];
+
+    // Override default values (since there are none) of the base class/model/table
+    protected $attributes = [];
 
     public function notification(): BelongsTo
     {

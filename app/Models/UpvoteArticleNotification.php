@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class UpvoteArticleNotification extends Model
+class UpvoteArticleNotification extends Notification
 {
-    use HasFactory;
+    public $timestamps = false;
 
     protected $table = 'upvote_article_notification';
 
@@ -16,6 +16,9 @@ class UpvoteArticleNotification extends Model
         'ntf_id',
         'article_id',
     ];
+
+    // Override default values (since there are none) of the base class/model/table
+    protected $attributes = [];
 
     public function notification(): BelongsTo
     {
