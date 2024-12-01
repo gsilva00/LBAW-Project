@@ -16,7 +16,8 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     public $timestamps = false; // Don't add create and update timestamps in database.
-    // protected $table = 'users'; - This is default Laravel conversion (lowercase camel_case model name)
+
+    protected $table = 'users'; // This is default Laravel conversion (lowercase camel_case model name)
 
     // The attributes that are mass assignable.
     protected $fillable = [

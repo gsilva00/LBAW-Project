@@ -12,8 +12,8 @@ class Comment extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
     const CREATED_AT = 'cmt_date';
+    const UPDATED_AT = null;
 
     protected $table = 'comment';
 
