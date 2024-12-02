@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -94,9 +93,16 @@ class ProfileController extends Controller
         $user->display_name = request('display_name');
         $user->description = request('description');
 
-        if (request('profile_picture')) {
-            $imageName = time() . '-' . request('profile_picture')->getClientOriginalName();
-            request('profile_picture')->move(public_path('images/profile'), $imageName);
+        if (request('file')) {
+            $fileController = new FileController();
+
+            if ($user->profile_picture !== 'default.jpg') {
+                $imageName = $fileController->uploadImage(request(), 'profile', $user->profile_picture);
+            }
+            else {
+                $imageName = $fileController->uploadImage(request(), 'profile');
+            }
+
             $user->profile_picture = $imageName;
         }
 

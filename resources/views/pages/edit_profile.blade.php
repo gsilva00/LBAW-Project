@@ -41,7 +41,7 @@
                 <p class="small-text">* Upload an image to change the current profile picture</p>
                 <div class="profile-info">
                     <label for="profile_picture"><span>Upload Profile Picture</span></label>
-                    <input type="file" name="profile_picture" id="profile_picture">
+                    <input type="file" name="file" id="profile_picture">
                 </div>
                 @if ($errors->has('profile_picture'))
                     @include('partials.error_popup', ['field' => 'profile_picture'])
