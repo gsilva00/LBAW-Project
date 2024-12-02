@@ -4,7 +4,7 @@
     <p><strong>
         @if($article->is_deleted)
             Anonymous
-        @else    
+        @else
             {{ $comment->author->display_name }}
         @endif
     </strong></p>

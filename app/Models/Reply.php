@@ -12,8 +12,8 @@ class Reply extends Model
 {
     use HasFactory;
 
-    public $timestamps = false; // No `updated_at` column.
     const CREATED_AT = 'rpl_date';
+    const UPDATED_AT = null;
 
     protected $table = 'reply';
 
@@ -34,6 +34,7 @@ class Reply extends Model
     ];
 
 
+    // Relationships
     public function author(): BelongsTo
     {
         return $this->belongsTo(
@@ -67,5 +68,9 @@ class Reply extends Model
             'user_id'
         )->withPivot('type');
     }
+
+
+    // Querying
+    // ...
 
 }

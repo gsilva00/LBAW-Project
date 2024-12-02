@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\Comment;
 use App\Models\Topic;
 use App\Models\Tag;
 use App\Models\User;
@@ -31,7 +32,7 @@ class ArticlePageController extends Controller
         $paragraphs = explode("<?n?n>", $article->content);
         $voteArticle = $user ? $user->getVoteTypeOnArticle($article) : 0;
 
-        Log::info('Vote Article: ' . json_encode($voteArticle));
+        $favourite = $user ? $user->isFavouriteArticle($article) : false;
 
         /*Log::info('Paragraphs: ' . json_encode($paragraphs));*/
 
@@ -49,6 +50,7 @@ class ArticlePageController extends Controller
             'paragraphs' => $paragraphs,
             'user' => $user,
             'voteArticle' => $voteArticle,
+            'favourite' => $favourite
         ]);
     }
 
@@ -222,4 +224,52 @@ class ArticlePageController extends Controller
         ]);
     }
 
+    public function favourite(Request $request, $id)
+    {
+        $user = Auth::user();
+        $isFavourite = $request->input('isFavourite');
+
+        Log::info("Saved");
+
+        if ($isFavourite) {
+            $user->favouriteArticles()->detach($id);
+            $favouriteStatus = 0;
+        } else {
+            Log::info("Entrei");
+            $user->favouriteArticles()->attach($id);
+            $favouriteStatus = 1;
+        }
+
+        return response()->json([
+            'favouriteStatus' => $favouriteStatus
+        ]);
+    }
+
+    public function writeComment(Request $request, $id)
+    {
+        Log::info('Comment request: ' . json_encode($request->all()));
+
+        $request->validate([
+            'comment' => 'required|string|max:255',
+        ]);
+
+        $user = auth()->user();
+        $article = ArticlePage::findOrFail($id);
+
+        $comment = new Comment();
+        $comment->author_id = auth()->id();
+        $comment->article_id = $article->id;
+        $comment->content = $request->comment;
+        $comment->save();
+
+        $comments = $article->comments()->with('replies')->get();
+
+        $commentsView = view('partials.comments', compact('comments', 'user', 'article'))->render();
+
+        return response()->json([
+            'commentsView' => $commentsView,
+        ]);
+    }
 }
+
+

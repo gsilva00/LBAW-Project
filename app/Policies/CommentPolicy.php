@@ -62,23 +62,4 @@ class CommentPolicy
     {
         return Auth::check() && $comment->author()->is($user) && !$user->is_banned;
     }
-
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Comment $comment): bool
-    {
-        // Only admins can revert soft-deleted comments.
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Comment $comment): bool
-    {
-        // Only admins can permanently delete a comment from the database.
-        return false;
-    }
 }

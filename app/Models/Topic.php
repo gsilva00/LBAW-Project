@@ -17,6 +17,7 @@ class Topic extends Model
     protected $fillable = ['name'];
 
 
+    // Relationships
     public function articles(): HasMany
     {
         return $this->hasMany(ArticlePage::class, 'topic_id');
@@ -32,6 +33,8 @@ class Topic extends Model
         );
     }
 
+
+    // Querying
     public static function findTopicByName($topic)
     {
         return Topic::where('name', $topic)->first();
