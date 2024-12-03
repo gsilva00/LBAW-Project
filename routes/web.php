@@ -87,18 +87,18 @@ Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('
 Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('showTag');
 Route::get('/saved-articles', [ArticlePageController::class, 'showSavedArticles'])->name('showSavedArticles');
 
+Route::post('/article/{id}/upvote', [ArticlePageController::class, 'upvote'])->name('upvoteArticle');
+Route::post('/article/{id}/downvote', [ArticlePageController::class, 'downvote'])->name('downvoteArticle');
+Route::post('/article/{id}/favourite', [ArticlePageController::class, 'favourite'])->name('favouriteArticle');
+Route::post('/article/{id}/writecomment', [ArticlePageController::class, 'writeComment'])->name('writeComment');
+
 // Tag
-Route::post('/tag/{tag}/follow', [TagController::class, 'followTag'])->name('tag.follow');
-Route::post('/tag/{tag}/unfollow', [TagController::class, 'unfollowTag'])->name('tag.unfollow');
+Route::post('/tag/{tag}/follow', [TagController::class, 'followTag'])->name('followTag');
+Route::post('/tag/{tag}/unfollow', [TagController::class, 'unfollowTag'])->name('unfollowTag');
 
 // Topic
-Route::post('/topic/{topic}/follow', [TopicController::class, 'followTopic'])->name('topic.follow');
-Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic'])->name('topic.unfollow');
-
-Route::post('/article/{id}/upvote', [ArticlePageController::class, 'upvote'])->name('article.upvote');
-Route::post('/article/{id}/downvote', [ArticlePageController::class, 'downvote'])->name('article.downvote');
-Route::post('/article/{id}/favourite', [ArticlePageController::class, 'favourite'])->name('article.favourite');
-Route::post('/article/{id}/writecomment', [ArticlePageController::class, 'writeComment'])->name('article.writecomment');
+Route::post('/topic/{topic}/follow', [TopicController::class, 'followTopic'])->name('followTopic');
+Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic'])->name('unfollowTopic');
 
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');

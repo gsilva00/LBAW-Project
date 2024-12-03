@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const upvoteButton = document.getElementById('upvote-button');
     const downvoteButton = document.getElementById('downvote-button');
-    const favoriteButton = document.querySelector('.favorite');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const upvoteUrl = upvoteButton.getAttribute('data-upvote-url');
     const downvoteUrl = downvoteButton.getAttribute('data-downvote-url');
-    const favoriteUrl = favoriteButton.getAttribute('data-favorite-url');
 
     upvoteButton.addEventListener('click', function(event) {
         event.preventDefault();
