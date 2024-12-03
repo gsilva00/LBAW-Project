@@ -39,11 +39,9 @@ class SearchController extends Controller
             $articles = ArticlePage::filterByTags($articles, $tags);
         }
 
-
         if ($topics->isNotEmpty()) {
             $articles = ArticlePage::filterByTopics($articles, $topics);
         }
-
 
         return view('pages.search', [
             'user' => $authUser,

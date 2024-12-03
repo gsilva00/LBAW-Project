@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const upvoteButton = document.getElementById('upvote-button');
     const downvoteButton = document.getElementById('downvote-button');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const upvoteUrl = upvoteButton.getAttribute('data-upvote-url');
     const downvoteUrl = downvoteButton.getAttribute('data-downvote-url');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     upvoteButton.addEventListener('click', function(event) {
         event.preventDefault();
@@ -20,14 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.message) {
                     alert(data.message);
-                } else {
+                }
+                else {
                     document.querySelector('.article-votes p strong').textContent = data.article.upvotes - data.article.downvotes;
                     if (data.voteStatus === 1) {
                         document.querySelector('#upvote-button i').classList.remove('bx-upvote');
                         document.querySelector('#upvote-button i').classList.add('bxs-upvote');
                         document.querySelector('#downvote-button i').classList.remove('bxs-downvote');
                         document.querySelector('#downvote-button i').classList.add('bx-downvote');
-                    } else {
+                    }
+                    else {
                         document.querySelector('#upvote-button i').classList.remove('bxs-upvote');
                         document.querySelector('#upvote-button i').classList.add('bx-upvote');
                     }
@@ -51,14 +53,16 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.message) {
                     alert(data.message);
-                } else {
+                }
+                else {
                     document.querySelector('.article-votes p strong').textContent = data.article.upvotes - data.article.downvotes;
                     if (data.voteStatus === -1) {
                         document.querySelector('#downvote-button i').classList.remove('bx-downvote');
                         document.querySelector('#downvote-button i').classList.add('bxs-downvote');
                         document.querySelector('#upvote-button i').classList.remove('bxs-upvote');
                         document.querySelector('#upvote-button i').classList.add('bx-upvote');
-                    } else {
+                    }
+                    else {
                         document.querySelector('#downvote-button i').classList.remove('bxs-downvote');
                         document.querySelector('#downvote-button i').classList.add('bx-downvote');
                     }
@@ -93,11 +97,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.favouriteStatus === 1) {
                     favoriteButton.querySelector('i').classList.remove('bx-star');
                     favoriteButton.querySelector('i').classList.add('bxs-star');
-                    favoriteButton.querySelector('span').textContent = 'Saved';
-                } else {
+                    favoriteButton.querySelector('span').textContent = 'Favourited';
+                }
+                else {
                     favoriteButton.querySelector('i').classList.remove('bxs-star');
                     favoriteButton.querySelector('i').classList.add('bx-star');
-                    favoriteButton.querySelector('span').textContent = 'Save Article';
+                    favoriteButton.querySelector('span').textContent = 'Favourite Article';
                 }
             })
             .catch(error => console.error('Error:', error));
@@ -142,7 +147,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 const commentsList = commentsSection.querySelector('.comments-list');
                 if (commentsList) {
                     commentsList.innerHTML = data.commentsView; // Update only the comments list
-                } else {
+                }
+                else {
                     console.error('Error: .comments-list element not found');
                 }
                 commentInput.value = ''; // Clear the input field

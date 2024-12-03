@@ -67,7 +67,8 @@ function createFullUser() {
                 if (data.success) {
                     alert(data.message);
                     form.reset(); // Reset form fields content
-                } else {
+                }
+                else {
                     displayErrors(data.errors);
                 }
             })

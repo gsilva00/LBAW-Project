@@ -9,7 +9,7 @@
         <div class="profile-info">
         <h1 class="large-rectangle">#{{ $tag->name }}</h1>
         @if(Auth::check())
-        <form method="POST" action="{{ Auth::user()->hasFollowedTag($tag) ? route('unfollowTag', $tag) : route('followTag', $tag) }}">
+        <form method="POST" action="{{ Auth::user()->hasFollowedTag($tag) ? route('unfollowTag', $tag->name) : route('followTag', $tag->name) }}">
             @csrf
             <button type="submit" class="large-rectangle small-text greyer">
                 {{ Auth::user()->hasFollowedTag($tag) ? 'Unfollow Tag' : 'Follow Tag' }}

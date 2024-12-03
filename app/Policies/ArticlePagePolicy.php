@@ -12,6 +12,7 @@ class ArticlePagePolicy
     /**
      * Perform pre-authorization checks.
      *
+     * Admins can do everything.
      * When null, the authorization check falls through to the respective policy method.
      */
     public function before(User $user, $ability): bool|null
@@ -57,7 +58,7 @@ class ArticlePagePolicy
      */
     public function update(User $user, ArticlePage $articlePage): bool
     {
-        return Auth::check() && $articlePage->author()->is($user) && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && $articlePage->author()->is($user);
     }
 
     /**
@@ -65,8 +66,23 @@ class ArticlePagePolicy
      */
     public function delete(User $user, ArticlePage $articlePage): bool
     {
-        return Auth::check() && $articlePage->author()->is($user) && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && $articlePage->author()->is($user);
     }
 
+
+    public function upvote(User $user, ArticlePage $articlePage): bool
+    {
+        return Auth::check() && !$user->is_banned;
+    }
+    public function downvote(User $user, ArticlePage $articlePage): bool
+    {
+        return Auth::check() && !$user->is_banned;
+    }
+
+    public function favourite(User $user, ArticlePage $articlePage): bool
+    {
+        // Valid for favoriting and unfavoriting
+        return Auth::check() && !$user->is_banned;
+    }
 
 }

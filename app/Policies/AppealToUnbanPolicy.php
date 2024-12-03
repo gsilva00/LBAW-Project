@@ -12,6 +12,7 @@ class AppealToUnbanPolicy
     /**
      * Perform pre-authorization checks.
      *
+     * Admins can do everything.
      * When null, the authorization check falls through to the respective policy method.
      */
     public function before(User $user, $ability): bool|null
@@ -38,7 +39,7 @@ class AppealToUnbanPolicy
      */
     public function view(User $user, AppealToUnban $appealToUnban): bool
     {
-        return Auth::check() && $appealToUnban->user()->is($user);
+        return Auth::check() && $user->is_banned && $appealToUnban->user()->is($user);
     }
 
     /**
@@ -54,7 +55,7 @@ class AppealToUnbanPolicy
      */
     public function update(User $user, AppealToUnban $appealToUnban): bool
     {
-        return Auth::check() && $appealToUnban->user()->is($user);
+        return Auth::check() && $user->is_banned && $appealToUnban->user()->is($user);
     }
 
     /**
@@ -62,7 +63,7 @@ class AppealToUnbanPolicy
      */
     public function delete(User $user, AppealToUnban $appealToUnban): bool
     {
-        return Auth::check() && $appealToUnban->user()->is($user);
+        return Auth::check() && $user->is_banned && $appealToUnban->user()->is($user);
     }
 
 }

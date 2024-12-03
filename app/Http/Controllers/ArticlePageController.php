@@ -6,7 +6,6 @@ use App\Models\User;
 
 use App\Models\ArticlePage;
 use App\Models\Comment;
-use App\Models\Topic;
 use App\Models\Tag;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -83,88 +82,35 @@ class ArticlePageController extends Controller
 
         $recentNews = ArticlePage::getAllRecentNews();
         return view('pages.recent_news', [
+            'user' => $user,
             'username' => $username,
-            'recentNews' => $recentNews,
-            'user' => $user
+            'recentNews' => $recentNews
         ]);
     }
 
-    public function showVotedNews(): View
+    public function showMostVotedNews(): View
     {
         $this->authorize('viewAny', ArticlePage::class);
 
-        /** @var User $user */
-        $user = Auth::user();
         $votedNews = ArticlePage::getArticlesByVotes();
 
         return view('pages.voted_news', [
-            'user' => $user,
+            'user' => Auth::user(),
             'votedNews' => $votedNews
         ]);
     }
 
-    public function showTopic(string $name): View
+    public function showFavouriteArticles(): View
     {
         $this->authorize('viewAny', ArticlePage::class);
 
         /** @var User $user */
         $user = Auth::user();
-        $topic = Topic::where('name', $name)->firstOrFail();
-        $articles = $topic->articles()->get();
+        $favArticles = $user->favouriteArticles;
 
-        return view('pages.topic_page', [
+        return view('pages.favourite_articles', [
             'user' => $user,
-            'topic' => $topic,
-            'articles' => $articles
-        ]);
-    }
-
-    public function showTag(string $name): View
-    {
-        $this->authorize('viewAny', ArticlePage::class);
-
-        /** @var User $user */
-        $user = Auth::user();
-        $tag = Tag::where('name', $name)->firstOrFail();
-        $articles = $tag->articles()->get();
-
-        return view('pages.tag_page', [
-            'user' => $user,
-            'tag' => $tag,
-            'articles' => $articles
-        ]);
-    }
-
-    public function showTrendingTags(): View
-    {
-        $this->authorize('viewAny', ArticlePage::class);
-
-        /** @var User $user */
-        $user = Auth::user();
-        $trendingTags = Tag::where('is_trending', true)
-        ->withCount(['articles' => function ($query) {
-            $query->where('is_deleted', false);
-        }])
-        ->get();
-
-        $trendingTagsNewsCount = $trendingTags->sum('articles_count');
-
-        return view('pages.trending_tags', [
-            'user' => $user,
-            'trendingTags' => $trendingTags,
-            'trendingTagsNewsCount' => $trendingTagsNewsCount
-        ]);
-    }
-
-    public function showSavedArticles(): View
-    {
-        /** @var User $user */
-        $user = Auth::user();
-        $savedArticles = $user->favouriteArticles;
-
-        return view('pages.saved_articles', [
-            'user' => $user,
-            'savedArticles' => $savedArticles
+            'favArticles' => $favArticles
         ]);
     }
 
@@ -175,6 +121,10 @@ class ArticlePageController extends Controller
         /** @var User $user */
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
+
+        // TODO SPECIAL FEEDBACK WHEN ARTICLE IS DELETED (NO INTERACTIONS ALLOWED)
+
+        $this->authorize('upvote', $article); // TODO REDIRECT TO LOGIN
 
         $vote = $user->votedArticles()->where('article_id', $id)->first();
         $voteStatus = 0;
@@ -213,6 +163,10 @@ class ArticlePageController extends Controller
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
+        // TODO SPECIAL FEEDBACK WHEN ARTICLE IS DELETED (NO INTERACTIONS ALLOWED)
+
+        $this->authorize('downvote', ArticlePage::class); // TODO REDIRECT TO LOGIN
+
         $vote = $user->votedArticles()->where('article_id', $id)->first();
         $voteStatus = 0;
 
@@ -221,14 +175,16 @@ class ArticlePageController extends Controller
                 $user->votedArticles()->detach($id);
                 $article->downvotes -= 1;
                 $voteStatus = 0;
-            } else {
+            }
+            else {
                 $vote->pivot->type = 'Downvote';
                 $vote->pivot->save();
                 $article->downvotes += 1;
                 $article->upvotes -= 1;
                 $voteStatus = -1;
             }
-        } else {
+        }
+        else {
             $user->votedArticles()->attach($id, ['type' => 'Downvote']);
             $article->downvotes += 1;
             $voteStatus = -1;
@@ -244,6 +200,10 @@ class ArticlePageController extends Controller
 
     public function favourite(Request $request, $id): JsonResponse
     {
+        // TODO SPECIAL FEEDBACK WHEN ARTICLE IS DELETED (NO INTERACTIONS ALLOWED)
+
+        $this->authorize('favourite', ArticlePage::class); // TODO REDIRECT TO LOGIN
+
         /** @var User $user */
         $user = Auth::user();
         $isFavourite = $request->input('isFavourite');
@@ -253,7 +213,8 @@ class ArticlePageController extends Controller
         if ($isFavourite) {
             $user->favouriteArticles()->detach($id);
             $favouriteStatus = 0;
-        } else {
+        }
+        else {
             Log::info("Entrei");
             $user->favouriteArticles()->attach($id);
             $favouriteStatus = 1;
@@ -267,6 +228,8 @@ class ArticlePageController extends Controller
     public function writeComment(Request $request, $id): JsonResponse
     {
         Log::info('Comment request: ' . json_encode($request->all()));
+
+        $this->authorize('create', Comment::class);
 
         $request->validate([
             'comment' => 'required|string|max:255',

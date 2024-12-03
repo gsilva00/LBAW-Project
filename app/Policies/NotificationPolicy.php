@@ -12,6 +12,7 @@ class NotificationPolicy
     /**
      * Perform pre-authorization checks.
      *
+     * Admins can do everything.
      * When null, the authorization check falls through to the respective policy method.
      */
     public function before(User $user, $ability): bool|null
@@ -29,7 +30,7 @@ class NotificationPolicy
     public function viewAny(User $user): bool
     {
         // TODO review this
-        return Auth::check();
+        return Auth::check() && !$user->is_banned;
     }
 
     /**
@@ -37,7 +38,7 @@ class NotificationPolicy
      */
     public function view(User $user, Notification $notification): bool
     {
-        return Auth::check() && $user->id === $notification->user_to;
+        return Auth::check() && !$user->is_banned && $user->id === $notification->user_to;
     }
 
     /**
@@ -55,7 +56,7 @@ class NotificationPolicy
     public function update(User $user, Notification $notification): bool
     {
         // The recipient user can mark the notification as read
-        return Auth::check() && $user->id === $notification->user_to;
+        return Auth::check() && !$user->is_banned && $user->id === $notification->user_to;
     }
 
     /**

@@ -34,7 +34,8 @@ class ReportComment extends Model
     {
         if ($this->comment_id) {
             return $this->belongsTo(Comment::class, 'comment_id');
-        } elseif ($this->reply_id) {
+        }
+        elseif ($this->reply_id) {
             return $this->belongsTo(Reply::class, 'reply_id');
         }
 

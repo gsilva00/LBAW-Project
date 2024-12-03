@@ -49,7 +49,7 @@
                         <div class="selected">
                     @foreach($profileUser->followedTopics as $topic)
                         <div class="block">
-                            <span>{{ $topic->name }}</span><button class="remove" data-url="{{ route('unfollowTopic', $topic) }}" data-topic-id="{{ $topic->id }}">&times;</button>
+                            <span>{{ $topic->name }}</span><button class="remove" data-url="{{ route('unfollowTopic', $topic->name) }}" data-topic-id="{{ $topic->id }}">&times;</button>
                         </div>
                     @endforeach
                         </div>
@@ -65,7 +65,7 @@
                     <div class="selected">
                         @foreach($profileUser->followedTags as $tag)
                             <div class="block">
-                                <span>{{ $tag->name }}</span><button class="remove" data-url="{{ route('unfollowTag', $tag) }}" data-tag-id="{{ $tag->id }}">&times;</button>
+                                <span>{{ $tag->name }}</span><button class="remove" data-url="{{ route('unfollowTag', $tag->name) }}" data-tag-id="{{ $tag->id }}">&times;</button>
                             </div>
                         @endforeach
                     </div>

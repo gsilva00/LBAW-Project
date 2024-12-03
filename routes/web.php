@@ -41,23 +41,33 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-// Main Dynamic
+// Main Dynamic Pages
 Route::get('/search', [SearchController::class, 'show'])->name('search');
 
 Route::get('/user-feed', [UserFollowingController::class, 'showUserFeed'])->name('userFeed');
 
+Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('showRecentNews');
+Route::get('/most-voted', [ArticlePageController::class, 'showMostVotedNews'])->name('showMostVotedNews');
+
+Route::get('/trending-tags', [TagController::class, 'showTrendingTags'])->name('showTrendingTags');
+Route::get('/tag/{name}', [TagController::class, 'showTag'])->name('showTag');
+Route::get('/topic/{name}', [TopicController::class, 'showTopic'])->name('showTopic');
+
+
 Route::prefix('following')->controller
 (UserFollowingController::class)->group(function () {
-    Route::get('/tags','followTags')->name('followingTags');
-    Route::get('/topics','followTopics')->name('followingTopics');
-    Route::get('/authors','followAuthors')->name('followingAuthors');
+    Route::get('/tags','showFollowingTags')->name('showFollowingTags');
+    Route::get('/topics','showFollowingTopics')->name('showFollowingTopics');
+    Route::get('/authors','showFollowingAuthors')->name('showFollowingAuthors');
 });
+
+Route::get('/favourite-articles', [ArticlePageController::class, 'showFavouriteArticles'])->name('showFavouriteArticles');
 
 // Profile
 Route::prefix('profile')->controller
 (ProfileController::class)->group(function () {
-    Route::get('/user/{username}', 'show')->name('profile');
-    Route::get('/edit/{username}', 'edit')->name('editProfile');
+    Route::get('/user/{username}', 'showProfile')->name('profile');
+    Route::get('/edit/{username}', 'showEdit')->name('editProfile');
     Route::post('/edit/{username}', 'update')->name('updateProfile');
     Route::post('/delete/{id}', 'delete')->name('deleteProfile');
 });
@@ -71,6 +81,15 @@ Route::prefix('admin-panel')->controller
 });
 
 // Article
+Route::prefix('article/{id}')->controller
+(ArticlePageController::class)->group(function () {
+    Route::get('/', 'show')->name('showArticle');
+    Route::post('/upvote', 'upvote')->name('upvoteArticle');
+    Route::post('/downvote', 'downvote')->name('downvoteArticle');
+    Route::post('/favourite', 'favourite')->name('favouriteArticle');
+    Route::post('/write-comment', 'writeComment')->name('writeComment');
+});
+
 Route::controller(CreateArticleController::class)->group(function () {
     Route::get('/create-article', 'create')->name('createArticle');
     Route::post('/create-article', 'store')->name('submitArticle');
@@ -79,22 +98,9 @@ Route::controller(CreateArticleController::class)->group(function () {
     Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
 });
 
-Route::get('/article/{id}', [ArticlePageController::class, 'show'])->name('showArticle');
-Route::get('/recent-news', [ArticlePageController::class, 'showRecentNews'])->name('showRecentNews');
-Route::get('/most-voted', [ArticlePageController::class, 'showVotedNews'])->name('showVotedNews');
-Route::get('/trending-tags', [ArticlePageController::class, 'showTrendingTags'])->name('showTrendingTags');
-Route::get('/topic/{name}', [ArticlePageController::class, 'showTopic'])->name('showTopic');
-Route::get('/tag/{name}', [ArticlePageController::class, 'showTag'])->name('showTag');
-Route::get('/saved-articles', [ArticlePageController::class, 'showSavedArticles'])->name('showSavedArticles');
-
-Route::post('/article/{id}/upvote', [ArticlePageController::class, 'upvote'])->name('upvoteArticle');
-Route::post('/article/{id}/downvote', [ArticlePageController::class, 'downvote'])->name('downvoteArticle');
-Route::post('/article/{id}/favourite', [ArticlePageController::class, 'favourite'])->name('favouriteArticle');
-Route::post('/article/{id}/write-comment', [ArticlePageController::class, 'writeComment'])->name('writeComment');
-
 // Tag
-Route::post('/tag/{tag}/follow', [TagController::class, 'followTag'])->name('followTag');
-Route::post('/tag/{tag}/unfollow', [TagController::class, 'unfollowTag'])->name('unfollowTag');
+Route::post('/tag/{name}/follow', [TagController::class, 'followTag'])->name('followTag');
+Route::post('/tag/{name}/unfollow', [TagController::class, 'unfollowTag'])->name('unfollowTag');
 
 // Topic
 Route::post('/topic/{topic}/follow', [TopicController::class, 'followTopic'])->name('followTopic');

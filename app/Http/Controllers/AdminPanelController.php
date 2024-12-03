@@ -26,7 +26,7 @@ class AdminPanelController extends Controller
          */
         $user = Auth::user();
 
-        if (Auth::guest() || !$user->can('viewAdminPanel', User::class)) {
+        if (Auth::guest() || $user->cant('viewAdminPanel', User::class)) {
             return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
         }
 

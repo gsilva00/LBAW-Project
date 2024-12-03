@@ -16,7 +16,7 @@ class ProfileController extends Controller
     /**
      * Show the user's profile.
      */
-    public function show(string $username): View
+    public function showProfile(string $username): View
     {
         /**
          * @var User $authUser
@@ -47,13 +47,13 @@ class ProfileController extends Controller
     /**
      * Show the user profile edit form.
      */
-    public function edit(string $username): View|RedirectResponse
+    public function showEdit(string $username): View|RedirectResponse
     {
         /** @var User $authUser */
         $authUser = Auth::user();
         $user = User::find($username);
 
-        if (Auth::guest() || !$authUser->can('update', $user)) {
+        if (Auth::guest() || $authUser->cant('update', $user)) {
             return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
         }
 
@@ -73,7 +73,7 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         $user = User::find($username);
 
-        if (Auth::guest() || !$authUser->can('update', $user)) {
+        if (Auth::guest() || $authUser->cant('update', $user)) {
             return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to edit that profile.');
         }
 

@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class UserFollowingController extends Controller
 {
-    public function followTags(Request $request): View
+    public function showFollowingTags(Request $request): View
     {
         /**
          * @var User $user
@@ -44,7 +44,7 @@ class UserFollowingController extends Controller
         ]);
     }
 
-    public function followTopics(Request $request): View
+    public function showFollowingTopics(Request $request): View
     {
         /** @var User $user */
         $user = Auth::user();
@@ -72,7 +72,7 @@ class UserFollowingController extends Controller
         ]);
     }
 
-    public function followAuthors(Request $request): View
+    public function showFollowingAuthors(Request $request): View
     {
         /** @var User $user */
         $user = Auth::user();
@@ -104,7 +104,7 @@ class UserFollowingController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (Auth::guest() || !$user->can('viewUserFeed', $user)) {
+        if (Auth::guest() || $user->cant('viewUserFeed', $user)) {
             return redirect()->route('login')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
         }
 

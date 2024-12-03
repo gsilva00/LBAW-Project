@@ -50,11 +50,11 @@
                     @endforeach
                 </div>
                 <div class="article-actions">
-                    <button class="small-rectangle fit-block favorite" title="Save Article" data-favorite-url="{{ route('favouriteArticle', ['id' => $article->id]) }}">
+                    <button class="small-rectangle fit-block favorite" title="Favourite Article" data-favorite-url="{{ route('favouriteArticle', ['id' => $article->id]) }}">
                         @if(Auth::check() && $favourite)
-                            <i class='bx bxs-star'></i><span>Saved</span>
+                            <i class='bx bxs-star'></i><span>Favourited</span>
                         @else
-                            <i class='bx bx-star'></i><span>Save Article</span>
+                            <i class='bx bx-star'></i><span>Favourite Article</span>
                         @endif
                     </button>
                     <div class="large-rectangle article-votes">

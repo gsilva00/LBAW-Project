@@ -68,7 +68,7 @@ class CreateArticleController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (Auth::guest() || !$user->can('create', ArticlePage::class)) {
+        if (Auth::guest() || $user->cant('create', ArticlePage::class)) {
             return redirect()->route('login')->with('error', 'Unauthorized. You do not possess the credentials to create an article.');
         }
 
