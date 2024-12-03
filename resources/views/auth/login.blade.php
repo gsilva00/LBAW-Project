@@ -26,8 +26,8 @@
             @endif
             <br>
             <div class="profile-info">
-                <input type="checkbox" name="remember" id="rebember" {{ old('remember') ? 'checked' : '' }}>
-                <label for="rebember"><span>Remember Me</span></label>
+                <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                <label for="remember"><span>Remember Me</span></label>
             </div>
             <br>
             <div class="profile-info">

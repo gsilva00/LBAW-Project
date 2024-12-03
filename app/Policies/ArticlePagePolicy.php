@@ -68,4 +68,5 @@ class ArticlePagePolicy
         return Auth::check() && $articlePage->author()->is($user) && !$user->is_banned;
     }
 
+
 }

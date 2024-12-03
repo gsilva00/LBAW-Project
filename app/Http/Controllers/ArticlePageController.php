@@ -2,23 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+
 use App\Models\ArticlePage;
 use App\Models\Comment;
 use App\Models\Topic;
 use App\Models\Tag;
-use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class ArticlePageController extends Controller
 {
-    public function show(Request $request, $id)
+    public function show(Request $request, $id): View
     {
         $article = ArticlePage::with(['tags', 'topic', 'author', 'comments', 'comments.replies'])->findOrFail($id);
 
         $this->authorize('view', $article);
 
+        /**
+         * @var User $user
+         * Return type of Auth::user() guaranteed on config/auth.php's User Providers
+         */
         $user = Auth::user();
 
         $referer = $request->headers->get('referer') ?? 'home page';
@@ -37,6 +44,7 @@ class ArticlePageController extends Controller
         /*Log::info('Paragraphs: ' . json_encode($paragraphs));*/
 
         return view('pages.article_page', [
+            'user' => $user,
             'article' => $article,
             'articleTags' => $article->tags,
             'topic' => $article->topic,
@@ -48,13 +56,12 @@ class ArticlePageController extends Controller
             'recentNews' => $recentNews,
             'isHomepage' => false,
             'paragraphs' => $paragraphs,
-            'user' => $user,
             'voteArticle' => $voteArticle,
             'favourite' => $favourite
         ]);
     }
 
-    private function getPageNameFromUrl($url)
+    private function getPageNameFromUrl(string $url): bool|string
     {
         if ($url === 'home page') {
             return $url;
@@ -66,12 +73,13 @@ class ArticlePageController extends Controller
         return end($segments) ?: 'home page';
     }
 
-    public function showRecentNews()
+    public function showRecentNews(): View
     {
+        $this->authorize('viewAny', ArticlePage::class);
+
+        /** @var User $user */
         $user = Auth::user();
         $username = $user->username ?? 'Guest';
-
-        $this->authorize('viewAny', ArticlePage::class);
 
         $recentNews = ArticlePage::getAllRecentNews();
         return view('pages.recent_news', [
@@ -81,51 +89,57 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function showVotedNews()
+    public function showVotedNews(): View
     {
-        $user = Auth::user();
-
         $this->authorize('viewAny', ArticlePage::class);
 
+        /** @var User $user */
+        $user = Auth::user();
         $votedNews = ArticlePage::getArticlesByVotes();
+
         return view('pages.voted_news', [
-            'votedNews' => $votedNews,
-            'user' => $user
+            'user' => $user,
+            'votedNews' => $votedNews
         ]);
     }
 
-    public function showTopic($name)
+    public function showTopic(string $name): View
     {
+        $this->authorize('viewAny', ArticlePage::class);
+
+        /** @var User $user */
         $user = Auth::user();
         $topic = Topic::where('name', $name)->firstOrFail();
         $articles = $topic->articles()->get();
 
-        $this->authorize('viewAny', ArticlePage::class);
-
         return view('pages.topic_page', [
+            'user' => $user,
             'topic' => $topic,
-            'articles' => $articles,
-            'user' => $user
+            'articles' => $articles
         ]);
     }
 
-    public function showTag($name)
+    public function showTag(string $name): View
     {
+        $this->authorize('viewAny', ArticlePage::class);
+
+        /** @var User $user */
         $user = Auth::user();
         $tag = Tag::where('name', $name)->firstOrFail();
         $articles = $tag->articles()->get();
 
-        $this->authorize('viewAny', ArticlePage::class);
-
         return view('pages.tag_page', [
+            'user' => $user,
             'tag' => $tag,
-            'articles' => $articles,
-            'user' => $user
+            'articles' => $articles
         ]);
     }
 
-    public function showTrendingTags()
+    public function showTrendingTags(): View
     {
+        $this->authorize('viewAny', ArticlePage::class);
+
+        /** @var User $user */
         $user = Auth::user();
         $trendingTags = Tag::where('is_trending', true)
         ->withCount(['articles' => function ($query) {
@@ -133,31 +147,32 @@ class ArticlePageController extends Controller
         }])
         ->get();
 
-        $this->authorize('viewAny', ArticlePage::class);
-
         $trendingTagsNewsCount = $trendingTags->sum('articles_count');
 
         return view('pages.trending_tags', [
+            'user' => $user,
             'trendingTags' => $trendingTags,
-            'trendingTagsNewsCount' => $trendingTagsNewsCount,
-            'user' => $user
+            'trendingTagsNewsCount' => $trendingTagsNewsCount
         ]);
     }
 
-    public function showSavedArticles()
+    public function showSavedArticles(): View
     {
+        /** @var User $user */
         $user = Auth::user();
         $savedArticles = $user->favouriteArticles;
 
         return view('pages.saved_articles', [
-            'savedArticles' => $savedArticles,
-            'user' => $user
+            'user' => $user,
+            'savedArticles' => $savedArticles
         ]);
     }
 
-    public function upvote(Request $request, $id)
+    public function upvote(Request $request, $id): JsonResponse
     {
         Log::info('Upvote request: ' . json_encode($request->all()));
+
+        /** @var User $user */
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
@@ -169,14 +184,16 @@ class ArticlePageController extends Controller
                 $user->votedArticles()->detach($id);
                 $article->upvotes -= 1;
                 $voteStatus = 0;
-            } else {
+            }
+            else {
                 $vote->pivot->type = 'Upvote';
                 $vote->pivot->save();
                 $article->upvotes += 1;
                 $article->downvotes -= 1;
                 $voteStatus = 1;
             }
-        } else {
+        }
+        else {
             $user->votedArticles()->attach($id, ['type' => 'Upvote']);
             $article->upvotes += 1;
             $voteStatus = 1;
@@ -190,8 +207,9 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function downvote(Request $request, $id)
+    public function downvote(Request $request, $id): JsonResponse
     {
+        /** @var User $user */
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
@@ -224,8 +242,9 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function favourite(Request $request, $id)
+    public function favourite(Request $request, $id): JsonResponse
     {
+        /** @var User $user */
         $user = Auth::user();
         $isFavourite = $request->input('isFavourite');
 
@@ -245,7 +264,7 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function writeComment(Request $request, $id)
+    public function writeComment(Request $request, $id): JsonResponse
     {
         Log::info('Comment request: ' . json_encode($request->all()));
 
@@ -253,6 +272,7 @@ class ArticlePageController extends Controller
             'comment' => 'required|string|max:255',
         ]);
 
+        /** @var User $user */
         $user = auth()->user();
         $article = ArticlePage::findOrFail($id);
 

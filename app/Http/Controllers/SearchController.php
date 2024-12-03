@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\ArticlePage;
 use App\Models\Tag;
 use App\Models\Topic;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
-    public function show(Request $request)
+    public function show(Request $request): View
     {
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
@@ -45,11 +46,11 @@ class SearchController extends Controller
 
 
         return view('pages.search', [
+            'user' => $authUser,
             'searchQuery' => $searchQuery,
             'articleItems' => $articles,
             'searchedTags' => $tags,
-            'searchedTopics' => $topics,
-            'user' => $authUser
+            'searchedTopics' => $topics
         ]);
     }
     private function sanitizeSearchQuery($query): string

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -11,8 +13,12 @@ use Illuminate\Http\Request;
 
 class UserFollowingController extends Controller
 {
-    public function followTags(Request $request)
+    public function followTags(Request $request): View
     {
+        /**
+         * @var User $user
+         * Return type of Auth::user() guaranteed on config/auth.php's User Providers
+         */
         $user = Auth::user();
 
         $this->authorize('viewFollowingTags', $user);
@@ -32,11 +38,15 @@ class UserFollowingController extends Controller
             return view('partials.articles_list', ['articles' => $articles_followed_tags]);
         }
 
-        return view('pages.display_articles', ['articles' => $articles_followed_tags, 'user' => $user]);
+        return view('pages.display_articles', [
+            'user' => $user,
+            'articles' => $articles_followed_tags
+        ]);
     }
 
-    public function followTopics(Request $request)
+    public function followTopics(Request $request): View
     {
+        /** @var User $user */
         $user = Auth::user();
 
         $this->authorize('viewFollowingTopics', $user);
@@ -56,11 +66,15 @@ class UserFollowingController extends Controller
             return view('partials.articles_list', ['articles' => $articles_followed_topics]);
         }
 
-        return view('pages.followedtopics', ['articles' => $articles_followed_topics, 'user' => $user]);
+        return view('pages.followedtopics', [
+            'user' => $user,
+            'articles' => $articles_followed_topics
+        ]);
     }
 
-    public function followAuthors(Request $request)
+    public function followAuthors(Request $request): View
     {
+        /** @var User $user */
         $user = Auth::user();
 
         $this->authorize('viewFollowingAuthors', $user);
@@ -79,14 +93,18 @@ class UserFollowingController extends Controller
             return view('partials.articles_list', ['articles' => $articles]);
         }
 
-        return view('pages.display_articles', ['articles' => $articles, 'user' => $user]);
+        return view('pages.display_articles', [
+            'user' => $user,
+            'articles' => $articles
+        ]);
     }
 
-    public function showUserFeed(Request $request)
+    public function showUserFeed(Request $request): View|RedirectResponse
     {
+        /** @var User $user */
         $user = Auth::user();
 
-        if (Auth::guest() || !Auth::user()->can('viewUserFeed', $user)) {
+        if (Auth::guest() || !$user->can('viewUserFeed', $user)) {
             return redirect()->route('login')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
         }
 

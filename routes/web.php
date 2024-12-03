@@ -90,7 +90,7 @@ Route::get('/saved-articles', [ArticlePageController::class, 'showSavedArticles'
 Route::post('/article/{id}/upvote', [ArticlePageController::class, 'upvote'])->name('upvoteArticle');
 Route::post('/article/{id}/downvote', [ArticlePageController::class, 'downvote'])->name('downvoteArticle');
 Route::post('/article/{id}/favourite', [ArticlePageController::class, 'favourite'])->name('favouriteArticle');
-Route::post('/article/{id}/writecomment', [ArticlePageController::class, 'writeComment'])->name('writeComment');
+Route::post('/article/{id}/write-comment', [ArticlePageController::class, 'writeComment'])->name('writeComment');
 
 // Tag
 Route::post('/tag/{tag}/follow', [TagController::class, 'followTag'])->name('followTag');

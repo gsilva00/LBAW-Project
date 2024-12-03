@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,11 +18,15 @@ class AdminPanelController extends Controller
      * Show the administrator panel.
      * - Uses pagination to show user list.
      */
-    public function show()
+    public function show(): View|RedirectResponse
     {
+        /**
+         * @var User $user
+         * Return type of Auth::user() guaranteed on config/auth.php's User Providers
+         */
         $user = Auth::user();
 
-        if (Auth::guest() || !Auth::user()->can('viewAdminPanel', User::class)) {
+        if (Auth::guest() || !$user->can('viewAdminPanel', User::class)) {
             return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
         }
 

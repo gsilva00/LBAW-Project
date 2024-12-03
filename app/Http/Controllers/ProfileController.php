@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -15,10 +16,14 @@ class ProfileController extends Controller
     /**
      * Show the user's profile.
      */
-    public function show(string $username)
+    public function show(string $username): View
     {
-        $user = User::find($username);
+        /**
+         * @var User $authUser
+         * Return type of Auth::user() guaranteed on config/auth.php's User Providers
+         */
         $authUser = Auth::user();
+        $user = User::find($username);
 
         $this->authorize('view', $user);
 
@@ -42,12 +47,13 @@ class ProfileController extends Controller
     /**
      * Show the user profile edit form.
      */
-    public function edit(string $username)
+    public function edit(string $username): View|RedirectResponse
     {
-        $user = User::find($username);
+        /** @var User $authUser */
         $authUser = Auth::user();
+        $user = User::find($username);
 
-        if (Auth::guest() || !Auth::user()->can('update', $user)) {
+        if (Auth::guest() || !$authUser->can('update', $user)) {
             return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
         }
 
@@ -63,10 +69,11 @@ class ProfileController extends Controller
      */
     public function update(string $username): RedirectResponse
     {
+        /** @var User $authUser */
         $authUser = Auth::user();
         $user = User::find($username);
 
-        if (Auth::guest() || !Auth::user()->can('update', $user)) {
+        if (Auth::guest() || !$authUser->can('update', $user)) {
             return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to edit that profile.');
         }
 
@@ -115,8 +122,9 @@ class ProfileController extends Controller
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Profile updated successfully!');
     }
 
-    public function delete(Request $request, $targetUserId)
+    public function delete(Request $request, $targetUserId): View|RedirectResponse
     {
+        /** @var User $authUser */
         $authUser = Auth::user();
         $targetUser = User::findOrFail($targetUserId);
 
