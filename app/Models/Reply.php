@@ -73,4 +73,15 @@ class Reply extends Model
     // Querying
     // ...
 
+    public function isUpvotedBy(User $user): bool
+    {
+        return $this->voters()->wherePivot('type', 'Upvote')->where('user_id', $user->id)->exists();
+    }
+
+    public function isDownvotedBy(User $user): bool
+    {
+        return $this->voters()->wherePivot('type', 'Downvote')->where('user_id', $user->id)->exists();
+    }
+
+
 }
