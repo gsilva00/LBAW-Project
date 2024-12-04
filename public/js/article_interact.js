@@ -23,6 +23,9 @@ function addInteractListeners() {
         event.preventDefault();
         handleFavourite(favouriteBtn, csrfToken);
     });
+
+    showReplies();
+
 }
 
 // Handle upvotes and downvotes
@@ -166,11 +169,144 @@ function updateCommentsUI(data, commentInput) {
     if (commentsList) {
         commentsList.innerHTML = data.commentsView; // Update the comments list
         commentInput.value = ''; // Clear the input field
+        upvoteComment();
+        downvoteComment();
+        showReplies();
     }
     else {
         console.error('Error: .comments-list element not found');
     }
 }
 
+function upvoteComment() {
+    document.querySelectorAll('.upvote-comment-button').forEach(button => {
+        button.addEventListener('click', function (event) {
+            console.log('Upvote button clicked');
+            event.preventDefault();
+            const isReply = this.closest('.comment').dataset.isReply === 'true';
+            const commentId = this.dataset.commentId;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = isReply ? `/reply/${commentId}/upvoteReply` : `/comment/${commentId}/upvoteComment`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    commentId: commentId,
+                    isUpvoted: this.querySelector('i').classList.contains('bxs-upvote')
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.comment || data.reply) {
+                        const item = data.comment || data.reply;
+                        const upvoteCount = document.querySelector(`#comment-${item.id}`);
+                        if (upvoteCount) {
+                            upvoteCount.textContent = item.upvotes - item.downvotes;
+                        } else {
+                            console.error(`Element with ID comment-${item.id} not found.`);
+                        }
+
+                        const upvoteIcon = this.querySelector('i');
+                        const downvoteIcon = this.closest('.comment').querySelector('.downvote-comment-button i');
+                        if (data.isUpvoted) {
+                            upvoteIcon.classList.add('bxs-upvote');
+                            upvoteIcon.classList.remove('bx-upvote');
+                            downvoteIcon.classList.remove('bxs-downvote');
+                            downvoteIcon.classList.add('bx-downvote');
+                        } else {
+                            upvoteIcon.classList.add('bx-upvote');
+                            upvoteIcon.classList.remove('bxs-upvote');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to upvote comment. See console for details.');
+                });
+        });
+    });
+}
+
+function downvoteComment() {
+    document.querySelectorAll('.downvote-comment-button').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const isReply = this.closest('.comment').dataset.isReply === 'true';
+            const commentId = this.dataset.commentId;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = isReply ? `/reply/${commentId}/downvoteReply` : `/comment/${commentId}/downvoteComment`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    commentId: commentId,
+                    isDownvoted: this.querySelector('i').classList.contains('bxs-downvote')
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.comment || data.reply) {
+                        const item = data.comment || data.reply;
+                        const upvoteCount = document.querySelector(`#comment-${item.id}`);
+                        if (upvoteCount) {
+                            upvoteCount.textContent = item.upvotes - item.downvotes;
+                        } else {
+                            console.error(`Element with ID comment-${item.id} not found.`);
+                        }
+
+                        const downvoteIcon = this.querySelector('i');
+                        const upvoteIcon = this.closest('.comment').querySelector('.upvote-comment-button i');
+                        if (data.isDownvoted) {
+                            downvoteIcon.classList.add('bxs-downvote');
+                            downvoteIcon.classList.remove('bx-downvote');
+                            upvoteIcon.classList.remove('bxs-upvote');
+                            upvoteIcon.classList.add('bx-upvote');
+                        } else {
+                            downvoteIcon.classList.add('bx-downvote');
+                            downvoteIcon.classList.remove('bxs-downvote');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to downvote comment. See console for details.');
+                });
+        });
+    });
+}
+
+function showReplies() {
+    console.log('showReplies');
+    const buttons = document.querySelectorAll('.see-replies-button');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            const repliesContainer = this.nextElementSibling;
+            const chevron = button.querySelector('i');
+            chevron.classList.toggle('bx-chevron-down');
+            chevron.classList.toggle('bx-chevron-up');
+            repliesContainer.classList.toggle('show');
+        });
+    });
+}
+
 addInteractListeners();
 addCommentFormListener();
+upvoteComment();
+downvoteComment();
+showReplies();
+
+
+
+
+
+
+
+
