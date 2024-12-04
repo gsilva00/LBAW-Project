@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -16,10 +16,14 @@ class ProfileController extends Controller
     /**
      * Show the user's profile.
      */
-    public function show(string $username)
+    public function showProfile(string $username): View
     {
-        $user = User::find($username);
+        /**
+         * @var User $authUser
+         * Return type of Auth::user() guaranteed on config/auth.php's User Providers
+         */
         $authUser = Auth::user();
+        $user = User::find($username);
 
         $this->authorize('view', $user);
 
@@ -43,12 +47,13 @@ class ProfileController extends Controller
     /**
      * Show the user profile edit form.
      */
-    public function edit(string $username)
+    public function showEdit(string $username): View|RedirectResponse
     {
-        $user = User::find($username);
+        /** @var User $authUser */
         $authUser = Auth::user();
+        $user = User::find($username);
 
-        if (Auth::guest() || !Auth::user()->can('update', $user)) {
+        if (Auth::guest() || $authUser->cant('update', $user)) {
             return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
         }
 
@@ -64,10 +69,11 @@ class ProfileController extends Controller
      */
     public function update(string $username): RedirectResponse
     {
+        /** @var User $authUser */
         $authUser = Auth::user();
         $user = User::find($username);
 
-        if (Auth::guest() || !Auth::user()->can('update', $user)) {
+        if (Auth::guest() || $authUser->cant('update', $user)) {
             return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to edit that profile.');
         }
 
@@ -94,9 +100,16 @@ class ProfileController extends Controller
         $user->display_name = request('display_name');
         $user->description = request('description');
 
-        if (request('profile_picture')) {
-            $imageName = time() . '-' . request('profile_picture')->getClientOriginalName();
-            request('profile_picture')->move(public_path('images/profile'), $imageName);
+        if (request('file')) {
+            $fileController = new FileController();
+
+            if ($user->profile_picture !== 'default.jpg') {
+                $imageName = $fileController->uploadImage(request(), 'profile', $user->profile_picture);
+            }
+            else {
+                $imageName = $fileController->uploadImage(request(), 'profile');
+            }
+
             $user->profile_picture = $imageName;
         }
 
@@ -109,8 +122,9 @@ class ProfileController extends Controller
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Profile updated successfully!');
     }
 
-    public function delete(Request $request, $targetUserId)
+    public function delete(Request $request, $targetUserId): View|RedirectResponse
     {
+        /** @var User $authUser */
         $authUser = Auth::user();
         $targetUser = User::findOrFail($targetUserId);
 

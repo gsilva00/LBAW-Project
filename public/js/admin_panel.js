@@ -37,7 +37,7 @@ function createFullUser() {
     const form = document.getElementById('createFullUserForm');
 
     if (!form) {
-        console.error('Missing form element');
+        console.error('Missing user form element');
         return;
     }
 
@@ -65,9 +65,10 @@ function createFullUser() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
+                    alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
                     form.reset(); // Reset form fields content
-                } else {
+                }
+                else {
                     displayErrors(data.errors);
                 }
             })
@@ -84,19 +85,19 @@ function createFullUser() {
         const displayNameRegex = /^[a-zA-Z0-9 _-]+$/;
 
         if (!usernameRegex.test(username)) {
-            alert('Username should only contain letters, numbers, dashes, and underscores.');
+            alert('Username should only contain letters, numbers, dashes, and underscores.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
             return false;
         }
         if (!displayNameRegex.test(displayName)) {
-            alert('Display Name should only contain letters, numbers, spaces, dashes, and underscores.');
+            alert('Display Name should only contain letters, numbers, spaces, dashes, and underscores.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
             return false;
         }
         if (!email) {
-            alert('Email is required.');
+            alert('Email is required.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
             return false;
         }
         if (!password || password.length < 8) {
-            alert('Password should be at least 8 characters long.');
+            alert('Password should be at least 8 characters long.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
             return false;
         }
 
@@ -106,7 +107,7 @@ function createFullUser() {
     function displayErrors(errors) {
         for (const field in errors) {
             if (errors.hasOwnProperty(field)) {
-                alert(`${field}: ${errors[field].join(', ')}`);
+                alert(`${field}: ${errors[field].join(', ')}`); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
             }
         }
     }

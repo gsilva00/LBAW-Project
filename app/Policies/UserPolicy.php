@@ -11,6 +11,7 @@ class UserPolicy
     /**
      * Perform pre-authorization checks.
      *
+     * Admins can do everything.
      * When null, the authorization check falls through to the respective policy method.
      */
     public function before(User $authUser, $ability): bool|null
@@ -25,7 +26,7 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(?User $authUser): bool
+    public function viewAny(User $authUser): bool
     {
         // Admins can view list of Users (profiles)
         return false;
@@ -68,40 +69,29 @@ class UserPolicy
     }
 
 
-    /**
-     * Determine whether the user can access his user feed
-     */
     public function viewUserFeed(User $authUser): bool
     {
         return Auth::check();
     }
 
-    /**
-     * Determine whether the user can access his followed tags
-     */
     public function viewFollowingTags(User $authUser): bool
     {
-        // Only authenticated users can follow tags
+        // Only authenticated users can access their followed tags
         return Auth::check();
     }
-    /**
-     * Determine whether the user can access his followed topics
-     */
+
     public function viewFollowingTopics(User $authUser): bool
     {
-        // Only authenticated users can follow topics
+        // Only authenticated users can access their followed topics
         return Auth::check();
     }
 
     public function viewFollowingAuthors(User $authUser): bool
     {
-        // Only authenticated users can follow authors
+        // Only authenticated users can access their followed authors
         return Auth::check();
     }
 
-    /**
-     * Determine whether the user can access the administrator panel
-     */
     public function viewAdminPanel(User $authUser): bool
     {
         // Only admins can view the administrator panel.

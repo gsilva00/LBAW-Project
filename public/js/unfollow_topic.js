@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const remainingBlocks = document.querySelectorAll('.block');
                 if (remainingBlocks.length === 0) {
-                    const container = document.querySelector('#favoriteTopicTitle'); // Assuming the parent container has this class
+                    const container = document.querySelector('#favouriteTopicTitle'); // Assuming the parent container has this class
                     const noTopicsMessage = document.createElement('div');
                     noTopicsMessage.className = 'not-available-container';
-                    noTopicsMessage.innerHTML = '<p>No favorite topics.</p>';
+                    noTopicsMessage.innerHTML = '<p>No favourite topics.</p>';
                     container.insertAdjacentElement('afterend', noTopicsMessage);
                 }
 

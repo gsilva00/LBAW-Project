@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Comment;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 
-class CommentPolicy
+class NotificationPolicy
 {
     /**
      * Perform pre-authorization checks.
@@ -27,17 +27,18 @@ class CommentPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(?User $user): bool
+    public function viewAny(User $user): bool
     {
-        return true;
+        // TODO review this
+        return Auth::check() && !$user->is_banned;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(?User $user, Comment $comment): bool
+    public function view(User $user, Notification $notification): bool
     {
-        return true;
+        return Auth::check() && !$user->is_banned && $user->id === $notification->user_to;
     }
 
     /**
@@ -45,32 +46,25 @@ class CommentPolicy
      */
     public function create(User $user): bool
     {
-        return Auth::check() && !$user->is_banned;
+        // User cannot directly create a notification, is it created automatically according to actions
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Comment $comment): bool
+    public function update(User $user, Notification $notification): bool
     {
-        return Auth::check() && !$user->is_banned && $comment->author()->is($user);
+        // The recipient user can mark the notification as read
+        return Auth::check() && !$user->is_banned && $user->id === $notification->user_to;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Comment $comment): bool
+    public function delete(User $user, Notification $notification): bool
     {
-        return Auth::check() && !$user->is_banned && $comment->author()->is($user);
-    }
-
-
-    public function upvote(User $user, Comment $comment): bool
-    {
-        return Auth::check() && !$user->is_banned && !$comment->is_deleted;
-    }
-    public function downvote(User $user, Comment $comment): bool
-    {
-        return Auth::check() && !$user->is_banned && !$comment->is_deleted;
+        // User cannot delete a notification
+        return false;
     }
 }

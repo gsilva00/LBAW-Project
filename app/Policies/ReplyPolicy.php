@@ -12,6 +12,7 @@ class ReplyPolicy
     /**
      * Perform pre-authorization checks.
      *
+     * Admins can do everything.
      * When null, the authorization check falls through to the respective policy method.
      */
     public function before(User $user, $ability): bool|null
@@ -52,7 +53,7 @@ class ReplyPolicy
      */
     public function update(User $user, Reply $reply): bool
     {
-        return Auth::check() && $reply->author()->is($user) && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && $reply->author()->is($user);
     }
 
     /**
@@ -60,25 +61,7 @@ class ReplyPolicy
      */
     public function delete(User $user, Reply $reply): bool
     {
-        return Auth::check() && $reply->author()->is($user) && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && $reply->author()->is($user);
     }
 
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Reply $reply): bool
-    {
-        // Only admins can permanently delete a reply from the database.
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Reply $reply): bool
-    {
-        // Only admins can permanently delete a reply from the database.
-        return false;
-    }
 }

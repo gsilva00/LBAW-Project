@@ -42,6 +42,7 @@ class ArticlePage extends Model
     ];
 
 
+    // Relationships
     public function author(): BelongsTo
     {
         return $this->belongsTo(
@@ -114,7 +115,7 @@ class ArticlePage extends Model
     {
         return $this->hasManyThrough(
             UpvoteArticleNotification::class,
-            Notifications::class,
+            Notification::class,
             'article_id',
             'ntf_id',
             'id',
@@ -122,6 +123,8 @@ class ArticlePage extends Model
         );
     }
 
+
+    // Querying
     public static function getMostRecentNews($how_many)
     {
         return self::where('is_deleted', false)
@@ -148,7 +151,8 @@ class ArticlePage extends Model
     {
         if (empty($searchQuery)) {
             return self::where('is_deleted', false)->get();
-        } elseif (preg_match('/^".*"$/', $searchQuery)) {
+        }
+        elseif (preg_match('/^".*"$/', $searchQuery)) {
             $exactQuery = trim($searchQuery, '"');
             return self::where('is_deleted', false)
                 ->where(function($query) use ($exactQuery) {
@@ -163,7 +167,8 @@ class ArticlePage extends Model
                         ->orWhere('content', 'ILIKE', '%' . $exactQuery);
                 })
                 ->get();
-        } else {
+        }
+        else {
             $words = explode(' ', $searchQuery);
             $sanitizedWords = array_map(function($word) {
                 return $word . ':*';

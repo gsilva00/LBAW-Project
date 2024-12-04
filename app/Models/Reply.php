@@ -12,8 +12,8 @@ class Reply extends Model
 {
     use HasFactory;
 
-    public $timestamps = false; // No `updated_at` column.
     const CREATED_AT = 'rpl_date';
+    const UPDATED_AT = null;
 
     protected $table = 'reply';
 
@@ -34,6 +34,7 @@ class Reply extends Model
     ];
 
 
+    // Relationships
     public function author(): BelongsTo
     {
         return $this->belongsTo(
@@ -68,6 +69,10 @@ class Reply extends Model
         )->withPivot('type');
     }
 
+
+    // Querying
+    // ...
+
     public function isUpvotedBy(User $user): bool
     {
         return $this->voters()->wherePivot('type', 'Upvote')->where('user_id', $user->id)->exists();
@@ -77,5 +82,6 @@ class Reply extends Model
     {
         return $this->voters()->wherePivot('type', 'Downvote')->where('user_id', $user->id)->exists();
     }
+
 
 }

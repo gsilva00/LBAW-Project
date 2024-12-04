@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const remainingBlocks = document.querySelectorAll('.block');
                 if (remainingBlocks.length === 0) {
-                    const container = document.querySelector('#favoriteTagTitle'); // Assuming the parent container has this class
+                    const container = document.querySelector('#favouriteTagTitle'); // Assuming the parent container has this class
                     const noTagsMessage = document.createElement('div');
                     noTagsMessage.className = 'not-available-container';
-                    noTagsMessage.innerHTML = '<p>No favorite tags.</p>';
+                    noTagsMessage.innerHTML = '<p>No favourite tags.</p>';
                     container.insertAdjacentElement('afterend', noTagsMessage);
                 }
 

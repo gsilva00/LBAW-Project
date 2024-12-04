@@ -3,8 +3,6 @@
 @section('title', 'Edit Article')
 
 @section('content')
-    <script src="{{ url('js/tageditarticle.js') }}"></script>
-
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Edit a New Article</h1>
         <form class="large-rectangle" action="{{ route('updateArticle', ['id' => $article->id]) }}" method="POST" enctype="multipart/form-data">
@@ -42,7 +40,7 @@
             <br>
             <div class="profile-info">
                 <label for="article_picture"><span>Upload Article Picture</span></label>
-                <input type="file" name="article_picture" id="article_picture">
+                <input type="file" name="file" id="article_picture">
             </div>
             @if ($errors->has('article_picture'))
                 @include('partials.error_popup', ['field' => 'article_picture'])

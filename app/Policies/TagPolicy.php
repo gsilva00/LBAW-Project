@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Comment;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 
-class CommentPolicy
+class TagPolicy
 {
     /**
      * Perform pre-authorization checks.
@@ -24,6 +24,7 @@ class CommentPolicy
         return null;
     }
 
+
     /**
      * Determine whether the user can view any models.
      */
@@ -35,7 +36,7 @@ class CommentPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(?User $user, Comment $comment): bool
+    public function view(?User $user, Tag $tag): bool
     {
         return true;
     }
@@ -45,32 +46,35 @@ class CommentPolicy
      */
     public function create(User $user): bool
     {
-        return Auth::check() && !$user->is_banned;
+        // Only admins can create tags
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Comment $comment): bool
+    public function update(User $user, Tag $tag): bool
     {
-        return Auth::check() && !$user->is_banned && $comment->author()->is($user);
+        // Only admins can update tags
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Comment $comment): bool
+    public function delete(User $user, Tag $tag): bool
     {
-        return Auth::check() && !$user->is_banned && $comment->author()->is($user);
+        // Only admins can delete tags
+        return false;
     }
 
 
-    public function upvote(User $user, Comment $comment): bool
+    public function follow(User $user): bool
     {
-        return Auth::check() && !$user->is_banned && !$comment->is_deleted;
+        return Auth::check() && $user->is_deleted;
     }
-    public function downvote(User $user, Comment $comment): bool
+    public function unfollow(User $user): bool
     {
-        return Auth::check() && !$user->is_banned && !$comment->is_deleted;
+        return Auth::check() && $user->is_deleted;
     }
 }

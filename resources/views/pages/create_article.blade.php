@@ -3,8 +3,6 @@
 @section('title', 'Create Article')
 
 @section('content')
-    <script src="{{ url('js/tagcreatearticle.js') }}"></script>
-
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Create a New Article</h1>
 
@@ -49,7 +47,7 @@
             <br>
             <div class="profile-info">
                 <label for="article_picture"><span>Upload Article Picture</span></label>
-                <input type="file" name="article_picture" id="article_picture">
+                <input type="file" name="file" id="article_picture">
             </div>
             @if ($errors->has('article_picture'))
                 @include('partials.error_popup', ['field' => 'article_picture'])

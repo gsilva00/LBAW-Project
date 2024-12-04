@@ -12,8 +12,8 @@ class Comment extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
     const CREATED_AT = 'cmt_date';
+    const UPDATED_AT = null;
 
     protected $table = 'comment';
 
@@ -34,6 +34,7 @@ class Comment extends Model
     ];
 
 
+    // Relationships
     public function author(): BelongsTo
     {
         return $this->belongsTo(
@@ -68,6 +69,9 @@ class Comment extends Model
         );
     }
 
+    // Querying
+    // ...
+
     public function isUpvotedBy(User $user): bool
     {
         return $this->voters()->wherePivot('type', 'Upvote')->where('user_id', $user->id)->exists();
@@ -77,5 +81,6 @@ class Comment extends Model
     {
         return $this->voters()->wherePivot('type', 'Downvote')->where('user_id', $user->id)->exists();
     }
+
 
 }

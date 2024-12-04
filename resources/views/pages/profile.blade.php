@@ -40,32 +40,32 @@
             </section>
             @if($isOwner || $isAdmin)
             <section>
-                <h2 id="favoriteTopicTitle">Favorite Topics</h2>
+                <h2 id="favouriteTopicTitle">Favourite Topics</h2>
                 @if($profileUser->followedTopics->isEmpty())
                     <div class="not-available-container">
-                        <p>No favorite topics.</p>
+                        <p>No favourite topics.</p>
                     </div>
                 @else
                         <div class="selected">
                     @foreach($profileUser->followedTopics as $topic)
                         <div class="block">
-                            <span>{{ $topic->name }}</span><button class="remove" data-url="{{ route('topic.unfollow', $topic) }}" data-topic-id="{{ $topic->id }}">&times;</button>
+                            <span>{{ $topic->name }}</span><button class="remove" data-url="{{ route('unfollowTopic', $topic->name) }}" data-topic-id="{{ $topic->id }}">&times;</button>
                         </div>
                     @endforeach
                         </div>
                 @endif
             </section>
             <section>
-                <h2 id="favoriteTagTitle">Favorite Tags</h2>
+                <h2 id="favouriteTagTitle">Favourite Tags</h2>
                 @if($profileUser->followedTags->isEmpty())
                     <div class="not-available-container">
-                        <p>No favorite tags.</p>
+                        <p>No favourite tags.</p>
                     </div>
                 @else
                     <div class="selected">
                         @foreach($profileUser->followedTags as $tag)
                             <div class="block">
-                                <span>{{ $tag->name }}</span><button class="remove" data-url="{{ route('tag.unfollow', $tag) }}" data-tag-id="{{ $tag->id }}">&times;</button>
+                                <span>{{ $tag->name }}</span><button class="remove" data-url="{{ route('unfollowTag', $tag->name) }}" data-tag-id="{{ $tag->id }}">&times;</button>
                             </div>
                         @endforeach
                     </div>
@@ -73,16 +73,16 @@
             </section>
 
             <section>
-                <h2>Favorite Authors</h2>
+                <h2>Favourite Authors</h2>
                 @if($profileUser->following->isEmpty())
                 <div class="not-available-container">
-                        <p>No favorite authors.</p>
+                        <p>No favourite authors.</p>
                     </div>
                 @else
                 <div id="users-section">
                 <div id="user-list">
-                        @foreach($profileUser->following as $favauthor)
-                            @include('partials.user_tile', ['user' => $favauthor])
+                        @foreach($profileUser->following as $fav_author)
+                            @include('partials.user_tile', ['user' => $fav_author])
                         @endforeach
                 </div>
                 </div>
