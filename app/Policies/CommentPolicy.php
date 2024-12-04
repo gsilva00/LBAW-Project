@@ -12,6 +12,7 @@ class CommentPolicy
     /**
      * Perform pre-authorization checks.
      *
+     * Admins can do everything.
      * When null, the authorization check falls through to the respective policy method.
      */
     public function before(User $user, $ability): bool|null
@@ -26,7 +27,7 @@ class CommentPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
         return true;
     }
@@ -34,7 +35,7 @@ class CommentPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Comment $comment): bool
+    public function view(?User $user, Comment $comment): bool
     {
         return true;
     }
@@ -52,7 +53,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment): bool
     {
-        return Auth::check() && $comment->author()->is($user) && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && $comment->author()->is($user);
     }
 
     /**
@@ -60,6 +61,16 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment): bool
     {
-        return Auth::check() && $comment->author()->is($user) && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && $comment->author()->is($user);
+    }
+
+
+    public function upvote(User $user, Comment $comment): bool
+    {
+        return Auth::check() && !$user->is_banned && !$comment->is_deleted;
+    }
+    public function downvote(User $user, Comment $comment): bool
+    {
+        return Auth::check() && !$user->is_banned && !$comment->is_deleted;
     }
 }

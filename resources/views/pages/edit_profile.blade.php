@@ -14,7 +14,7 @@
                     <label for="username"><span>Username</span></label>
                     <input type="text" name="username" id="username" value="{{ $profileUser->username }}" autocomplete="off" disabled>
                     <input type="hidden" name="username" value="{{ $profileUser->username }}">
-                    <!-- So that the username value is actually submitted (disabled inputs aren't submitted) -->
+                    <!-- Extra input element so that the username value is actually submitted (disabled inputs aren't submitted) -->
                 </div>
                 @if ($errors->has('username'))
                     @include('partials.error_popup', ['field' => 'username'])

@@ -13,7 +13,7 @@
         <div id="contacts-phone">
             <i class='bx bx-phone'></i>
             <h2>Phone</h2>
-            <p>Call us at +351 891 639</p>
+            <p>Call us at +351 891 639 240</p>
         </div>
         <div id="contacts-mail">
             <i class='bx bx-envelope'></i>

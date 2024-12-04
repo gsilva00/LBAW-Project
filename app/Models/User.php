@@ -126,7 +126,7 @@ class User extends Authenticatable
         );
     }
 
-    // - Votes and favorites
+    // - Votes and favourites
     public function votedArticles(): BelongsToMany
     {
         return $this->belongsToMany(

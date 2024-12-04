@@ -6,10 +6,7 @@
     <div class="homepage-wrapper">
         @if($articleItems->isNotEmpty())
             <div class="first-article">
-                @php
-                    $firstArticle = $articleItems->first();
-                @endphp
-                @include('partials.first_tile', ['article' => $firstArticle])
+                @include('partials.first_tile', ['article' => $articleItems->first()])
             </div>
             <div class="sec-articles">
                 @foreach($articleItems->slice(1) as $article)

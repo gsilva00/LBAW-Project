@@ -9,7 +9,7 @@ class FileController extends Controller
     /**
      * Handle image upload.
      */
-    public function uploadImage(Request $request, string $type, string $oldImage = null)
+    public function uploadImage(Request $request, string $type, ?string $oldImage = null): string
     {
         $file = $request->file('file');
         $imageName = $file->hashName();

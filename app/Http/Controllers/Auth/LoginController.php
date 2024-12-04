@@ -16,11 +16,12 @@ class LoginController extends Controller
     /**
      * Display a login form.
      */
-    public function showLoginForm(): RedirectResponse|View
+    public function showLoginForm(): View|RedirectResponse
     {
         if (Auth::check()) {
             return redirect()->route('homepage');
-        } else {
+        }
+        else {
             return view('auth.login');
         }
     }
@@ -49,7 +50,7 @@ class LoginController extends Controller
     /**
      * Log out the user from application.
      */
-    public function logout(Request $request)
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
         $request->session()->invalidate();

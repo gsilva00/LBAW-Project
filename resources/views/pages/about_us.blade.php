@@ -19,17 +19,17 @@
         <div id="contacts-phone">
             <i class='bx bx-ghost'></i>
             <h2>Don't become a ghost</h2>
-            <p>Are you behind the times like an old newspaper? Here, you can stay updated with the current world in less than few seconds</p>
+            <p>Are you behind the times like an old newspaper? Here, you can stay updated with the current world in less than few seconds!</p>
         </div>
         <div id="contacts-mail">
             <i class='bx bx-wink-smile'></i>
             <h2>A factual space</h2>
-            <p>Tired of fake news spreding in social media? Don't worry! The news we share to you are examined carefully by our community</p>
+            <p>Tired of fake news spreading in social media? Don't worry! The news we share to you are examined carefully by our community!</p>
         </div>
         <div id="contacts-pin">
             <i class='bx bxs-invader'></i>
             <h2>Everything anytime</h2>
-            <p>Your experience will be tailored to your preferences. Of course, you can always search for a niche article burried in the depths!</p>
+            <p>Your experience will be tailored to your preferences. Of course, you can always search for a niche article buried in the depths!</p>
         </div>
     </div>
 

@@ -6,13 +6,13 @@
     <br>
     <div class="recent-news-wrapper">
         <div class="feed-options-container" data-toggle="buttons">
-            <label class="feed-option active" data-url="{{ route('followingTags') }}">
+            <label class="feed-option active" data-url="{{ route('showFollowingTags') }}">
                 <input type="radio" name="feed-options" checked> <i class='bx bx-purchase-tag'></i>Followed Tags
             </label>
-            <label class="feed-option" data-url="{{ route('followingTopics') }}">
+            <label class="feed-option" data-url="{{ route('showFollowingTopics') }}">
                 <input type="radio" name="feed-options"><i class='bx bx-book'></i> Followed Topics
             </label>
-            <label class="feed-option" data-url="{{ route('followingAuthors') }}">
+            <label class="feed-option" data-url="{{ route('showFollowingAuthors') }}">
                 <input type="radio" name="feed-options"><i class='bx bx-heart'></i> Followed Authors
             </label>
         </div>

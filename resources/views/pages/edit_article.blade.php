@@ -3,8 +3,6 @@
 @section('title', 'Edit Article')
 
 @section('content')
-    <script src="{{ url('js/tageditarticle.js') }}"></script>
-
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Edit a New Article</h1>
         <form class="large-rectangle" action="{{ route('updateArticle', ['id' => $article->id]) }}" method="POST" enctype="multipart/form-data">

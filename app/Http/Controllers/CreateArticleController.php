@@ -5,33 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\ArticlePage;
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 
 class CreateArticleController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): View|RedirectResponse
     {
+        /**
+         * @var User $user
+         * Return type of Auth::user() guaranteed on config/auth.php's User Providers
+         */
         $user = Auth::user();
 
         $this->authorize('create', ArticlePage::class);
 
-        try {
-            $request->validate([
-                'title' => 'required|string|max:50',
-                'subtitle' => 'required|string|max:50',
-                'content' => 'string|max:10000',
-                'topics' => 'required|exists:topic,id',
-                'article_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-            ], [
-                'topics.required' => 'Please choose a topic.',
-                'topics.exists' => 'The selected topic is invalid.',
-            ]);
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->validator)->withInput();
-        }
+        $request->validate([
+            'title' => 'required|string|max:50',
+            'subtitle' => 'required|string|max:50',
+            'content' => 'string|max:10000',
+            'topics' => 'required|exists:topic,id',
+            'article_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+        ], [
+            'topics.required' => 'Please choose a topic.',
+            'topics.exists' => 'The selected topic is invalid.',
+        ]);
 
         $topics = $request->input('topics');
         if (in_array('No_Topic', $topics)) {
@@ -61,17 +63,23 @@ class CreateArticleController extends Controller
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article created successfully!');
     }
 
-    public function create(){
+    public function create(): View|RedirectResponse
+    {
+        /** @var User $user */
         $user = Auth::user();
 
-        if (Auth::guest() || !Auth::user()->can('create', ArticlePage::class)) {
+        if (Auth::guest() || $user->cant('create', ArticlePage::class)) {
             return redirect()->route('login')->with('error', 'Unauthorized. You do not possess the credentials to create an article.');
         }
 
-        return view('pages.create_article', ['user' => $user]);
+        return view('pages.create_article', [
+            'user' => $user
+        ]);
     }
 
-    public function edit(Request $request, $id){
+    public function edit(Request $request, $id): View
+    {
+        /** @var User $user */
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
@@ -81,11 +89,16 @@ class CreateArticleController extends Controller
 
         $article->content = str_replace('<?n?n>', "\n", $article->content);
 
-        return view('pages.edit_article', ['user' => $user, 'article' => $article, 'tags' => $tags]);
+        return view('pages.edit_article', [
+            'user' => $user,
+            'article' => $article,
+            'tags' => $tags
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): View|RedirectResponse
     {
+        /** @var User $user */
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
@@ -141,8 +154,9 @@ class CreateArticleController extends Controller
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article updated successfully!');
     }
 
-    public function delete(Request $request, $id)
+    public function delete(Request $request, $id): View|RedirectResponse
     {
+        /** @var User $user */
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 

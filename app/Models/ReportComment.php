@@ -30,11 +30,12 @@ class ReportComment extends Model
     /**
      * Retrieve the reported comment or reply.
      */
-    public function reportedEntity(): belongsTo | null
+    public function reportedEntity(): belongsTo|null
     {
         if ($this->comment_id) {
             return $this->belongsTo(Comment::class, 'comment_id');
-        } elseif ($this->reply_id) {
+        }
+        elseif ($this->reply_id) {
             return $this->belongsTo(Reply::class, 'reply_id');
         }
 

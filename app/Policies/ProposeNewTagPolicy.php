@@ -12,6 +12,7 @@ class ProposeNewTagPolicy
     /**
      * Perform pre-authorization checks.
      *
+     * Admins can do everything.
      * When null, the authorization check falls through to the respective policy method.
      */
     public function before(User $user, $ability): bool|null
@@ -38,7 +39,7 @@ class ProposeNewTagPolicy
      */
     public function view(User $user, ProposeNewTag $proposeNewTag): bool
     {
-        return Auth::check() && $proposeNewTag->user()->is($user);
+        return Auth::check() && !$user->is_banned && $proposeNewTag->user()->is($user);
     }
 
     /**
@@ -46,7 +47,7 @@ class ProposeNewTagPolicy
      */
     public function create(User $user): bool
     {
-        return Auth::check();
+        return Auth::check() && !$user->is_banned;
     }
 
     /**
@@ -54,7 +55,7 @@ class ProposeNewTagPolicy
      */
     public function update(User $user, ProposeNewTag $proposeNewTag): bool
     {
-        return Auth::check() && $proposeNewTag->user()->is($user);
+        return Auth::check() && !$user->is_banned && $proposeNewTag->user()->is($user);
     }
 
     /**
@@ -63,7 +64,7 @@ class ProposeNewTagPolicy
     public function delete(User $user, ProposeNewTag $proposeNewTag): bool
     {
         // Only admins can delete tag proposals
-        return Auth::check() && $proposeNewTag->user()->is($user);
+        return Auth::check() && !$user->is_banned && $proposeNewTag->user()->is($user);
     }
 
 }

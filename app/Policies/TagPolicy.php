@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\AskToBecomeFactChecker;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 
-class AskToBecomeFactCheckerPolicy
+class TagPolicy
 {
     /**
      * Perform pre-authorization checks.
@@ -28,18 +28,17 @@ class AskToBecomeFactCheckerPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
-        // Only admins can view list of Fact Checker Requests
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, AskToBecomeFactChecker $atbfc): bool
+    public function view(?User $user, Tag $tag): bool
     {
-        return Auth::check() && !$user->is_banned && $atbfc->user()->is($user);
+        return true;
     }
 
     /**
@@ -47,22 +46,35 @@ class AskToBecomeFactCheckerPolicy
      */
     public function create(User $user): bool
     {
-        return Auth::check() && !$user->is_banned && !$user->is_fact_checker;
+        // Only admins can create tags
+        return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, AskToBecomeFactChecker $atbfc): bool
+    public function update(User $user, Tag $tag): bool
     {
-        return Auth::check() && !$user->is_banned && $atbfc->user()->is($user);
+        // Only admins can update tags
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, AskToBecomeFactChecker $atbfc): bool
+    public function delete(User $user, Tag $tag): bool
     {
-        return Auth::check() && !$user->is_banned && $atbfc->user()->is($user);
+        // Only admins can delete tags
+        return false;
+    }
+
+
+    public function follow(User $user): bool
+    {
+        return Auth::check() && $user->is_deleted;
+    }
+    public function unfollow(User $user): bool
+    {
+        return Auth::check() && $user->is_deleted;
     }
 }
