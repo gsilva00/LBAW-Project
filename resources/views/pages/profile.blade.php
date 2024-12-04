@@ -40,10 +40,10 @@
             </section>
             @if($isOwner || $isAdmin)
             <section>
-                <h2 id="favoriteTopicTitle">Favorite Topics</h2>
+                <h2 id="favouriteTopicTitle">Favourite Topics</h2>
                 @if($profileUser->followedTopics->isEmpty())
                     <div class="not-available-container">
-                        <p>No favorite topics.</p>
+                        <p>No favourite topics.</p>
                     </div>
                 @else
                         <div class="selected">
@@ -56,10 +56,10 @@
                 @endif
             </section>
             <section>
-                <h2 id="favoriteTagTitle">Favorite Tags</h2>
+                <h2 id="favouriteTagTitle">Favourite Tags</h2>
                 @if($profileUser->followedTags->isEmpty())
                     <div class="not-available-container">
-                        <p>No favorite tags.</p>
+                        <p>No favourite tags.</p>
                     </div>
                 @else
                     <div class="selected">
@@ -73,10 +73,10 @@
             </section>
 
             <section>
-                <h2>Favorite Authors</h2>
+                <h2>Favourite Authors</h2>
                 @if($profileUser->following->isEmpty())
                 <div class="not-available-container">
-                        <p>No favorite authors.</p>
+                        <p>No favourite authors.</p>
                     </div>
                 @else
                 <div id="users-section">

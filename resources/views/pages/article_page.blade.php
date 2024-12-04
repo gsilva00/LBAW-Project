@@ -50,11 +50,13 @@
                     @endforeach
                 </div>
                 <div class="article-actions">
-                    <button class="small-rectangle fit-block favorite" title="Favourite Article" data-favorite-url="{{ route('favouriteArticle', ['id' => $article->id]) }}">
+                    <button class="small-rectangle fit-block favourite" title="Favourite Article" data-favourite-url="{{ route('favouriteArticle', ['id' => $article->id]) }}">
                         @if(Auth::check() && $favourite)
-                            <i class='bx bxs-star'></i><span>Favourited</span>
+                            <i class='bx bxs-star'></i>
+                            <span>Favourited</span>
                         @else
-                            <i class='bx bx-star'></i><span>Favourite Article</span>
+                            <i class='bx bx-star'></i>
+                            <span>Favourite Article</span>
                         @endif
                     </button>
                     <div class="large-rectangle article-votes">
@@ -80,7 +82,8 @@
 
                 <div class="comments-section">
                     <h2>Comments</h2>
-                    <form id="comment-form" class="comment" action="{{ route('writeComment', ['id' => $article->id]) }}">
+                    <form id="comment-form" class="comment" method="POST" action="{{ route('writeComment', ['id' => $article->id]) }}">
+                        @csrf
                         @if(Auth::guest() || $user->is_deleted)
                             <img src="{{ asset('images/profile/default.jpg') }}" alt="profile_picture">
                         @else
@@ -105,8 +108,4 @@
             @include('partials.recent_news',['recentNews' => $recentNews])
         </nav>
     </div>
-
-    <script src="{{ url('js/article_vote.js') }}" defer></script>
-
-
 @endsection

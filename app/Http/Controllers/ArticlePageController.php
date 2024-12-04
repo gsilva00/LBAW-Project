@@ -206,16 +206,16 @@ class ArticlePageController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
-        $isFavourite = $request->input('isFavourite');
+        // Get "true" or "false" sent in request (convert to boolean)
+        $isFavourite = filter_var($request->input('isFavourite'), FILTER_VALIDATE_BOOLEAN);
 
-        Log::info("Saved");
+        // Log::info("The isFavourite value is: " . var_export($isFavourite, true));
 
         if ($isFavourite) {
             $user->favouriteArticles()->detach($id);
             $favouriteStatus = 0;
         }
         else {
-            Log::info("Entrei");
             $user->favouriteArticles()->attach($id);
             $favouriteStatus = 1;
         }
