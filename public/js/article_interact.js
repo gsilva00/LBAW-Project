@@ -178,6 +178,7 @@ function updateCommentsUI(data, commentInput) {
     }
 }
 
+
 function upvoteComment() {
     document.querySelectorAll('.upvote-comment-button').forEach(button => {
         button.addEventListener('click', function (event) {

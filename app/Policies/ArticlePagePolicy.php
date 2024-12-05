@@ -70,16 +70,16 @@ class ArticlePagePolicy
     }
 
 
-    public function upvote(User $user, ArticlePage $articlePage): bool
+    public function upvote(User $user): bool
     {
         return Auth::check() && !$user->is_banned;
     }
-    public function downvote(User $user, ArticlePage $articlePage): bool
+    public function downvote(User $user): bool
     {
         return Auth::check() && !$user->is_banned;
     }
 
-    public function favourite(User $user, ArticlePage $articlePage): bool
+    public function favourite(User $user): bool
     {
         // Valid for favoriting and unfavoriting
         return Auth::check() && !$user->is_banned;

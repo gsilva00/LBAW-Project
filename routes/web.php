@@ -84,9 +84,9 @@ Route::prefix('admin-panel')->controller
 Route::prefix('article/{id}')->controller
 (ArticlePageController::class)->group(function () {
     Route::get('/', 'show')->name('showArticle');
-    Route::post('/upvote', 'upvote')->name('upvoteArticle');
-    Route::post('/downvote', 'downvote')->name('downvoteArticle');
-    Route::post('/favourite', 'favourite')->name('favouriteArticle');
+    Route::post('/upvote-article', 'upvoteArticle')->name('upvoteArticle');
+    Route::post('/downvote-article', 'downvoteArticle')->name('downvoteArticle');
+    Route::post('/favourite-article', 'favourite')->name('favouriteArticle');
     Route::post('/write-comment', 'writeComment')->name('writeComment');
 });
 
@@ -97,6 +97,12 @@ Route::controller(CreateArticleController::class)->group(function () {
     Route::post('/edit-article/{id}', 'update')->name('updateArticle');
     Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
 });
+
+Route::post('/comment/{id}/upvote-comment', [ArticlePageController::class, 'upvoteComment'])->name('comment.upvoteComment');
+Route::post('/comment/{id}/downvote-comment', [ArticlePageController::class, 'downvoteComment'])->name('comment.downvoteComment');
+
+Route::post('/reply/{id}/upvote-reply', [ArticlePageController::class, 'upvoteReply'])->name('comment.upvoteReply');
+Route::post('/reply/{id}/downvote-reply', [ArticlePageController::class, 'downvoteReply'])->name('comment.downvoteReply');
 
 // Tag
 Route::post('/tag/{name}/follow', [TagController::class, 'followTag'])->name('followTag');
@@ -109,15 +115,3 @@ Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic']
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutUs');
-
-Route::post('/article/{id}/upvoteArticle', [ArticlePageController::class, 'upvoteArticle'])->name('article.upvoteArticle');
-Route::post('/article/{id}/downvoteArticle', [ArticlePageController::class, 'downvoteArticle'])->name('article.downvoteArticle');
-Route::post('/article/{id}/favourite', [ArticlePageController::class, 'favourite'])->name('article.favourite');
-Route::post('/article/{id}/writecomment', [ArticlePageController::class, 'writeComment'])->name('article.writecomment');
-
-Route::post('/comment/{id}/upvoteComment', [ArticlePageController::class, 'upvoteComment'])->name('comment.upvoteComment');
-Route::post('/comment/{id}/downvoteComment', [ArticlePageController::class, 'downvoteComment'])->name('comment.downvoteComment');
-
-Route::post('/reply/{id}/upvoteReply', [ArticlePageController::class, 'upvoteReply'])->name('comment.upvoteReply');
-Route::post('/reply/{id}/downvoteReply', [ArticlePageController::class, 'downvoteReply'])->name('comment.downvoteReply');
-

@@ -115,10 +115,8 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function upvote(Request $request, $id): JsonResponse
+    public function upvoteArticle($id): JsonResponse
     {
-        Log::info('Upvote request: ' . json_encode($request->all()));
-
         /** @var User $user */
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
@@ -128,7 +126,6 @@ class ArticlePageController extends Controller
         $this->authorize('upvote', $article); // TODO REDIRECT TO LOGIN
 
         $vote = $user->votedArticles()->where('article_id', $id)->first();
-        $voteStatus = 0;
 
         if ($vote) {
             if ($vote->pivot->type === 'Upvote') {
@@ -158,7 +155,7 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function downvote(Request $request, $id): JsonResponse
+    public function downvoteArticle($id): JsonResponse
     {
         /** @var User $user */
         $user = Auth::user();
@@ -228,7 +225,7 @@ class ArticlePageController extends Controller
 
     public function writeComment(Request $request, $id): JsonResponse
     {
-        Log::info('Comment request: ' . json_encode($request->all()));
+        // Log::info('Comment request: ' . json_encode($request->all()));
 
         $this->authorize('create', Comment::class);
 
@@ -256,11 +253,9 @@ class ArticlePageController extends Controller
     }
 
 
-    public function upvoteComment(Request $request, $id)
+    public function upvoteComment($id): JsonResponse
     {
-
-        Log::info("Id: " . $id);
-
+        /** @var User $user */
         $user = Auth::user();
 
         if (!$user) {
@@ -276,14 +271,16 @@ class ArticlePageController extends Controller
                 $comment->voters()->detach($user->id);
                 $comment->upvotes--;
                 $isUpvoted = false;
-            } else {
+            }
+            else {
                 $vote->pivot->type = 'Upvote';
                 $vote->pivot->save();
                 $comment->upvotes++;
                 $comment->downvotes--;
                 $isUpvoted = true;
             }
-        } else {
+        }
+        else {
             $comment->voters()->attach($user->id, ['type' => 'Upvote']);
             $comment->upvotes++;
             $isUpvoted = true;
@@ -297,10 +294,9 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function downvoteComment($id)
+    public function downvoteComment($id): JsonResponse
     {
-        Log::info("Id: " . $id);
-
+        /** @var User $user */
         $user = Auth::user();
 
         if (!$user) {
@@ -316,14 +312,16 @@ class ArticlePageController extends Controller
                 $comment->voters()->detach($user->id);
                 $comment->downvotes--;
                 $isDownvoted = false;
-            } else {
+            }
+            else {
                 $vote->pivot->type = 'Downvote';
                 $vote->pivot->save();
                 $comment->downvotes++;
                 $comment->upvotes--;
                 $isDownvoted = true;
             }
-        } else {
+        }
+        else {
             $comment->voters()->attach($user->id, ['type' => 'Downvote']);
             $comment->downvotes++;
             $isDownvoted = true;
@@ -337,10 +335,9 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function upvoteReply($id)
+    public function upvoteReply($id): JsonResponse
     {
-        Log::info("Id: " . $id);
-
+        /** @var User $user */
         $user = Auth::user();
 
         if (!$user) {
@@ -356,14 +353,16 @@ class ArticlePageController extends Controller
                 $reply->voters()->detach($user->id);
                 $reply->upvotes--;
                 $isUpvoted = false;
-            } else {
+            }
+            else {
                 $vote->pivot->type = 'Upvote';
                 $vote->pivot->save();
                 $reply->upvotes++;
                 $reply->downvotes--;
                 $isUpvoted = true;
             }
-        } else {
+        }
+        else {
             $reply->voters()->attach($user->id, ['type' => 'Upvote']);
             $reply->upvotes++;
             $isUpvoted = true;
@@ -377,9 +376,9 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function downvoteReply($id){
-        Log::info("Id: " . $id);
-
+    public function downvoteReply($id): JsonResponse
+    {
+        /** @var User $user */
         $user = Auth::user();
 
         if (!$user) {
@@ -395,14 +394,16 @@ class ArticlePageController extends Controller
                 $reply->voters()->detach($user->id);
                 $reply->downvotes--;
                 $isDownvoted = false;
-            } else {
+            }
+            else {
                 $vote->pivot->type = 'Downvote';
                 $vote->pivot->save();
                 $reply->downvotes++;
                 $reply->upvotes--;
                 $isDownvoted = true;
             }
-        } else {
+        }
+        else {
             $reply->voters()->attach($user->id, ['type' => 'Downvote']);
             $reply->downvotes++;
             $isDownvoted = true;
