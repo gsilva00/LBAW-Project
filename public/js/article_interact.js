@@ -182,12 +182,16 @@ function updateCommentsUI(data, commentInput) {
 function upvoteComment() {
     document.querySelectorAll('.upvote-comment-button').forEach(button => {
         button.addEventListener('click', function (event) {
-            console.log('Upvote button clicked');
             event.preventDefault();
-            const isReply = this.closest('.comment').dataset.isReply === 'true';
+            const commentElement = this.closest('.comment');
+            if (!commentElement) {
+                console.error('Comment element not found.');
+                return;
+            }
+            const isReply = commentElement.dataset.isReply === 'true';
             const commentId = this.dataset.commentId;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const url = isReply ? `/reply/${commentId}/upvoteReply` : `/comment/${commentId}/upvoteComment`;
+            const url = isReply ? `/reply/${commentId}/upvote-reply` : `/comment/${commentId}/upvote-comment`;
 
             fetch(url, {
                 method: 'POST',
@@ -204,23 +208,27 @@ function upvoteComment() {
                 .then(data => {
                     if (data.comment || data.reply) {
                         const item = data.comment || data.reply;
-                        const upvoteCount = document.querySelector(`#comment-${item.id}`);
+                        const upvoteCount = document.querySelector(`#${isReply ? 'reply-' : 'comment-'}${item.id} .upvote-count`);
                         if (upvoteCount) {
                             upvoteCount.textContent = item.upvotes - item.downvotes;
                         } else {
-                            console.error(`Element with ID comment-${item.id} not found.`);
+                            console.error(`Element with ID ${isReply ? 'reply-' : 'comment-'}${item.id} not found.`);
                         }
 
                         const upvoteIcon = this.querySelector('i');
-                        const downvoteIcon = this.closest('.comment').querySelector('.downvote-comment-button i');
-                        if (data.isUpvoted) {
-                            upvoteIcon.classList.add('bxs-upvote');
-                            upvoteIcon.classList.remove('bx-upvote');
-                            downvoteIcon.classList.remove('bxs-downvote');
-                            downvoteIcon.classList.add('bx-downvote');
+                        const downvoteIcon = commentElement.querySelector('.downvote-comment-button i');
+                        if (upvoteIcon && downvoteIcon) {
+                            if (data.isUpvoted) {
+                                upvoteIcon.classList.add('bxs-upvote');
+                                upvoteIcon.classList.remove('bx-upvote');
+                                downvoteIcon.classList.remove('bxs-downvote');
+                                downvoteIcon.classList.add('bx-downvote');
+                            } else {
+                                upvoteIcon.classList.add('bx-upvote');
+                                upvoteIcon.classList.remove('bxs-upvote');
+                            }
                         } else {
-                            upvoteIcon.classList.add('bx-upvote');
-                            upvoteIcon.classList.remove('bxs-upvote');
+                            console.error('Upvote or downvote icon not found.');
                         }
                     }
                 })
@@ -236,10 +244,15 @@ function downvoteComment() {
     document.querySelectorAll('.downvote-comment-button').forEach(button => {
         button.addEventListener('click', function (event) {
             event.preventDefault();
-            const isReply = this.closest('.comment').dataset.isReply === 'true';
+            const commentElement = this.closest('.comment');
+            if (!commentElement) {
+                console.error('Comment element not found.');
+                return;
+            }
+            const isReply = commentElement.dataset.isReply === 'true';
             const commentId = this.dataset.commentId;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const url = isReply ? `/reply/${commentId}/downvoteReply` : `/comment/${commentId}/downvoteComment`;
+            const url = isReply ? `/reply/${commentId}/downvote-reply` : `/comment/${commentId}/downvote-comment`;
 
             fetch(url, {
                 method: 'POST',
@@ -256,23 +269,27 @@ function downvoteComment() {
                 .then(data => {
                     if (data.comment || data.reply) {
                         const item = data.comment || data.reply;
-                        const upvoteCount = document.querySelector(`#comment-${item.id}`);
+                        const upvoteCount = document.querySelector(`#${isReply ? 'reply-' : 'comment-'}${item.id} .upvote-count`);
                         if (upvoteCount) {
                             upvoteCount.textContent = item.upvotes - item.downvotes;
                         } else {
-                            console.error(`Element with ID comment-${item.id} not found.`);
+                            console.error(`Element with ID ${isReply ? 'reply-' : 'comment-'}${item.id} not found.`);
                         }
 
                         const downvoteIcon = this.querySelector('i');
-                        const upvoteIcon = this.closest('.comment').querySelector('.upvote-comment-button i');
-                        if (data.isDownvoted) {
-                            downvoteIcon.classList.add('bxs-downvote');
-                            downvoteIcon.classList.remove('bx-downvote');
-                            upvoteIcon.classList.remove('bxs-upvote');
-                            upvoteIcon.classList.add('bx-upvote');
+                        const upvoteIcon = commentElement.querySelector('.upvote-comment-button i');
+                        if (downvoteIcon && upvoteIcon) {
+                            if (data.isDownvoted) {
+                                downvoteIcon.classList.add('bxs-downvote');
+                                downvoteIcon.classList.remove('bx-downvote');
+                                upvoteIcon.classList.remove('bxs-upvote');
+                                upvoteIcon.classList.add('bx-upvote');
+                            } else {
+                                downvoteIcon.classList.add('bx-downvote');
+                                downvoteIcon.classList.remove('bxs-downvote');
+                            }
                         } else {
-                            downvoteIcon.classList.add('bx-downvote');
-                            downvoteIcon.classList.remove('bxs-downvote');
+                            console.error('Upvote or downvote icon not found.');
                         }
                     }
                 })

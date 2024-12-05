@@ -1,4 +1,4 @@
-<div class="comment" data-is-reply="{{ $isReply ? 'true' : 'false' }}">
+<div class="comment" data-is-reply="{{ $isReply ? 'true' : 'false' }}" id="{{ $isReply ? 'reply-' . $comment->id : 'comment-' . $comment->id }}">
     <img src="{{ $comment->is_deleted ? asset('images/profile/default.jpg') : asset('images/profile/' . $comment->author->profile_picture) }}" alt="profile_picture">
     <div class="profile-info name-date">
         <p><strong>
