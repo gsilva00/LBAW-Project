@@ -167,11 +167,12 @@ function updateCommentsUI(data, commentInput) {
     const commentsList = commentsSection.querySelector('.comments-list');
 
     if (commentsList) {
-        commentsList.innerHTML = data.commentsView; // Update the comments list
-        commentInput.value = ''; // Clear the input field
+        commentsList.innerHTML = data.commentsView;
+        commentInput.value = '';
         upvoteComment();
         downvoteComment();
         showReplies();
+        deleteButton();
     }
     else {
         console.error('Error: .comments-list element not found');
@@ -315,12 +316,64 @@ function showReplies() {
     });
 }
 
+
+function deleteButton() {
+    document.querySelectorAll('.bx-trash').forEach(button => {
+        button.closest('button').addEventListener('click', function (event) {
+            event.preventDefault();
+            const commentElement = this.closest('.comment');
+            if (!commentElement) {
+                console.error('Comment element not found.');
+                return;
+            }
+            const id = commentElement.id;
+            const match = id.match(/(?:comment-|reply-)(\d+)/);
+            const commentId = match ? match[1] : null;
+            if (!commentId) {
+                console.error('Comment ID not found.');
+                return;
+            }
+            const isReply = commentElement.dataset.isReply === 'true';
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = isReply ? `/reply/${commentId}/delete-reply` : `/comment/${commentId}/delete-comment`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        commentElement.outerHTML = data.commentsView;
+                    } else {
+                        console.error('Failed to delete comment:', data.message);
+                        alert('Failed to delete comment. See console for details.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to delete comment. See console for details.');
+                });
+        });
+    });
+}
+
+
+
 addInteractListeners();
 addCommentFormListener();
 upvoteComment();
 downvoteComment();
 showReplies();
-
+deleteButton();
 
 
 

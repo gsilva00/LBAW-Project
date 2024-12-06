@@ -417,7 +417,34 @@ class ArticlePageController extends Controller
         ]);
     }
 
+    public function deleteComment($id): JsonResponse
+    {
+        $comment = Comment::find($id);
+        $comment->is_deleted = true;
+        $comment->save();
 
+        $commentsView = view('partials.comment', ['comment' => $comment, 'user' => Auth::user(), 'isReply' => false, 'replies' => $comment->replies])->render();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment deleted successfully',
+            'commentsView' => $commentsView
+        ]);
+    }
+
+    public function deleteReply($id): JsonResponse
+    {
+        $reply = Reply::find($id);
+        $reply->is_deleted = true;
+        $reply->save();
+
+        $commentsView = view('partials.comment', ['comment' => $reply, 'user' => Auth::user(), 'isReply' => false, 'replies' => $reply->replies])->render();
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment deleted successfully',
+            'commentsView' => $commentsView
+        ]);
+    }
 
 }
 

@@ -100,9 +100,11 @@ Route::controller(CreateArticleController::class)->group(function () {
 
 Route::post('/comment/{id}/upvote-comment', [ArticlePageController::class, 'upvoteComment'])->name('comment.upvoteComment');
 Route::post('/comment/{id}/downvote-comment', [ArticlePageController::class, 'downvoteComment'])->name('comment.downvoteComment');
+Route::post('/comment/{id}/delete-comment', [ArticlePageController::class, 'deleteComment'])->name('comment.deleteComment');
 
 Route::post('/reply/{id}/upvote-reply', [ArticlePageController::class, 'upvoteReply'])->name('comment.upvoteReply');
 Route::post('/reply/{id}/downvote-reply', [ArticlePageController::class, 'downvoteReply'])->name('comment.downvoteReply');
+Route::post('/reply/{id}/delete-reply', [ArticlePageController::class, 'deleteReply'])->name('comment.deleteReply');
 
 // Tag
 Route::post('/tag/{name}/follow', [TagController::class, 'followTag'])->name('followTag');

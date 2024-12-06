@@ -12,7 +12,7 @@
             </button>
             <div class="reply">
                 @foreach($comment->replies as $reply)
-                    @include('partials.comment', ['comment' => $reply, 'article' => $article, 'user' => $user, 'isReply' => true])
+                    @include('partials.comment', ['comment' => $reply, 'user' => $user, 'isReply' => true])
                 @endforeach
             </div>
         @endif
