@@ -57,13 +57,13 @@
             </section>
             <section>
                 <h2 id="favouriteTagTitle">Favourite Tags</h2>
-                @if($profileUser->followedTags->isEmpty())
+                @if($profileUser->getFollowedTags()->isEmpty())
                     <div class="not-available-container">
                         <p>No favourite tags.</p>
                     </div>
                 @else
                     <div class="selected">
-                        @foreach($profileUser->followedTags as $tag)
+                        @foreach($profileUser->getFollowedTags() as $tag)
                             <div class="block">
                                 <span>{{ $tag->name }}</span><button class="remove" data-url="{{ route('unfollowTag', $tag->name) }}" data-tag-id="{{ $tag->id }}">&times;</button>
                             </div>
