@@ -41,10 +41,12 @@
             @endif
         </div>
         @if(!$comment->is_deleted)
-            <button class="small-rectangle" title="reply comment">
-                <i class='bx bx-message remove-position'></i>
-                <span>Reply</span>
-            </button>
+            @if(!$isReply)
+                <button class="small-rectangle" title="reply comment">
+                    <i class='bx bx-message remove-position'></i>
+                    <span>Reply</span>
+                </button>
+            @endif
             <button class="small-rectangle" title="report comment">
                 <i class='bx bx-flag remove-position' ></i>
                 <span>Report</span>

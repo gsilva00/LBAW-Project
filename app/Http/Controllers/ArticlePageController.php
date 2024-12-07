@@ -446,6 +446,62 @@ class ArticlePageController extends Controller
         ]);
     }
 
+    public function showCommentForm($id, Request $request): View
+    {
+
+        $comment = $request->state === 'editReply' ?  Reply::findOrFail($id) : Comment::findOrFail($id);
+        $article = ArticlePage::findOrFail($request->articleId);
+        $user = auth()->user();
+
+        return view('partials.comment_write_form', [
+            'user' => $user,
+            'article' => $article,
+            'state' => $request->state === 'reply' ? 'replyComment' : 'editComment',
+            'comment' => $comment
+        ]);
+    }
+
+    public function editComment($id, Request $request): JsonResponse
+    {
+        Log::info('Edit comment request: ' . json_encode($request->all()));
+        $comment = $request->isReply ? Reply::findOrFail($id) : Comment::findOrFail($id);
+        $comment->content = $request->comment;
+        $comment->save();
+
+        Log::info('Comment edited: ' . json_encode($comment));
+
+        $commentsView = view('partials.comment', ['comment' => $comment, 'user' => Auth::user(), 'isReply' => $request->isReply , 'replies' => $comment->replies])->render();
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment edited successfully',
+            'commentsView' => $commentsView
+        ]);
+    }
+
+    public function replyComment($id, Request $request): JsonResponse
+    {
+        $comment = Comment::findOrFail($id);
+
+        $request->validate([
+            'comment' => 'required|string|max:255',
+        ]);
+
+        $reply = new Reply();
+        $reply->author_id = auth()->id();
+        $reply->comment_id = $comment->id;
+        $reply->content = $request->comment;
+        $reply->save();
+
+        $replyView = view('partials.comment', ['comment' => $reply, 'user' => Auth::user(), 'isReply' => true,])->render();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Reply added successfully',
+            'replyView' => $replyView
+        ]);
+    }
+
+
 }
 
 
