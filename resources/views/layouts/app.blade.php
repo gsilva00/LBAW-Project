@@ -27,6 +27,7 @@
         <link href="{{ url('css/filter.css') }}" rel="stylesheet">
         <link href="{{ url('css/popup.css') }}" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
+        <link href="{{ url('css/modal.css') }}" rel="stylesheet">
         <!-- Scripts -->
         <script src="{{ url('js/dropdown.js') }}" defer> </script>
         <script src="{{ url('js/dropdown_tag_filter.js') }}" defer> </script>

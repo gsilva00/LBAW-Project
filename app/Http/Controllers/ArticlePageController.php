@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reply;
+use App\Models\Report;
+use App\Models\ReportArticle;
 use App\Models\User;
 
 use App\Models\ArticlePage;
@@ -499,6 +501,38 @@ class ArticlePageController extends Controller
             'success' => true,
             'message' => 'Reply added successfully',
             'replyView' => $replyView
+        ]);
+    }
+
+    public function showReportArticleModal($id)
+    {
+        $article = ArticlePage::findOrFail($id);
+        return view('partials.report_article_modal', ['article' => $article]);
+    }
+
+    public function reportArticleSubmit($id, Request $request): JsonResponse
+    {
+        Log::info('Report request: ' . json_encode($request->all()));
+        
+        $author = Auth::user();
+        $article = ArticlePage::findOrFail($id);
+        
+        $report = new Report();
+        $report->description = $request->description;
+        $report->reporter_id = $author->id;
+        
+        $report->save();
+        
+        $reportArticle = new ReportArticle();
+        $reportArticle->type = $request->type;
+        $reportArticle->report_id = $report->id;
+        $reportArticle->article_id = $article->id;
+        
+        $reportArticle->save();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Article reported successfully'
         ]);
     }
 

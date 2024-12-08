@@ -29,7 +29,9 @@
                             Created at: {{ $article->create_date }}
                         @endif
                     </p>
-                    <button class="small-text small-rectangle" title="report news"><span>Report News</span></button>  <!-- Needs to be implemented -->
+                    <button class="small-text small-rectangle" title="report article" id="report-article-button" data-article-id="{{ $article->id }}">
+                        <span>Report Article</span> <!-- Needs to be implemented -->
+                    </button>
                 </div>
                 <p class="title">{{ $article->is_deleted ? '[Deleted]' : $article->subtitle }}</p>
                 <div>
