@@ -10,21 +10,29 @@ function addInteractListeners() {
         return;
     }
 
-    upvoteBtn.addEventListener('click', (event) => {
+    upvoteBtn.removeEventListener('click', handleUpvoteClick);
+    upvoteBtn.addEventListener('click', handleUpvoteClick);
+
+    downvoteBtn.removeEventListener('click', handleDownvoteClick);
+    downvoteBtn.addEventListener('click', handleDownvoteClick);
+
+    favouriteBtn.removeEventListener('click', handleFavouriteClick);
+    favouriteBtn.addEventListener('click', handleFavouriteClick);
+
+    function handleUpvoteClick(event) {
         event.preventDefault();
         handleVote(upvoteBtn, 'upvote', csrfToken);
-    });
-    downvoteBtn.addEventListener('click', (event) => {
+    }
+
+    function handleDownvoteClick(event) {
         event.preventDefault();
         handleVote(downvoteBtn, 'downvote', csrfToken);
-    });
+    }
 
-    favouriteBtn.addEventListener('click', (event) => {
+    function handleFavouriteClick(event) {
         event.preventDefault();
         handleFavourite(favouriteBtn, csrfToken);
-    });
-
-    showReplies();
+    }
 
 }
 
@@ -305,73 +313,67 @@ function handleDownvoteClick(event) {
         });
 }
 
-function showReplies() {
-    console.log('showReplies');
-    const buttons = document.querySelectorAll('.see-replies-button');
-    buttons.forEach(button => {
-        button.addEventListener('click', function () {
-            const repliesContainer = this.nextElementSibling;
-            const chevron = button.querySelector('i');
-            chevron.classList.toggle('bx-chevron-down');
-            chevron.classList.toggle('bx-chevron-up');
-            repliesContainer.classList.toggle('show');
-        });
-    });
-}
+
 
 
 function deleteButton() {
     document.querySelectorAll('.bx-trash').forEach(button => {
-        button.closest('button').addEventListener('click', function (event) {
-            event.preventDefault();
-            const commentElement = this.closest('.comment');
-            if (!commentElement) {
-                console.error('Comment element not found.');
-                return;
-            }
-            const id = commentElement.id;
-            const match = id.match(/(?:comment-|reply-)(\d+)/);
-            const commentId = match ? match[1] : null;
-            if (!commentId) {
-                console.error('Comment ID not found.');
-                return;
-            }
-            const isReply = commentElement.dataset.isReply === 'true';
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const url = isReply ? `/reply/${commentId}/delete-reply` : `/comment/${commentId}/delete-comment`;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        commentElement.outerHTML = data.commentsView;
-                    } else {
-                        console.error('Failed to delete comment:', data.message);
-                        alert('Failed to delete comment. See console for details.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to delete comment. See console for details.');
-                });
-        });
+        const parentButton = button.closest('button');
+        parentButton.removeEventListener('click', handleDeleteClick); // Remove any existing event listener
+        parentButton.addEventListener('click', handleDeleteClick); // Add the new event listener
     });
+}
+
+function handleDeleteClick(event) {
+    event.preventDefault();
+    const commentElement = this.closest('.comment');
+    if (!commentElement) {
+        console.error('Comment element not found.');
+        return;
+    }
+    const id = commentElement.id;
+    const match = id.match(/(?:comment-|reply-)(\d+)/);
+    const commentId = match ? match[1] : null;
+    if (!commentId) {
+        console.error('Comment ID not found.');
+        return;
+    }
+    const isReply = commentElement.dataset.isReply === 'true';
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const url = isReply ? `/reply/${commentId}/delete-reply` : `/comment/${commentId}/delete-comment`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                commentElement.outerHTML = data.commentsView;
+            } else {
+                console.error('Failed to delete comment:', data.message);
+                alert('Failed to delete comment. See console for details.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete comment. See console for details.');
+        });
 }
 
 function showEditComment() {
     document.querySelectorAll('.bx-pencil').forEach(button => {
-        button.closest('button').addEventListener('click', handleEditClick);
+        const parentButton = button.closest('button');
+        parentButton.removeEventListener('click', handleEditClick); // Remove any existing event listener
+        parentButton.addEventListener('click', handleEditClick); // Add the new event listener
     });
 }
 
@@ -461,6 +463,7 @@ function submitEditForm(form, commentElement, editButton, icon, text, cancelEdit
                 editButton.addEventListener('click', handleEditClick);
                 editButton.removeEventListener('click', cancelEdit);
                 adder(); // Re-attach event listeners
+                console.log('Comment edited successfully');
             } else {
                 console.error('Failed to edit comment:', data.message);
             }
@@ -474,7 +477,9 @@ function submitEditForm(form, commentElement, editButton, icon, text, cancelEdit
 
 function showReplyForm() {
     document.querySelectorAll('.bx-message').forEach(button => {
-        button.closest('button').addEventListener('click', handleReplyClick);
+        const parentButton = button.closest('button');
+        parentButton.removeEventListener('click', handleReplyClick); // Remove any existing event listener
+        parentButton.addEventListener('click', handleReplyClick); // Add the new event listener
     });
 }
 
@@ -564,7 +569,7 @@ function submitReplyForm(form, commentElement, replyButton, icon, text, cancelRe
                     const seeRepliesButton = document.createElement('button');
                     seeRepliesButton.classList.add('small-rectangle', 'see-replies-button');
                     seeRepliesButton.setAttribute('title', 'See replies');
-                    seeRepliesButton.innerHTML = `<i class='bx bx-chevron-down remove-position'></i><span data-reply-count="${commentId}">1 Answer</span>`;
+                    seeRepliesButton.innerHTML = `<i class='bx bx-chevron-down remove-position'></i><span data-reply-count="${commentId}">0 Answer</span>`;
                     commentElement.parentNode.insertBefore(seeRepliesButton, repliesContainer);
 
                     // Attach event listener to the new "See replies" button
@@ -594,7 +599,8 @@ function submitReplyForm(form, commentElement, replyButton, icon, text, cancelRe
                 text.textContent = 'Reply';
                 replyButton.addEventListener('click', handleReplyClick);
                 replyButton.removeEventListener('click', cancelReply);
-                adder(); // Re-attach event listeners
+                console.log('Reply added successfully');
+                adderSpecial();
                 form.closest('div').remove(); // Remove the form container
             } else {
                 console.error('Failed to reply to comment:', data.message);
@@ -605,7 +611,7 @@ function submitReplyForm(form, commentElement, replyButton, icon, text, cancelRe
         });
 }
 
-function reattachSeeRepliesListeners() {
+function showReplies() {
     const buttons = document.querySelectorAll('.see-replies-button');
     buttons.forEach(button => {
         button.removeEventListener('click', toggleReplies); // Remove any existing event listener
@@ -615,25 +621,44 @@ function reattachSeeRepliesListeners() {
 
 function toggleReplies() {
     const repliesContainer = this.nextElementSibling;
+    if (!repliesContainer) {
+        console.error('Replies container not found');
+        return;
+    }
+    console.log('Replies container found:', repliesContainer);
     const chevron = this.querySelector('i');
+    if (!chevron) {
+        console.error('Chevron icon not found');
+        return;
+    }
     chevron.classList.toggle('bx-chevron-down');
     chevron.classList.toggle('bx-chevron-up');
     repliesContainer.classList.toggle('show');
 }
+
 
 function adder() {
     addInteractListeners();
     addCommentFormListener();
     upvoteComment();
     downvoteComment();
-    reattachSeeRepliesListeners();
+    deleteButton();
+    showEditComment();
+    showReplyForm();
+    showReplies();
+}
+
+
+function adderSpecial() {
+    addInteractListeners();
+    addCommentFormListener();
+    upvoteComment();
+    downvoteComment();
     deleteButton();
     showEditComment();
     showReplyForm();
 }
 
 adder();
-
-
 
 

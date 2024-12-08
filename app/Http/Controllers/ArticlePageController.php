@@ -464,7 +464,8 @@ class ArticlePageController extends Controller
     public function editComment($id, Request $request): JsonResponse
     {
         Log::info('Edit comment request: ' . json_encode($request->all()));
-        $comment = $request->isReply ? Reply::findOrFail($id) : Comment::findOrFail($id);
+        $comment = $request->isReply === 'true' ? Reply::findOrFail($id) : Comment::findOrFail($id);
+        Log::info('Comment found: ' . json_encode($comment));
         $comment->content = $request->comment;
         $comment->save();
 
