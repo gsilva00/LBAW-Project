@@ -112,7 +112,14 @@ Route::post('/reply/{id}/downvote-reply', [ArticlePageController::class, 'downvo
 Route::post('/reply/{id}/delete-reply', [ArticlePageController::class, 'deleteReply'])->name('comment.deleteReply');
 
 Route::post('/report-article-modal/{id}', [ArticlePageController::class, 'showReportArticleModal'])->name('showReportArticleModal');
+Route::post('/report-comment-modal/{id}', [ArticlePageController::class, 'showReportCommentModal'])->name('showReportCommentModal');
+Route::post('/report-user-modal/{id}', [ArticlePageController::class, 'showReportUserModal'])->name('showReportUserModal');
+
+
 Route::post('/report-article-submit/{id}', [ArticlePageController::class, 'reportArticleSubmit'])->name('reportArticleSubmit');
+Route::post('/report-comment-submit/{id}', [ArticlePageController::class, 'reportCommentSubmit'])->name('reportCommentSubmit');
+Route::post('/report-user-submit/{id}', [ArticlePageController::class, 'reportUserSubmit'])->name('reportUserSubmit');
+
 
 // Tag
 Route::post('/tag/{name}/follow', [TagController::class, 'followTag'])->name('followTag');

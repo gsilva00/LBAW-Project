@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Reply;
 use App\Models\Report;
 use App\Models\ReportArticle;
+use App\Models\ReportComment;
+use App\Models\ReportUser;
 use App\Models\User;
 
 use App\Models\ArticlePage;
@@ -506,8 +508,7 @@ class ArticlePageController extends Controller
 
     public function showReportArticleModal($id)
     {
-        $article = ArticlePage::findOrFail($id);
-        return view('partials.report_article_modal', ['article' => $article]);
+        return view('partials.report_article_modal', ['articleId' => $id, 'state' => 'reportArticle']);
     }
 
     public function reportArticleSubmit($id, Request $request): JsonResponse
@@ -530,6 +531,73 @@ class ArticlePageController extends Controller
         
         $reportArticle->save();
         
+        return response()->json([
+            'success' => true,
+            'message' => 'Article reported successfully'
+        ]);
+    }
+
+    public function showReportCommentModal($id, Request $request)
+    {
+        return view('partials.report_article_modal', ['commentId' => $id, 'state' => $request->isReply ? 'reportReply' : 'reportComment']);
+    }
+
+    public function reportCommentSubmit($id, Request $request): JsonResponse
+    {
+        Log::info('Report request: ' . json_encode($request->all()));
+
+        $author = Auth::user();
+        $article = ArticlePage::findOrFail($id);
+
+        $report = new Report();
+        $report->description = $request->description;
+        $report->reporter_id = $author->id;
+
+        $report->save();
+
+        $reportComment = new ReportComment();
+        $reportComment->type = $request->type;
+        $reportComment->report_id = $report->id;
+
+        if($request->isReply) {
+            $reportComment->reply_id = $id;
+        } else {
+            $reportComment->comment_id = $id;
+        }
+
+        $reportComment->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Article reported successfully'
+        ]);
+    }
+
+    public function showReportUserModal($id)
+    {
+        return view('partials.report_article_modal', ['userId' => $id, 'state' => 'reportUser']);
+    }
+
+    public function reportUserSubmit($id, Request $request): JsonResponse
+    {
+        Log::info('Report request: ' . json_encode($request->all()));
+
+        $author = Auth::user();
+        $article = ArticlePage::findOrFail($id);
+
+        $report = new Report();
+        $report->description = $request->description;
+        $report->reporter_id = $author->id;
+
+        $report->save();
+
+        $reportUser = new ReportUser();
+        $reportUser->type = $request->type;
+        $reportUser->report_id = $report->id;
+        $reportUser->user_id = $id;
+
+        $reportUser->save();
+
         return response()->json([
             'success' => true,
             'message' => 'Article reported successfully'

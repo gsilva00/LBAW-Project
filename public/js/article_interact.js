@@ -654,16 +654,124 @@ document.addEventListener('DOMContentLoaded', function () {
                 popupContainer.innerHTML = html;
                 document.body.appendChild(popupContainer);
                 openPopup();
+                submitArticleReport();
             })
             .catch(error => console.error('Error loading pop-up:', error));
     });
 });
 
+function submitArticleReport() {
 
-document.addEventListener('DOMContentLoaded', function () {
+        var reportReason = document.getElementById('reportReason');
+        var reportCategory = document.getElementById('reportCategory');
+        var submitButton = document.getElementById('submitReportButton');
+        var maxLength = 300;
+
+
+        reportReason.addEventListener('input', function () {
+            var charCount = reportReason.value.length;
+            if (charCount > maxLength) {
+                reportReason.value = reportReason.value.substring(0, maxLength);
+            }
+            document.getElementById('charCountFeedback').textContent = `${charCount}/${maxLength} characters`;
+        });
+
+        submitButton.addEventListener('click', function () {
+            var charCount = reportReason.value.length;
+            if (charCount > maxLength) {
+                alert('Reason for reporting cannot exceed 300 characters.');
+                return;
+            }
+
+            var description = reportReason.value;
+            var type = reportCategory.value;
+            var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            var url = submitButton.getAttribute('data-action-url');
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    description: description,
+                    type: type
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        closePopup();
+                    } else {
+                        alert('Failed to submit report. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to submit report. See console for details.');
+                });
+        });
+}
+
+function openPopup() {
+    var popup = document.getElementById('reportArticlePopup');
+    if (popup) {
+        popup.style.display = 'flex';
+    } else {
+        console.error('Popup element not found');
+    }
+}
+
+function closePopup() {
+    var popup = document.getElementById('reportArticlePopup');
+    if (popup) {
+        popup.style.display = 'none';
+        popup.remove();
+    } else {
+        console.error('Popup element not found');
+    }
+}
+
+function reportCommentShow() {
+    document.querySelectorAll('.comment .bx-flag').forEach(button => {
+        const parentButton = button.closest('button');
+        parentButton.addEventListener('click', function () {
+            const commentElement = this.closest('.comment');
+            const isReply = commentElement.dataset.isReply === 'true';
+            const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = `/report-comment-modal/${commentId}`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    commentId: commentId,
+                    isReply: isReply
+                })
+            })
+                .then(response => response.text())
+                .then(html => {
+                    const popupContainer = document.createElement('div');
+                    popupContainer.innerHTML = html;
+                    document.body.appendChild(popupContainer);
+                    openPopup();
+                    submitCommentReport();
+                })
+                .catch(error => console.error('Error loading pop-up:', error));
+        });
+    });
+}
+
+function submitCommentReport() {
     var reportReason = document.getElementById('reportReason');
+    var reportCategory = document.getElementById('reportCategory');
+    var submitButton = document.getElementById('submitReportButton');
     var maxLength = 300;
-    var reportForm = document.getElementById('reportNewsForm');
 
     reportReason.addEventListener('input', function () {
         var charCount = reportReason.value.length;
@@ -673,29 +781,34 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('charCountFeedback').textContent = `${charCount}/${maxLength} characters`;
     });
 
-    reportForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+    submitButton.addEventListener('click', function () {
         var charCount = reportReason.value.length;
         if (charCount > maxLength) {
             alert('Reason for reporting cannot exceed 300 characters.');
             return;
         }
 
-        var formData = new FormData(reportForm);
+        var description = reportReason.value;
+        var type = reportCategory.value;
         var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        var url = reportForm.getAttribute('action');
+        var url = submitButton.getAttribute('data-action-url');
+        var isReply = document.getElementById('reportArticlePopup').dataset.isReply === 'true';
 
         fetch(url, {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': csrfToken
             },
-            body: formData
+            body: JSON.stringify({
+                description: description,
+                type: type,
+                isReply: isReply
+            })
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Report submitted successfully.');
                     closePopup();
                 } else {
                     alert('Failed to submit report. Please try again.');
@@ -706,16 +819,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Failed to submit report. See console for details.');
             });
     });
-});
-
-function openPopup() {
-    document.getElementById('reportNewsPopup').style.display = 'flex';
 }
-
-function closePopup() {
-    document.getElementById('reportNewsPopup').style.display = 'none';
-}
-
 
 
 function adder() {
@@ -727,6 +831,7 @@ function adder() {
     showEditComment();
     showReplyForm();
     showReplies();
+    reportCommentShow();
 }
 
 function adderSpecial() {
@@ -737,6 +842,7 @@ function adderSpecial() {
     deleteButton();
     showEditComment();
     showReplyForm();
+    reportCommentShow();
 }
 
 adder();
