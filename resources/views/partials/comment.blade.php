@@ -5,7 +5,9 @@
                 @if($comment->is_deleted || $comment->author->is_deleted)
                     Anonymous
                 @else
-                    {{ $comment->author->display_name }}
+                    <a href="{{ route('profile', ['username' => $comment->author->username]) }}">
+                        {{ $comment->author->display_name }}
+                    </a>
                 @endif
             </strong></p>
         <p class="small-text">{{ $comment->cmt_date ?? $comment->rpl_date }}</p>
