@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    <div class="profile-wrapper">
+    <div class="profile-wrapper" data-user-id="{{$profileUser->id}}">
         <section class="profile-container">
             <img src="{{ asset('images/profile/' . $profileUser->profile_picture) }}" alt="profile_picture">
             <div class="profile-info">
@@ -24,6 +24,9 @@
                     @csrf
                     <button type="button" id="follow-user-button" class="large-rectangle small-text greyer">
                         {{ Auth::user()->isFollowing($user) ? 'Unfollow User' : 'Follow User' }}
+                    </button>
+                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                        Report User
                     </button>
                 </form>
                 @endif

@@ -581,9 +581,9 @@ class ArticlePageController extends Controller
     public function reportUserSubmit($id, Request $request): JsonResponse
     {
         Log::info('Report request: ' . json_encode($request->all()));
+        Log::info('User id: ' . $id);
 
         $author = Auth::user();
-        $article = ArticlePage::findOrFail($id);
 
         $report = new Report();
         $report->description = $request->description;
