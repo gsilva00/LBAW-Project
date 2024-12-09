@@ -36,6 +36,9 @@
                 <a class="large-rectangle small-text" href="{{ route('register') }}">Register</a>
             </div>
             <br>
+            <div class="Recover Password">
+                <a href="{{ route('recoverPasswordForm') }}">Forgot Your Password?</a>
+            </div>
             @include('partials.success_message')
             @if(session('error'))
                 @include('partials.error_popup', ['field' => 'error'])
