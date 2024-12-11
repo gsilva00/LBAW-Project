@@ -10,7 +10,6 @@ function closeMessage() {
 function showReportUserPopup(userId) {
     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var url = `/report-user-modal/${userId}`;
-
     fetch(url, {
         method: 'POST',
         headers: {
@@ -84,8 +83,8 @@ function submitReportUser() {
     });
 }
 
-document.querySelector('.profile-wrapper').addEventListener('click', function() {
-    var userId = this.getAttribute('data-user-id');
+document.getElementById('report-user-button').addEventListener('click', function() {
+    var userId = document.querySelector('.profile-wrapper').getAttribute('data-user-id');
     showReportUserPopup(userId);
 });
 
