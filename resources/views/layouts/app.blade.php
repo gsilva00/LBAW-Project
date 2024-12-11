@@ -27,6 +27,7 @@
         <link href="{{ url('css/filter.css') }}" rel="stylesheet">
         <link href="{{ url('css/popup.css') }}" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
+        <link href="{{ url('css/modal.css') }}" rel="stylesheet">
         <!-- Scripts -->
         <script src="{{ url('js/dropdown.js') }}" defer> </script>
         <script src="{{ url('js/dropdown_tag_filter.js') }}" defer> </script>
@@ -34,7 +35,6 @@
         <script src="{{ url('js/admin_panel.js') }}" defer></script>
         <script src="{{ url('js/user_feed.js') }}" defer></script>
         <script src="{{ url('js/popup.js') }}" defer> </script>
-        <script src="{{ url('js/replies.js') }}" defer> </script>
         <script src="{{ url('js/unfollow_tag.js') }}" defer> </script>
         <script src="{{ url('js/unfollow_topic.js') }}" defer> </script>
         <script src="{{ url('js/tag_create_article.js') }}" defer></script>

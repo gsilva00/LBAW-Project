@@ -67,10 +67,10 @@ class TopicPolicy
 
     public function follow(User $user): bool
     {
-        return Auth::check() && $user->is_deleted;
+        return Auth::check() && !$user->is_deleted;
     }
     public function unfollow(User $user): bool
     {
-        return Auth::check() && $user->is_deleted;
+        return Auth::check() && !$user->is_deleted;
     }
 }

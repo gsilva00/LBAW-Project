@@ -100,7 +100,7 @@ class User extends Authenticatable
     public function followedTags(): BelongsToMany
     {
         return $this->belongsToMany(
-            topic::class,
+            tag::class,
             'follow_tags',
             'user_id',
             'tag_id'
@@ -250,6 +250,11 @@ class User extends Authenticatable
     public function isFavouriteArticle(ArticlePage $article): bool
     {
         return $this->favouriteArticles()->where('article_id', $article->id)->exists();
+    }
+
+    public function getFollowedTags()
+    {
+        return $this->followedTags()->get();
     }
 
 }

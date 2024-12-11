@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    <div class="profile-wrapper">
+    <div class="profile-wrapper" data-user-id="{{$profileUser->id}}">
         <section class="profile-container">
             <img src="{{ asset('images/profile/' . $profileUser->profile_picture) }}" alt="profile_picture">
             <div class="profile-info">
@@ -24,6 +24,9 @@
                     @csrf
                     <button type="button" id="follow-user-button" class="large-rectangle small-text greyer">
                         {{ Auth::user()->isFollowing($user) ? 'Unfollow User' : 'Follow User' }}
+                    </button>
+                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                        Report User
                     </button>
                 </form>
                 @endif
@@ -57,13 +60,13 @@
             </section>
             <section>
                 <h2 id="favouriteTagTitle">Favourite Tags</h2>
-                @if($profileUser->followedTags->isEmpty())
+                @if($profileUser->getFollowedTags()->isEmpty())
                     <div class="not-available-container">
                         <p>No favourite tags.</p>
                     </div>
                 @else
                     <div class="selected">
-                        @foreach($profileUser->followedTags as $tag)
+                        @foreach($profileUser->getFollowedTags() as $tag)
                             <div class="block">
                                 <span>{{ $tag->name }}</span><button class="remove" data-url="{{ route('unfollowTag', $tag->name) }}" data-tag-id="{{ $tag->id }}">&times;</button>
                             </div>

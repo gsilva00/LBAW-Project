@@ -10,21 +10,29 @@ function addInteractListeners() {
         return;
     }
 
-    upvoteBtn.addEventListener('click', (event) => {
+    upvoteBtn.removeEventListener('click', handleUpvoteClick);
+    upvoteBtn.addEventListener('click', handleUpvoteClick);
+
+    downvoteBtn.removeEventListener('click', handleDownvoteClick);
+    downvoteBtn.addEventListener('click', handleDownvoteClick);
+
+    favouriteBtn.removeEventListener('click', handleFavouriteClick);
+    favouriteBtn.addEventListener('click', handleFavouriteClick);
+
+    function handleUpvoteClick(event) {
         event.preventDefault();
         handleVote(upvoteBtn, 'upvote', csrfToken);
-    });
-    downvoteBtn.addEventListener('click', (event) => {
+    }
+
+    function handleDownvoteClick(event) {
         event.preventDefault();
         handleVote(downvoteBtn, 'downvote', csrfToken);
-    });
+    }
 
-    favouriteBtn.addEventListener('click', (event) => {
+    function handleFavouriteClick(event) {
         event.preventDefault();
         handleFavourite(favouriteBtn, csrfToken);
-    });
-
-    showReplies();
+    }
 
 }
 
@@ -167,11 +175,9 @@ function updateCommentsUI(data, commentInput) {
     const commentsList = commentsSection.querySelector('.comments-list');
 
     if (commentsList) {
-        commentsList.innerHTML = data.commentsView; // Update the comments list
-        commentInput.value = ''; // Clear the input field
-        upvoteComment();
-        downvoteComment();
-        showReplies();
+        commentsList.innerHTML = data.commentsView;
+        commentInput.value = '';
+        adder();
     }
     else {
         console.error('Error: .comments-list element not found');
@@ -181,65 +187,561 @@ function updateCommentsUI(data, commentInput) {
 
 function upvoteComment() {
     document.querySelectorAll('.upvote-comment-button').forEach(button => {
-        button.addEventListener('click', function (event) {
-            console.log('Upvote button clicked');
-            event.preventDefault();
-            const isReply = this.closest('.comment').dataset.isReply === 'true';
-            const commentId = this.dataset.commentId;
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const url = isReply ? `/reply/${commentId}/upvoteReply` : `/comment/${commentId}/upvoteComment`;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({
-                    commentId: commentId,
-                    isUpvoted: this.querySelector('i').classList.contains('bxs-upvote')
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.comment || data.reply) {
-                        const item = data.comment || data.reply;
-                        const upvoteCount = document.querySelector(`#comment-${item.id}`);
-                        if (upvoteCount) {
-                            upvoteCount.textContent = item.upvotes - item.downvotes;
-                        } else {
-                            console.error(`Element with ID comment-${item.id} not found.`);
-                        }
-
-                        const upvoteIcon = this.querySelector('i');
-                        const downvoteIcon = this.closest('.comment').querySelector('.downvote-comment-button i');
-                        if (data.isUpvoted) {
-                            upvoteIcon.classList.add('bxs-upvote');
-                            upvoteIcon.classList.remove('bx-upvote');
-                            downvoteIcon.classList.remove('bxs-downvote');
-                            downvoteIcon.classList.add('bx-downvote');
-                        } else {
-                            upvoteIcon.classList.add('bx-upvote');
-                            upvoteIcon.classList.remove('bxs-upvote');
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to upvote comment. See console for details.');
-                });
-        });
+        button.removeEventListener('click', handleUpvoteClick); // Remove any existing event listener
+        button.addEventListener('click', handleUpvoteClick); // Add the new event listener
     });
+}
+
+function handleUpvoteClick(event) {
+    event.preventDefault();
+    const commentElement = this.closest('.comment');
+    if (!commentElement) {
+        console.error('Comment element not found.');
+        return;
+    }
+    const isReply = commentElement.dataset.isReply === 'true';
+    const commentId = this.dataset.commentId;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const url = isReply ? `/reply/${commentId}/upvote-reply` : `/comment/${commentId}/upvote-comment`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            commentId: commentId,
+            isUpvoted: this.querySelector('i').classList.contains('bxs-upvote')
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.comment || data.reply) {
+                const item = data.comment || data.reply;
+                const upvoteCount = document.querySelector(`#${isReply ? 'reply-' : 'comment-'}${item.id} .upvote-count`);
+                if (upvoteCount) {
+                    upvoteCount.textContent = item.upvotes - item.downvotes;
+                } else {
+                    console.error(`Element with ID ${isReply ? 'reply-' : 'comment-'}${item.id} not found.`);
+                }
+
+                const upvoteIcon = this.querySelector('i');
+                const downvoteIcon = commentElement.querySelector('.downvote-comment-button i');
+                if (upvoteIcon && downvoteIcon) {
+                    if (data.isUpvoted) {
+                        upvoteIcon.classList.add('bxs-upvote');
+                        upvoteIcon.classList.remove('bx-upvote');
+                        downvoteIcon.classList.remove('bxs-downvote');
+                        downvoteIcon.classList.add('bx-downvote');
+                    } else {
+                        upvoteIcon.classList.add('bx-upvote');
+                        upvoteIcon.classList.remove('bxs-upvote');
+                    }
+                } else {
+                    console.error('Upvote or downvote icon not found.');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to upvote comment. See console for details.');
+        });
 }
 
 function downvoteComment() {
     document.querySelectorAll('.downvote-comment-button').forEach(button => {
-        button.addEventListener('click', function (event) {
-            event.preventDefault();
-            const isReply = this.closest('.comment').dataset.isReply === 'true';
-            const commentId = this.dataset.commentId;
+        button.removeEventListener('click', handleDownvoteClick); // Remove any existing event listener
+        button.addEventListener('click', handleDownvoteClick); // Add the new event listener
+    });
+}
+
+function handleDownvoteClick(event) {
+    event.preventDefault();
+    const commentElement = this.closest('.comment');
+    if (!commentElement) {
+        console.error('Comment element not found.');
+        return;
+    }
+    const isReply = commentElement.dataset.isReply === 'true';
+    const commentId = this.dataset.commentId;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const url = isReply ? `/reply/${commentId}/downvote-reply` : `/comment/${commentId}/downvote-comment`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify({
+            commentId: commentId,
+            isDownvoted: this.querySelector('i').classList.contains('bxs-downvote')
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.comment || data.reply) {
+                const item = data.comment || data.reply;
+                const upvoteCount = document.querySelector(`#${isReply ? 'reply-' : 'comment-'}${item.id} .upvote-count`);
+                if (upvoteCount) {
+                    upvoteCount.textContent = item.upvotes - item.downvotes;
+                } else {
+                    console.error(`Element with ID ${isReply ? 'reply-' : 'comment-'}${item.id} not found.`);
+                }
+
+                const downvoteIcon = this.querySelector('i');
+                const upvoteIcon = commentElement.querySelector('.upvote-comment-button i');
+                if (downvoteIcon && upvoteIcon) {
+                    if (data.isDownvoted) {
+                        downvoteIcon.classList.add('bxs-downvote');
+                        downvoteIcon.classList.remove('bx-downvote');
+                        upvoteIcon.classList.remove('bxs-upvote');
+                        upvoteIcon.classList.add('bx-upvote');
+                    } else {
+                        downvoteIcon.classList.add('bx-downvote');
+                        downvoteIcon.classList.remove('bxs-downvote');
+                    }
+                } else {
+                    console.error('Upvote or downvote icon not found.');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to downvote comment. See console for details.');
+        });
+}
+
+
+
+
+function deleteButton() {
+    document.querySelectorAll('.bx-trash').forEach(button => {
+        const parentButton = button.closest('button');
+        parentButton.removeEventListener('click', handleDeleteClick); // Remove any existing event listener
+        parentButton.addEventListener('click', handleDeleteClick); // Add the new event listener
+    });
+}
+
+function handleDeleteClick(event) {
+    event.preventDefault();
+    const commentElement = this.closest('.comment');
+    if (!commentElement) {
+        console.error('Comment element not found.');
+        return;
+    }
+    const id = commentElement.id;
+    const match = id.match(/(?:comment-|reply-)(\d+)/);
+    const commentId = match ? match[1] : null;
+    if (!commentId) {
+        console.error('Comment ID not found.');
+        return;
+    }
+    const isReply = commentElement.dataset.isReply === 'true';
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const url = isReply ? `/reply/${commentId}/delete-reply` : `/comment/${commentId}/delete-comment`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                commentElement.outerHTML = data.commentsView;
+            } else {
+                console.error('Failed to delete comment:', data.message);
+                alert('Failed to delete comment. See console for details.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to delete comment. See console for details.');
+        });
+}
+
+function showEditComment() {
+    document.querySelectorAll('.bx-pencil').forEach(button => {
+        const parentButton = button.closest('button');
+        parentButton.removeEventListener('click', handleEditClick); // Remove any existing event listener
+        parentButton.addEventListener('click', handleEditClick); // Add the new event listener
+    });
+}
+
+function handleEditClick(event) {
+    event.preventDefault();
+    const commentElement = this.closest('.comment');
+    const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
+    const isReply = commentElement.dataset.isReply === 'true';
+    const articleId = document.querySelector('meta[name="article-id"]').getAttribute('content');
+
+    const url = `/comment/${commentId}/commentForm`;
+    const state = isReply ? 'editReply' : 'editComment';
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ state: state, articleId: articleId })
+    })
+        .then(response => response.text())
+        .then(html => {
+            displayEditForm(html, commentElement, this);
+        })
+        .catch(error => {
+            console.error('Error fetching the edit form:', error);
+        });
+}
+
+function displayEditForm(html, commentElement, editButton) {
+    const formContainer = document.createElement('div');
+    formContainer.innerHTML = html;
+    commentElement.appendChild(formContainer);
+
+    // Change the button icon and text
+    const icon = editButton.querySelector('i');
+    const text = editButton.querySelector('span');
+    icon.classList.remove('bx-pencil');
+    icon.classList.add('bx-x');
+    text.textContent = 'Cancel the edit';
+
+    // Add event listener to revert changes on click
+    const cancelEdit = function (event) {
+        event.preventDefault();
+        formContainer.remove();
+        icon.classList.remove('bx-x');
+        icon.classList.add('bx-pencil');
+        text.textContent = 'Edit comment';
+        editButton.addEventListener('click', handleEditClick);
+        editButton.removeEventListener('click', cancelEdit);
+    };
+
+    editButton.removeEventListener('click', handleEditClick);
+    editButton.addEventListener('click', cancelEdit);
+
+    // Add event listener to handle form submission
+    const form = formContainer.querySelector('form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        submitEditForm(form, commentElement, editButton, icon, text, cancelEdit);
+    });
+}
+
+function submitEditForm(form, commentElement, editButton, icon, text, cancelEdit) {
+    const formData = new FormData(form);
+    const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
+    const isReply = commentElement.dataset.isReply === 'true';
+    const editUrl = `/comment/${commentId}/edit-comment`;
+
+    formData.append('isReply', isReply);
+
+    fetch(editUrl, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                commentElement.innerHTML = data.commentsView;
+                icon.classList.remove('bx-x');
+                icon.classList.add('bx-pencil');
+                text.textContent = 'Edit comment';
+                editButton.addEventListener('click', handleEditClick);
+                editButton.removeEventListener('click', cancelEdit);
+                adder(); // Re-attach event listeners
+                console.log('Comment edited successfully');
+            } else {
+                console.error('Failed to edit comment:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error editing comment:', error);
+        });
+}
+
+
+
+function showReplyForm() {
+    document.querySelectorAll('.bx-message').forEach(button => {
+        const parentButton = button.closest('button');
+        parentButton.removeEventListener('click', handleReplyClick); // Remove any existing event listener
+        parentButton.addEventListener('click', handleReplyClick); // Add the new event listener
+    });
+}
+
+function handleReplyClick(event) {
+    event.preventDefault();
+    const commentElement = this.closest('.comment');
+    const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
+    const articleId = document.querySelector('meta[name="article-id"]').getAttribute('content');
+    const url = `/comment/${commentId}/commentForm`;
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ state: 'reply', articleId: articleId })
+    })
+        .then(response => response.text())
+        .then(html => {
+            displayReplyForm(html, commentElement, this);
+        })
+        .catch(error => {
+            console.error('Error fetching the reply form:', error);
+        });
+}
+
+function displayReplyForm(html, commentElement, replyButton) {
+    const formContainer = document.createElement('div');
+    formContainer.innerHTML = html;
+    commentElement.appendChild(formContainer);
+
+    // Change the button icon and text
+    const icon = replyButton.querySelector('i');
+    const text = replyButton.querySelector('span');
+    icon.classList.remove('bx-message');
+    icon.classList.add('bx-x');
+    text.textContent = 'Cancel reply';
+
+    // Add event listener to revert changes on click
+    const cancelReply = function (event) {
+        event.preventDefault();
+        formContainer.remove();
+        icon.classList.remove('bx-x');
+        icon.classList.add('bx-message');
+        text.textContent = 'Reply';
+        replyButton.addEventListener('click', handleReplyClick);
+        replyButton.removeEventListener('click', cancelReply);
+    };
+
+    replyButton.removeEventListener('click', handleReplyClick);
+    replyButton.addEventListener('click', cancelReply);
+
+    // Add event listener to handle form submission
+    const form = formContainer.querySelector('form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        submitReplyForm(form, commentElement, replyButton, icon, text, cancelReply);
+    });
+}
+
+function submitReplyForm(form, commentElement, replyButton, icon, text, cancelReply) {
+    const formData = new FormData(form);
+    const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
+    const replyUrl = `/comment/${commentId}/reply`;
+
+    fetch(replyUrl, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                let repliesContainer = document.querySelector(`[data-reply-container][data-comment-id="comment-${commentId}"]`);
+                if (!repliesContainer) {
+                    // Create the replies container
+                    repliesContainer = document.createElement('div');
+                    repliesContainer.classList.add('reply');
+                    repliesContainer.setAttribute('data-reply-container', '');
+                    repliesContainer.setAttribute('data-comment-id', `comment-${commentId}`);
+                    commentElement.parentNode.insertBefore(repliesContainer, commentElement.nextSibling);
+
+                    // Create the "See replies" button
+                    const seeRepliesButton = document.createElement('button');
+                    seeRepliesButton.classList.add('small-rectangle', 'see-replies-button');
+                    seeRepliesButton.setAttribute('title', 'See replies');
+                    seeRepliesButton.innerHTML = `<i class='bx bx-chevron-down remove-position'></i><span data-reply-count="${commentId}">0 Answer</span>`;
+                    commentElement.parentNode.insertBefore(seeRepliesButton, repliesContainer);
+
+                    // Attach event listener to the new "See replies" button
+                    seeRepliesButton.addEventListener('click', function () {
+                        const chevron = seeRepliesButton.querySelector('i');
+                        chevron.classList.toggle('bx-chevron-down');
+                        chevron.classList.toggle('bx-chevron-up');
+                        repliesContainer.classList.toggle('show');
+                    });
+                }
+
+                // Append the new reply
+                const newReply = document.createElement('div');
+                newReply.innerHTML = data.replyView;
+                repliesContainer.appendChild(newReply);
+
+                // Update the reply count
+                let replyCountElement = document.querySelector(`[data-reply-count="${commentId}"]`);
+                if (replyCountElement) {
+                    let replyCount = parseInt(replyCountElement.textContent.match(/\d+/)[0]);
+                    replyCount++;
+                    replyCountElement.textContent = `${replyCount} ${replyCount > 1 ? 'Answers' : 'Answer'}`;
+                }
+
+                icon.classList.remove('bx-x');
+                icon.classList.add('bx-message');
+                text.textContent = 'Reply';
+                replyButton.addEventListener('click', handleReplyClick);
+                replyButton.removeEventListener('click', cancelReply);
+                console.log('Reply added successfully');
+                adderSpecial();
+                form.closest('div').remove(); // Remove the form container
+            } else {
+                console.error('Failed to reply to comment:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error replying to comment:', error);
+        });
+}
+
+function showReplies() {
+    const buttons = document.querySelectorAll('.see-replies-button');
+    buttons.forEach(button => {
+        button.removeEventListener('click', toggleReplies); // Remove any existing event listener
+        button.addEventListener('click', toggleReplies); // Add the new event listener
+    });
+}
+
+function toggleReplies() {
+    const repliesContainer = this.nextElementSibling;
+    if (!repliesContainer) {
+        console.error('Replies container not found');
+        return;
+    }
+    console.log('Replies container found:', repliesContainer);
+    const chevron = this.querySelector('i');
+    if (!chevron) {
+        console.error('Chevron icon not found');
+        return;
+    }
+    chevron.classList.toggle('bx-chevron-down');
+    chevron.classList.toggle('bx-chevron-up');
+    repliesContainer.classList.toggle('show');
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('report-article-button').addEventListener('click', function () {
+        var articleId = this.getAttribute('data-article-id');
+        fetch(`/report-article-modal/${articleId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+            .then(response => response.text())
+            .then(html => {
+                var popupContainer = document.createElement('div');
+                popupContainer.innerHTML = html;
+                document.body.appendChild(popupContainer);
+                openPopup();
+                submitArticleReport();
+            })
+            .catch(error => console.error('Error loading pop-up:', error));
+    });
+});
+
+function submitArticleReport() {
+
+        var reportReason = document.getElementById('reportReason');
+        var reportCategory = document.getElementById('reportCategory');
+        var submitButton = document.getElementById('submitReportButton');
+        var maxLength = 300;
+
+
+        reportReason.addEventListener('input', function () {
+            var charCount = reportReason.value.length;
+            if (charCount > maxLength) {
+                reportReason.value = reportReason.value.substring(0, maxLength);
+            }
+            document.getElementById('charCountFeedback').textContent = `${charCount}/${maxLength} characters`;
+        });
+
+        submitButton.addEventListener('click', function () {
+            var charCount = reportReason.value.length;
+            if (charCount > maxLength) {
+                alert('Reason for reporting cannot exceed 300 characters.');
+                return;
+            }
+
+            var description = reportReason.value;
+            var type = reportCategory.value;
+            var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            var url = submitButton.getAttribute('data-action-url');
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    description: description,
+                    type: type
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        closePopup();
+                    } else {
+                        alert('Failed to submit report. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to submit report. See console for details.');
+                });
+        });
+}
+
+function openPopup() {
+    var popup = document.getElementById('reportArticlePopup');
+    if (popup) {
+        popup.style.display = 'flex';
+    } else {
+        console.error('Popup element not found');
+    }
+}
+
+function closePopup() {
+    var popup = document.getElementById('reportArticlePopup');
+    if (popup) {
+        popup.style.display = 'none';
+        popup.remove();
+    } else {
+        console.error('Popup element not found');
+    }
+}
+
+function reportCommentShow() {
+    document.querySelectorAll('.comment .bx-flag').forEach(button => {
+        const parentButton = button.closest('button');
+        parentButton.addEventListener('click', function () {
+            const commentElement = this.closest('.comment');
+            const isReply = commentElement.dataset.isReply === 'true';
+            const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const url = isReply ? `/reply/${commentId}/downvoteReply` : `/comment/${commentId}/downvoteComment`;
+            const url = `/report-comment-modal/${commentId}`;
 
             fetch(url, {
                 method: 'POST',
@@ -249,65 +751,100 @@ function downvoteComment() {
                 },
                 body: JSON.stringify({
                     commentId: commentId,
-                    isDownvoted: this.querySelector('i').classList.contains('bxs-downvote')
+                    isReply: isReply
                 })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.comment || data.reply) {
-                        const item = data.comment || data.reply;
-                        const upvoteCount = document.querySelector(`#comment-${item.id}`);
-                        if (upvoteCount) {
-                            upvoteCount.textContent = item.upvotes - item.downvotes;
-                        } else {
-                            console.error(`Element with ID comment-${item.id} not found.`);
-                        }
-
-                        const downvoteIcon = this.querySelector('i');
-                        const upvoteIcon = this.closest('.comment').querySelector('.upvote-comment-button i');
-                        if (data.isDownvoted) {
-                            downvoteIcon.classList.add('bxs-downvote');
-                            downvoteIcon.classList.remove('bx-downvote');
-                            upvoteIcon.classList.remove('bxs-upvote');
-                            upvoteIcon.classList.add('bx-upvote');
-                        } else {
-                            downvoteIcon.classList.add('bx-downvote');
-                            downvoteIcon.classList.remove('bxs-downvote');
-                        }
-                    }
+                .then(response => response.text())
+                .then(html => {
+                    const popupContainer = document.createElement('div');
+                    popupContainer.innerHTML = html;
+                    document.body.appendChild(popupContainer);
+                    openPopup();
+                    submitCommentReport();
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to downvote comment. See console for details.');
-                });
+                .catch(error => console.error('Error loading pop-up:', error));
         });
     });
 }
 
-function showReplies() {
-    console.log('showReplies');
-    const buttons = document.querySelectorAll('.see-replies-button');
-    buttons.forEach(button => {
-        button.addEventListener('click', function () {
-            const repliesContainer = this.nextElementSibling;
-            const chevron = button.querySelector('i');
-            chevron.classList.toggle('bx-chevron-down');
-            chevron.classList.toggle('bx-chevron-up');
-            repliesContainer.classList.toggle('show');
-        });
+function submitCommentReport() {
+    var reportReason = document.getElementById('reportReason');
+    var reportCategory = document.getElementById('reportCategory');
+    var submitButton = document.getElementById('submitReportButton');
+    var maxLength = 300;
+
+    reportReason.addEventListener('input', function () {
+        var charCount = reportReason.value.length;
+        if (charCount > maxLength) {
+            reportReason.value = reportReason.value.substring(0, maxLength);
+        }
+        document.getElementById('charCountFeedback').textContent = `${charCount}/${maxLength} characters`;
+    });
+
+    submitButton.addEventListener('click', function () {
+        var charCount = reportReason.value.length;
+        if (charCount > maxLength) {
+            alert('Reason for reporting cannot exceed 300 characters.');
+            return;
+        }
+
+        var description = reportReason.value;
+        var type = reportCategory.value;
+        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        var url = submitButton.getAttribute('data-action-url');
+        var isReply = document.getElementById('reportArticlePopup').dataset.isReply === 'true';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                description: description,
+                type: type,
+                isReply: isReply
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closePopup();
+                } else {
+                    alert('Failed to submit report. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to submit report. See console for details.');
+            });
     });
 }
 
-addInteractListeners();
-addCommentFormListener();
-upvoteComment();
-downvoteComment();
-showReplies();
 
+function adder() {
+    addInteractListeners();
+    addCommentFormListener();
+    upvoteComment();
+    downvoteComment();
+    deleteButton();
+    showEditComment();
+    showReplyForm();
+    showReplies();
+    reportCommentShow();
+}
 
+function adderSpecial() {
+    addInteractListeners();
+    addCommentFormListener();
+    upvoteComment();
+    downvoteComment();
+    deleteButton();
+    showEditComment();
+    showReplyForm();
+    reportCommentShow();
+}
 
-
-
-
+adder();
 
 

@@ -3,6 +3,7 @@
 @section('title', $article->is_deleted ? '[Deleted]' : $article->title)
 
 @section('content')
+    <meta name="article-id" content="{{ $article->id }}">
     <div class="article-more-news-wrapper">
         <section class="article-section">
             <div class="large-rectangle breadcrumbs">
@@ -28,7 +29,9 @@
                             Created at: {{ $article->create_date }}
                         @endif
                     </p>
-                    <button class="small-text small-rectangle" title="report news"><span>Report News</span></button>  <!-- Needs to be implemented -->
+                    <button class="small-text small-rectangle" title="report article" id="report-article-button" data-article-id="{{ $article->id }}">
+                        <span>Report Article</span> <!-- Needs to be implemented -->
+                    </button>
                 </div>
                 <p class="title">{{ $article->is_deleted ? '[Deleted]' : $article->subtitle }}</p>
                 <div>
@@ -78,23 +81,9 @@
                     </div>
                 </div>
 
-
-
                 <div class="comments-section">
                     <h2>Comments</h2>
-                    <form id="comment-form" class="comment" method="POST" action="{{ route('writeComment', ['id' => $article->id]) }}">
-                        @csrf
-                        @if(Auth::guest() || $user->is_deleted)
-                            <img src="{{ asset('images/profile/default.jpg') }}" alt="profile_picture">
-                        @else
-                            <img src="{{ asset('images/profile/' . $user->profile_picture) }}" alt="profile_picture">
-                        @endif
-                        <div class="comment-input-container">
-                            <input type="text" class="comment-input" placeholder="Write a comment..." @if(Auth::guest() || $user->is_deleted) disabled @endif>
-
-                            <button class="small-rectangle" title="Send comment" @if(Auth::guest() || $user->is_deleted) disabled @endif><i class='bx bx-send remove-position'></i><span>Send</span></button>
-                        </div>
-                    </form>
+                    @include('partials.comment_write_form', ['user' => $user, 'article' => $article, 'state' => "writeArticleComment"])
                     <br>
                     <br>
                     <div class="comments-list">

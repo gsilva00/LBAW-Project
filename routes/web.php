@@ -100,9 +100,26 @@ Route::controller(CreateArticleController::class)->group(function () {
 
 Route::post('/comment/{id}/upvote-comment', [ArticlePageController::class, 'upvoteComment'])->name('comment.upvoteComment');
 Route::post('/comment/{id}/downvote-comment', [ArticlePageController::class, 'downvoteComment'])->name('comment.downvoteComment');
+Route::post('/comment/{id}/delete-comment', [ArticlePageController::class, 'deleteComment'])->name('comment.deleteComment');
+Route::post('/comment/{id}/edit-comment', [ArticlePageController::class, 'editComment'])->name('comment.editComment');
+
+Route::post('/comment/{id}/commentForm', [ArticlePageController::class, 'showCommentForm'])->name('comment.commentForm');
+Route::post('/comment/{id}/reply', [ArticlePageController::class, 'replyComment'])->name('comment.replyComment');
+
 
 Route::post('/reply/{id}/upvote-reply', [ArticlePageController::class, 'upvoteReply'])->name('comment.upvoteReply');
 Route::post('/reply/{id}/downvote-reply', [ArticlePageController::class, 'downvoteReply'])->name('comment.downvoteReply');
+Route::post('/reply/{id}/delete-reply', [ArticlePageController::class, 'deleteReply'])->name('comment.deleteReply');
+
+Route::post('/report-article-modal/{id}', [ArticlePageController::class, 'showReportArticleModal'])->name('showReportArticleModal');
+Route::post('/report-comment-modal/{id}', [ArticlePageController::class, 'showReportCommentModal'])->name('showReportCommentModal');
+Route::post('/report-user-modal/{id}', [ArticlePageController::class, 'showReportUserModal'])->name('showReportUserModal');
+
+
+Route::post('/report-article-submit/{id}', [ArticlePageController::class, 'reportArticleSubmit'])->name('reportArticleSubmit');
+Route::post('/report-comment-submit/{id}', [ArticlePageController::class, 'reportCommentSubmit'])->name('reportCommentSubmit');
+Route::post('/report-user-submit/{id}', [ArticlePageController::class, 'reportUserSubmit'])->name('reportUserSubmit');
+
 
 // Tag
 Route::post('/tag/{name}/follow', [TagController::class, 'followTag'])->name('followTag');
@@ -115,3 +132,5 @@ Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic']
 // Static Pages
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutUs');
+
+

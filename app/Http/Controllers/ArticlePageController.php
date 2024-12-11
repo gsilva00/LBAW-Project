@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reply;
+use App\Models\Report;
+use App\Models\ReportArticle;
+use App\Models\ReportComment;
+use App\Models\ReportUser;
 use App\Models\User;
 
 use App\Models\ArticlePage;
@@ -417,6 +421,188 @@ class ArticlePageController extends Controller
         ]);
     }
 
+    public function deleteComment($id): JsonResponse
+    {
+        $comment = Comment::find($id);
+        $comment->is_deleted = true;
+        $comment->save();
+
+        $commentsView = view('partials.comment', ['comment' => $comment, 'user' => Auth::user(), 'isReply' => false, 'replies' => $comment->replies])->render();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment deleted successfully',
+            'commentsView' => $commentsView
+        ]);
+    }
+
+    public function deleteReply($id): JsonResponse
+    {
+        $reply = Reply::find($id);
+        $reply->is_deleted = true;
+        $reply->save();
+
+        $commentsView = view('partials.comment', ['comment' => $reply, 'user' => Auth::user(), 'isReply' => false, 'replies' => $reply->replies])->render();
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment deleted successfully',
+            'commentsView' => $commentsView
+        ]);
+    }
+
+    public function showCommentForm($id, Request $request): View
+    {
+
+        $comment = $request->state === 'editReply' ?  Reply::findOrFail($id) : Comment::findOrFail($id);
+        $article = ArticlePage::findOrFail($request->articleId);
+        $user = auth()->user();
+
+        return view('partials.comment_write_form', [
+            'user' => $user,
+            'article' => $article,
+            'state' => $request->state === 'reply' ? 'replyComment' : 'editComment',
+            'comment' => $comment
+        ]);
+    }
+
+    public function editComment($id, Request $request): JsonResponse
+    {
+        Log::info('Edit comment request: ' . json_encode($request->all()));
+        $comment = $request->isReply === 'true' ? Reply::findOrFail($id) : Comment::findOrFail($id);
+        Log::info('Comment found: ' . json_encode($comment));
+        $comment->content = $request->comment;
+        $comment->save();
+
+        Log::info('Comment edited: ' . json_encode($comment));
+
+        $commentsView = view('partials.comment', ['comment' => $comment, 'user' => Auth::user(), 'isReply' => $request->isReply , 'replies' => $comment->replies])->render();
+        return response()->json([
+            'success' => true,
+            'message' => 'Comment edited successfully',
+            'commentsView' => $commentsView
+        ]);
+    }
+
+    public function replyComment($id, Request $request): JsonResponse
+    {
+        $comment = Comment::findOrFail($id);
+
+        $request->validate([
+            'comment' => 'required|string|max:255',
+        ]);
+
+        $reply = new Reply();
+        $reply->author_id = auth()->id();
+        $reply->comment_id = $comment->id;
+        $reply->content = $request->comment;
+        $reply->save();
+
+        $replyView = view('partials.comment', ['comment' => $reply, 'user' => Auth::user(), 'isReply' => true,])->render();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Reply added successfully',
+            'replyView' => $replyView
+        ]);
+    }
+
+    public function showReportArticleModal($id)
+    {
+        return view('partials.report_article_modal', ['articleId' => $id, 'state' => 'reportArticle']);
+    }
+
+    public function reportArticleSubmit($id, Request $request): JsonResponse
+    {
+        Log::info('Report request: ' . json_encode($request->all()));
+        
+        $author = Auth::user();
+        $article = ArticlePage::findOrFail($id);
+        
+        $report = new Report();
+        $report->description = $request->description;
+        $report->reporter_id = $author->id;
+        
+        $report->save();
+        
+        $reportArticle = new ReportArticle();
+        $reportArticle->type = $request->type;
+        $reportArticle->report_id = $report->id;
+        $reportArticle->article_id = $article->id;
+        
+        $reportArticle->save();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Article reported successfully'
+        ]);
+    }
+
+    public function showReportCommentModal($id, Request $request)
+    {
+        return view('partials.report_article_modal', ['commentId' => $id, 'state' => $request->isReply ? 'reportReply' : 'reportComment']);
+    }
+
+    public function reportCommentSubmit($id, Request $request): JsonResponse
+    {
+        Log::info('Report request: ' . json_encode($request->all()));
+
+        $author = Auth::user();
+        $article = ArticlePage::findOrFail($id);
+
+        $report = new Report();
+        $report->description = $request->description;
+        $report->reporter_id = $author->id;
+
+        $report->save();
+
+        $reportComment = new ReportComment();
+        $reportComment->type = $request->type;
+        $reportComment->report_id = $report->id;
+
+        if($request->isReply) {
+            $reportComment->reply_id = $id;
+        } else {
+            $reportComment->comment_id = $id;
+        }
+
+        $reportComment->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Article reported successfully'
+        ]);
+    }
+
+    public function showReportUserModal($id)
+    {
+        return view('partials.report_article_modal', ['userId' => $id, 'state' => 'reportUser']);
+    }
+
+    public function reportUserSubmit($id, Request $request): JsonResponse
+    {
+        Log::info('Report request: ' . json_encode($request->all()));
+        Log::info('User id: ' . $id);
+
+        $author = Auth::user();
+
+        $report = new Report();
+        $report->description = $request->description;
+        $report->reporter_id = $author->id;
+
+        $report->save();
+
+        $reportUser = new ReportUser();
+        $reportUser->type = $request->type;
+        $reportUser->report_id = $report->id;
+        $reportUser->user_id = $id;
+
+        $reportUser->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Article reported successfully'
+        ]);
+    }
 
 
 }
