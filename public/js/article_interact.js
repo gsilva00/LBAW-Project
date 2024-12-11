@@ -823,7 +823,6 @@ function submitCommentReport() {
 
 
 function adder() {
-    addInteractListeners();
     addCommentFormListener();
     upvoteComment();
     downvoteComment();
@@ -835,7 +834,6 @@ function adder() {
 }
 
 function adderSpecial() {
-    addInteractListeners();
     addCommentFormListener();
     upvoteComment();
     downvoteComment();
@@ -844,7 +842,7 @@ function adderSpecial() {
     showReplyForm();
     reportCommentShow();
 }
-
+addInteractListeners();
 adder();
 
 
