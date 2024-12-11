@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminPanelController;
 use App\Http\Controllers\ArticlePageController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\CreateArticleController;
 use App\Http\Controllers\HomepageController;
@@ -36,6 +37,10 @@ Route::controller(LoginController::class)->group(function () {
     Route::post('/login', 'authenticate');
     Route::post('/logout', 'logout')->name('logout')->middleware('auth');
 });
+
+Route::get('/recover-password', [MailController::class, 'showRecoverPasswordForm'])->name('recoverPasswordForm');
+Route::post('/recover-password', [MailController::class, 'sendRecoverPasswordEmail'])->name('recoverPasswordAction');
+
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');

@@ -6,12 +6,11 @@
             {{ csrf_field() }}
             <h1>Login</h1>
             <div class="profile-info space-between">
-                <label for="email"><span>E-mail</span></label>
-                <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
-                       autocomplete="email">
+                <label for="login"><span>Email/Username</span></label>
+                <input id="login" type="text" name="login" value="{{ old('login') }}" required autofocus autocomplete="username" placeholder="email/username">
             </div>
-            @if ($errors->has('email'))
-                @include('partials.error_popup', ['field' => 'email'])
+            @if ($errors->has('login'))
+                @include('partials.error_popup', ['field' => 'login'])
             @endif
             <br>
             <div class="profile-info space-between">
@@ -37,6 +36,9 @@
                 <a class="large-rectangle small-text" href="{{ route('register') }}">Register</a>
             </div>
             <br>
+            <div class="Recover Password">
+                <a href="{{ route('recoverPasswordForm') }}">Forgot Your Password?</a>
+            </div>
             @include('partials.success_message')
             @if(session('error'))
                 @include('partials.error_popup', ['field' => 'error'])
