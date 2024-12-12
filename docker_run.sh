@@ -1,9 +1,15 @@
 #!/bin/bash
+
+# Stop execution if a step fails
 set -e
 
-cd /var/www
-env >> /var/www/.env
-php artisan clear-compiled
+# Replace with your group's image name
+IMAGE_NAME=gitlab.up.pt:5050/lbaw/lbawYYYY/lbawYYXX
+
+# Ensure that dependencies are available
+composer install
 php artisan config:clear
-php-fpm8.3 -D
-nginx -g "daemon off;"
+php artisan clear-compiled
+php artisan optimize
+
+docker buildx build --push --platform linux/amd64,linux/arm64 -t $IMAGE_NAME .
