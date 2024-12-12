@@ -156,15 +156,9 @@ class ArticlePage extends Model
             $exactQuery = trim($searchQuery, '"');
             return self::where('is_deleted', false)
                 ->where(function($query) use ($exactQuery) {
-                    $query->where('title', 'ILIKE', '%\b' . $exactQuery . '\b%')
-                        ->orWhere('subtitle', 'ILIKE', '%\b' . $exactQuery . '\b%')
-                        ->orWhere('content', 'ILIKE', '%\b' . $exactQuery . '\b%')
-                        ->orWhere('title', 'ILIKE', $exactQuery . '%')
-                        ->orWhere('subtitle', 'ILIKE', $exactQuery . '%')
-                        ->orWhere('content', 'ILIKE', $exactQuery . '%')
-                        ->orWhere('title', 'ILIKE', '%' . $exactQuery)
-                        ->orWhere('subtitle', 'ILIKE', '%' . $exactQuery)
-                        ->orWhere('content', 'ILIKE', '%' . $exactQuery);
+                    $query->where('title', 'ILIKE', '% ' . $exactQuery . ' %')
+                        ->orWhere('subtitle', 'ILIKE', '% ' . $exactQuery . ' %')
+                        ->orWhere('content', 'ILIKE', '% ' . $exactQuery . ' %');
                 })
                 ->get();
         }
@@ -187,6 +181,7 @@ class ArticlePage extends Model
                 ->orderByRaw("ts_rank(tsv, to_tsquery('english', ?)) DESC", [$tsQuery])
                 ->get();
         }
+
     }
 
     public static function filterByTags($articles, $tags)

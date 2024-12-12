@@ -100,7 +100,7 @@ class User extends Authenticatable
     public function followedTags(): BelongsToMany
     {
         return $this->belongsToMany(
-            tag::class,
+            Tag::class,
             'follow_tags',
             'user_id',
             'tag_id'
