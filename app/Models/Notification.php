@@ -39,27 +39,36 @@ class Notification extends Model
         return $this->belongsTo(User::class, 'user_to');
     }
 
+    public function getSenderDisplayNameAttribute(): array
+    {
+        return $this->sender ? [$this->sender->display_name, $this->sender->username] : ['Unknown', 'Unknown'];
+    }
+
+    public function getRecipientDisplayNameAttribute(): array
+    {
+        return $this->recipient ? [$this->recipient->display_name, $this->recipient->username] : ['Unknown', 'Unknown'];
+    }
+
 
     // Querying
     // Get respective subclass entry for a base class entry
-    public function getSpecificNotification(): HasOne|null
+    public function getSpecificNotification(): array|null
     {
         $ntfTypes = [
-            CommentNotification::class,
-            ReplyNotification::class,
-            UpvoteArticleNotification::class,
-            UpvoteCommentNotification::class,
-            UpvoteReplyNotification::class
+            1 => CommentNotification::class,
+            2 => ReplyNotification::class,
+            3 => UpvoteArticleNotification::class,
+            4 => UpvoteCommentNotification::class,
+            5 => UpvoteReplyNotification::class
         ];
 
-        foreach ($ntfTypes as $type) {
-            $equivSubEntry = $this->hasOne($type, 'ntf_id')->first();
+        foreach ($ntfTypes as $type => $class) {
+            $equivSubEntry = $this->hasOne($class, 'ntf_id')->first();
             if ($equivSubEntry) {
-                return $equivSubEntry;
+                return [$type, $equivSubEntry];
             }
         }
 
-        return null;
-    }
 
+    }
 }

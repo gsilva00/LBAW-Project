@@ -9,6 +9,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\CreateArticleController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
@@ -76,6 +77,9 @@ Route::prefix('profile')->controller
     Route::post('/edit/{username}', 'update')->name('updateProfile');
     Route::post('/delete/{id}', 'delete')->name('deleteProfile');
 });
+
+Route::get('/notifications', [NotificationsController::class, 'showNotificationsPage'])->name('notifications.show.page');
+
 
 // Administrator Panel
 Route::prefix('admin-panel')->controller
