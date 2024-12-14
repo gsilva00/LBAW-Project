@@ -17,6 +17,7 @@ class Notification extends Model
     protected $table = 'notifications';
 
     protected $fillable = [
+        'id',
         'ntf_date',
         'is_viewed',
         'user_to',
@@ -71,14 +72,40 @@ class Notification extends Model
 
     }
 
-    public static function getViewedNotificationsForUser(User $user)
+    public static function getArquivedNotificationsForUser(User $user)
     {
         return $user->notificationsReceived()->where('is_viewed', true)->get();
     }
 
-    public static function getUnviewedNotificationsForUser(User $user)
+    public static function getNewNotificationsForUser(User $user)
     {
         return $user->notificationsReceived()->where('is_viewed', false)->get();
+    }
+
+    public static function getNotificationsForUserByType(User $user, int $type, bool $isViewed)
+    {
+        if($isViewed){
+            $notifications = $user->notificationsReceived()->where('is_viewed', true)->get();
+        }
+        else{
+            $notifications = $user->notificationsReceived()->where('is_viewed', false)->get();
+        }
+        $newNotifications = [];
+
+        foreach ($notifications as $notification) {
+            $specificNotification = $notification->getSpecificNotification();
+            if ($type === 1) {
+                if ($specificNotification[0] === 1 || $specificNotification[0] === 2) {
+                    $newNotifications[] = $notification;
+                }
+            } else {
+                if ($specificNotification[0] === 3 || $specificNotification[0] === 4 || $specificNotification[0] === 5) {
+                    $newNotifications[] = $notification;
+                }
+            }
+        }
+
+        return $newNotifications;
     }
 
 

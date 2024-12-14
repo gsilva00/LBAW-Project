@@ -79,8 +79,16 @@ Route::prefix('profile')->controller
 });
 
 Route::get('/notifications', [NotificationsController::class, 'showNotificationsPage'])->name('notifications.show.page');
-Route::get('/notifications/new', [NotificationsController::class, 'newComments'])->name('notifications.show.newComments');
-Route::get('/notifications/archived', [NotificationsController::class, 'arquivedComments'])->name('notifications.show.arquivedComments');
+Route::get('/notifications/new/all', [NotificationsController::class, 'newNotifications'])->name('notifications.show.newNotificationsAll');
+Route::get('/notifications/archived/all', [NotificationsController::class, 'arquivedNotifications'])->name('notifications.show.arquivedNotificationsAll');
+
+Route::get('/notifications/new/upvotes', [NotificationsController::class, 'newNotificationsUpvotes'])->name('notifications.show.newNotificationsUpvotes');
+Route::get('/notifications/new/comments', [NotificationsController::class, 'newNotificationsComments'])->name('notifications.show.newNotificationsComments');
+
+Route::get('/notifications/archived/upvotes', [NotificationsController::class, 'arquivedNotificationsUpvotes'])->name('notifications.show.arquivedNotificationsUpvotes');
+Route::get('/notifications/archived/comments', [NotificationsController::class, 'arquivedNotificationsComments'])->name('notifications.show.arquivedNotificationsComments');
+
+Route::get('/notifications/archiving/{id}', [NotificationsController::class, 'archivingNotification'])->name('notifications.archiving');
 
 // Administrator Panel
 Route::prefix('admin-panel')->controller
