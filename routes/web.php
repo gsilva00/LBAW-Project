@@ -79,7 +79,8 @@ Route::prefix('profile')->controller
 });
 
 Route::get('/notifications', [NotificationsController::class, 'showNotificationsPage'])->name('notifications.show.page');
-
+Route::get('/notifications/new', [NotificationsController::class, 'newComments'])->name('notifications.show.newComments');
+Route::get('/notifications/archived', [NotificationsController::class, 'arquivedComments'])->name('notifications.show.arquivedComments');
 
 // Administrator Panel
 Route::prefix('admin-panel')->controller

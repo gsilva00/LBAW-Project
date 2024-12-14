@@ -41,6 +41,7 @@
         <script src="{{ url('js/tag_create_article.js') }}" defer></script>
         <script src="{{ url('js/tag_edit_article.js') }}" defer></script>
         <script src="{{ url('js/article_interact.js') }}" defer> </script>
+        <script src="{{ url('js/notifications_interect.js') }}" defer> </script>
     </head>
     <body>
         <div class="wrapper">

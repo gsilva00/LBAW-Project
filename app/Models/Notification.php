@@ -69,6 +69,17 @@ class Notification extends Model
             }
         }
 
-
     }
+
+    public static function getViewedNotificationsForUser(User $user)
+    {
+        return $user->notificationsReceived()->where('is_viewed', true)->get();
+    }
+
+    public static function getUnviewedNotificationsForUser(User $user)
+    {
+        return $user->notificationsReceived()->where('is_viewed', false)->get();
+    }
+
+
 }
