@@ -21,6 +21,10 @@
     align-items: center;
 }
 
+.large-rectangle.article-votes{
+    padding: 0.2em;
+}
+
 .small-text{
     font-size: var(--small-text-size);
     font-weight: 300;

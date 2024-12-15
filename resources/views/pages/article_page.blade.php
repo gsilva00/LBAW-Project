@@ -62,7 +62,7 @@
                             <span>Favourite Article</span>
                         @endif
                     </button>
-                    <div class="large-rectangle article-votes">
+                    <div class="fit-block large-rectangle article-votes">
                         <button id="upvote-button" data-upvote-url="{{ route('upvoteArticle', ['id' => $article->id]) }}">
                             @if($voteArticle == 1)
                                 <i class='bx bxs-upvote'></i>

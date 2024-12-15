@@ -12,7 +12,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
                     <a class="dropdown-item" href="<?php echo e(route('profile', ['username' => $user->username])); ?>"><h2>See Profile</h2></a>
-                    <a class="dropdown-item" href="<?php echo e(route('showSavedArticles')); ?>"><h2>Saved Articles</h2></a>
+                    <a class="dropdown-item" href="<?php echo e(route('showFavouriteArticles')); ?>"><h2>Favourite Articles</h2></a>
                     <?php if($user->is_admin): ?>
                         <a class="dropdown-item" href="<?php echo e(route('adminPanel')); ?>"><h2>Administrator Panel</h2></a>
                     <?php endif; ?>
@@ -31,7 +31,7 @@
     <div id="bottom-part-header">
         <a href="<?php echo e(route('homepage')); ?>"><h2><i class='bx bx-home-alt'></i> Homepage</h2></a>
         <a href="<?php echo e(route('showRecentNews')); ?>"><h2><i class='bx bx-stopwatch'></i>Most Recent News</h2></a>
-        <a href="<?php echo e(route('showVotedNews')); ?>"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
+        <a href="<?php echo e(route('showMostVotedNews')); ?>"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
         <a href="<?php echo e(route('showTrendingTags')); ?>"><h2><i class='bx bx-trending-up'></i>Trending Tags</h2></a>
         <h2 class="topic">
             <a href="<?php echo e(route('showTopic', ['name' => 'Politics'])); ?>">Politics</a>

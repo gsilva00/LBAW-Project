@@ -30,6 +30,15 @@ a {
 .news-tile {
   border: 1px solid #f5f5f5;
   padding-bottom: 10px;
+
+  height: 12em;
+}
+
+.news-tile a{
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+  justify-content: flex-start;
 }
 
 .news-tile p{
@@ -38,13 +47,23 @@ a {
   font-size: 1em;
   font-weight: 700;
   padding-left: 1em;
+
+  background-color: white;
+  flex-shrink: 0;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 3em;
 }
 
 .news-tile img {
   max-width: 100%;
   object-fit: cover;
+  object-position: center;
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
+  flex-shrink: 0;
+  height: 68%;
 }
 
 #recent-news-section .news-tile a img{
@@ -90,6 +109,10 @@ button{
   display: flex;
   align-items: flex-start;
   cursor: pointer;
+}
+
+button[type="button"]:hover{
+  background-color: var(--primary-color);
 }
 
 .title{

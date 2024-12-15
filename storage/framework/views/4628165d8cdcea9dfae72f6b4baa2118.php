@@ -10,7 +10,7 @@
         <div class="profile-info">
         <h1 class="large-rectangle">#<?php echo e($tag->name); ?></h1>
         <?php if(Auth::check()): ?>
-        <form method="POST" action="<?php echo e(Auth::user()->hasFollowedTag($tag) ? route('tag.unfollow', $tag) : route('tag.follow', $tag)); ?>">
+        <form method="POST" action="<?php echo e(Auth::user()->hasFollowedTag($tag) ? route('unfollowTag', $tag->name) : route('followTag', $tag->name)); ?>">
             <?php echo csrf_field(); ?>
             <button type="submit" class="large-rectangle small-text greyer">
                 <?php echo e(Auth::user()->hasFollowedTag($tag) ? 'Unfollow Tag' : 'Follow Tag'); ?>

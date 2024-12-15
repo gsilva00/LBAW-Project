@@ -2,7 +2,8 @@
     display: grid;
     grid-template-areas: "image name-date"
                           "image comment-content"
-                          "image comment-actions";
+                          "image comment-actions"
+                          "comment-form comment-form";
     grid-template-columns: auto 1fr;
     column-gap: 1em;
     margin-top: 2em;
@@ -32,6 +33,10 @@
     justify-content: flex-start;
     column-gap: 1em;
     margin-top: 1em;
+}
+
+.comment div{
+    grid-area: comment-form;
 }
 
 button .remove-position{

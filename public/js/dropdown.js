@@ -24,6 +24,7 @@ function setupDropdown(buttonId) {
 setupDropdown('profile-button');
 setupDropdown('all-topics-button');
 setupDropdown('search-button');
+setupDropdown('search-select-button');
 
 
 // Add event listeners to the buttons inside the search dropdown (Level 1)
@@ -50,3 +51,35 @@ function setupFilterDropdown() {
 }
 
 setupFilterDropdown();
+
+
+
+
+
+
+
+
+// To disappear filter button depending on the selection of search type (eg.: article, user, comment)
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButton = document.getElementById('filter-button');
+    const searchSelectUser = document.getElementById('search-select-user');
+    const searchSelectComment = document.getElementById('search-select-comment');
+    const searchSelectArticle = document.getElementById('search-select-article');
+
+    function toggleFilterButton() {
+        if (searchSelectUser.checked || searchSelectComment.checked) {
+            filterButton.style.display = 'none';
+            searchSelectUser.parentElement.style.right = "24.5em";
+        } else {
+            filterButton.style.display = 'flex';
+            searchSelectUser.parentElement.style.right = "29.5em";
+        }
+    }
+
+    searchSelectUser.addEventListener('change', toggleFilterButton);
+    searchSelectComment.addEventListener('change', toggleFilterButton);
+    searchSelectArticle.addEventListener('change', toggleFilterButton);
+
+    // Initial setup
+    toggleFilterButton();
+});
