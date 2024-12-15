@@ -28,6 +28,7 @@
         <link href="{{ url('css/popup.css') }}" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link href="{{ url('css/modal.css') }}" rel="stylesheet">
+        <link href="{{ url('css/notification_card.css') }}" rel="stylesheet">
         <!-- Scripts -->
         <script src="{{ url('js/dropdown.js') }}" defer> </script>
         <script src="{{ url('js/dropdown_tag_filter.js') }}" defer> </script>
@@ -40,6 +41,7 @@
         <script src="{{ url('js/tag_create_article.js') }}" defer></script>
         <script src="{{ url('js/tag_edit_article.js') }}" defer></script>
         <script src="{{ url('js/article_interact.js') }}" defer> </script>
+        <script src="{{ url('js/notifications_interect.js') }}" defer> </script>
     </head>
     <body>
         <div class="wrapper">

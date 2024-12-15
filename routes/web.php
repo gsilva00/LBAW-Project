@@ -9,6 +9,7 @@ use App\Http\Controllers\MailController;
 use App\Http\Controllers\ContactsController;
 use App\Http\Controllers\CreateArticleController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagController;
@@ -76,6 +77,18 @@ Route::prefix('profile')->controller
     Route::post('/edit/{username}', 'update')->name('updateProfile');
     Route::post('/delete/{id}', 'delete')->name('deleteProfile');
 });
+
+Route::get('/notifications', [NotificationsController::class, 'showNotificationsPage'])->name('notifications.show.page');
+Route::get('/notifications/new/all', [NotificationsController::class, 'newNotifications'])->name('notifications.show.newNotificationsAll');
+Route::get('/notifications/archived/all', [NotificationsController::class, 'arquivedNotifications'])->name('notifications.show.arquivedNotificationsAll');
+
+Route::get('/notifications/new/upvotes', [NotificationsController::class, 'newNotificationsUpvotes'])->name('notifications.show.newNotificationsUpvotes');
+Route::get('/notifications/new/comments', [NotificationsController::class, 'newNotificationsComments'])->name('notifications.show.newNotificationsComments');
+
+Route::get('/notifications/archived/upvotes', [NotificationsController::class, 'arquivedNotificationsUpvotes'])->name('notifications.show.arquivedNotificationsUpvotes');
+Route::get('/notifications/archived/comments', [NotificationsController::class, 'arquivedNotificationsComments'])->name('notifications.show.arquivedNotificationsComments');
+
+Route::get('/notifications/archiving/{id}', [NotificationsController::class, 'archivingNotification'])->name('notifications.archiving');
 
 // Administrator Panel
 Route::prefix('admin-panel')->controller

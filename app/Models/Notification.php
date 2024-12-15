@@ -17,6 +17,7 @@ class Notification extends Model
     protected $table = 'notifications';
 
     protected $fillable = [
+        'id',
         'ntf_date',
         'is_viewed',
         'user_to',
@@ -39,27 +40,73 @@ class Notification extends Model
         return $this->belongsTo(User::class, 'user_to');
     }
 
+    public function getSenderDisplayNameAttribute(): array
+    {
+        return $this->sender ? [$this->sender->display_name, $this->sender->username] : ['Unknown', 'Unknown'];
+    }
+
+    public function getRecipientDisplayNameAttribute(): array
+    {
+        return $this->recipient ? [$this->recipient->display_name, $this->recipient->username] : ['Unknown', 'Unknown'];
+    }
+
 
     // Querying
     // Get respective subclass entry for a base class entry
-    public function getSpecificNotification(): HasOne|null
+    public function getSpecificNotification(): array|null
     {
         $ntfTypes = [
-            CommentNotification::class,
-            ReplyNotification::class,
-            UpvoteArticleNotification::class,
-            UpvoteCommentNotification::class,
-            UpvoteReplyNotification::class
+            1 => CommentNotification::class,
+            2 => ReplyNotification::class,
+            3 => UpvoteArticleNotification::class,
+            4 => UpvoteCommentNotification::class,
+            5 => UpvoteReplyNotification::class
         ];
 
-        foreach ($ntfTypes as $type) {
-            $equivSubEntry = $this->hasOne($type, 'ntf_id')->first();
+        foreach ($ntfTypes as $type => $class) {
+            $equivSubEntry = $this->hasOne($class, 'ntf_id')->first();
             if ($equivSubEntry) {
-                return $equivSubEntry;
+                return [$type, $equivSubEntry];
             }
         }
 
-        return null;
     }
+
+    public static function getArquivedNotificationsForUser(User $user)
+    {
+        return $user->notificationsReceived()->where('is_viewed', true)->orderBy('ntf_date', 'desc')->get();
+    }
+
+    public static function getNewNotificationsForUser(User $user)
+    {
+        return $user->notificationsReceived()->where('is_viewed', false)->orderBy('ntf_date', 'desc')->get();
+    }
+
+    public static function getNotificationsForUserByType(User $user, int $type, bool $isViewed)
+    {
+        if($isViewed){
+            $notifications = $user->notificationsReceived()->where('is_viewed', true)->orderBy('ntf_date', 'desc')->get();
+        }
+        else{
+            $notifications = $user->notificationsReceived()->where('is_viewed', false)->orderBy('ntf_date', 'desc')->get();
+        }
+        $newNotifications = [];
+
+        foreach ($notifications as $notification) {
+            $specificNotification = $notification->getSpecificNotification();
+            if ($type === 1) {
+                if ($specificNotification[0] === 1 || $specificNotification[0] === 2) {
+                    $newNotifications[] = $notification;
+                }
+            } else {
+                if ($specificNotification[0] === 3 || $specificNotification[0] === 4 || $specificNotification[0] === 5) {
+                    $newNotifications[] = $notification;
+                }
+            }
+        }
+
+        return $newNotifications;
+    }
+
 
 }
