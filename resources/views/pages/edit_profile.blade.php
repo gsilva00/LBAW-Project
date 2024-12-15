@@ -79,6 +79,18 @@
                 @if ($errors->has('new_password_confirmation'))
                     @include('partials.error_popup', ['field' => 'new_password_confirmation'])
                 @endif
+                <h2><strong>Notifications Settings</strong></h2>
+                <br>
+                <div>
+                    <div>
+                        <label for="upvote-notifications">Upvote Notifications</label>
+                        <input type="checkbox" id="upvote-notifications" name="upvote-notifications" {{$profileUser->upvote_notification ? "checked" : ""}}/>
+                    </div>
+                    <div>
+                        <label for="comment-notifications">Comment/Reply Notifications</label>
+                        <input type="checkbox" id="comment-notifications" name="comment-notifications" {{$profileUser->comment_notification ? "checked" : ""}} />
+                    </div>
+                </div>
                 <br>
                 <br>
                 <br>
@@ -88,20 +100,6 @@
                     <button type="submit" class="large-rectangle small-text greyer">Save</button>
                 </div>
             </form>
-        </section>
-        <section class="profile-container">
-            <h2><strong>Notifications Settings</strong></h2>
-            <br>
-            <div>
-                <div>
-                    <input type="checkbox" id="scales" name="scales" checked />
-                    <label for="scales">Scales</label>
-                </div>
-                <div>
-                    <input type="checkbox" id="scales" name="scales" checked />
-                    <label for="scales">Scales</label>
-                </div>
-            </div>
         </section>
         <section class="profile-container">
             <form action="{{ route('deleteProfile', ['id' => $profileUser->id]) }}" method="POST" style="display:inline;">
