@@ -30,17 +30,17 @@ class MailController extends Controller
         }
 
         $username = $user->username;
-        $password = $user->password;
+        $verificationCode = rand(100000, 999999);
 
         $mailData = [
             'username' => $username,
-            'password' => $password
+            'code' => $verificationCode
         ];
 
         try {
             Mail::to($request->email)->send(new MailModel($mailData));
             $status = 'Success!';
-            $message = $request->name . ', an email has been sent to ' . $request->email;
+            $message = 'An email has been sent to ' . $request->email . ' with a verification code.';
         } catch (TransportException $e) {
             $status = 'Error!';
             $message = 'SMTP connection error occurred during the email sending process to ' . $request->email;
@@ -51,7 +51,59 @@ class MailController extends Controller
 
         $request->session()->flash('status', $status);
         $request->session()->flash('message', $message);
-        return redirect()->route('recoverPasswordForm');
 
+        if ($status === 'Success!') {
+            return redirect()->route('recoverPasswordForm')->with([
+                'verificationCode' => $verificationCode,
+                'email' => $request->email
+            ]);
+        }
+
+        return redirect()->route('recoverPasswordForm');
+    }
+
+    public function checkResetPassword(Request $request)
+    {
+        $verificationCode = $request->real_code;
+        $enteredCode = $request->code;
+        $email = $request->email;
+
+        if ($verificationCode == $enteredCode) {
+            return redirect()->route('resetPasswordForm')->with('email', $email);
+        }
+
+        $request->session()->flash('status', 'Error!');
+        $request->session()->flash('message', 'The verification code you entered is incorrect.');
+        return redirect()->route('recoverPasswordForm');
+    }
+
+    public function showResetPasswordForm(Request $request)
+    {
+        if (!$request->session()->has('email')) {
+            return redirect()->route('recoverPasswordForm');
+        }
+
+        return view('pages.reset_password')->with('email', $request->session()->get('email'));
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $email = $request->email;
+        $password = $request->password;
+        $confirmPassword = $request->confirm_password;
+
+        if ($password !== $confirmPassword) {
+            $request->session()->flash('status', 'Error!');
+            $request->session()->flash('message', 'Passwords do not match.');
+            return redirect()->route('resetPasswordForm')->with('email', $email);
+        }
+
+        $user = User::where('email', $email)->first();
+        $user->password = bcrypt($password);
+        $user->save();
+
+        $request->session()->flash('status', 'Success!');
+        $request->session()->flash('message', 'Password reset successfully.');
+        return redirect()->route('login');
     }
 }

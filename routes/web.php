@@ -38,12 +38,18 @@ Route::controller(LoginController::class)->group(function () {
     Route::post('/logout', 'logout')->name('logout')->middleware('auth');
 });
 
-Route::get('/recover-password', [MailController::class, 'showRecoverPasswordForm'])->name('recoverPasswordForm');
-Route::post('/recover-password', [MailController::class, 'sendRecoverPasswordEmail'])->name('recoverPasswordAction');
-
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
+});
+
+//Password Recovery
+Route::controller(MailController::class)->group(function () {
+    Route::get('/recover-password', 'showRecoverPasswordForm')->name('recoverPasswordForm');
+    Route::post('/recover-password', 'sendRecoverPasswordEmail')->name('recoverPasswordAction');
+    Route::post('/reset-password-check', 'checkResetPassword')->name('resetPasswordCheck');
+    Route::get('/reset-password', 'showResetPasswordForm')->name('resetPasswordForm');
+    Route::post('/reset-password', 'resetPassword')->name('resetPasswordAction');
 });
 
 // Main Dynamic Pages

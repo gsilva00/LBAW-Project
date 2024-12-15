@@ -50,7 +50,7 @@ class MailModel extends Mailable
         return $this->view('mails.recover_password_mail')
             ->with([
                 'username' => $this->mailData['username'],
-                'password' => $this->mailData['password'],
+                'code' => $this->mailData['code'],
             ]);
     }
 }
