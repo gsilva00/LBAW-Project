@@ -2,13 +2,28 @@
 
 @section('content')
     @if(session('status'))
-        <section class="content">
+        @if(session('status') === 'Success!')
+            <form method="POST" action="{{ route('resetPasswordCheck') }}">
+                {{ csrf_field() }}
+                <h1>{{ session('message') }}</h1>
+                <div class="">
+                    <label for="code"><span>Verification Code</span></label>
+                    <input id="code" type="text" name="code" value="{{ old('code') }}" required autofocus autocomplete="code" placeholder="code">
+                </div>
+                <input type="hidden" name="real_code" value="{{ session('verificationCode') }}">
+                <input type="hidden" name="email" value="{{ session('email') }}">
+                <br>
+                <div class="profile-info">
+                    <button type="submit" class="large-rectangle small-text">Confirm</button>
+                </div>
+            </form>
+        @else
             <h3>{{ session('status') }}</h3>
             <h4>{{ session('message') }}</h4>
             <button onclick="location.reload()">
                 <h3>Try again</h3>
             </button>
-        </section>
+        @endif
     @else
         <div class="recover-password-container">
             <form method="POST" action="{{ route('recoverPasswordAction') }}">
@@ -22,7 +37,6 @@
                 <div class="profile-info">
                     <button type="submit" class="large-rectangle small-text">Recover Password</button>
                 </div>
-                <br>
             </form>
         </div>
     @endif
