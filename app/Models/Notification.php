@@ -74,21 +74,21 @@ class Notification extends Model
 
     public static function getArquivedNotificationsForUser(User $user)
     {
-        return $user->notificationsReceived()->where('is_viewed', true)->get();
+        return $user->notificationsReceived()->where('is_viewed', true)->orderBy('ntf_date', 'desc')->get();
     }
 
     public static function getNewNotificationsForUser(User $user)
     {
-        return $user->notificationsReceived()->where('is_viewed', false)->get();
+        return $user->notificationsReceived()->where('is_viewed', false)->orderBy('ntf_date', 'desc')->get();
     }
 
     public static function getNotificationsForUserByType(User $user, int $type, bool $isViewed)
     {
         if($isViewed){
-            $notifications = $user->notificationsReceived()->where('is_viewed', true)->get();
+            $notifications = $user->notificationsReceived()->where('is_viewed', true)->orderBy('ntf_date', 'desc')->get();
         }
         else{
-            $notifications = $user->notificationsReceived()->where('is_viewed', false)->get();
+            $notifications = $user->notificationsReceived()->where('is_viewed', false)->orderBy('ntf_date', 'desc')->get();
         }
         $newNotifications = [];
 

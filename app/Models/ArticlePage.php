@@ -156,9 +156,18 @@ class ArticlePage extends Model
             $exactQuery = trim($searchQuery, '"');
             return self::where('is_deleted', false)
                 ->where(function($query) use ($exactQuery) {
-                    $query->where('title', 'ILIKE', '% ' . $exactQuery . ' %')
+                    $query->Where('title', 'ILIKE', '% ' . $exactQuery)
+                        ->orWhere('title', 'ILIKE', $exactQuery . ' %')
+                        ->orwhere('title', 'ILIKE', '% ' . $exactQuery . ' %')
+                        ->orWhere('title', 'ILIKE', $exactQuery)
                         ->orWhere('subtitle', 'ILIKE', '% ' . $exactQuery . ' %')
-                        ->orWhere('content', 'ILIKE', '% ' . $exactQuery . ' %');
+                        ->orWhere('subtitle', 'ILIKE', $exactQuery . ' %')
+                        ->orWhere('subtitle', 'ILIKE', '% ' . $exactQuery)
+                        ->orWhere('subtitle', 'ILIKE', $exactQuery)
+                        ->orWhere('content', 'ILIKE', '% ' . $exactQuery . ' %')
+                        ->orWhere('content', 'ILIKE', $exactQuery . ' %')
+                        ->orWhere('content', 'ILIKE', '% ' . $exactQuery)
+                        ->orWhere('content', 'ILIKE', $exactQuery);
                 })
                 ->get();
         }
