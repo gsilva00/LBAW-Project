@@ -26,10 +26,10 @@
                         <?php echo e(Auth::user()->isFollowing($user) ? 'Unfollow User' : 'Follow User'); ?>
 
                     </button>
-                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
-                        Report User
-                    </button>
                 </form>
+                <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                        Report User
+                </button>
                 <?php endif; ?>
             </div>
             <div id="rest-profile-info">

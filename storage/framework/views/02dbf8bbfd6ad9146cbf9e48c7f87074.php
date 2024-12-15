@@ -3,8 +3,6 @@
 <?php $__env->startSection('title', 'Create Article'); ?>
 
 <?php $__env->startSection('content'); ?>
-    <script src="<?php echo e(url('js/tagcreatearticle.js')); ?>"></script>
-
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Create a New Article</h1>
 
@@ -31,7 +29,7 @@
                 <input type="text" id="tag-create-article-input" placeholder="Type to search tags...">
                 <div id="tag-create-article-suggestions" class="suggestions"></div>
             </div>
-            <div id="selected-create-article-tags" class="selected"></div>
+            <div id="selected-create-article-tags" class="selected selected-maxwidth"></div>
             <div class="profile-info">
                 <label for="content"><span>Topics</span></label>
                 <select class="form-control" id="topics" name="topics[]" required>
@@ -50,7 +48,7 @@
             <br>
             <div class="profile-info">
                 <label for="article_picture"><span>Upload Article Picture</span></label>
-                <input type="file" name="article_picture" id="article_picture">
+                <input type="file" name="file" id="article_picture">
             </div>
             <?php if($errors->has('article_picture')): ?>
                 <?php echo $__env->make('partials.error_popup', ['field' => 'article_picture'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

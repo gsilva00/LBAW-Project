@@ -25,10 +25,10 @@
                     <button type="button" id="follow-user-button" class="large-rectangle small-text greyer">
                         {{ Auth::user()->isFollowing($user) ? 'Unfollow User' : 'Follow User' }}
                     </button>
-                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
-                        Report User
-                    </button>
                 </form>
+                <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                        Report User
+                </button>
                 @endif
             </div>
             <div id="rest-profile-info">
