@@ -4,17 +4,24 @@
 <div class="dropdown-menu" id="search-menu" aria-labelledby="search-button">
     <form class="dropdown-item" action="{{ route('search') }}" method="GET">
         <div class="search-container">
+        <button class="p" type="button" id="search-select-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="button-for-search-selection">
+                <i class='bx bx-filter'></i>
+                <span>Search By</span>
+            </button>
+            <div class="dropdown-menu" id="search-select-menu">
+                    <input id="search-select-article" type="radio" name="search-select" value="article" checked="checked">
+                    <label for="search-select-article" > Article </label>
+                    <input id="search-select-user" type="radio" name="search-select" value="user">
+                    <label for="search-select-user" > User </label>
+                    <input id="search-select-comment" type="radio" name="search-select" value="comment">
+                    <label for="search-select-comment" > Comment </label>
+            </div>
             <button class="p" type="button" id="filter-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="button-for-filter">
                 <i class='bx bx-filter-alt'></i>
                 <span>Filters</span>
             </button>
             <input type="search" name="search" placeholder="Search" aria-label="Search">
             <button class="p" type="submit"><span>Search</span></button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
         </div>
         <div id="filter-options">
             <div class="filter-option">

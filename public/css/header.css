@@ -139,7 +139,7 @@ header{
 }
 
 #search-menu{
-  top: 6em;
+  top: 5.9em;
 }
 
 .dropdown-item:hover {
@@ -181,4 +181,24 @@ header{
 #all-topics-button + .dropdown-menu{
   top: 5.9em;
   right: 5em;
+}
+
+#search-select-menu{
+  list-style-type: none;
+  width: max-content;
+  padding: 0.5em 1em 0.1em 0.5em ;
+  text-align: start;
+  right: 29.5em;
+  top: 0em;
+}
+
+#search-select-menu:hover{
+  background-color: #f1f1f1;
+}
+
+#search-select-menu label{
+  position: relative;
+  top: -1.3em;
+  font-size: 0.85em;
+  margin-right: 1em;
 }

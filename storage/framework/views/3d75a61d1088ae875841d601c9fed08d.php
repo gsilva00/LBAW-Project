@@ -3,6 +3,7 @@
 <?php $__env->startSection('title', $article->is_deleted ? '[Deleted]' : $article->title); ?>
 
 <?php $__env->startSection('content'); ?>
+    <meta name="article-id" content="<?php echo e($article->id); ?>">
     <div class="article-more-news-wrapper">
         <section class="article-section">
             <div class="large-rectangle breadcrumbs">
@@ -30,7 +31,9 @@
 
                         <?php endif; ?>
                     </p>
-                    <button class="small-text small-rectangle" title="report news"><span>Report News</span></button>  <!-- Needs to be implemented -->
+                    <button class="small-text small-rectangle" title="report article" id="report-article-button" data-article-id="<?php echo e($article->id); ?>">
+                        <span>Report Article</span> <!-- Needs to be implemented -->
+                    </button>
                 </div>
                 <p class="title"><?php echo e($article->is_deleted ? '[Deleted]' : $article->subtitle); ?></p>
                 <div>
@@ -51,49 +54,43 @@
                         <span><strong><a href="<?php echo e(route('showTag', ['name' => $tag->name])); ?>"><?php echo e($tag->name); ?></a></strong></span><?php if(!$loop->last): ?><?php endif; ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
-                <div class="article-actions">      
-                        <?php if(Auth::check() && $user->favouriteArticles->contains($article->id)): ?>
-                        <button class="small-rectangle fit-block favorite" title="Save Article"><i class='bx bxs-star'></i><span>Saved
+                <div class="article-actions">
+                    <button class="small-rectangle fit-block favourite" title="Favourite Article" data-favourite-url="<?php echo e(route('favouriteArticle', ['id' => $article->id])); ?>">
+                        <?php if(Auth::check() && $favourite): ?>
+                            <i class='bx bxs-star'></i>
+                            <span>Favourited</span>
                         <?php else: ?>
-                        <button class="small-rectangle fit-block favorite" title="Save Article"><i class='bx bx-star'></i><span> Save Article
+                            <i class='bx bx-star'></i>
+                            <span>Favourite Article</span>
                         <?php endif; ?>
-                    </span></button>
-                    <div class="small-rectangle fit-block"><button title="upvote article"><i class='bx bx-upvote'></i></button><span><strong><?php echo e($article->upvotes - $article->downvotes); ?></strong></span><button title="downvote article"><i class='bx bx-downvote' ></i></button></div>
+                    </button>
+                    <div class="fit-block large-rectangle article-votes">
+                        <button id="upvote-button" data-upvote-url="<?php echo e(route('upvoteArticle', ['id' => $article->id])); ?>">
+                            <?php if($voteArticle == 1): ?>
+                                <i class='bx bxs-upvote'></i>
+                            <?php else: ?>
+                                <i class='bx bx-upvote'></i>
+                            <?php endif; ?>
+                        </button>
+                        <p><strong><?php echo e($article->upvotes - $article->downvotes); ?></strong></p>
+                        <button id="downvote-button" data-downvote-url="<?php echo e(route('downvoteArticle', ['id' => $article->id])); ?>">
+                            <?php if($voteArticle == -1): ?>
+                                <i class='bx bxs-downvote'></i>
+                            <?php else: ?>
+                                <i class='bx bx-downvote'></i>
+                            <?php endif; ?>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="comments-section">
                     <h2>Comments</h2>
-                    <form class="comment">
-                        <?php if(Auth::guest() || $user->is_deleted): ?>
-                            <img src="<?php echo e(asset('images/profile/default.jpg')); ?>" alt="profile_picture">
-                        <?php else: ?>
-                            <img src="<?php echo e(asset('images/profile/' . $user->profile_picture)); ?>" alt="profile_picture">
-                        <?php endif; ?>
-                        <div class="comment-input-container">
-                            <input type="text" class="comment-input" placeholder="Write a comment..." <?php if(Auth::guest() || $user->is_deleted): ?> disabled <?php endif; ?>>
-
-                            <button class="small-rectangle" title="Send comment" <?php if(Auth::guest() || $user->is_deleted): ?> disabled <?php endif; ?>><i class='bx bx-send remove-position'></i><span>Send</span></button>
-                        </div>
-                    </form>
+                    <?php echo $__env->make('partials.comment_write_form', ['user' => $user, 'article' => $article, 'state' => "writeArticleComment"], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     <br>
                     <br>
-                    <?php if($comments->isEmpty()): ?>
-                        <div class="not-available-container">
-                            <p>No comments available.</p>
-                        </div>
-                    <?php else: ?>
-                        <?php $__currentLoopData = $comments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $comment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php echo $__env->make('partials.comment', ['comment' => $comment, 'replies' => $comment->replies, 'user' => $user], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                            <?php if($comment->replies->isNotEmpty()): ?>
-                                <button class="small-rectangle see-replies-button" title="See replies"><i class='bx bx-chevron-down remove-position' ></i><span><?php echo e($comment->replies->count()); ?> <?php echo e($comment->replies->count() > 1 ? 'Answers' : 'Answer'); ?></span></button>
-                                <div class="reply">
-                                <?php $__currentLoopData = $comment->replies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reply): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <?php echo $__env->make('partials.comment', ['comment' => $reply], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                </div>
-                            <?php endif; ?>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    <?php endif; ?>
+                    <div class="comments-list">
+                        <?php echo $__env->make('partials.comments', ['comments' => $comments, 'user' => $user, 'article' => $article], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                    </div>
                 </div>
             </div>
         </section>

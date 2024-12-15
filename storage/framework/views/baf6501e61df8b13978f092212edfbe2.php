@@ -9,7 +9,7 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-    <div class="profile-wrapper">
+    <div class="profile-wrapper" data-user-id="<?php echo e($profileUser->id); ?>">
         <section class="profile-container">
             <img src="<?php echo e(asset('images/profile/' . $profileUser->profile_picture)); ?>" alt="profile_picture">
             <div class="profile-info">
@@ -26,6 +26,9 @@
                         <?php echo e(Auth::user()->isFollowing($user) ? 'Unfollow User' : 'Follow User'); ?>
 
                     </button>
+                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                        Report User
+                    </button>
                 </form>
                 <?php endif; ?>
             </div>
@@ -41,32 +44,32 @@
             </section>
             <?php if($isOwner || $isAdmin): ?>
             <section>
-                <h2 id="favoriteTopicTitle">Favorite Topics</h2>
+                <h2 id="favouriteTopicTitle">Favourite Topics</h2>
                 <?php if($profileUser->followedTopics->isEmpty()): ?>
                     <div class="not-available-container">
-                        <p>No favorite topics.</p>
+                        <p>No favourite topics.</p>
                     </div>
                 <?php else: ?>
                         <div class="selected">
                     <?php $__currentLoopData = $profileUser->followedTopics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="block">
-                            <span><?php echo e($topic->name); ?></span><button class="remove" data-url="<?php echo e(route('topic.unfollow', $topic)); ?>" data-topic-id="<?php echo e($topic->id); ?>">&times;</button>
+                            <span><?php echo e($topic->name); ?></span><button class="remove" data-url="<?php echo e(route('unfollowTopic', $topic->name)); ?>" data-topic-id="<?php echo e($topic->id); ?>">&times;</button>
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                 <?php endif; ?>
             </section>
             <section>
-                <h2 id="favoriteTagTitle">Favorite Tags</h2>
-                <?php if($profileUser->followedTags->isEmpty()): ?>
+                <h2 id="favouriteTagTitle">Favourite Tags</h2>
+                <?php if($profileUser->getFollowedTags()->isEmpty()): ?>
                     <div class="not-available-container">
-                        <p>No favorite tags.</p>
+                        <p>No favourite tags.</p>
                     </div>
                 <?php else: ?>
                     <div class="selected">
-                        <?php $__currentLoopData = $profileUser->followedTags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $profileUser->getFollowedTags(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="block">
-                                <span><?php echo e($tag->name); ?></span><button class="remove" data-url="<?php echo e(route('tag.unfollow', $tag)); ?>" data-tag-id="<?php echo e($tag->id); ?>">&times;</button>
+                                <span><?php echo e($tag->name); ?></span><button class="remove" data-url="<?php echo e(route('unfollowTag', $tag->name)); ?>" data-tag-id="<?php echo e($tag->id); ?>">&times;</button>
                             </div>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
@@ -74,16 +77,16 @@
             </section>
 
             <section>
-                <h2>Favorite Authors</h2>
+                <h2>Favourite Authors</h2>
                 <?php if($profileUser->following->isEmpty()): ?>
                 <div class="not-available-container">
-                        <p>No favorite authors.</p>
+                        <p>No favourite authors.</p>
                     </div>
                 <?php else: ?>
                 <div id="users-section">
                 <div id="user-list">
-                        <?php $__currentLoopData = $profileUser->following; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $favauthor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php echo $__env->make('partials.user_tile', ['user' => $favauthor], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                        <?php $__currentLoopData = $profileUser->following; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fav_author): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php echo $__env->make('partials.user_tile', ['user' => $fav_author], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
                 </div>
