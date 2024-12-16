@@ -508,11 +508,24 @@ paths:
         '200':
           description: 'Success. Display Most Voted News Feed.'
 
-  /article/{id}:
+  /recent-news:
 
     get:
       operationId: R304
-      summary: 'R304: View News Item'
+      summary: 'R304: View Recent News'
+      description: 'Show the Recent News page. Access: GUE, USR'
+      tags:
+        - 'M03: News'
+
+      responses:
+        '200':
+          description: 'Success. Display Recent News Feed.'
+
+  /article/{id}:
+
+    get:
+      operationId: R305
+      summary: 'R305: View News Item'
       description: 'Show Article page. Access: GUE, USR'
       tags:
         - 'M03: News'
@@ -533,8 +546,8 @@ paths:
   /create-article:
 
     get:
-      operationId: R305
-      summary: 'R305: Create News Article Form'
+      operationId: R306
+      summary: 'R306: Create News Article Form'
       description: 'Display create a new article UI. Access: USR'
       tags:
         - 'M03: News'
@@ -553,8 +566,8 @@ paths:
                   value: '/login'
 
     post:
-      operationId: R306
-      summary: 'R306: Create New Article Action'
+      operationId: R307
+      summary: 'R307: Create New Article Action'
       description: 'Create a new article. Access: USR'
       tags:
         - 'M03: News'
@@ -599,8 +612,8 @@ paths:
   /edit-article/{id}:
 
     get:
-      operationId: R307
-      summary: 'R307: Edit article Form'
+      operationId: R308
+      summary: 'R308: Edit article Form'
       description: 'Show the edit article page. Access: OWN'
       tags:
         - 'M03: News'
@@ -619,8 +632,8 @@ paths:
           description: 'Unauthorized. You do not possess the valid credentials edit this article.'
 
     post:
-      operationId: R308
-      summary: 'R308: Edit article Action'
+      operationId: R309
+      summary: 'R309: Edit article Action'
       description: 'Processes and saves the changes made by user. Access: OWN'
       tags:
         - 'M03: News'
@@ -670,8 +683,8 @@ paths:
   /delete-article/{id}:
 
     post:
-      operationId: R309
-      summary: 'R309: Delete an article.'
+      operationId: R310
+      summary: 'R310: Delete an article.'
       description: 'Delete an article action. Access: OWN, ADM'
       tags:
         - 'M03: News'
