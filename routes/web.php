@@ -86,13 +86,13 @@ Route::prefix('profile')->controller
 
 Route::get('/notifications', [NotificationsController::class, 'showNotificationsPage'])->name('notifications.show.page');
 Route::get('/notifications/new/all', [NotificationsController::class, 'newNotifications'])->name('notifications.show.newNotificationsAll');
-Route::get('/notifications/archived/all', [NotificationsController::class, 'arquivedNotifications'])->name('notifications.show.arquivedNotificationsAll');
+Route::get('/notifications/archived/all', [NotificationsController::class, 'archivedNotifications'])->name('notifications.show.archivedNotificationsAll');
 
 Route::get('/notifications/new/upvotes', [NotificationsController::class, 'newNotificationsUpvotes'])->name('notifications.show.newNotificationsUpvotes');
 Route::get('/notifications/new/comments', [NotificationsController::class, 'newNotificationsComments'])->name('notifications.show.newNotificationsComments');
 
-Route::get('/notifications/archived/upvotes', [NotificationsController::class, 'arquivedNotificationsUpvotes'])->name('notifications.show.arquivedNotificationsUpvotes');
-Route::get('/notifications/archived/comments', [NotificationsController::class, 'arquivedNotificationsComments'])->name('notifications.show.arquivedNotificationsComments');
+Route::get('/notifications/archived/upvotes', [NotificationsController::class, 'archivedNotificationsUpvotes'])->name('notifications.show.archivedNotificationsUpvotes');
+Route::get('/notifications/archived/comments', [NotificationsController::class, 'archivedNotificationsComments'])->name('notifications.show.archivedNotificationsComments');
 
 Route::get('/notifications/archiving/{id}', [NotificationsController::class, 'archivingNotification'])->name('notifications.archiving');
 
@@ -122,18 +122,17 @@ Route::controller(CreateArticleController::class)->group(function () {
     Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
 });
 
-Route::post('/comment/{id}/upvote-comment', [ArticlePageController::class, 'upvoteComment'])->name('comment.upvoteComment');
-Route::post('/comment/{id}/downvote-comment', [ArticlePageController::class, 'downvoteComment'])->name('comment.downvoteComment');
-Route::post('/comment/{id}/delete-comment', [ArticlePageController::class, 'deleteComment'])->name('comment.deleteComment');
-Route::post('/comment/{id}/edit-comment', [ArticlePageController::class, 'editComment'])->name('comment.editComment');
+Route::post('/comment/{id}/upvote-comment', [ArticlePageController::class, 'upvoteComment'])->name('upvoteComment');
+Route::post('/comment/{id}/downvote-comment', [ArticlePageController::class, 'downvoteComment'])->name('downvoteComment');
+Route::post('/comment/{id}/delete-comment', [ArticlePageController::class, 'deleteComment'])->name('deleteComment');
+Route::post('/comment/{id}/edit-comment', [ArticlePageController::class, 'editComment'])->name('editComment');
 
-Route::post('/comment/{id}/commentForm', [ArticlePageController::class, 'showCommentForm'])->name('comment.commentForm');
-Route::post('/comment/{id}/reply', [ArticlePageController::class, 'replyComment'])->name('comment.replyComment');
+Route::post('/comment/{id}/commentForm', [ArticlePageController::class, 'showCommentForm'])->name('showCommentForm');
+Route::post('/comment/{id}/reply', [ArticlePageController::class, 'replyComment'])->name('replyComment');
 
-
-Route::post('/reply/{id}/upvote-reply', [ArticlePageController::class, 'upvoteReply'])->name('comment.upvoteReply');
-Route::post('/reply/{id}/downvote-reply', [ArticlePageController::class, 'downvoteReply'])->name('comment.downvoteReply');
-Route::post('/reply/{id}/delete-reply', [ArticlePageController::class, 'deleteReply'])->name('comment.deleteReply');
+Route::post('/reply/{id}/upvote-reply', [ArticlePageController::class, 'upvoteReply'])->name('upvoteReply');
+Route::post('/reply/{id}/downvote-reply', [ArticlePageController::class, 'downvoteReply'])->name('downvoteReply');
+Route::post('/reply/{id}/delete-reply', [ArticlePageController::class, 'deleteReply'])->name('deleteReply');
 
 Route::post('/report-article-modal/{id}', [ArticlePageController::class, 'showReportArticleModal'])->name('showReportArticleModal');
 Route::post('/report-comment-modal/{id}', [ArticlePageController::class, 'showReportCommentModal'])->name('showReportCommentModal');

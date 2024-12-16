@@ -58,7 +58,7 @@ class ArticlePagePolicy
      */
     public function update(User $user, ArticlePage $articlePage): bool
     {
-        return Auth::check() && !$user->is_banned && $articlePage->author()->is($user);
+        return Auth::check() && !$user->is_banned && $articlePage->author()->is($user) && !$articlePage->is_deleted;
     }
 
     /**
@@ -66,23 +66,24 @@ class ArticlePagePolicy
      */
     public function delete(User $user, ArticlePage $articlePage): bool
     {
-        return Auth::check() && !$user->is_banned && $articlePage->author()->is($user);
+        return Auth::check() && !$user->is_banned && $articlePage->author()->is($user) && !$articlePage->is_deleted;
     }
 
 
-    public function upvote(User $user): bool
+    public function upvote(User $user, ArticlePage $articlePage): bool
     {
-        return Auth::check() && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && !$articlePage->is_deleted;
     }
-    public function downvote(User $user): bool
+    public function downvote(User $user, ArticlePage $articlePage): bool
     {
-        return Auth::check() && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && !$articlePage->is_deleted;
     }
-
-    public function favourite(User $user): bool
+    public function favourite(User $user, ArticlePage $articlePage): bool
     {
-        // Valid for favoriting and unfavoriting
-        return Auth::check() && !$user->is_banned;
+        return Auth::check() && !$user->is_banned && !$articlePage->is_deleted;
     }
-
+    public function report(User $user, ArticlePage $articlePage): bool
+    {
+        return Auth::check() && !$user->is_banned && !$articlePage->is_deleted;
+    }
 }

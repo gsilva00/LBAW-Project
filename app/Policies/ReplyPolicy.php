@@ -64,4 +64,13 @@ class ReplyPolicy
         return Auth::check() && !$user->is_banned && $reply->author()->is($user);
     }
 
+
+    public function upvote(User $user, Reply $reply): bool
+    {
+        return Auth::check() && !$user->is_banned && !$reply->is_deleted;
+    }
+    public function downvote(User $user, Reply $reply): bool
+    {
+        return Auth::check() && !$user->is_banned && !$reply->is_deleted;
+    }
 }

@@ -42,7 +42,7 @@
                 </button>
             @endif
         </div>
-        @if(!$comment->is_deleted)
+        @if(!$comment->is_deleted && Auth::check())
             @if(!$isReply)
                 <button class="small-rectangle" title="reply comment">
                     <i class='bx bx-message remove-position'></i>

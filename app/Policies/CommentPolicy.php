@@ -73,4 +73,8 @@ class CommentPolicy
     {
         return Auth::check() && !$user->is_banned && !$comment->is_deleted;
     }
+    public function report(User $user, Comment $comment): bool
+    {
+        return Auth::check() && !$user->is_banned && !$comment->is_deleted;
+    }
 }

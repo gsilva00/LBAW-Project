@@ -167,11 +167,9 @@ class ArticlePageController extends Controller
 
         // TODO SPECIAL FEEDBACK WHEN ARTICLE IS DELETED (NO INTERACTIONS ALLOWED)
 
-        $this->authorize('downvote', ArticlePage::class); // TODO REDIRECT TO LOGIN
+        $this->authorize('downvote', $article); // TODO REDIRECT TO LOGIN
 
         $vote = $user->votedArticles()->where('article_id', $id)->first();
-        $voteStatus = 0;
-
         if ($vote) {
             if ($vote->pivot->type === 'Downvote') {
                 $user->votedArticles()->detach($id);
@@ -202,9 +200,11 @@ class ArticlePageController extends Controller
 
     public function favourite(Request $request, $id): JsonResponse
     {
+        $article = ArticlePage::findOrFail($id);
+
         // TODO SPECIAL FEEDBACK WHEN ARTICLE IS DELETED (NO INTERACTIONS ALLOWED)
 
-        $this->authorize('favourite', ArticlePage::class); // TODO REDIRECT TO LOGIN
+        $this->authorize('favourite', $article); // TODO REDIRECT TO LOGIN
 
         /** @var User $user */
         $user = Auth::user();
@@ -230,16 +230,18 @@ class ArticlePageController extends Controller
     public function writeComment(Request $request, $id): JsonResponse
     {
         // Log::info('Comment request: ' . json_encode($request->all()));
+        /** @var User $user */
+        $user = auth()->user();
+        $article = ArticlePage::findOrFail($id);
 
+        if ($article->is_deleted) { // TODO review
+            return response()->json(['error' => 'Article is deleted'], 404);
+        }
         $this->authorize('create', Comment::class);
 
         $request->validate([
             'comment' => 'required|string|max:255',
         ]);
-
-        /** @var User $user */
-        $user = auth()->user();
-        $article = ArticlePage::findOrFail($id);
 
         $comment = new Comment();
         $comment->author_id = auth()->id();
@@ -261,15 +263,14 @@ class ArticlePageController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        $this->authorize('upvote', Comment::class);
+
         $comment = Comment::findOrFail($id);
-
         $vote = $comment->voters()->where('user_id', $user->id)->first();
-
         if ($vote) {
             if ($vote->pivot->type === 'Upvote') {
                 $comment->voters()->detach($user->id);
@@ -302,15 +303,14 @@ class ArticlePageController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        $this->authorize('downvote', Comment::class);
+
         $comment = Comment::findOrFail($id);
-
         $vote = $comment->voters()->where('user_id', $user->id)->first();
-
         if ($vote) {
             if ($vote->pivot->type === 'Downvote') {
                 $comment->voters()->detach($user->id);
@@ -343,15 +343,14 @@ class ArticlePageController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        $this->authorize('upvote', Reply::class);
+
         $reply = Reply::findOrFail($id);
-
         $vote = $reply->voters()->where('user_id', $user->id)->first();
-
         if ($vote) {
             if ($vote->pivot->type === 'Upvote') {
                 $reply->voters()->detach($user->id);
@@ -384,15 +383,14 @@ class ArticlePageController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-
         if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        $this->authorize('downvote', Reply::class);
+
         $reply = Reply::findOrFail($id);
-
         $vote = $reply->voters()->where('user_id', $user->id)->first();
-
         if ($vote) {
             if ($vote->pivot->type === 'Downvote') {
                 $reply->voters()->detach($user->id);
@@ -427,6 +425,8 @@ class ArticlePageController extends Controller
         $comment->is_deleted = true;
         $comment->save();
 
+        $this->authorize('delete', $comment);
+
         $commentsView = view('partials.comment', ['comment' => $comment, 'user' => Auth::user(), 'isReply' => false, 'replies' => $comment->replies])->render();
 
         return response()->json([
@@ -442,6 +442,8 @@ class ArticlePageController extends Controller
         $reply->is_deleted = true;
         $reply->save();
 
+        $this->authorize('delete', $reply);
+
         $commentsView = view('partials.comment', ['comment' => $reply, 'user' => Auth::user(), 'isReply' => false, 'replies' => $reply->replies])->render();
         return response()->json([
             'success' => true,
@@ -452,10 +454,11 @@ class ArticlePageController extends Controller
 
     public function showCommentForm($id, Request $request): View
     {
-
         $comment = $request->state === 'editReply' ?  Reply::findOrFail($id) : Comment::findOrFail($id);
         $article = ArticlePage::findOrFail($request->articleId);
         $user = auth()->user();
+
+        $this->authorize('create', Comment::class);
 
         return view('partials.comment_write_form', [
             'user' => $user,
@@ -473,6 +476,8 @@ class ArticlePageController extends Controller
         $comment->content = $request->comment;
         $comment->save();
 
+        $this->authorize('update', $comment);
+
         Log::info('Comment edited: ' . json_encode($comment));
 
         $commentsView = view('partials.comment', ['comment' => $comment, 'user' => Auth::user(), 'isReply' => $request->isReply , 'replies' => $comment->replies])->render();
@@ -487,6 +492,8 @@ class ArticlePageController extends Controller
     {
         $comment = Comment::findOrFail($id);
 
+        $this->authorize('create', Reply::class);
+
         $request->validate([
             'comment' => 'required|string|max:255',
         ]);
@@ -497,7 +504,11 @@ class ArticlePageController extends Controller
         $reply->content = $request->comment;
         $reply->save();
 
-        $replyView = view('partials.comment', ['comment' => $reply, 'user' => Auth::user(), 'isReply' => true,])->render();
+        $replyView = view('partials.comment', [
+            'comment' => $reply,
+            'user' => Auth::user(),
+            'isReply' => true,
+        ])->render();
 
         return response()->json([
             'success' => true,
@@ -506,8 +517,12 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function showReportArticleModal($id)
+    public function showReportArticleModal($id): View
     {
+        $article = ArticlePage::findOrFail($id);
+
+        $this->authorize('report', $article);
+
         return view('partials.report_article_modal', ['articleId' => $id, 'state' => 'reportArticle']);
     }
 
@@ -517,18 +532,18 @@ class ArticlePageController extends Controller
         
         $author = Auth::user();
         $article = ArticlePage::findOrFail($id);
-        
+
+        $this->authorize('report', $article);
+
         $report = new Report();
         $report->description = $request->description;
         $report->reporter_id = $author->id;
-        
         $report->save();
         
         $reportArticle = new ReportArticle();
         $reportArticle->type = $request->type;
         $reportArticle->report_id = $report->id;
         $reportArticle->article_id = $article->id;
-        
         $reportArticle->save();
         
         return response()->json([
@@ -537,8 +552,12 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function showReportCommentModal($id, Request $request)
+    public function showReportCommentModal($id, Request $request): View
     {
+        $comment = Comment::findOrFail($id);
+
+        $this->authorize('report', $comment);
+
         return view('partials.report_article_modal', ['commentId' => $id, 'state' => $request->isReply ? 'reportReply' : 'reportComment']);
     }
 
@@ -547,24 +566,33 @@ class ArticlePageController extends Controller
         Log::info('Report request: ' . json_encode($request->all()));
 
         $author = Auth::user();
-        $article = ArticlePage::findOrFail($id);
+
+        if ($request->isReply) {
+            $reply = Reply::findOrFail($id);
+            $this->authorize('report', $reply);
+
+        }
+        else {
+            $comment = Comment::findOrFail($id);
+            $this->authorize('report', $comment);
+
+        }
 
         $report = new Report();
         $report->description = $request->description;
         $report->reporter_id = $author->id;
-
         $report->save();
 
         $reportComment = new ReportComment();
         $reportComment->type = $request->type;
         $reportComment->report_id = $report->id;
 
-        if($request->isReply) {
+        if ($request->isReply) {
             $reportComment->reply_id = $id;
-        } else {
+        }
+        else {
             $reportComment->comment_id = $id;
         }
-
         $reportComment->save();
 
         return response()->json([
@@ -573,8 +601,12 @@ class ArticlePageController extends Controller
         ]);
     }
 
-    public function showReportUserModal($id)
+    public function showReportUserModal($id): View
     {
+        $targetUser = User::findOrFail($id);
+
+        $this->authorize('report', $targetUser);
+
         return view('partials.report_article_modal', ['userId' => $id, 'state' => 'reportUser']);
     }
 
@@ -603,7 +635,6 @@ class ArticlePageController extends Controller
             'message' => 'Article reported successfully'
         ]);
     }
-
 
 }
 
