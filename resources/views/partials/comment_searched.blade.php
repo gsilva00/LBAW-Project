@@ -42,6 +42,11 @@
                 </button>
             @endif
         </div>
+        @if(!$isReply)
+            <a href="{{ route('showArticle', ['id' => $comment->article_id]) }}">View Article</a>
+        @else
+            <a href="{{ route('showArticle', ['id' => $comment->comment->article_id]) }}">View Article</a>
+        @endif
 
     </div>
 </div>
