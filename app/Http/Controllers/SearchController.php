@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\Comment;
+use App\Models\Reply;
 use App\Models\Tag;
 use App\Models\Topic;
 use Illuminate\Contracts\View\View;
@@ -14,13 +16,25 @@ class SearchController extends Controller
 {
     public function show(Request $request): View
     {
+        Log::info('Request', $request->input());
+
+        if($request->input('search-select') === 'article'){
+            $result = $this->searchArticle($request);
+        }
+        else if($request->input('search-select') === 'comment') {
+            $result = $this->searchCommentsPrivate($request);
+        }
+        else{
+            $result = $this->searchUsers($request);
+        }
+
+        return $result;
+    }
+
+    private function searchArticle(Request $request):view
+    {
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
-
-        /*Log::info('Search query', [
-            'tags' => $request->input('tags', ''),
-            'topics' => $request->input('topics', '')
-        ]);*/
 
         $topicNames = $request->input('topics', []);
         $tagNames = $request->input('tags', []);
@@ -30,11 +44,6 @@ class SearchController extends Controller
 
         $articles = ArticlePage::filterBySearchQuery($searchQuery);
 
-        /*Log::info('Search tags and topics', [
-            'tags' => $tags->pluck('name')->toArray(),
-            'topics' => $topics->pluck('name')->toArray()
-        ]);*/
-
         if ($tags->isNotEmpty()) {
             $articles = ArticlePage::filterByTags($articles, $tags);
         }
@@ -43,7 +52,7 @@ class SearchController extends Controller
             $articles = ArticlePage::filterByTopics($articles, $topics);
         }
 
-        return view('pages.search', [
+        return view('pages.search_article', [
             'user' => $authUser,
             'searchQuery' => $searchQuery,
             'articleItems' => $articles,
@@ -51,6 +60,30 @@ class SearchController extends Controller
             'searchedTopics' => $topics
         ]);
     }
+
+    private function searchCommentsPrivate(Request $request):view
+    {
+        $authUser = Auth::user();
+        $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
+
+        $comments = Comment::filterBySearchQuery($searchQuery);
+        $replies = Reply::filterBySearchQuery($searchQuery);
+
+        return view('pages.search_comments', [
+            'user' => $authUser,
+            'searchQuery' => $searchQuery,
+            'commentsItems' => $comments,
+            'repliesItems' => $replies,
+        ]);
+    }
+
+    private function searchUsers(Request $request):view
+    {
+        $authUser = Auth::user();
+        $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
+
+    }
+
     private function sanitizeSearchQuery($query): string
     {
         return preg_replace('/[^\w\s"]/', '', $query);

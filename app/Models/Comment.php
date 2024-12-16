@@ -82,5 +82,37 @@ class Comment extends Model
         return $this->voters()->wherePivot('type', 'Downvote')->where('user_id', $user->id)->exists();
     }
 
+    public static function filterBySearchQuery($searchQuery)
+    {
+        if (empty($searchQuery)) {
+            return self::where('is_deleted', false)->get();
+        } elseif (preg_match('/^".*"$/', $searchQuery)) {
+            $exactQuery = trim($searchQuery, '"');
+            return self::where('is_deleted', false)
+                ->where(function($query) use ($exactQuery) {
+                    $query->where('content', 'ILIKE', '% ' . $exactQuery)
+                        ->orWhere('content', 'ILIKE', $exactQuery . ' %')
+                        ->orWhere('content', 'ILIKE', '% ' . $exactQuery . ' %')
+                        ->orWhere('content', 'ILIKE', $exactQuery);
+                })
+                ->get();
+        } else {
+            $words = explode(' ', $searchQuery);
+            $sanitizedWords = array_map(function($word) {
+                return $word . ':*';
+            }, $words);
+            $tsQuery = implode(' & ', $sanitizedWords);
+
+            return self::where('is_deleted', false)
+                ->whereRaw("full_text_vector @@ to_tsquery('english', ?)", [$tsQuery])
+                ->orWhere(function($query) use ($words) {
+                    foreach ($words as $word) {
+                        $query->orWhere('content', 'ILIKE', '%' . $word . '%');
+                    }
+                })
+                ->orderByRaw("ts_rank(full_text_vector, to_tsquery('english', ?)) DESC", [$tsQuery])
+                ->get();
+        }
+    }
 
 }
