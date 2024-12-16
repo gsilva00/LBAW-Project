@@ -162,6 +162,19 @@ paths:
                   description: 'Failed registration. Redirect to register form.'
                   value: '/register'
 
+  /recover-password:
+
+    get:
+      operationId: R106
+      summary: 'R106: Recover Password Form'
+      description: 'Display recover password form. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+  
+      responses:
+        '200':
+          description: 'Ok. Show Recover Password UI'
+
 ################################## Individual Profile ##################################
 
   /profile/user/{username}:
