@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class AdminPanelController extends Controller
@@ -99,24 +100,47 @@ class AdminPanelController extends Controller
             $profile_picture_path = $imageName;
         }
 
+        // Mass-assign non-sensitive fields
         $user = User::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'display_name' => $request->display_name,
-            'description' => $request->description,
+            'display_name' => $request->input('display_name'),
+            'username' => $request->input('username'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            'description' => $request->input('description'),
             'profile_picture' => $profile_picture_path,
-            'reputation' => $request->input('reputation', 3),
-            'upvote_notification' => $request->input('upvote_notification', true),
-            'comment_notification' => $request->input('comment_notification', true),
-            'is_admin' => $request->input('is_admin', false),
-            'is_fact_checker' => $request->input('is_fact_checker', false),
+            'reputation' => $request->input('reputation'),
+            'upvote_notification' => $request->input('upvote_notification', false),
+            'comment_notification' => $request->input('comment_notification', false),
         ]);
 
+        // Set sensitive fields manually
+        $user->is_admin = $request->input('is_admin', false);
+        $user->is_fact_checker = $request->input('is_fact_checker', false);
+        $user->save();
+
+        /*Log::info('User created with values:', [
+            'username' => $user->username,
+            'email' => $user->email,
+            'display_name' => $user->display_name,
+            'description' => $user->description,
+            'profile_picture' => $user->profile_picture,
+            'reputation' => $user->reputation,
+            'upvote_notification' => $user->upvote_notification,
+            'comment_notification' => $user->comment_notification,
+            'is_admin' => $user->is_admin,
+            'is_fact_checker' => $user->is_fact_checker,
+            'is_deleted' => $user->is_deleted,
+            'is_banned' => $user->is_banned,
+            'remember_token' => $user->remember_token,
+        ]);*/
+
+        $newUserHtml = view('partials.user_tile', ['user' => $user])->render();
+
         return response()->json([
+            'user' => $user,
             'success' => true,
             'message' => 'User created successfully.',
-            'user' => $user,
+            'newUserHtml' => $newUserHtml,
         ]);
     }
 }

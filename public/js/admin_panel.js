@@ -35,6 +35,7 @@ seeMoreUsers();
 // Admin's create user
 function createFullUser() {
     const form = document.getElementById('createFullUserForm');
+    const userList = document.getElementById('user-list');
 
     if (!form) {
         console.error('Missing user form element');
@@ -67,6 +68,10 @@ function createFullUser() {
                 if (data.success) {
                     alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
                     form.reset(); // Reset form fields content
+
+                    if (data.newUserHtml) {
+                        userList.insertAdjacentHTML('beforeend', data.newUserHtml);
+                    }
                 }
                 else {
                     displayErrors(data.errors);
@@ -107,6 +112,7 @@ function createFullUser() {
     function displayErrors(errors) {
         for (const field in errors) {
             if (errors.hasOwnProperty(field)) {
+                console.log("Entered displayErrors function");
                 alert(`${field}: ${errors[field].join(', ')}`); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
             }
         }

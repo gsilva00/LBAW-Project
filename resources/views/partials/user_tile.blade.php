@@ -7,7 +7,7 @@
                 {{ $user->display_name }}
             </a>
         </h2>
-        <form  method="POST" style="display:inline;">
+        <form method="POST" style="display:inline;">
             @csrf
             @if (Auth::user()->isFollowing($user))
                 <button type="submit" class="large-rectangle small-text greyer">Unfollow User</button>
