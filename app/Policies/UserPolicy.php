@@ -98,4 +98,9 @@ class UserPolicy
         return false;
     }
 
+    public function report(User $authUser, User $targetUser): bool
+    {
+        return Auth::check() && !$authUser->is_banned && !$targetUser->is_banned;
+    }
+
 }

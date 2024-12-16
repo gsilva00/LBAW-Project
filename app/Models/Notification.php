@@ -72,7 +72,7 @@ class Notification extends Model
 
     }
 
-    public static function getArquivedNotificationsForUser(User $user)
+    public static function getArchivedNotificationsForUser(User $user)
     {
         return $user->notificationsReceived()->where('is_viewed', true)->orderBy('ntf_date', 'desc')->get();
     }

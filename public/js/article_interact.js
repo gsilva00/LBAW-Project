@@ -625,7 +625,7 @@ function toggleReplies() {
         console.error('Replies container not found');
         return;
     }
-    console.log('Replies container found:', repliesContainer);
+    // console.log('Replies container found:', repliesContainer);
     const chevron = this.querySelector('i');
     if (!chevron) {
         console.error('Chevron icon not found');
@@ -640,7 +640,7 @@ function toggleReplies() {
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('report-article-button').addEventListener('click', function () {
-        var articleId = this.getAttribute('data-article-id');
+        const articleId = this.getAttribute('data-article-id');
         fetch(`/report-article-modal/${articleId}`, {
             method: 'POST',
             headers: {
@@ -650,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.text())
             .then(html => {
-                var popupContainer = document.createElement('div');
+                const popupContainer = document.createElement('div');
                 popupContainer.innerHTML = html;
                 document.body.appendChild(popupContainer);
                 openPopup();
@@ -661,61 +661,60 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function submitArticleReport() {
+    const reportReason = document.getElementById('reportReason');
+    const reportCategory = document.getElementById('reportCategory');
+    const submitButton = document.getElementById('submitReportButton');
+    const maxLength = 300;
 
-        var reportReason = document.getElementById('reportReason');
-        var reportCategory = document.getElementById('reportCategory');
-        var submitButton = document.getElementById('submitReportButton');
-        var maxLength = 300;
 
-
-        reportReason.addEventListener('input', function () {
-            var charCount = reportReason.value.length;
-            if (charCount > maxLength) {
-                reportReason.value = reportReason.value.substring(0, maxLength);
-            }
-            document.getElementById('charCountFeedback').textContent = `${charCount}/${maxLength} characters`;
+    reportReason.addEventListener('input', function () {
+        const charCount = reportReason.value.length;
+        if (charCount > maxLength) {
+            reportReason.value = reportReason.value.substring(0, maxLength);
+        }
+        document.getElementById('charCountFeedback').textContent = `${charCount}/${maxLength} characters`;
         });
 
-        submitButton.addEventListener('click', function () {
-            var charCount = reportReason.value.length;
-            if (charCount > maxLength) {
-                alert('Reason for reporting cannot exceed 300 characters.');
-                return;
-            }
+    submitButton.addEventListener('click', function () {
+        const charCount = reportReason.value.length;
+        if (charCount > maxLength) {
+            alert('Reason for reporting cannot exceed 300 characters.');
+            return;
+        }
 
-            var description = reportReason.value;
-            var type = reportCategory.value;
-            var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            var url = submitButton.getAttribute('data-action-url');
+        const description = reportReason.value;
+        const type = reportCategory.value;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const url = submitButton.getAttribute('data-action-url');
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({
-                    description: description,
-                    type: type
-                })
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                description: description,
+                type: type
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        closePopup();
-                    } else {
-                        alert('Failed to submit report. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to submit report. See console for details.');
-                });
-        });
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closePopup();
+                } else {
+                    alert('Failed to submit report. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to submit report. See console for details.');
+            });
+    });
 }
 
 function openPopup() {
-    var popup = document.getElementById('reportArticlePopup');
+    const popup = document.getElementById('reportArticlePopup');
     if (popup) {
         popup.style.display = 'flex';
     } else {
@@ -724,7 +723,7 @@ function openPopup() {
 }
 
 function closePopup() {
-    var popup = document.getElementById('reportArticlePopup');
+    const popup = document.getElementById('reportArticlePopup');
     if (popup) {
         popup.style.display = 'none';
         popup.remove();
@@ -768,13 +767,13 @@ function reportCommentShow() {
 }
 
 function submitCommentReport() {
-    var reportReason = document.getElementById('reportReason');
-    var reportCategory = document.getElementById('reportCategory');
-    var submitButton = document.getElementById('submitReportButton');
-    var maxLength = 300;
+    const reportReason = document.getElementById('reportReason');
+    const reportCategory = document.getElementById('reportCategory');
+    const submitButton = document.getElementById('submitReportButton');
+    const maxLength = 300;
 
     reportReason.addEventListener('input', function () {
-        var charCount = reportReason.value.length;
+        const charCount = reportReason.value.length;
         if (charCount > maxLength) {
             reportReason.value = reportReason.value.substring(0, maxLength);
         }
@@ -782,17 +781,17 @@ function submitCommentReport() {
     });
 
     submitButton.addEventListener('click', function () {
-        var charCount = reportReason.value.length;
+        const charCount = reportReason.value.length;
         if (charCount > maxLength) {
             alert('Reason for reporting cannot exceed 300 characters.');
             return;
         }
 
-        var description = reportReason.value;
-        var type = reportCategory.value;
-        var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        var url = submitButton.getAttribute('data-action-url');
-        var isReply = document.getElementById('reportArticlePopup').dataset.isReply === 'true';
+        const description = reportReason.value;
+        const type = reportCategory.value;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const url = submitButton.getAttribute('data-action-url');
+        const isReply = document.getElementById('reportArticlePopup').dataset.isReply === 'true';
 
         fetch(url, {
             method: 'POST',

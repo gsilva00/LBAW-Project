@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -95,10 +96,25 @@ class ProfileController extends Controller
             return redirect()->back()->withErrors(['cur_password' => 'Current password is incorrect'])->withInput();
         }
 
+        Log::info("Request: ", [
+            'username' => request('username'),
+            'email' => request('email'),
+            'display_name' => request('display_name'),
+            'description' => request('description'),
+            'new_password' => request('new_password'),
+            'profile_picture' => request('profile_picture'),
+            'upvote_notification' => request('upvote-notifications'),
+            'comment_notification' => request('comment-notifications'),
+            'tupvote_notification' => request('upvote-notifications') === 'on',
+            'tcomment_notification' => request('comment-notifications') === 'on',
+        ]);
+
         $user->username = request('username');
         $user->email = request('email');
         $user->display_name = request('display_name');
         $user->description = request('description');
+        $user->upvote_notification = request('upvote-notifications') === 'on';
+        $user->comment_notification = request('comment-notifications') === 'on';
 
         if (request('file')) {
             $fileController = new FileController();
@@ -118,6 +134,16 @@ class ProfileController extends Controller
         }
 
         $user->save();
+
+        Log::info("User updated: ", [
+            'username' => $user->username,
+            'email' => $user->email,
+            'display_name' => $user->display_name,
+            'description' => $user->description,
+            'profile_picture' => $user->profile_picture,
+            'upvote_notification' => $user->upvote_notification,
+            'comment_notification' => $user->comment_notification,
+        ]);
 
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Profile updated successfully!');
     }
