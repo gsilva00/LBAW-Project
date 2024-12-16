@@ -474,7 +474,7 @@ paths:
         '200':
           description: 'Success. Display Home Feed.'
 
-  /user_feed:
+  /user-feed:
 
     get:
       operationId: R302
