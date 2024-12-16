@@ -175,6 +175,42 @@ paths:
         '200':
           description: 'Ok. Show Recover Password UI'
 
+    post:
+      operationId: R107
+      summary: 'R107: Recover Password Action'
+      description: 'Processes the password recovery form submition. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+  
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+
+      responses:
+        '302':
+          description: 'Redirect after processing recover password form submission.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. An email has been sent with the verification code to reset your password.'
+                  value: '/recover-password'
+
+                302Failure:
+                  description: 'The email provided is not registered in our system or is unreachable! Please try again.'
+                  value: '/recover-password'
+
 ################################## Individual Profile ##################################
 
   /profile/user/{username}:
