@@ -211,6 +211,43 @@ paths:
                   description: 'The email provided is not registered in our system or is unreachable! Please try again.'
                   value: '/recover-password'
 
+  /reset-password-check:
+
+    post:
+      operationId: R108
+      summary: 'R108: Reset Password Check'
+      description: 'Analyses the verification code provided by the user. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                verificationCode:
+                  type: integer
+              required:
+                - verificationCode
+
+      responses:
+        '302':
+          description: 'Redirect after the verification code check.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. The provided verification code is correct. Redirect to reset password form'
+                  value: '/reset-password'
+
+                302Failure:
+                  description: 'Fail. The provided verification code is incorrect. Redirect to recover password form'
+                  value: '/recover-password'
+
 ################################## Individual Profile ##################################
 
   /profile/user/{username}:
