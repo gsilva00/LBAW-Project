@@ -248,6 +248,59 @@ paths:
                   description: 'Fail. The provided verification code is incorrect. Redirect to recover password form'
                   value: '/recover-password'
 
+  /reset-password:
+  
+    get:
+      operationId: R109
+      summary: 'R109: Reset Password Form'
+      description: 'Display reset password form. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+  
+      responses:
+        '200':
+          description: 'Ok. Show Reset Password UI'
+
+    post:
+      operationId: R110
+      summary: 'R110: Reset Password Action'
+      description: 'Processes the password reset form submition. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+  
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                new_password:
+                  type: string
+                  format: password
+                confirm_password:
+                  type: string
+                  format: password
+              required:
+                - new_password
+                - confirm_password
+
+      responses:
+        '302':
+          description: 'Redirect after processing recover password form submission.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. Password reset request accepted.'
+                  value: '/login'
+
+                302Failure:
+                  description: 'Fail. The passwords do not match! Try again.'
+                  value: '/reset-password'
+
 ################################## Individual Profile ##################################
 
   /profile/user/{username}:
