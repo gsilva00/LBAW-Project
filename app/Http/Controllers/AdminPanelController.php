@@ -9,7 +9,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,7 +33,7 @@ class AdminPanelController extends Controller
         $users = User::where([
             ['is_admin', false],
             ['is_deleted', false]
-        ])->paginate(10);
+        ])->paginate(config('pagination.users_per_page'));
 
         // TODO expand for more administrator features
 
@@ -57,7 +56,7 @@ class AdminPanelController extends Controller
         $users = User::where([
             ['is_admin', false],
             ['is_deleted', false]
-        ])->paginate(10, ['*'], 'page', $page);
+        ])->paginate(config('pagination.users_per_page'), ['*'], 'page', $page);
 
         $view = view('partials.user_tile_list', [
             'users' => $users
@@ -94,9 +93,9 @@ class AdminPanelController extends Controller
         }
 
         $profile_picture_path = 'default.jpg';
-        if ($request->hasFile('profile_picture')) {
-            $imageName = time() . '-' . $request->file('profile_picture')->getClientOriginalName();
-            $request->file('profile_picture')->move(public_path('images/profile'), $imageName);
+        if ($request->hasFile('file')) {
+            $fileController = new FileController();
+            $imageName = $fileController->uploadImage($request, 'profile');
             $profile_picture_path = $imageName;
         }
 
@@ -134,12 +133,31 @@ class AdminPanelController extends Controller
             'remember_token' => $user->remember_token,
         ]);*/
 
-        $newUserHtml = view('partials.user_tile', ['user' => $user])->render();
+        // Handle pagination
+        $usersPerPage = config('pagination.users_per_page');
+        $totalUsers = User::where([
+            ['is_admin', false],
+            ['is_deleted', false],
+        ])->count();
+        $userPos = $totalUsers-1; // Not counting the new one
+
+        $currentPageNum = (int) $request->input('currentPageNum', 1);
+        $pageFirstPos = ($currentPageNum-1) * $usersPerPage;
+        $pageLastPos = $pageFirstPos+$usersPerPage - 1;
+
+        $newUserHtml = null;
+        if ($userPos >= $pageFirstPos && $userPos <= $pageLastPos && !$user->is_admin) {
+            // If the new user belongs on the current page, generate its HTML
+            $newUserHtml = view('partials.user_tile', [
+                'user' => $user
+            ])->render();
+        }
 
         return response()->json([
             'user' => $user,
             'success' => true,
             'message' => 'User created successfully.',
+            'isAfterLast' => $userPos > $pageLastPos,
             'newUserHtml' => $newUserHtml,
         ]);
     }

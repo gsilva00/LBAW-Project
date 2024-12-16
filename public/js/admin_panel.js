@@ -1,6 +1,6 @@
 // 'See more' functionality in user list
 function seeMoreUsers() {
-    const button = document.getElementById('see-more-users');
+    const button = document.getElementById('load-more-users');
     const userList = document.getElementById('user-list');
 
     if (!button || !userList) {
@@ -23,7 +23,7 @@ function seeMoreUsers() {
 
             if (!data.hasMorePages) {
                 button.style.display = 'none';
-                userList.insertAdjacentHTML('beforeend', '<p>No more users to show.</p>');
+                userList.insertAdjacentHTML('afterend', '<p>No more users to show.</p>');
             }
         })
         .catch(error => console.error('Error fetching more users:', error));
@@ -36,9 +36,10 @@ seeMoreUsers();
 function createFullUser() {
     const form = document.getElementById('createFullUserForm');
     const userList = document.getElementById('user-list');
+    const button = document.getElementById('load-more-users');
 
-    if (!form) {
-        console.error('Missing user form element');
+    if (!form || !userList || !button) {
+        console.error('Missing user form elements');
         return;
     }
 
@@ -47,10 +48,9 @@ function createFullUser() {
 
         const formData = new FormData(form);
 
-        /*console.log('Form Data:');
-        formData.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });*/
+        // data-page-num in button refers to the page the button will fetch, not the current one being displayed
+        const currentPageNum = (parseInt(button.getAttribute('data-page-num')) - 1).toString();
+        formData.append('currentPageNum', currentPageNum);
 
         if (!validateFormData(formData)) {
             return;
@@ -71,6 +71,18 @@ function createFullUser() {
 
                     if (data.newUserHtml) {
                         userList.insertAdjacentHTML('beforeend', data.newUserHtml);
+                    }
+                    else if (data.isAfterLast) {
+                        console.log("New user is added but not visible on the current page.");
+
+                        if (button.style.display === 'none') {
+                            button.style.display = 'block';
+                        }
+
+                        const noMoreUsersMessage = userList.querySelector('#users-section > p');
+                        if (noMoreUsersMessage && noMoreUsersMessage.textContent === 'No more users to show.') {
+                            noMoreUsersMessage.remove();
+                        }
                     }
                 }
                 else {

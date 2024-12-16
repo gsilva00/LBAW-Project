@@ -13,9 +13,7 @@
             <div id="user-list">
                 @include('partials.user_tile_list', ['users' => $users])
             </div>
-            @if($hasMorePages)
-                <button id="see-more-users" data-page-num="{{ $currPageNum+1 }}" data-url="{{ route('moreUsers') }}">Load More</button>
-            @endif
+            <button id="load-more-users" class="large-rectangle small-text greyer" data-page-num="{{ $currPageNum+1 }}" data-url="{{ route('moreUsers') }}" @if(!$hasMorePages) style="display: none" @endif>Load More</button>
         </div>
         <br>
         <h2 class="large-rectangle">Create a New Topic</h2>
