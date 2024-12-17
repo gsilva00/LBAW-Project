@@ -257,4 +257,9 @@ class User extends Authenticatable
         return $this->followedTags()->get();
     }
 
+    public function isFollowingUser(int $userId): bool
+    {
+        return $this->following()->where('following_id', $userId)->exists();
+    }
+
 }
