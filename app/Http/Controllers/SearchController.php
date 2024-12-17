@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Reply;
 use App\Models\Tag;
 use App\Models\Topic;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,6 +83,13 @@ class SearchController extends Controller
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
 
+        $users = User::filterBySearchQuery($searchQuery);
+
+        return view('pages.search_users', [
+            'user' => $authUser,
+            'searchQuery' => $searchQuery,
+            'usersItems' => $users,
+        ]);
     }
 
     private function sanitizeSearchQuery($query): string
