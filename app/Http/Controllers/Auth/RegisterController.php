@@ -33,8 +33,8 @@ class RegisterController extends Controller
             try {
                 // Validate the request data
                 $request->validate([
-                    'username' => 'required|string|max:255|unique:users',
-                    'email' => 'required|string|email|max:255|unique:users',
+                    'username' => 'required|string|max:20|unique:users',
+                    'email' => 'required|string|email|max:256|unique:users',
                     'password' => 'required|string|min:8|confirmed',
                 ]);
 

@@ -240,7 +240,7 @@ class ArticlePageController extends Controller
         $this->authorize('create', Comment::class);
 
         $request->validate([
-            'comment' => 'required|string|max:255',
+            'comment' => 'required|string|max:300',
         ]);
 
         $comment = new Comment();
@@ -263,9 +263,6 @@ class ArticlePageController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
 
         $this->authorize('upvote', Comment::class);
 
@@ -303,9 +300,6 @@ class ArticlePageController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
 
         $this->authorize('downvote', Comment::class);
 
@@ -343,9 +337,6 @@ class ArticlePageController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
 
         $this->authorize('upvote', Reply::class);
 
@@ -383,9 +374,6 @@ class ArticlePageController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$user) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
 
         $this->authorize('downvote', Reply::class);
 
@@ -495,7 +483,7 @@ class ArticlePageController extends Controller
         $this->authorize('create', Reply::class);
 
         $request->validate([
-            'comment' => 'required|string|max:255',
+            'comment' => 'required|string|max:300',
         ]);
 
         $reply = new Reply();
