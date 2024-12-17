@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
+use App\Models\Topic;
 use App\Models\User;
 
 use Illuminate\Contracts\View\View;
@@ -35,14 +37,47 @@ class AdminPanelController extends Controller
             ['is_deleted', false]
         ])->paginate(config('pagination.users_per_page'));
 
+        $topics = Topic::paginate(config('pagination.topics_per_page'));
+
+        $tags = Tag::paginate(config('pagination.tags_per_page'));
+
         // TODO expand for more administrator features
 
         return view('pages.admin_panel', [
             'user' => $user,
-            'users' => $users,
-            'currPageNum' => 1,
-            'hasMorePages' => $users->hasMorePages(),
+            'userCurrPageNum' => 1, // User pagination
+            'userHasMorePages' => $users->hasMorePages(),
+            'usersPaginated' => $users,
+            'topicCurrPageNum' => 1, // Topic pagination
+            'topicHasMorePages' => $topics->hasMorePages(),
+            'topicsPaginated' => $topics,
+            'tagCurrPageNum' => 1, // Tag pagination
+            'tagHasMorePages' => $tags->hasMorePages(),
+            'tagsPaginated' => $tags,
         ]);
+    }
+
+
+    // Handle positioning of the newly created entity in context of pagination
+    private function newItemPag($modelClass, $newEntity, $currPageNum, $perPage, $viewPartial): array
+    {
+        $totalEntities = $modelClass::count();
+        $newEntityPos = $totalEntities - 1;
+
+        $pageFirstPos = ($currPageNum - 1) * $perPage;
+        $pageLastPos = $pageFirstPos + $perPage - 1;
+
+        $entityHtml = null;
+        if ($newEntityPos >= $pageFirstPos && $newEntityPos <= $pageLastPos) {
+            $entityHtml = view($viewPartial, [
+                $newEntity->getTable() => $newEntity,
+            ])->render();
+        }
+
+        return [
+            'isAfterLast' => $newEntityPos > $pageLastPos,
+            'entityHtml' => $entityHtml,
+        ];
     }
 
     /**
@@ -56,15 +91,20 @@ class AdminPanelController extends Controller
         $users = User::where([
             ['is_admin', false],
             ['is_deleted', false]
-        ])->paginate(config('pagination.users_per_page'), ['*'], 'page', $page);
+        ])->paginate(
+            config('pagination.users_per_page'),
+            ['*'],
+            'page',
+            $page
+        );
 
         $view = view('partials.user_tile_list', [
-            'users' => $users
+            'usersPaginated' => $users
         ])->render();
 
         return response()->json([
-            'html' => $view,
-            'hasMorePages' => $users->hasMorePages(),
+            'newHtml' => $view,
+            'hasMoreUserPages' => $users->hasMorePages(),
         ]);
     }
 
@@ -73,11 +113,11 @@ class AdminPanelController extends Controller
         $this->authorize('create', User::class);
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|string|email|max:255|unique:users',
-            'display_name' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'password' => 'required|string|min:8',
+            'username' => 'required|string|max:20|unique:users',
+            'email' => 'required|string|email|max:256|unique:users',
+            'display_name' => 'nullable|string|max:20',
+            'description' => 'nullable|string|max:300',
+            'password' => 'required|string|min:8|max:256',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'reputation' => 'nullable|integer|min:0|max:5',
             'upvote_notification' => 'nullable|boolean',
@@ -89,7 +129,7 @@ class AdminPanelController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors(),
-            ], 400);
+            ], 422);
         }
 
         $profile_picture_path = 'default.jpg';
@@ -117,48 +157,162 @@ class AdminPanelController extends Controller
         $user->is_fact_checker = $request->input('is_fact_checker', false);
         $user->save();
 
-        /*Log::info('User created with values:', [
-            'username' => $user->username,
-            'email' => $user->email,
-            'display_name' => $user->display_name,
-            'description' => $user->description,
-            'profile_picture' => $user->profile_picture,
-            'reputation' => $user->reputation,
-            'upvote_notification' => $user->upvote_notification,
-            'comment_notification' => $user->comment_notification,
-            'is_admin' => $user->is_admin,
-            'is_fact_checker' => $user->is_fact_checker,
-            'is_deleted' => $user->is_deleted,
-            'is_banned' => $user->is_banned,
-            'remember_token' => $user->remember_token,
-        ]);*/
-
         // Handle pagination
-        $usersPerPage = config('pagination.users_per_page');
-        $totalUsers = User::where([
-            ['is_admin', false],
-            ['is_deleted', false],
-        ])->count();
-        $userPos = $totalUsers-1; // Not counting the new one
-
-        $currentPageNum = (int) $request->input('currentPageNum', 1);
-        $pageFirstPos = ($currentPageNum-1) * $usersPerPage;
-        $pageLastPos = $pageFirstPos+$usersPerPage - 1;
-
-        $newUserHtml = null;
-        if ($userPos >= $pageFirstPos && $userPos <= $pageLastPos && !$user->is_admin) {
-            // If the new user belongs on the current page, generate its HTML
-            $newUserHtml = view('partials.user_tile', [
-                'user' => $user
-            ])->render();
-        }
+        $pagination = $this->newItemPag(
+            User::class,
+            $user,
+            (int)$request->input('currPageNum', 1),
+            config('pagination.users_per_page'),
+            'partials.user_tile'
+        );
 
         return response()->json([
-            'user' => $user,
             'success' => true,
             'message' => 'User created successfully.',
-            'isAfterLast' => $userPos > $pageLastPos,
-            'newUserHtml' => $newUserHtml,
+            'user' => $user,
+            'isAfterLast' => $pagination['isAfterLast'],
+            'newHtml' => $pagination['entityHtml'],
+        ]);
+    }
+
+
+    public function moreTopics(Request $request): JsonResponse
+    {
+        $this->authorize('viewAdminPanel', User::class);
+
+        $page = $request->get('page', 1);
+        $topics = Topic::paginate(
+            config('pagination.topics_per_page'),
+            ['*'],
+            'page',
+            $page
+        );
+
+        $view = view('partials.topic_tile_list', [
+            'topicsPaginated' => $topics
+        ])->render();
+
+
+        return response()->json([
+            'newHtml' => $view,
+            'hasMoreTopicPages' => $topics->hasMorePages(),
+        ]);
+    }
+
+    public function createTopic(Request $request): JsonResponse
+    {
+        $this->authorize('create', Topic::class);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:30|unique:topic',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+                'message' => 'Failed to create topic.'
+            ], 422);
+        }
+
+        $topic = Topic::create([
+            'name' => $request->input('name'),
+        ]);
+
+
+        $pagination = $this->newItemPag(
+            Topic::class,
+            $topic,
+            (int)$request->input('currPageNum', 1),
+            config('pagination.topics_per_page'),
+            'partials.topic_tile'
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Topic created successfully.',
+            'topic' => $topic,
+            'isAfterLast' => $pagination['isAfterLast'],
+            'newHtml' => $pagination['entityHtml'],
+        ]);
+    }
+
+
+    public function moreTags(Request $request): JsonResponse
+    {
+        $this->authorize('viewAdminPanel', User::class);
+
+        $page = $request->get('page', 1);
+        $tags = Tag::paginate(
+            config('pagination.tags_per_page'),
+            ['*'],
+            'page',
+            $page
+        );
+
+        $view = view('partials.tag_tile_list', [
+            'tagsPaginated' => $tags
+        ])->render();
+
+        return response()->json([
+            'newHtml' => $view,
+            'hasMoreTagPages' => $tags->hasMorePages(),
+        ]);
+    }
+
+    public function createTag(Request $request): JsonResponse
+    {
+        $this->authorize('create', Tag::class);
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:30|unique:tag',
+            'is_trending' => 'nullable|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+                'message' => 'Failed to create tag.',
+            ], 400);
+        }
+
+        $tag = Tag::create([
+            'name' => $request->input('name'),
+            'is_trending' => $request->input('is_trending', false),
+        ]);
+
+
+        $pagination = $this->newItemPag(
+            Tag::class,
+            $tag,
+            (int)$request->input('currPageNum', 1),
+            config('pagination.tags_per_page'),
+            'partials.tag_tile'
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tag created successfully.',
+            'tag' => $tag,
+            'isAfterLast' => $pagination['isAfterLast'],
+            'newHtml' => $pagination['entityHtml'],
+        ]);
+    }
+
+    public function toggleTrending($id): JsonResponse
+    {
+        $tag = Tag::findOrFail($id);
+
+        $this->authorize('update', $tag);
+
+        $tag->is_trending = !$tag->is_trending;
+        $tag->save();
+
+        return response()->json([
+            'success' => true,
+            'is_trending' => $tag->is_trending,
+            'message' => $tag->is_trending ? 'Tag added to trending.' : 'Tag removed from trending.',
         ]);
     }
 }

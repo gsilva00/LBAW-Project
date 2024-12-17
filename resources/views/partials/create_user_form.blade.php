@@ -21,11 +21,17 @@
         <label for="display_name"><span>Display Name</span></label>
         <input type="text" name="display_name" id="display_name" value="{{ old('display_name') }}" placeholder="Enter display name" autocomplete="name">
     </div>
+    @if ($errors->has('display_name'))
+        @include('partials.error_popup', ['field' => 'display_name'])
+    @endif
     <br>
     <div class="profile-info">
         <label for="description"><span>Description</span></label>
         <textarea name="description" id="description" placeholder="Enter description">{{ old('description') }}</textarea>
     </div>
+    @if ($errors->has('description'))
+        @include('partials.error_popup', ['field' => 'description'])
+    @endif
     <br>
     <div class="profile-info">
         <label for="password"><span>Password</span></label>
