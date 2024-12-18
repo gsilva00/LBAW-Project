@@ -20,15 +20,13 @@
                     </a>
                 @endif
                 @if(Auth::check() && !$isOwner)
-                <form id="follow-user-form" method="POST">
-                    @csrf
-                    <button type="button" id="follow-user-button" class="large-rectangle small-text greyer">
-                        {{ Auth::user()->isFollowing($user) ? 'Unfollow User' : 'Follow User' }}
+                    <button type="button" id="follow-user-button" class="large-rectangle small-text greyer"
+                            data-user-id="{{ $user->id }}" data-profile-id="{{ $profileUser->id }}">
+                        {{ Auth::user()->isFollowingUser($profileUser->id) ? 'Unfollow User' : 'Follow User' }}
                     </button>
-                </form>
-                <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
-                        Report User
-                </button>
+                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                            Report User
+                    </button>
                 @endif
             </div>
             <div id="rest-profile-info">

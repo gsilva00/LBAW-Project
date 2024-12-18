@@ -121,4 +121,36 @@ class UserFollowingController extends Controller
             'articles' => []
         ]);
     }
+
+    public function followUser(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        Log::info('UserFollowingController@followUser', [
+            'user' => $user,
+            'request' => $request->input(),
+        ]);
+
+        //$this->authorize('followUser', $user);
+        Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
+
+        $user->following()->attach($request->profile_id);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function unfollowUser(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        //$this->authorize('unfollowUser', $user);
+
+        Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
+
+        $user->following()->detach($request->profile_id);
+
+        return response()->json(['success' => true]);
+    }
 }

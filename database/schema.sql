@@ -502,3 +502,23 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER handle_report_trigger
 AFTER UPDATE ON report
 FOR EACH ROW EXECUTE FUNCTION handle_report();
+
+
+
+ALTER TABLE users ADD COLUMN display_name_tsv tsvector;
+
+UPDATE users SET display_name_tsv = to_tsvector(COALESCE(display_name, ''));
+
+CREATE OR REPLACE FUNCTION update_display_name_tsv() RETURNS trigger AS $$
+BEGIN
+    NEW.display_name_tsv := to_tsvector(COALESCE(NEW.display_name, ''));
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_display_name_tsv_trigger
+    BEFORE INSERT OR UPDATE ON users
+                         FOR EACH ROW EXECUTE FUNCTION update_display_name_tsv();
+
+CREATE INDEX i_display_name_tsv ON users USING GIN(display_name_tsv);
+

@@ -257,4 +257,44 @@ class User extends Authenticatable
         return $this->followedTags()->get();
     }
 
+    public function isFollowingUser(int $userId): bool
+    {
+        return $this->following()->where('following_id', $userId)->exists();
+    }
+
+    public static function filterBySearchQuery($searchQuery)
+    {
+        if (empty($searchQuery)) {
+            return self::where('is_deleted', false)->get();
+        } elseif (preg_match('/^".*"$/', $searchQuery)) {
+            $exactQuery = trim($searchQuery, '"');
+            return self::where('is_deleted', false)
+                ->where(function($query) use ($exactQuery) {
+                    $query->where('display_name', 'ILIKE', '% ' . $exactQuery)
+                        ->orWhere('display_name', 'ILIKE', $exactQuery . ' %')
+                        ->orWhere('display_name', 'ILIKE', '% ' . $exactQuery . ' %')
+                        ->orWhere('display_name', 'ILIKE', $exactQuery);
+                })
+                ->get();
+        } else {
+            $words = explode(' ', $searchQuery);
+            $sanitizedWords = array_map(function($word) {
+                return $word . ':*';
+            }, $words);
+            $tsQuery = implode(' & ', $sanitizedWords);
+
+            return self::where('is_deleted', false)
+                ->whereRaw("display_name_tsv @@ to_tsquery(?)", [$tsQuery])
+                ->orWhere(function($query) use ($words) {
+                    foreach ($words as $word) {
+                        $query->orWhere('display_name', 'ILIKE', '%' . $word . '%');
+                    }
+                })
+                ->orderByRaw("ts_rank(display_name_tsv, to_tsquery(?)) DESC", [$tsQuery])
+                ->get();
+        }
+    }
+
+
+
 }
