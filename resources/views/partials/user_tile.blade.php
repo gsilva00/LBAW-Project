@@ -12,7 +12,7 @@
                 <div>
                     @csrf
                     @if (Auth::user()->isFollowing($user))
-                        <button type="button" class="unfollow-user-button-profile large-rectangle small-text greyer" data-user-id="{{ Auth::id() }}" data-profile-id="{{ $user->id }}">Unfollow User</button>
+                        <button type="button" class="unfollow-user-button-profile large-rectangle small-text greyer" data-user-id="{{ Auth::id() }}" data-profile-id="{{ $user->id }}" data-url="{{route('unfollowUserAction')}}">Unfollow User</button>
                     @endif
                 </div>
             @endif
