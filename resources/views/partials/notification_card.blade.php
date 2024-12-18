@@ -17,9 +17,12 @@
 
         @if($notification_specifics[0] === 1)
             <p><strong>comment_id:</strong> {{ $notification_specifics[1]->comment_id }}</p>
+            <p><strong>Comment content:</strong>{{$notification_specifics[1]->comment->content}}</p>
             <p><a href="{{ route('showArticle', ['id' => $notification_specifics[1]->comment->article_id]) }}"><strong>View Comment</strong></a></p>
         @elseif($notification_specifics[0] === 2)
             <p><strong>reply_id:</strong> {{ $notification_specifics[1]->reply_id }}</p>
+            <p><strong>Your comment:</strong>{{$notification_specifics[1]->reply->comment->content}}</p>
+            <p><strong>Reply content:</strong>{{$notification_specifics[1]->reply->content}}</p>
             <p><a href="{{ route('showArticle', ['id' => $notification_specifics[1]->reply->comment->article_id]) }}"><strong>View Reply</strong></a></p>
         @elseif($notification_specifics[0] === 3)
             <p><strong>article_id:</strong> {{ $notification_specifics[1]->article_id }}</p>

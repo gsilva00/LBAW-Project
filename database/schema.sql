@@ -392,20 +392,37 @@ FOR EACH ROW EXECUTE FUNCTION notify_comment();
 --TR2
 CREATE OR REPLACE FUNCTION notify_reply() RETURNS trigger AS $$
 DECLARE
-    article_author_id INTEGER;
+article_author_id INTEGER;
+    comment_author_id INTEGER;
     notification_id INTEGER;
 BEGIN
-    SELECT author_id INTO article_author_id FROM article_page WHERE id = (SELECT article_id FROM comment WHERE id = NEW.comment_id);
+    -- Get the author of the article
+SELECT author_id INTO article_author_id FROM article_page WHERE id = (SELECT article_id FROM comment WHERE id = NEW.comment_id);
 
-    IF (SELECT comment_notification FROM users WHERE id = article_author_id) THEN
-        INSERT INTO notifications (ntf_date, is_viewed, user_to, user_from)
-        VALUES (CURRENT_TIMESTAMP, FALSE, article_author_id, NEW.author_id)
+-- Get the author of the comment
+SELECT author_id INTO comment_author_id FROM comment WHERE id = NEW.comment_id;
+
+-- Notify the article author if they have comment notifications enabled
+IF (SELECT comment_notification FROM users WHERE id = article_author_id) THEN
+    INSERT INTO notifications (ntf_date, is_viewed, user_to, user_from)
+    VALUES (CURRENT_TIMESTAMP, FALSE, article_author_id, NEW.author_id)
         RETURNING id INTO notification_id;
 
-        INSERT INTO reply_notification (ntf_id, reply_id)
-        VALUES (notification_id, NEW.id);
-    END IF;
-    RETURN NEW;
+INSERT INTO reply_notification (ntf_id, reply_id)
+VALUES (notification_id, NEW.id);
+END IF;
+
+    -- Notify the comment author if they have comment notifications enabled
+    IF (SELECT comment_notification FROM users WHERE id = comment_author_id) THEN
+        INSERT INTO notifications (ntf_date, is_viewed, user_to, user_from)
+        VALUES (CURRENT_TIMESTAMP, FALSE, comment_author_id, NEW.author_id)
+            RETURNING id INTO notification_id;
+
+INSERT INTO reply_notification (ntf_id, reply_id)
+VALUES (notification_id, NEW.id);
+END IF;
+
+RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 

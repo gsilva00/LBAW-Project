@@ -187,7 +187,7 @@ class ArticlePage extends Model
                             ->orWhere('content', 'ILIKE', '%' . $word . '%');
                     }
                 })
-                ->orderByRaw("ts_rank(tsv, to_tsquery(?) DESC", [$tsQuery])
+                ->orderByRaw("ts_rank(tsv, to_tsquery(?)) DESC", [$tsQuery])
                 ->get();
         }
 
