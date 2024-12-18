@@ -14,7 +14,7 @@
         @else
             <div class="news-grid">
                 @foreach($usersItems as $userItem)
-                    @include('partials.user_tile', ['user' => $userItem])
+                    @include('partials.user_searched', ['user' => $userItem])
                 @endforeach
             </div>
         @endif
