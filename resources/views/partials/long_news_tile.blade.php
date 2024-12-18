@@ -1,6 +1,6 @@
 <a href="{{ route('showArticle', ['id' => $article->id]) }}">
     <div class="long-article-container news-tile">
-        <img src="{{ asset('images/article/' . $article->article_image) }}" alt="News Image">
+        <img src="{{ asset('images/article/' . $article->article_image) }}" alt="Article's main image">
         <div class="long-article-title-subtitle">
             <span class="article-title" >{{ $article->title }}</span>
             <div class="article-meta-container">

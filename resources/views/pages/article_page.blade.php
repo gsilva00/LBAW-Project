@@ -35,7 +35,7 @@
                 </div>
                 <p class="title">{{ $article->is_deleted ? '[Deleted]' : $article->subtitle }}</p>
                 <div>
-                    <img class="article-image" src="{{ $article->is_deleted ? asset('images/article/default.jpg') : asset('images/article/' . $article->article_image) }}" alt="News Image">
+                    <img class="article-image" src="{{ $article->is_deleted ? asset('images/article/default.jpg') : asset('images/article/' . $article->article_image) }}" alt="Article's main image">
                 </div>
                 @if($article->is_deleted)
                     <p class="thin">[Deleted]</p>

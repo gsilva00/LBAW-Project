@@ -11,12 +11,12 @@
 @section('content')
     <div class="profile-wrapper" data-user-id="{{$profileUser->id}}">
         <section class="profile-container">
-            <img src="{{ asset('images/profile/' . $profileUser->profile_picture) }}" alt="profile_picture">
+            <img src="{{ asset('images/profile/' . $profileUser->profile_picture) }}" alt="Profile picture">
             <div class="profile-info">
                 <h1>{{ $profileUser->display_name }}'s Profile</h1>
                 @if($isOwner || $isAdmin)
-                    <a href="{{ route('editProfile', ['username' => $profileUser->username])}}">
-                        <button class="large-rectangle small-text greyer">Edit Profile</button>
+                    <a href="{{ route('editProfile', ['username' => $profileUser->username]) }}" class="large-rectangle small-text greyer">
+                        Edit Profile
                     </a>
                 @endif
                 @if(Auth::check() && !$isOwner)
@@ -98,8 +98,8 @@
             @endif
 
             @if($isOwner)
-                <a href="{{ route('createArticle')}}">
-                    <button class="large-rectangle small-text">Create New Article</button>
+                <a href="{{ route('createArticle') }}" class="large-rectangle small-text">
+                    Create New Article
                 </a>
             @endif
 
