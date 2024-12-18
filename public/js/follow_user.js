@@ -1,4 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
     const followButton = document.getElementById('follow-user-button');
     const followUrl = '/following/user/action/follow';
     const unfollowUrl = '/following/user/action/unfollow';
@@ -36,4 +35,3 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('An error occurred. Please try again.');
             });
     });
-});

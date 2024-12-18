@@ -81,11 +81,11 @@
                     </div>
                 @else
                 <div id="users-section">
-                <div id="user-list">
-                        @foreach($profileUser->following as $fav_author)
-                            @include('partials.user_tile', ['user' => $fav_author])
-                        @endforeach
-                </div>
+                    <div id="user-list">
+                            @foreach($profileUser->following as $fav_author)
+                                @include('partials.user_tile', ['user' => $fav_author, 'isAdminPanel' => false])
+                            @endforeach
+                    </div>
                 </div>
                 @endif
             </section>

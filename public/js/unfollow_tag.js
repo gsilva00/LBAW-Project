@@ -42,3 +42,41 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function unfollow_user_profile() {
+    document.addEventListener('click', function (event) {
+        if (event.target && event.target.classList.contains('unfollow-user-button-profile')) {
+            console.log('clicked');
+            const unfollowButton = event.target;
+            const userId = unfollowButton.dataset.userId;
+            const profileId = unfollowButton.dataset.profileId;
+
+            fetch('/following/user/action/unfollow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ user_id: userId, profile_id: profileId })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        unfollowButton.closest('.profile-container-admin').remove();
+                    } else {
+                        alert('An error occurred. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        }
+    });
+}
+unfollow_user_profile();
