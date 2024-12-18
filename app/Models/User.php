@@ -284,13 +284,13 @@ class User extends Authenticatable
             $tsQuery = implode(' & ', $sanitizedWords);
 
             return self::where('is_deleted', false)
-                ->whereRaw("display_name_tsv @@ to_tsquery('english', ?)", [$tsQuery])
+                ->whereRaw("display_name_tsv @@ to_tsquery(?)", [$tsQuery])
                 ->orWhere(function($query) use ($words) {
                     foreach ($words as $word) {
                         $query->orWhere('display_name', 'ILIKE', '%' . $word . '%');
                     }
                 })
-                ->orderByRaw("ts_rank(display_name_tsv, to_tsquery('english', ?)) DESC", [$tsQuery])
+                ->orderByRaw("ts_rank(display_name_tsv, to_tsquery(?)) DESC", [$tsQuery])
                 ->get();
         }
     }

@@ -105,13 +105,13 @@ class Reply extends Model
             $tsQuery = implode(' & ', $sanitizedWords);
 
             return self::where('is_deleted', false)
-                ->whereRaw("full_text_vector_r @@ to_tsquery('english', ?)", [$tsQuery])
+                ->whereRaw("full_text_vector_r @@ to_tsquery(?)", [$tsQuery])
                 ->orWhere(function($query) use ($words) {
                     foreach ($words as $word) {
                         $query->orWhere('content', 'ILIKE', '%' . $word . '%');
                     }
                 })
-                ->orderByRaw("ts_rank(full_text_vector_r, to_tsquery('english', ?)) DESC", [$tsQuery])
+                ->orderByRaw("ts_rank(full_text_vector_r, to_tsquery(?)) DESC", [$tsQuery])
                 ->get();
         }
     }

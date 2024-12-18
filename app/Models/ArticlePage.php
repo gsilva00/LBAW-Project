@@ -179,7 +179,7 @@ class ArticlePage extends Model
             $tsQuery = implode(' & ', $sanitizedWords);
 
             return self::where('is_deleted', false)
-                ->whereRaw("tsv @@ to_tsquery('english', ?)", [$tsQuery])
+                ->whereRaw("tsv @@ to_tsquery(?)", [$tsQuery])
                 ->orWhere(function($query) use ($words) {
                     foreach ($words as $word) {
                         $query->orWhere('title', 'ILIKE', '%' . $word . '%')
@@ -187,7 +187,7 @@ class ArticlePage extends Model
                             ->orWhere('content', 'ILIKE', '%' . $word . '%');
                     }
                 })
-                ->orderByRaw("ts_rank(tsv, to_tsquery('english', ?)) DESC", [$tsQuery])
+                ->orderByRaw("ts_rank(tsv, to_tsquery(?) DESC", [$tsQuery])
                 ->get();
         }
 
