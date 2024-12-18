@@ -23,6 +23,10 @@ class UpvoteReplyNotification extends Model
         return $this->belongsTo(Notification::class, 'ntf_id');
     }
 
+    public function reply(): BelongsTo
+    {
+        return $this->belongsTo(Reply::class, 'reply_id');
+    }
 
     // Querying
     // ...

@@ -17,19 +17,19 @@
 
         @if($notification_specifics[0] === 1)
             <p><strong>comment_id:</strong> {{ $notification_specifics[1]->comment_id }}</p>
-            <p><a href="#"><strong>View Comment</strong></a></p>
+            <p><a href="{{ route('showArticle', ['id' => $notification_specifics[1]->comment->article_id]) }}"><strong>View Comment</strong></a></p>
         @elseif($notification_specifics[0] === 2)
             <p><strong>reply_id:</strong> {{ $notification_specifics[1]->reply_id }}</p>
-            <p><a href="#"><strong>View Reply</strong></a></p>
+            <p><a href="{{ route('showArticle', ['id' => $notification_specifics[1]->reply->comment->article_id]) }}"><strong>View Reply</strong></a></p>
         @elseif($notification_specifics[0] === 3)
             <p><strong>article_id:</strong> {{ $notification_specifics[1]->article_id }}</p>
             <p><a href="{{ route('showArticle', ['id' => $notification_specifics[1]->article_id]) }}"><strong>View Article</strong></a></p>
         @elseif($notification_specifics[0] === 4)
             <p><strong>comment_id:</strong> {{ $notification_specifics[1]->comment_id }}</p>
-            <p><a href="#"><strong>View Comment</strong></a></p>
+            <p><a href="{{ route('showArticle', ['id' => $notification_specifics[1]->comment->article_id]) }}"><strong>View Comment</strong></a></p>
         @elseif($notification_specifics[0] === 5)
             <p><strong>reply_id:</strong> {{ $notification_specifics[1]->reply_id }}</p>
-            <p><a href="#"><strong>View Reply</strong></a></p>
+            <p><a href="{{ route('showArticle', ['id' => $notification_specifics[1]->reply->comment->article_id]) }}"><strong>View Reply</strong></a></p>
         @endif
 
         @if(!$notification->is_viewed)
