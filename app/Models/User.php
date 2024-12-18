@@ -27,6 +27,7 @@ class User extends Authenticatable
         'password',
         'profile_picture',
         'description',
+        'reputation',
         'upvote_notification',
         'comment_notification',
     ];
@@ -58,8 +59,14 @@ class User extends Authenticatable
 
     // The attributes that should be cast when setting values and getting them from the database
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'reputation' => 'integer',
+        'upvote_notification' => 'boolean',
+        'comment_notification' => 'boolean',
+        'is_banned' => 'boolean',
+        'is_admin' => 'boolean',
+        'is_fact_checker' => 'boolean',
+        'is_deleted' => 'boolean',
     ];
 
 

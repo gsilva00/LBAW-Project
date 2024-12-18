@@ -103,8 +103,16 @@ Route::get('/notifications/archiving/{id}', [NotificationsController::class, 'ar
 Route::prefix('admin-panel')->controller
 (AdminPanelController::class)->group(function () {
     Route::get('/', 'show')->name('adminPanel');
-    Route::post('/create-user', 'createFullUser')->name('adminCreateUser');
+    // User management
     Route::get('/more-users', 'moreUsers')->name('moreUsers');
+    Route::post('/create-user', 'createFullUser')->name('adminCreateUser');
+    // Topic management
+    Route::get('/more-topics', 'moreTopics')->name('moreTopics');
+    Route::post('/create-topic', 'createTopic')->name('adminCreateTopic');
+    // Tag management
+    Route::get('/more-tags', 'moreTags')->name('moreTags');
+    Route::post('/create-tag', 'createTag')->name('createTag');
+    Route::post('/toggle-trending-tag/{id}', 'toggleTrending')->name('toggleTrendingTag');
 });
 
 // Article
