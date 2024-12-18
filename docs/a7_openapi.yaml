@@ -162,6 +162,145 @@ paths:
                   description: 'Failed registration. Redirect to register form.'
                   value: '/register'
 
+  /recover-password:
+
+    get:
+      operationId: R106
+      summary: 'R106: Recover Password Form'
+      description: 'Display recover password form. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+  
+      responses:
+        '200':
+          description: 'Ok. Show Recover Password UI'
+
+    post:
+      operationId: R107
+      summary: 'R107: Recover Password Action'
+      description: 'Processes the password recovery form submition. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+  
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+              required:
+                - email
+
+      responses:
+        '302':
+          description: 'Redirect after processing recover password form submission.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. An email has been sent with the verification code to reset your password.'
+                  value: '/recover-password'
+
+                302Failure:
+                  description: 'The email provided is not registered in our system or is unreachable! Please try again.'
+                  value: '/recover-password'
+
+  /reset-password-check:
+
+    post:
+      operationId: R108
+      summary: 'R108: Reset Password Check'
+      description: 'Analyses the verification code provided by the user. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                verification_code:
+                  type: integer
+              required:
+                - verification_code
+
+      responses:
+        '302':
+          description: 'Redirect after the verification code check.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. The provided verification code is correct. Redirect to reset password form'
+                  value: '/reset-password'
+
+                302Failure:
+                  description: 'Fail. The provided verification code is incorrect. Redirect to recover password form'
+                  value: '/recover-password'
+
+  /reset-password:
+  
+    get:
+      operationId: R109
+      summary: 'R109: Reset Password Form'
+      description: 'Display reset password form. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+  
+      responses:
+        '200':
+          description: 'Ok. Show Reset Password UI'
+
+    post:
+      operationId: R110
+      summary: 'R110: Reset Password Action'
+      description: 'Processes the password reset form submition. Access: GUE'
+      tags:
+        - 'M01: Authentication'
+  
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                new_password:
+                  type: string
+                  format: password
+                confirm_password:
+                  type: string
+                  format: password
+              required:
+                - new_password
+                - confirm_password
+
+      responses:
+        '302':
+          description: 'Redirect after processing recover password form submission.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. Password reset request accepted.'
+                  value: '/login'
+
+                302Failure:
+                  description: 'Fail. The passwords do not match! Try again.'
+                  value: '/reset-password'
+
 ################################## Individual Profile ##################################
 
   /profile/user/{username}:
@@ -335,7 +474,7 @@ paths:
         '200':
           description: 'Success. Display Home Feed.'
 
-  /user_feed:
+  /user-feed:
 
     get:
       operationId: R302
@@ -369,11 +508,24 @@ paths:
         '200':
           description: 'Success. Display Most Voted News Feed.'
 
-  /article/{id}:
+  /recent-news:
 
     get:
       operationId: R304
-      summary: 'R304: View News Item'
+      summary: 'R304: View Recent News'
+      description: 'Show the Recent News page. Access: GUE, USR'
+      tags:
+        - 'M03: News'
+
+      responses:
+        '200':
+          description: 'Success. Display Recent News Feed.'
+
+  /article/{id}:
+
+    get:
+      operationId: R305
+      summary: 'R305: View News Item'
       description: 'Show Article page. Access: GUE, USR'
       tags:
         - 'M03: News'
@@ -394,8 +546,8 @@ paths:
   /create-article:
 
     get:
-      operationId: R305
-      summary: 'R305: Create News Article Form'
+      operationId: R306
+      summary: 'R306: Create News Article Form'
       description: 'Display create a new article UI. Access: USR'
       tags:
         - 'M03: News'
@@ -414,8 +566,8 @@ paths:
                   value: '/login'
 
     post:
-      operationId: R306
-      summary: 'R306: Create New Article Action'
+      operationId: R307
+      summary: 'R307: Create New Article Action'
       description: 'Create a new article. Access: USR'
       tags:
         - 'M03: News'
@@ -460,8 +612,8 @@ paths:
   /edit-article/{id}:
 
     get:
-      operationId: R307
-      summary: 'R307: Edit article Form'
+      operationId: R308
+      summary: 'R308: Edit article Form'
       description: 'Show the edit article page. Access: OWN'
       tags:
         - 'M03: News'
@@ -480,8 +632,8 @@ paths:
           description: 'Unauthorized. You do not possess the valid credentials edit this article.'
 
     post:
-      operationId: R308
-      summary: 'R308: Edit article Action'
+      operationId: R309
+      summary: 'R309: Edit article Action'
       description: 'Processes and saves the changes made by user. Access: OWN'
       tags:
         - 'M03: News'
@@ -531,8 +683,8 @@ paths:
   /delete-article/{id}:
 
     post:
-      operationId: R309
-      summary: 'R309: Delete an article.'
+      operationId: R310
+      summary: 'R310: Delete an article.'
       description: 'Delete an article action. Access: OWN, ADM'
       tags:
         - 'M03: News'
