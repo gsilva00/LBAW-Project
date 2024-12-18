@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\DB;
 
 class ArticlePage extends Model
 {
@@ -217,6 +218,65 @@ class ArticlePage extends Model
         return $articles->filter(function($article) {
             return !$article->is_deleted;
         });
+    }
+
+    //TRAN02
+    public function voteArticleTransaction($userId, $articleId, $voteType, $userTo, $userFrom, $ntfDate)
+    {
+        DB::transaction(function () use ($userId, $articleId, $voteType, $userTo, $userFrom, $ntfDate) {
+            // Check if the user has already voted on the article
+            $existingVote = DB::table('vote_article')
+                ->where('user_id', $userId)
+                ->where('article_id', $articleId)
+                ->first();
+
+            if ($existingVote) {
+                // Remove the existing vote
+                DB::table('vote_article')
+                    ->where('user_id', $userId)
+                    ->where('article_id', $articleId)
+                    ->delete();
+
+                // Decrement the appropriate vote count
+                if ($existingVote->type === 'Upvote') {
+                    $this->where('id', $articleId)->decrement('upvotes');
+                } else {
+                    $this->where('id', $articleId)->decrement('downvotes');
+                }
+            }
+
+            // Insert the new vote
+            DB::table('vote_article')->insert([
+                'user_id' => $userId,
+                'article_id' => $articleId,
+                'type' => $voteType
+            ]);
+
+            // Increment the appropriate vote count
+            if ($voteType === 'Upvote') {
+                $this->where('id', $articleId)->increment('upvotes');
+            } else {
+                $this->where('id', $articleId)->increment('downvotes');
+            }
+
+            // Check if the user has upvote notifications enabled
+            $isNtfy = DB::table('users')->where('id', $userTo)->value('upvote_notification');
+
+            if ($isNtfy) {
+                // Insert into Notification and fetch the ID
+                $ntfId = DB::table('notifications')->insertGetId([
+                    'ntf_date' => $ntfDate,
+                    'user_to' => $userTo,
+                    'user_from' => $userFrom
+                ]);
+
+                // Insert into UpvoteArticleNotification using the fetched notification ID
+                DB::table('upvote_article_notification')->insert([
+                    'ntf_id' => $ntfId,
+                    'article_id' => $articleId
+                ]);
+            }
+        }, 5);
     }
 
 }
