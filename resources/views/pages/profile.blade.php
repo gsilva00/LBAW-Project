@@ -11,7 +11,7 @@
 @section('content')
     <div class="profile-wrapper" data-user-id="{{$profileUser->id}}">
         <section class="profile-container">
-            <img src="{{ asset('images/profile/' . $profileUser->profile_picture) }}" alt="Profile picture">
+            <img src="{{ asset('images/profile/' . $profileUser->profile_picture) }}" alt="Your profile picture">
             <div class="profile-info">
                 <h1>{{ $profileUser->display_name }}'s Profile</h1>
                 @if($isOwner || $isAdmin)

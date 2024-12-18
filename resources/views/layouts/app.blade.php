@@ -46,9 +46,10 @@
         <script src="{{ url('js/follow_user.js') }}" defer> </script>
     </head>
     <body>
+        <a href="#main-content" class="skip-link">Skip to main content</a>
         <div class="wrapper">
             @include('layouts.header')
-            <main class="content">
+            <main id="main-content" class="content">
                 @yield('content')
             </main>
             @include('layouts.footer')
