@@ -136,7 +136,6 @@ class ArticlePageController extends Controller
                 $voteStatus = 0;
             } else {
                 $article->voteArticleTransaction($user->id, $id, 'Upvote', $article->author_id, $user->id, now());
-                $article->downvotes -= 1;
                 $voteStatus = 1;
             }
         } else {
@@ -171,7 +170,6 @@ class ArticlePageController extends Controller
                 $voteStatus = 0;
             } else {
                 $article->voteArticleTransaction($user->id, $id, 'Downvote', $article->author_id, $user->id, now());
-                $article->upvotes -= 1;
                 $voteStatus = -1;
             }
         } else {
@@ -267,7 +265,6 @@ class ArticlePageController extends Controller
                 $isUpvoted = false;
             } else {
                 $comment->voteCommentTransaction($user->id, $id, 'Upvote', $comment->author_id, $user->id, now());
-                $comment->downvotes--;
                 $isUpvoted = true;
             }
         } else {
@@ -301,7 +298,6 @@ class ArticlePageController extends Controller
                 $isDownvoted = false;
             } else {
                 $comment->voteCommentTransaction($user->id, $id, 'Downvote', $comment->author_id, $user->id, now());
-                $comment->upvotes--;
                 $isDownvoted = true;
             }
         } else {
@@ -323,31 +319,27 @@ class ArticlePageController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $this->authorize('upvote', Reply::class);
+        //$this->authorize('upvote', Reply::class);
 
         $reply = Reply::findOrFail($id);
         $vote = $reply->voters()->where('user_id', $user->id)->first();
+
         if ($vote) {
             if ($vote->pivot->type === 'Upvote') {
                 $reply->voters()->detach($user->id);
                 $reply->upvotes--;
                 $isUpvoted = false;
-            }
-            else {
-                $vote->pivot->type = 'Upvote';
-                $vote->pivot->save();
-                $reply->upvotes++;
-                $reply->downvotes--;
+            } else {
+                $reply->voteReplyTransaction($user->id, $id, 'Upvote', $reply->author_id, $user->id, now());
                 $isUpvoted = true;
             }
-        }
-        else {
-            $reply->voters()->attach($user->id, ['type' => 'Upvote']);
-            $reply->upvotes++;
+        } else {
+            $reply->voteReplyTransaction($user->id, $id, 'Upvote', $reply->author_id, $user->id, now());
             $isUpvoted = true;
         }
 
         $reply->save();
+        $reply->refresh();
 
         return response()->json([
             'reply' => $reply,
@@ -360,31 +352,27 @@ class ArticlePageController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $this->authorize('downvote', Reply::class);
+        //$this->authorize('downvote', Reply::class);
 
         $reply = Reply::findOrFail($id);
         $vote = $reply->voters()->where('user_id', $user->id)->first();
+
         if ($vote) {
             if ($vote->pivot->type === 'Downvote') {
                 $reply->voters()->detach($user->id);
                 $reply->downvotes--;
                 $isDownvoted = false;
-            }
-            else {
-                $vote->pivot->type = 'Downvote';
-                $vote->pivot->save();
-                $reply->downvotes++;
-                $reply->upvotes--;
+            } else {
+                $reply->voteReplyTransaction($user->id, $id, 'Downvote', $reply->author_id, $user->id, now());
                 $isDownvoted = true;
             }
-        }
-        else {
-            $reply->voters()->attach($user->id, ['type' => 'Downvote']);
-            $reply->downvotes++;
+        } else {
+            $reply->voteReplyTransaction($user->id, $id, 'Downvote', $reply->author_id, $user->id, now());
             $isDownvoted = true;
         }
 
         $reply->save();
+        $reply->refresh();
 
         return response()->json([
             'reply' => $reply,
