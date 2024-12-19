@@ -131,6 +131,9 @@ Route::controller(CreateArticleController::class)->group(function () {
     Route::get('/edit-article/{id}', 'edit')->name('editArticle');
     Route::post('/edit-article/{id}', 'update')->name('updateArticle');
     Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
+
+    Route::post('porpose-tag/show', 'porposeNewTagShow')->name('showProposeTag');
+    Route::post('/propose-tag/submit', 'porposeNewTag')->name('proposeTagSubmit');
 });
 
 Route::post('/comment/{id}/upvote-comment', [ArticlePageController::class, 'upvoteComment'])->name('upvoteComment');

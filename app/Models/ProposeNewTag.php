@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProposeNewTag extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+
 
     protected $table = 'propose_new_tag';
 

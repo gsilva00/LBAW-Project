@@ -30,7 +30,7 @@
                         @endif
                     </p>
                     <button class="small-text small-rectangle" title="report article" id="report-article-button" data-article-id="{{ $article->id }}">
-                        <span>Report Article</span> <!-- Needs to be implemented -->
+                        <span>Report Article</span>
                     </button>
                 </div>
                 <p class="title">{{ $article->is_deleted ? '[Deleted]' : $article->subtitle }}</p>
