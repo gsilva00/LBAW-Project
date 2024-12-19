@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -302,6 +303,28 @@ class User extends Authenticatable
         }
     }
 
-
+    //TRAN01
+    public function deleteUserTransaction($userId)
+    {
+        DB::transaction(function () use ($userId) {
+            DB::table('users')
+                ->where('id', $userId)
+                ->update([
+                    'display_name' => null,
+                    'username' => '!deleted!' . $userId,
+                    'email' => '!deleted!' . $userId,
+                    'password' => 'deleted',
+                    'profile_picture' => 'default.jpg',
+                    'description' => null,
+                    'reputation' => null,
+                    'upvote_notification' => false,
+                    'comment_notification' => false,
+                    'is_banned' => false,
+                    'is_deleted' => true,
+                    'is_admin' => false,
+                    'is_fact_checker' => false
+                ]);
+        }, 5);
+    }
 
 }

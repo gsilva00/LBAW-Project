@@ -210,7 +210,11 @@ class ArticlePage extends Model
 
     public static function getAllArticlesNonDeleted()
     {
-        return self::where('is_deleted', false)->get();
+        return self::where('is_deleted', false)
+            ->whereHas('author', function ($query) {
+                $query->where('is_banned', false);
+            })
+            ->get();
     }
 
     public static function filterDeletedArticles($articles)
