@@ -168,6 +168,24 @@ input[type="file"]::file-selector-button{
   min-height: 100vh;
 }
 
+.skip-link {
+  position: absolute;
+  top: auto;
+  left: -10000px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
+  position: static;
+  width: auto;
+  height: auto;
+}
+
 .content {
   flex: 1;
 }
