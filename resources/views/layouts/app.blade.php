@@ -36,7 +36,7 @@
         <script src="{{ url('js/admin_panel.js') }}" defer></script>
         <script src="{{ url('js/user_feed.js') }}" defer></script>
         <script src="{{ url('js/popup.js') }}" defer> </script>
-        <script src="{{ url('js/unfollow_tag.js') }}" defer> </script>
+        <script src="{{ url('js/unfollow_profile_user.js') }}" defer> </script>
         <script src="{{ url('js/unfollow_topic.js') }}" defer> </script>
         <script src="{{ url('js/tag_create_article.js') }}" defer></script>
         <script src="{{ url('js/tag_edit_article.js') }}" defer></script>
@@ -44,6 +44,7 @@
         <script src="{{ url('js/notifications_interect.js') }}" defer> </script>
         <script src="{{ url('js/comment_search_interact.js') }}" defer> </script>
         <script src="{{ url('js/follow_user.js') }}" defer> </script>
+        <script src="{{ url('js/porpose_tag.js') }}" defer> </script>
     </head>
     <body>
         <div class="wrapper">

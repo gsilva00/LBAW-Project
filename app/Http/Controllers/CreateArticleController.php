@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
+use App\Models\ProposeNewTag;
 use App\Models\Tag;
 use App\Models\Topic;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -170,6 +172,33 @@ class CreateArticleController extends Controller
         $article->save();
 
         return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article deleted successfully!');
+    }
+
+
+    public function porposeNewTagShow(): \Illuminate\Contracts\View\View
+    {
+        return view('partials.porpose_new_tag');
+    }
+
+    public function porposeNewTag(Request $request): JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:50',
+        ]);
+
+        $tag = new ProposeNewTag();
+        $tag->name = $request->input('name');
+        $tag->user_id = Auth::id();
+        $tag->save();
+
+        Log::info('CreateArticleController@porposeNewTag', [
+            'name' => $request->input('name'),
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tag proposed successfully!'
+        ]);
     }
 
 }

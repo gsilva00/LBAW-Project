@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Comment extends Model
 {
@@ -113,6 +114,57 @@ class Comment extends Model
                 ->orderByRaw("ts_rank(full_text_vector, to_tsquery(?)) DESC", [$tsQuery])
                 ->get();
         }
+    }
+
+    //TRAN03
+    public function voteCommentTransaction($userId, $commentId, $voteType, $userTo, $userFrom, $ntfDate)
+    {
+        DB::transaction(function () use ($userId, $commentId, $voteType, $userTo, $userFrom, $ntfDate) {
+            $existingVote = DB::table('vote_comment')
+                ->where('user_id', $userId)
+                ->where('comment_id', $commentId)
+                ->first();
+
+            if ($existingVote) {
+                DB::table('vote_comment')
+                    ->where('user_id', $userId)
+                    ->where('comment_id', $commentId)
+                    ->delete();
+
+                if ($existingVote->type === 'Upvote') {
+                    $this->where('id', $commentId)->decrement('upvotes');
+                } else {
+                    $this->where('id', $commentId)->decrement('downvotes');
+                }
+            }
+
+            DB::table('vote_comment')->insert([
+                'user_id' => $userId,
+                'comment_id' => $commentId,
+                'type' => $voteType
+            ]);
+
+            if ($voteType === 'Upvote') {
+                $this->where('id', $commentId)->increment('upvotes');
+            } else {
+                $this->where('id', $commentId)->increment('downvotes');
+            }
+
+            $isNtfy = DB::table('users')->where('id', $userTo)->value('upvote_notification');
+
+            if ($isNtfy) {
+                $ntfId = DB::table('notifications')->insertGetId([
+                    'ntf_date' => $ntfDate,
+                    'user_to' => $userTo,
+                    'user_from' => $userFrom
+                ]);
+
+                DB::table('upvote_comment_notification')->insert([
+                    'ntf_id' => $ntfId,
+                    'comment_id' => $commentId
+                ]);
+            }
+        }, 5);
     }
 
 }

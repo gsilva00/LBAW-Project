@@ -160,28 +160,14 @@ class ProfileController extends Controller
             'cur_password_delete' => $authUser->is_admin ? 'nullable|string' : 'required|string',
         ]);
 
-        // Check the password if the user is not an admin
         if (!$authUser->is_admin && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
             return redirect()->back()->withErrors(['cur_password_delete' => 'Current password is incorrect'])->withInput();
         }
 
-        $targetUser->display_name = '[Deleted User]';
-        $targetUser->username = '[deleted_user_' . $targetUserId . ']';
-        $targetUser->email = '[deleted_user_' . $targetUserId . ']@example.com';
-        $targetUser->password = '<PASSWORD>';
-        $targetUser->profile_picture = 'images/profile/default.jpg';
-        $targetUser->description = 'This user account has been deleted.';
-        $targetUser->reputation = 0;
-        $targetUser->upvote_notification = false;
-        $targetUser->comment_notification = false;
-        $targetUser->is_banned = false;
-        $targetUser->is_admin = false;
-        $targetUser->is_fact_checker = false;
-        $targetUser->is_deleted = true;
-        $targetUser->save();
+        $targetUser->deleteUserTransaction($targetUserId);
 
         if ($authUser->id === $targetUser->id) {
-            Auth::logout();  // Log out the user
+            Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 

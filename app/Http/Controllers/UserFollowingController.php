@@ -79,7 +79,7 @@ class UserFollowingController extends Controller
 
         $this->authorize('viewFollowingAuthors', $user);
 
-        $authors = $user->followers()->get();
+        $authors = $user->following()->where('is_deleted', false)->where('is_banned', false)->get();
         $articles = User::filterByFollowingUsers($authors);
 
         /*Log::info('UserFollowingController@followAuthors', [

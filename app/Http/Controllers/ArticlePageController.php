@@ -125,9 +125,7 @@ class ArticlePageController extends Controller
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
-        // TODO SPECIAL FEEDBACK WHEN ARTICLE IS DELETED (NO INTERACTIONS ALLOWED)
-
-        $this->authorize('upvote', $article); // TODO REDIRECT TO LOGIN
+        $this->authorize('upvote', $article);
 
         $vote = $user->votedArticles()->where('article_id', $id)->first();
 
@@ -136,22 +134,18 @@ class ArticlePageController extends Controller
                 $user->votedArticles()->detach($id);
                 $article->upvotes -= 1;
                 $voteStatus = 0;
-            }
-            else {
-                $vote->pivot->type = 'Upvote';
-                $vote->pivot->save();
-                $article->upvotes += 1;
-                $article->downvotes -= 1;
+            } else {
+                $article->voteArticleTransaction($user->id, $id, 'Upvote', $article->author_id, $user->id, now());
                 $voteStatus = 1;
             }
-        }
-        else {
-            $user->votedArticles()->attach($id, ['type' => 'Upvote']);
-            $article->upvotes += 1;
+        } else {
+            $article->voteArticleTransaction($user->id, $id, 'Upvote', $article->author_id, $user->id, now());
             $voteStatus = 1;
         }
 
         $article->save();
+
+        $article->refresh();
 
         return response()->json([
             'article' => $article,
@@ -165,32 +159,27 @@ class ArticlePageController extends Controller
         $user = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
-        // TODO SPECIAL FEEDBACK WHEN ARTICLE IS DELETED (NO INTERACTIONS ALLOWED)
-
-        $this->authorize('downvote', $article); // TODO REDIRECT TO LOGIN
+        $this->authorize('downvote', $article);
 
         $vote = $user->votedArticles()->where('article_id', $id)->first();
+
         if ($vote) {
             if ($vote->pivot->type === 'Downvote') {
                 $user->votedArticles()->detach($id);
                 $article->downvotes -= 1;
                 $voteStatus = 0;
-            }
-            else {
-                $vote->pivot->type = 'Downvote';
-                $vote->pivot->save();
-                $article->downvotes += 1;
-                $article->upvotes -= 1;
+            } else {
+                $article->voteArticleTransaction($user->id, $id, 'Downvote', $article->author_id, $user->id, now());
                 $voteStatus = -1;
             }
-        }
-        else {
-            $user->votedArticles()->attach($id, ['type' => 'Downvote']);
-            $article->downvotes += 1;
+        } else {
+            $article->voteArticleTransaction($user->id, $id, 'Downvote', $article->author_id, $user->id, now());
             $voteStatus = -1;
         }
 
         $article->save();
+
+        $article->refresh();
 
         return response()->json([
             'article' => $article,
@@ -264,31 +253,27 @@ class ArticlePageController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $this->authorize('upvote', Comment::class);
+        //$this->authorize('upvote', Comment::class);
 
         $comment = Comment::findOrFail($id);
         $vote = $comment->voters()->where('user_id', $user->id)->first();
+
         if ($vote) {
             if ($vote->pivot->type === 'Upvote') {
                 $comment->voters()->detach($user->id);
                 $comment->upvotes--;
                 $isUpvoted = false;
-            }
-            else {
-                $vote->pivot->type = 'Upvote';
-                $vote->pivot->save();
-                $comment->upvotes++;
-                $comment->downvotes--;
+            } else {
+                $comment->voteCommentTransaction($user->id, $id, 'Upvote', $comment->author_id, $user->id, now());
                 $isUpvoted = true;
             }
-        }
-        else {
-            $comment->voters()->attach($user->id, ['type' => 'Upvote']);
-            $comment->upvotes++;
+        } else {
+            $comment->voteCommentTransaction($user->id, $id, 'Upvote', $comment->author_id, $user->id, now());
             $isUpvoted = true;
         }
 
         $comment->save();
+        $comment->refresh();
 
         return response()->json([
             'comment' => $comment,
@@ -301,31 +286,27 @@ class ArticlePageController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $this->authorize('downvote', Comment::class);
+        //$this->authorize('downvote', Comment::class);
 
         $comment = Comment::findOrFail($id);
         $vote = $comment->voters()->where('user_id', $user->id)->first();
+
         if ($vote) {
             if ($vote->pivot->type === 'Downvote') {
                 $comment->voters()->detach($user->id);
                 $comment->downvotes--;
                 $isDownvoted = false;
-            }
-            else {
-                $vote->pivot->type = 'Downvote';
-                $vote->pivot->save();
-                $comment->downvotes++;
-                $comment->upvotes--;
+            } else {
+                $comment->voteCommentTransaction($user->id, $id, 'Downvote', $comment->author_id, $user->id, now());
                 $isDownvoted = true;
             }
-        }
-        else {
-            $comment->voters()->attach($user->id, ['type' => 'Downvote']);
-            $comment->downvotes++;
+        } else {
+            $comment->voteCommentTransaction($user->id, $id, 'Downvote', $comment->author_id, $user->id, now());
             $isDownvoted = true;
         }
 
         $comment->save();
+        $comment->refresh();
 
         return response()->json([
             'comment' => $comment,
@@ -338,31 +319,27 @@ class ArticlePageController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $this->authorize('upvote', Reply::class);
+        //$this->authorize('upvote', Reply::class);
 
         $reply = Reply::findOrFail($id);
         $vote = $reply->voters()->where('user_id', $user->id)->first();
+
         if ($vote) {
             if ($vote->pivot->type === 'Upvote') {
                 $reply->voters()->detach($user->id);
                 $reply->upvotes--;
                 $isUpvoted = false;
-            }
-            else {
-                $vote->pivot->type = 'Upvote';
-                $vote->pivot->save();
-                $reply->upvotes++;
-                $reply->downvotes--;
+            } else {
+                $reply->voteReplyTransaction($user->id, $id, 'Upvote', $reply->author_id, $user->id, now());
                 $isUpvoted = true;
             }
-        }
-        else {
-            $reply->voters()->attach($user->id, ['type' => 'Upvote']);
-            $reply->upvotes++;
+        } else {
+            $reply->voteReplyTransaction($user->id, $id, 'Upvote', $reply->author_id, $user->id, now());
             $isUpvoted = true;
         }
 
         $reply->save();
+        $reply->refresh();
 
         return response()->json([
             'reply' => $reply,
@@ -375,31 +352,27 @@ class ArticlePageController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        $this->authorize('downvote', Reply::class);
+        //$this->authorize('downvote', Reply::class);
 
         $reply = Reply::findOrFail($id);
         $vote = $reply->voters()->where('user_id', $user->id)->first();
+
         if ($vote) {
             if ($vote->pivot->type === 'Downvote') {
                 $reply->voters()->detach($user->id);
                 $reply->downvotes--;
                 $isDownvoted = false;
-            }
-            else {
-                $vote->pivot->type = 'Downvote';
-                $vote->pivot->save();
-                $reply->downvotes++;
-                $reply->upvotes--;
+            } else {
+                $reply->voteReplyTransaction($user->id, $id, 'Downvote', $reply->author_id, $user->id, now());
                 $isDownvoted = true;
             }
-        }
-        else {
-            $reply->voters()->attach($user->id, ['type' => 'Downvote']);
-            $reply->downvotes++;
+        } else {
+            $reply->voteReplyTransaction($user->id, $id, 'Downvote', $reply->author_id, $user->id, now());
             $isDownvoted = true;
         }
 
         $reply->save();
+        $reply->refresh();
 
         return response()->json([
             'reply' => $reply,
