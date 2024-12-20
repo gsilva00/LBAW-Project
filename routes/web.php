@@ -85,6 +85,9 @@ Route::prefix('profile')->controller
     Route::get('/edit/{username}', 'showEdit')->name('editProfile');
     Route::post('/edit/{username}', 'update')->name('updateProfile');
     Route::post('/delete/{id}', 'delete')->name('deleteProfile');
+
+    Route::post('/appeal-unban/show', 'appealUnbanShow')->name('appealUnbanShow');
+    Route::post('/appeal-unban/submit', 'appealUnbanSubmit')->name('appealUnbanSubmit');
 });
 
 Route::get('/notifications', [NotificationsController::class, 'showNotificationsPage'])->name('notifications.show.page');

@@ -19,6 +19,11 @@
                         Edit Profile
                     </a>
                 @endif
+                @if($isOwner && $user->is_banned)
+                    <button type="button" id="unban-appeal-button" class="large-rectangle small-text greyer" data-action-url="{{ route('appealUnbanShow') }}">
+                        Appeal Unban
+                    </button>
+                @endif
                 @if(Auth::check() && !$isOwner)
                     <button type="button" id="follow-user-button" class="large-rectangle small-text greyer"
                             data-user-id="{{ $user->id }}" data-profile-id="{{ $profileUser->id }}">
