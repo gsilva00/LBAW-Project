@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -47,7 +46,7 @@ class MailModel extends Mailable
 
     public function build()
     {
-        return $this->view('mails.recover_password_mail')
+        return $this->markdown('mails.recover_password_mail')
             ->with([
                 'username' => $this->mailData['username'],
                 'code' => $this->mailData['code'],
