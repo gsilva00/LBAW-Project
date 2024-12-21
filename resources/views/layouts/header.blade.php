@@ -23,9 +23,9 @@
                     @csrf
                 </form>
             @else
-                <a id="profile-button" href="{{ route('login') }}">
+                <button type="button" id="profile-button" onclick="window.location='{{ route('login') }}'">
                     <i class='bx bx-user-circle'></i><h2>Login</h2>
-                </a>
+                </button>
             @endif
         </div>
     </div>

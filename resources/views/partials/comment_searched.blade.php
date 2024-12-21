@@ -43,9 +43,15 @@
             @endif
         </div>
         @if(!$isReply)
-            <a href="{{ route('showArticle', ['id' => $comment->article_id]) }}">View Article</a>
+            <button class="small-rectangle" onclick="window.location.href='{{ route('showArticle', ['id' => $comment->article_id]) }}'">
+                <i class='bx bx-show remove-position' ></i>
+                View Article
+            </button>
         @else
-            <a href="{{ route('showArticle', ['id' => $comment->comment->article_id]) }}">View Article</a>
+            <button class="small-rectangle" onclick="window.location.href='{{ route('showArticle', ['id' => $comment->comment->article_id]) }}'">
+                <i class='bx bx-show remove-position' ></i>
+                View Article
+            </button>
         @endif
 
     </div>

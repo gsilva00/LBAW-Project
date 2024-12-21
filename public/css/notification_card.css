@@ -1,4 +1,7 @@
 .notification-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
@@ -7,28 +10,19 @@
     background-color: #fff;
 }
 
-.notification-card p {
-    margin: 8px 0;
+.date{
+    text-align: right;
+    color: #666;
 }
 
-.notification-card strong {
-    color: #333;
+.notification-card .profile-info{
+    width: 85%;
 }
 
-
-.nav-tabs .nav-link {
-    color: #495057;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-bottom-color: transparent;
-}
-.nav-tabs .nav-link.active {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff #007bff #f8f9fa;
-}
-.tab-content {
-    border: 1px solid #dee2e6;
-    border-top: none;
-    padding: 1rem;
+.notification-card .profile-info p {
+    position: relative;
+    bottom: 0.2em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

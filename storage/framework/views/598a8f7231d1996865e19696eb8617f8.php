@@ -12,6 +12,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
                     <a class="dropdown-item" href="<?php echo e(route('profile', ['username' => $user->username])); ?>"><h2>See Profile</h2></a>
+                    <a class="dropdown-item" href="<?php echo e(route('notifications.show.page')); ?>"><h2>Notifications</h2></a>
                     <a class="dropdown-item" href="<?php echo e(route('showFavouriteArticles')); ?>"><h2>Favourite Articles</h2></a>
                     <?php if($user->is_admin): ?>
                         <a class="dropdown-item" href="<?php echo e(route('adminPanel')); ?>"><h2>Administrator Panel</h2></a>
@@ -22,9 +23,9 @@
                     <?php echo csrf_field(); ?>
                 </form>
             <?php else: ?>
-                <a id="profile-button" href="<?php echo e(route('login')); ?>">
+                <button type="button" id="profile-button" onclick="window.location='<?php echo e(route('login')); ?>'">
                     <i class='bx bx-user-circle'></i><h2>Login</h2>
-                </a>
+                </button>
             <?php endif; ?>
         </div>
     </div>

@@ -1,0 +1,18 @@
+.user-search-container{
+    display: grid;
+    grid-template-areas: "profile_image";
+    column-gap: 2em;
+    padding: 1em;
+    margin-block: 1em;
+    background-color: var(--secondary-color);
+    justify-items: center;
+    text-align: center;
+}
+
+.user-search-container img{
+    grid-area: profile_image;
+    width: 5em;
+    height: 5em;
+    object-fit: cover;
+    object-position: center;
+}

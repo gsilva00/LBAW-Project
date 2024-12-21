@@ -1,6 +1,6 @@
 <div class="news-tile">
     <a href="<?php echo e(route('showArticle', ['id' => $article->id])); ?>">
-        <img src="<?php echo e(asset('images/article/' . $article->article_image)); ?>" alt="News Image">
+        <img src="<?php echo e(asset('images/article/' . $article->article_image)); ?>" alt="<?php echo e($article->title); ?>'s main image">
         <p class="title"><?php echo e($article->title); ?></p>
     </a>
     <?php if(!$article->is_deleted && Auth::check() && Auth::user()->id === $article->author_id): ?>
