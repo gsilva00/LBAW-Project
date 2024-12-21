@@ -76,7 +76,7 @@
             @else
                 <a href="{{ route('profile', ['username' => $pair_users[1][1]]) }}">{{ $pair_users[1][0] }}</a>
             @endif
-             upvoted on the reply "{{$notification_specifics[1]->comment->content}}" from your article</p>
+             upvoted on the reply "{{$notification_specifics[1]->reply->content}}" from your article</p>
             
             <button type="button" class="small-rectangle" onclick="window.location.href='{{ route('showArticle', ['id' => $notification_specifics[1]->reply->comment->article_id]) }}'">
                 <i class='bx bx-show remove-position' ></i>
