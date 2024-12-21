@@ -62,15 +62,17 @@
                     <label for="new_password_confirmation"><span>Confirm Password</span></label>
                     <input type="password" name="new_password_confirmation" id="new_password_confirmation" placeholder="New Password">
                 </div>
+                <br>
+                <br>
                 <h2><strong>Notifications Settings</strong></h2>
                 <div>
                     <div class="profile-info">
-                        <label for="upvote-notifications">Upvote Notifications</label>
                         <input type="checkbox" id="upvote-notifications" name="upvote-notifications" {{$profileUser->upvote_notification ? "checked" : ""}}/>
+                        <label for="upvote-notifications">Upvote Notifications</label>
                     </div>
                     <div class="profile-info">
-                        <label for="comment-notifications">Comment/Reply Notifications</label>
                         <input type="checkbox" id="comment-notifications" name="comment-notifications" {{$profileUser->comment_notification ? "checked" : ""}} />
+                        <label for="comment-notifications">Comment/Reply Notifications</label>
                     </div>
                 </div>
                 <br>
@@ -85,7 +87,7 @@
         </section>
         <section class="profile-container">
             <form action="{{ route('deleteProfile', ['id' => $profileUser->id]) }}" method="POST" style="display:inline;">
-            @csrf
+                @csrf
                 <br>
                 <h2><strong>Delete account</strong></h2>
                 @if($isOwner)
