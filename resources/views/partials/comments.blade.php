@@ -8,7 +8,8 @@
         @if($comment->replies->isNotEmpty())
             <button class="small-rectangle see-replies-button" title="See replies">
                 <i class='bx bx-chevron-down remove-position' ></i>
-                <span data-reply-count="{{ $comment->id }}">{{ $comment->replies->count() }} {{ $comment->replies->count() > 1 ? 'Answers' : 'Answer' }}</span>            </button>
+                <span data-reply-count="{{ $comment->id }}">{{ $comment->replies->count() }} {{ $comment->replies->count() > 1 ? 'Answers' : 'Answer' }}</span>
+            </button>
             <div class="reply" data-reply-container data-comment-id="comment-{{ $comment->id }}">
                 @foreach($comment->replies as $reply)
                     @if(!\App\Models\Reply::checkIsBanned($reply))

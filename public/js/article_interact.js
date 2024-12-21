@@ -636,6 +636,7 @@ function showReplies() {
 
 function toggleReplies() {
     const repliesContainer = this.nextElementSibling;
+    console.log('Show replies button clicked');
     if (!repliesContainer) {
         console.error('Replies container not found');
         return;
@@ -675,7 +676,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.body.appendChild(popupContainer);
                 openPopup();
                 submitArticleReport();
-            }
+            })
+            .catch(error => {
+                if (error.message === 'Unauthorized') {
+                    alert('You are not authorized to perform this action.');
+                } else {
+                    console.error('Error loading pop-up:', error);
+                }
+            });
     });
 });
 
