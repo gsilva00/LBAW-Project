@@ -63,6 +63,7 @@
                     @endif
                 @endif
                 <br>
+                <br>
                 <h2><strong>Optional: Change Password</strong></h2>
                 <div class="profile-info">
                     <label for="new_password"><span>New Password</span></label>
@@ -79,16 +80,17 @@
                 @if ($errors->has('new_password_confirmation'))
                     @include('partials.error_popup', ['field' => 'new_password_confirmation'])
                 @endif
-                <h2><strong>Notifications Settings</strong></h2>
                 <br>
+                <br>
+                <h2><strong>Notifications Settings</strong></h2>
                 <div>
-                    <div>
-                        <label for="upvote-notifications">Upvote Notifications</label>
+                    <div class="profile-info">
                         <input type="checkbox" id="upvote-notifications" name="upvote-notifications" {{$profileUser->upvote_notification ? "checked" : ""}}/>
+                        <label for="upvote-notifications">Upvote Notifications</label>
                     </div>
-                    <div>
-                        <label for="comment-notifications">Comment/Reply Notifications</label>
+                    <div class="profile-info">
                         <input type="checkbox" id="comment-notifications" name="comment-notifications" {{$profileUser->comment_notification ? "checked" : ""}} />
+                        <label for="comment-notifications">Comment/Reply Notifications</label>
                     </div>
                 </div>
                 <br>

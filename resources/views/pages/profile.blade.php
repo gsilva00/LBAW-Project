@@ -98,9 +98,9 @@
             @endif
 
             @if($isOwner)
-                <a href="{{ route('createArticle') }}" class="large-rectangle small-text">
+                <button type="button" onclick="window.location='{{ route('createArticle') }}'" class="large-rectangle small-text">
                     Create New Article
-                </a>
+                </button>
             @endif
 
         </div>

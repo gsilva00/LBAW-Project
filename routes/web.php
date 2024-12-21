@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\FeaturesController;
 use App\Http\Controllers\CreateArticleController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\NotificationsController;
@@ -167,6 +168,7 @@ Route::post('/topic/{topic}/follow', [TopicController::class, 'followTopic'])->n
 Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic'])->name('unfollowTopic');
 
 // Static Pages
+Route::get('/features', [FeaturesController::class, 'show'])->name('features');
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutUs');
 

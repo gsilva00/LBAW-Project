@@ -99,9 +99,9 @@
             <?php endif; ?>
 
             <?php if($isOwner): ?>
-                <a href="<?php echo e(route('createArticle')); ?>" class="large-rectangle small-text">
+                <button type="button" onclick="window.location='<?php echo e(route('createArticle')); ?>'" class="large-rectangle small-text">
                     Create New Article
-                </a>
+                </button>
             <?php endif; ?>
 
         </div>

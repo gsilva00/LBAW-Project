@@ -76,7 +76,7 @@
             <?php else: ?>
                 <a href="<?php echo e(route('profile', ['username' => $pair_users[1][1]])); ?>"><?php echo e($pair_users[1][0]); ?></a>
             <?php endif; ?>
-             upvoted on the reply "<?php echo e($notification_specifics[1]->comment->content); ?>" from your article</p>
+             upvoted on the reply "<?php echo e($notification_specifics[1]->reply->content); ?>" from your article</p>
             
             <button type="button" class="small-rectangle" onclick="window.location.href='<?php echo e(route('showArticle', ['id' => $notification_specifics[1]->reply->comment->article_id])); ?>'">
                 <i class='bx bx-show remove-position' ></i>
