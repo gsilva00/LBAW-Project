@@ -44,6 +44,7 @@ class ArticlePageController extends Controller
         $voteArticle = $user ? $user->getVoteTypeOnArticle($article) : 0;
 
         $favourite = $user ? $user->isFavouriteArticle($article) : false;
+        $comments = Comment::removeBannedComments($article->comments);
 
         /*Log::info('Paragraphs: ' . json_encode($paragraphs));*/
 
@@ -52,7 +53,7 @@ class ArticlePageController extends Controller
             'article' => $article,
             'articleTags' => $article->tags,
             'topic' => $article->topic,
-            'comments' => $article->comments,
+            'comments' => $comments,
             'previousPage' => $previousPage,
             'previousUrl' => $previousUrl,
             'authorDisplayName' => $authorDisplayName,

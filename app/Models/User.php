@@ -327,4 +327,11 @@ class User extends Authenticatable
         }, 5);
     }
 
+    public static function removeBannedAndDeletedUsers($users)
+    {
+        return $users->filter(function ($user) {
+            return !$user->is_banned && !$user->is_deleted;
+        });
+    }
+
 }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppealToUnban;
 use App\Models\ArticlePage;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -176,4 +178,28 @@ class ProfileController extends Controller
 
         return redirect()->route('adminPanel')->with('success', 'User account deleted successfully!');
     }
+
+    public function appealUnbanShow(): View
+    {
+        return view('partials.appeal_unban');
+    }
+
+    public function appealUnbanSubmit(Request $request): JsonResponse
+    {
+        Log::info("Request: ", [
+            'request' => $request->all(),
+        ]);
+
+        $appeal = new AppealToUnban();
+        $appeal->description = $request->input('appealReason');
+        $appeal->user_id = Auth::id();
+
+        $appeal->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Appeal submitted successfully!'
+        ]);
+    }
+
 }

@@ -167,4 +167,18 @@ class Comment extends Model
         }, 5);
     }
 
+    public static function removeBannedComments($comments)
+    {
+        return $comments->filter(function ($comment) {
+            return !$comment->author->is_banned;
+        });
+    }
+
+    public static function removeBannedAndDeletedComments($comments)
+    {
+        return $comments->filter(function ($comment) {
+            return !$comment->author->is_banned && !$comment->is_deleted;
+        });
+    }
+
 }

@@ -32,7 +32,7 @@
                 $isUpvoted = $user ? $comment->isUpvotedBy($user) : false;
                 $isDownvoted = $user ? $comment->isDownvotedBy($user) : false;
             @endphp
-            @if(!$comment->is_deleted)
+            @if(!$comment->is_deleted && !$user->is_banned)
                 <button class="upvote-comment-button" data-comment-id="{{ $comment->id }}">
                     <i class='bx {{ $isUpvoted ? "bxs-upvote" : "bx-upvote" }}' title="upvote comment"></i>
                 </button>

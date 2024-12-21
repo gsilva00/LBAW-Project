@@ -70,6 +70,9 @@ class SearchController extends Controller
         $comments = Comment::filterBySearchQuery($searchQuery);
         $replies = Reply::filterBySearchQuery($searchQuery);
 
+        $comments = Comment::removeBannedAndDeletedComments($comments);
+        $replies = Reply::removeBannedAndDeletedReplies($replies);
+
         return view('pages.search_comments', [
             'user' => $authUser,
             'searchQuery' => $searchQuery,
@@ -84,6 +87,7 @@ class SearchController extends Controller
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
 
         $users = User::filterBySearchQuery($searchQuery);
+        $users = User::removeBannedAndDeletedUsers($users);
 
         return view('pages.search_users', [
             'user' => $authUser,

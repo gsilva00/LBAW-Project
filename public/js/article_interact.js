@@ -163,10 +163,6 @@ function handleCommentSubmission(form, csrfToken) {
 
     fetchPostRequest(url, bodyData, csrfToken)
         .then(data => updateCommentsUI(data, commentInput))
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Failed to update comments. See console for details.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-        });
 }
 
 // Update the comments UI
@@ -488,22 +484,41 @@ function handleReplyClick(event) {
     const commentElement = this.closest('.comment');
     const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
     const articleId = document.querySelector('meta[name="article-id"]').getAttribute('content');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const url = `/comment/${commentId}/commentForm`;
 
-    fetch(url, {
-        method: 'POST',
+    // Check if the user is banned
+    fetch('/check-user-status', {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ state: 'reply', articleId: articleId })
+            'X-CSRF-TOKEN': csrfToken
+        }
     })
-        .then(response => response.text())
-        .then(html => {
-            displayReplyForm(html, commentElement, this);
+        .then(response => response.json())
+        .then(data => {
+            if (data.isBanned) {
+                alert('You are banned from replying to comments.');
+            } else {
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({ state: 'reply', articleId: articleId })
+                })
+                    .then(response => response.text())
+                    .then(html => {
+                        displayReplyForm(html, commentElement, this);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching the reply form:', error);
+                    });
+            }
         })
         .catch(error => {
-            console.error('Error fetching the reply form:', error);
+            console.error('Error checking user status:', error);
         });
 }
 
@@ -621,6 +636,7 @@ function showReplies() {
 
 function toggleReplies() {
     const repliesContainer = this.nextElementSibling;
+    console.log('Show replies button clicked');
     if (!repliesContainer) {
         console.error('Replies container not found');
         return;
@@ -648,7 +664,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
         })
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized');
+                }
+                return response.text();
+            })
             .then(html => {
                 const popupContainer = document.createElement('div');
                 popupContainer.innerHTML = html;
@@ -656,7 +677,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 openPopup();
                 submitArticleReport();
             })
-            .catch(error => console.error('Error loading pop-up:', error));
+            .catch(error => {
+                if (error.message === 'Unauthorized') {
+                    alert('You are not authorized to perform this action.');
+                } else {
+                    console.error('Error loading pop-up:', error);
+                }
+            });
     });
 });
 
@@ -753,7 +780,12 @@ function reportCommentShow() {
                     isReply: isReply
                 })
             })
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Unauthorized');
+                    }
+                    return response.text();
+                })
                 .then(html => {
                     const popupContainer = document.createElement('div');
                     popupContainer.innerHTML = html;
@@ -761,7 +793,7 @@ function reportCommentShow() {
                     openPopup();
                     submitCommentReport();
                 })
-                .catch(error => console.error('Error loading pop-up:', error));
+
         });
     });
 }

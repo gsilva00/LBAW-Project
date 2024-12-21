@@ -45,6 +45,7 @@
         <script src="{{ url('js/comment_search_interact.js') }}" defer> </script>
         <script src="{{ url('js/follow_user.js') }}" defer> </script>
         <script src="{{ url('js/porpose_tag.js') }}" defer> </script>
+        <script src="{{ url('js/appeal_unban.js') }}" defer> </script>
     </head>
     <body>
         <a href="#main-content" class="skip-link">Skip to main content</a>
