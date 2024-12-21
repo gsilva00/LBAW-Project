@@ -37,7 +37,6 @@
         <script src="{{ url('js/user_feed.js') }}" defer></script>
         <script src="{{ url('js/popup.js') }}" defer> </script>
         <script src="{{ url('js/unfollow_profile_user.js') }}" defer> </script>
-        <script src="{{ url('js/unfollow_topic.js') }}" defer> </script>
         <script src="{{ url('js/tag_create_article.js') }}" defer></script>
         <script src="{{ url('js/tag_edit_article.js') }}" defer></script>
         <script src="{{ url('js/article_interact.js') }}" defer> </script>

@@ -1,10 +1,18 @@
-function createWithPagination(formId, listId, buttonId, successMessage, errorMessage) {
+function notAvailableContainer(message) {
+    const container = document.createElement('div');
+    container.className = 'not-available-container';
+    container.innerHTML = `<p>${message}</p>`;
+    return container;
+}
+
+function createWithPagination(formId, listId, buttonId, successMsg, errorMsg) {
     const form = document.getElementById(formId);
     const list = document.getElementById(listId);
     const button = document.getElementById(buttonId);
 
     // If any of the required elements are missing, return early
     if (!form || !list || !button) {
+        console.warn('Missing elements for \'createWithPagination\'');
         return;
     }
 
@@ -37,7 +45,7 @@ function createWithPagination(formId, listId, buttonId, successMessage, errorMes
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(successMessage); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    alert(successMsg); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
                     form.reset(); // Clear the form fields
 
                     if (data.newHtml) {
@@ -60,7 +68,7 @@ function createWithPagination(formId, listId, buttonId, successMessage, errorMes
                         displayErrors(data.errors);
                     }
                     else {
-                        alert(data.message || errorMessage);
+                        alert(data.message || errorMsg);
                     }
                 }
             })
@@ -169,12 +177,12 @@ function validateTagForm(formData) {
 }
 
 
-function seeMoreEntities(buttonId, listId) {
-    const button = document.getElementById(buttonId);
+function seeMoreEntities(listId, buttonId) {
     const list = document.getElementById(listId);
+    const button = document.getElementById(buttonId);
 
-    if (!button || !list) {
-        console.error(`Missing elements for '${listId}'`);
+    if (!list || !button) {
+        console.warn('Missing elements for \'seeMoreEntities\'');
         return;
     }
 
@@ -206,73 +214,170 @@ function seeMoreEntities(buttonId, listId) {
     });
 }
 
+// Setup toggle trending tag for the whole list
 function toggleTrendingTag() {
     const tagList = document.getElementById('tag-list');
 
     if (!tagList) {
-        console.error('Missing element: #tag-list');
+        console.warn('Missing element for \'toggleTrendingTag\'');
         return;
     }
 
     // Handle click events for toggling trending status
-    tagList.addEventListener('click', function (event) {
-        const button = event.target;
+    tagList.addEventListener('submit', function (event) {
+        event.preventDefault()
 
-        if (button.matches('.trending-tag-action')) {
-            const form = button.closest('form');
-            const url = form.action;
-            const formData = new FormData(form);
+        const form = event.target;
+        const button = form.querySelector('.trending-tag-action');
+        const formData = new FormData(form);
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': formData.get('_token'),
-                    'Accept': 'application/json',
-                },
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'Accept': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Update button text and attribute based on the new trending status
+                    button.textContent = data.is_trending ? 'Remove from Trending' : 'Add to Trending';
+                    button.setAttribute('data-is-trending', data.is_trending);
+
+                    alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                } else {
+                    alert(data.message || 'Failed to toggle trending.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                }
             })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        // Update button text and attribute based on the new trending status
-                        button.textContent = data.is_trending ? 'Remove from Trending' : 'Add to Trending';
-                        button.setAttribute('data-is-trending', data.is_trending);
+            .catch((error) => console.error('Error toggling trending status:', error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
 
-                        alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-                    } else {
-                        alert(data.message || 'Failed to toggle trending.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-                    }
-                })
-                .catch((error) => console.error('Error toggling trending status:', error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-        }
     });
 }
 
 
-seeMoreEntities('load-more-users', 'user-list');
-seeMoreEntities('load-more-topics', 'topic-list');
-seeMoreEntities('load-more-tags', 'tag-list');
+function seeMoreProposals(listId, buttonId) {
+    const proposalList = document.getElementById(listId);
+    const button = document.getElementById(buttonId);
+
+    if (!proposalList || !button) {
+        console.warn(`Missing elements for \'proposals\'`);
+        return;
+    }
+
+    button.addEventListener('click', function () {
+        const url = button.getAttribute('data-url');
+        const pageNum = button.getAttribute('data-page-num');
+
+        fetch(`${url}?page=${pageNum}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.newHtml) {
+                    proposalList.insertAdjacentHTML('beforeend', data.newHtml);
+                    button.setAttribute('data-page-num', (parseInt(pageNum) + 1).toString());
+
+                    if (!data.hasMoreTagProposalPages) {
+                        button.style.display = 'none';
+                        proposalList.insertAdjacentHTML('afterend', '<p>No more entries to show.</p>');
+                    }
+                }
+                else {
+                    console.error(`Error: No 'html' content returned for '${listId}'`); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                }
+            })
+            .catch(error => console.error(`Error fetching more data for '${listId}':`, error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+    });
+}
+
+
+// Handle tag proposal actions (accept/reject) for
+function handleProposal() {
+    const proposalList = document.getElementById('tag-proposal-list');
+    const tagList = document.getElementById('tag-list');
+
+    if (!proposalList || !tagList) {
+        console.warn('Missing elements for \'handleProposal\'');
+        return;
+    }
+
+
+    proposalList.addEventListener('submit', function (event) {
+        event.preventDefault()
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'Accept': 'application/json',
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    form.closest('.propose-tag-tile').remove();
+
+                    if (data.newHtml) {
+                        tagList.insertAdjacentHTML('beforeend', data.newHtml);
+                    }
+
+                    if (proposalList.children.length === 0) {
+                        proposalList.insertAdjacentElement('afterend', notAvailableContainer('No pending tag proposals to list.'));
+                    }
+                }
+                else {
+                    alert('Failed to process the proposal.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                }
+            })
+            .catch(error => console.error('Error processing proposal:', error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+    });
+}
+
+seeMoreEntities(
+    'user-list',
+    'load-more-users'
+);
+seeMoreEntities(
+    'topic-list',
+    'load-more-topics'
+);
+seeMoreEntities(
+    'tag-list',
+    'load-more-tags'
+);
+seeMoreProposals(
+    'tag-proposal-list',
+    'load-more-tag-proposals'
+);
 
 createWithPagination(
     'createFullUserForm',
     'user-list',
     'load-more-users',
     'User created successfully!',
-    'Error creating user.'
+    'Error creating user.',
 );
 createWithPagination(
     'createTopicForm',
     'topic-list',
     'load-more-topics',
     'Topic created successfully!',
-    'Error creating topic.'
+    'Error creating topic.',
 );
 createWithPagination(
     'createTagForm',
     'tag-list',
     'load-more-tags',
     'Tag created successfully!',
-    'Error creating tag.'
+    'Error creating tag.',
 );
 
 toggleTrendingTag();
 
+handleProposal();

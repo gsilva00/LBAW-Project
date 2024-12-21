@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProposeNewTag;
 use App\Models\Tag;
 use App\Models\Topic;
 use App\Models\User;
@@ -31,8 +32,7 @@ class AdminPanelController extends Controller
 
         try {
             $this->authorize('viewAdminPanel', User::class);
-        }
-        catch (AuthorizationException $e) {
+        } catch (AuthorizationException $e) {
             return redirect()->route('homepage')
                 ->withErrors('Unauthorized. You do not possess the valid credentials to access that page.');
         }
@@ -45,6 +45,8 @@ class AdminPanelController extends Controller
         $topics = Topic::paginate(config('pagination.topics_per_page'));
 
         $tags = Tag::paginate(config('pagination.tags_per_page'));
+
+        $tag_proposals = ProposeNewTag::paginate(config('pagination.tag_proposals_per_page'));
 
         // TODO expand for more administrator features
 
@@ -59,6 +61,9 @@ class AdminPanelController extends Controller
             'tagCurrPageNum' => 1, // Tag pagination
             'tagHasMorePages' => $tags->hasMorePages(),
             'tagsPaginated' => $tags,
+            'tagProposalCurrPageNum' => 1, // Tag proposal pagination
+            'tagProposalHasMorePages' => $tag_proposals->hasMorePages(),
+            'tagProposalsPaginated' => $tag_proposals,
         ]);
     }
 
@@ -110,7 +115,7 @@ class AdminPanelController extends Controller
 
         return response()->json([
             'newHtml' => $view,
-            'hasMoreUserPages' => $users->hasMorePages(),
+            'userHasMorePages' => $users->hasMorePages(),
         ]);
     }
 
@@ -201,7 +206,7 @@ class AdminPanelController extends Controller
 
         return response()->json([
             'newHtml' => $view,
-            'hasMoreTopicPages' => $topics->hasMorePages(),
+            'topicHasMorePages' => $topics->hasMorePages(),
         ]);
     }
 
@@ -261,7 +266,7 @@ class AdminPanelController extends Controller
 
         return response()->json([
             'newHtml' => $view,
-            'hasMoreTagPages' => $tags->hasMorePages(),
+            'tagHasMorePages' => $tags->hasMorePages(),
         ]);
     }
 
@@ -304,7 +309,7 @@ class AdminPanelController extends Controller
         ]);
     }
 
-    public function toggleTrending($id): JsonResponse
+    public function toggleTrending(int $id): JsonResponse
     {
         $tag = Tag::findOrFail($id);
 
@@ -317,6 +322,62 @@ class AdminPanelController extends Controller
             'success' => true,
             'is_trending' => $tag->is_trending,
             'message' => $tag->is_trending ? 'Tag added to trending.' : 'Tag removed from trending.',
+        ]);
+    }
+
+
+    public function moreTagProposals(Request $request): JsonResponse
+    {
+        $this->authorize('viewAdminPanel', User::class);
+
+        $page = $request->get('page', 1);
+        $proposals = ProposeNewTag::paginate(
+            config('pagination.tag_proposals_per_page'),
+            ['*'],
+            'page',
+            $page
+        );
+
+        $view = view('partials.propose_tag_tile_list', [
+            'tagProposalsPaginated' => $proposals
+        ])->render();
+
+        return response()->json([
+            'newHtml' => $view,
+            'tagProposalHasMorePages' => $proposals->hasMorePages(),
+        ]);
+    }
+
+    public function acceptTagProposal(int $id): JsonResponse
+    {
+        $this->authorize('accept', ProposeNewTag::class);
+
+        $proposal = ProposeNewTag::findOrFail($id);
+        $proposal->delete();
+
+        $tag = Tag::create([
+            'name' => $proposal->name
+        ]);
+
+        $tagHtml = view('partials.tag_tile', ['tag' => $tag])->render();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tag proposal accepted and added to tags.',
+            'newHtml' => $tagHtml,
+        ]);
+    }
+
+    public function rejectTagProposal(int $id): JsonResponse
+    {
+        $this->authorize('reject', ProposeNewTag::class);
+
+        $proposal = ProposeNewTag::findOrFail($id);
+        $proposal->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tag proposal rejected.',
         ]);
     }
 }

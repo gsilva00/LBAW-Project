@@ -16,4 +16,9 @@ return [
      * Number of tags per page in the admin's panel
      */
     'tags_per_page' => 10,
+
+    /**
+     * Number of tag proposals per page in the admin's panel
+     */
+    'tag_proposals_per_page' => 10,
 ];
