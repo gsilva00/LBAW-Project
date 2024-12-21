@@ -168,4 +168,9 @@ class Reply extends Model
         }, 5);
     }
 
+    public static function checkIsBanned($reply)
+    {
+        return $reply->author->is_banned;
+    }
+
 }

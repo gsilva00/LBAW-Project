@@ -11,7 +11,9 @@
                 <span data-reply-count="{{ $comment->id }}">{{ $comment->replies->count() }} {{ $comment->replies->count() > 1 ? 'Answers' : 'Answer' }}</span>            </button>
             <div class="reply" data-reply-container data-comment-id="comment-{{ $comment->id }}">
                 @foreach($comment->replies as $reply)
-                    @include('partials.comment', ['comment' => $reply, 'user' => $user, 'isReply' => true])
+                    @if(!\App\Models\Reply::checkIsBanned($reply))
+                        @include('partials.comment', ['comment' => $reply, 'user' => $user, 'isReply' => true])
+                    @endif
                 @endforeach
             </div>
         @endif
