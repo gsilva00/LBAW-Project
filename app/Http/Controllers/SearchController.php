@@ -84,6 +84,7 @@ class SearchController extends Controller
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
 
         $users = User::filterBySearchQuery($searchQuery);
+        $users = User::removeBannedAndDeletedUsers($users);
 
         return view('pages.search_users', [
             'user' => $authUser,
