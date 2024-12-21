@@ -173,4 +173,11 @@ class Reply extends Model
         return $reply->author->is_banned;
     }
 
+    public static function removeBannedAndDeletedReplies($replies)
+    {
+        return $replies->filter(function ($reply) {
+            return !$reply->author->is_banned && !$reply->is_deleted;
+        });
+    }
+
 }

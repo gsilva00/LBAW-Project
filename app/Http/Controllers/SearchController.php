@@ -70,6 +70,9 @@ class SearchController extends Controller
         $comments = Comment::filterBySearchQuery($searchQuery);
         $replies = Reply::filterBySearchQuery($searchQuery);
 
+        $comments = Comment::removeBannedAndDeletedComments($comments);
+        $replies = Reply::removeBannedAndDeletedReplies($replies);
+
         return view('pages.search_comments', [
             'user' => $authUser,
             'searchQuery' => $searchQuery,
