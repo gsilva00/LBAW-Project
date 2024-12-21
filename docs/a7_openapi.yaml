@@ -722,6 +722,17 @@ paths:
         '403':
           description: 'You do not possess the credentials for this action.'
 
+  /favourite-articles:
+    get:
+      operationId: R311
+      summary: 'R311: View Favourite Articles'
+      description: 'Show the favourite articles page. Access: USR'
+      tags:
+        - 'M03: News'
+      responses:
+        '200':
+          description: 'Success. Display favourite articles.'
+
 ######################################## Search ########################################
 
   /search:
