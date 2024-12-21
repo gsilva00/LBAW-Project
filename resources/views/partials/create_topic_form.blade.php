@@ -11,9 +11,6 @@
             maxlength="30"
         >
     </div>
-    @if ($errors->has('name'))
-        @include('partials.error_popup', ['field' => 'name'])
-    @endif
     <br>
     <div class="profile-info">
         <button type="submit" class="large-rectangle small-text greyer">Create Topic</button>

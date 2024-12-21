@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ArticlePage;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +36,9 @@ class UserFollowingController extends Controller
         if ($request->ajax()) {
             /*Log::info("AJAX request");*/
 
-            return view('partials.articles_list', ['articles' => $articles_followed_tags]);
+            return view('partials.articles_list', [
+                'articles' => $articles_followed_tags
+            ]);
         }
 
         return view('pages.display_articles', [
@@ -63,7 +66,9 @@ class UserFollowingController extends Controller
         if ($request->ajax()) {
             /*Log::info("AJAX request");*/
 
-            return view('partials.articles_list', ['articles' => $articles_followed_topics]);
+            return view('partials.articles_list', [
+                'articles' => $articles_followed_topics
+            ]);
         }
 
         return view('pages.followedtopics', [
@@ -90,7 +95,9 @@ class UserFollowingController extends Controller
         if ($request->ajax()) {
             /*Log::info("AJAX request");*/
 
-            return view('partials.articles_list', ['articles' => $articles]);
+            return view('partials.articles_list', [
+                'articles' => $articles
+            ]);
         }
 
         return view('pages.display_articles', [
@@ -104,8 +111,12 @@ class UserFollowingController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (Auth::guest() || $user->cant('viewUserFeed', $user)) {
-            return redirect()->route('login')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
+        try {
+            $this->authorize('viewUserFeed', $user);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to access that page.');
         }
 
 
@@ -113,7 +124,9 @@ class UserFollowingController extends Controller
             /*Log::info("AJAX request");*/
             $articles = ArticlePage::all();
 
-            return view('partials.articles_list', ['articles' => $articles]);
+            return view('partials.articles_list', [
+                'articles' => $articles
+            ]);
         }
 
         return view('pages.user_feed', [
@@ -126,31 +139,51 @@ class UserFollowingController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
+        $targetUser = User::find($request->profile_id);
 
-        Log::info('UserFollowingController@followUser', [
+        /*Log::info('UserFollowingController@followUser', [
             'user' => $user,
             'request' => $request->input(),
-        ]);
+        ]);*/
 
-        //$this->authorize('followUser', $user);
-        Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
+        try {
+            $this->authorize('followUser', $targetUser);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to perform that action.');
+        }
+
+        // Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
 
         $user->following()->attach($request->profile_id);
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true
+        ]);
     }
 
     public function unfollowUser(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
+        $targetUser = User::find($request->profile_id);
 
-        //$this->authorize('unfollowUser', $user);
 
-        Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
+        try {
+            $this->authorize('unfollowUser', $targetUser);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to perform that action.');
+        }
+
+        // Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
 
         $user->following()->detach($request->profile_id);
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

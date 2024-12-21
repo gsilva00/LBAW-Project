@@ -4,7 +4,7 @@
     @if(session('status'))
         @if(session('status') === 'Success!')
             <form method="POST" action="{{ route('resetPasswordCheck') }}">
-                {{ csrf_field() }}
+                @csrf
                 <h1>{{ session('message') }}</h1>
                 <div class="">
                     <label for="code"><span>Verification Code</span></label>
@@ -27,7 +27,7 @@
     @else
         <div class="recover-password-container">
             <form method="POST" action="{{ route('recoverPasswordAction') }}">
-                {{ csrf_field() }}
+                @csrf
                 <h1>Recover Password</h1>
                 <div class="">
                     <label for="email"><span>Email</span></label>

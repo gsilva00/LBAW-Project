@@ -55,7 +55,8 @@ class TagController extends Controller
         $tag = Tag::where('name', $name)->firstOrFail();
         $user->followedTags()->attach($tag->id);
 
-        return redirect()->back()->with('success', 'Tag followed successfully.');
+        return redirect()->back()
+            ->withSuccess('Tag followed successfully.');
     }
 
     public function unfollowTag(string $name): RedirectResponse
@@ -68,6 +69,7 @@ class TagController extends Controller
         $tag = Tag::where('name', $name)->firstOrFail();
         $user->followedTags()->detach($tag->id);
 
-        return redirect()->back()->with('success', 'Tag unfollowed successfully.');
+        return redirect()->back()
+            ->withSuccess('Tag unfollowed successfully.');
     }
 }

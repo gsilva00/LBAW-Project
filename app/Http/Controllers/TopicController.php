@@ -37,7 +37,8 @@ class TopicController extends Controller
         $topic = Topic::where('name', $name)->firstOrFail();
         $user->followedTopics()->attach($topic->id);
 
-        return redirect()->back()->with('success', 'Topic followed successfully.');
+        return redirect()->back()
+            ->withSuccess('Topic followed successfully.');
     }
 
     public function unfollowTopic(string $name): RedirectResponse
@@ -50,6 +51,7 @@ class TopicController extends Controller
         $topic = Topic::where('name', $name)->firstOrFail();
         $user->followedTopics()->detach($topic->id);
 
-        return redirect()->back()->with('success', 'Topic unfollowed successfully.');
+        return redirect()->back()
+            ->withSuccess('Topic unfollowed successfully.');
     }
 }

@@ -117,6 +117,14 @@ Route::prefix('admin-panel')->controller
     Route::get('/more-tags', 'moreTags')->name('moreTags');
     Route::post('/create-tag', 'createTag')->name('createTag');
     Route::post('/toggle-trending-tag/{id}', 'toggleTrending')->name('toggleTrendingTag');
+    // Tag proposal management
+    Route::get('/more-tag-proposals', 'moreTagProposals')->name('moreTagProposals');
+    Route::post('/accept-tag-proposal/{id}', 'acceptTagProposal')->name('acceptTagProposal');
+    Route::post('/reject-tag-proposal/{id}', 'rejectTagProposal')->name('rejectTagProposal');
+    // Unban appeal management
+    Route::get('/more-unban-appeals', 'moreUnbanAppeals')->name('moreUnbanAppeals');
+    Route::post('/accept-unban-appeal/{id}', 'acceptUnbanAppeal')->name('acceptUnbanAppeal');
+    Route::post('/reject-unban-appeal/{id}', 'rejectUnbanAppeal')->name('rejectUnbanAppeal');
 });
 
 // Article

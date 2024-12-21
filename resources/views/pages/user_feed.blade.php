@@ -19,6 +19,11 @@
         <br>
         <div id="articles">
             <div id="comment-form" class="recent-news-container">
+                @if(empty($articles))
+                    <div class="not-available-container">
+                        <p>You have no favourite articles yet.</p>
+                    </div>
+                @endif
                 @foreach($articles as $article)
                     @include('partials.long_news_tile', [
                         'article' => $article,

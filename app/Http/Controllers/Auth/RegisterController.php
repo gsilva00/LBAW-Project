@@ -17,7 +17,8 @@ class RegisterController extends Controller
     public function showRegistrationForm(): View|RedirectResponse
     {
         if (Auth::check()) {
-            return redirect()->route('homepage');
+            return redirect()->route('homepage')
+                ->withErrors('You cannot create an account while logged in.');
         }
         else {
             return view('auth.register');
@@ -27,37 +28,37 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         if (Auth::check()) {
-            return redirect()->route('homepage');
+            return redirect()->route('homepage')
+                ->withErrors('You cannot create an account while logged in.');
         }
-        else {
-            try {
-                // Validate the request data
-                $request->validate([
-                    'username' => 'required|string|max:20|unique:users',
-                    'email' => 'required|string|email|max:256|unique:users',
-                    'password' => 'required|string|min:8|confirmed',
-                ]);
 
-                User::create([
-                    'username' => $request->username,
-                    'email' => $request->email,
-                    'password' => $request->password,
-                    'display_name' => $request->username
-                ]);
+        try {
+            // Validate the request data
+            $request->validate([
+                'username' => 'required|string|regex:/^[a-zA-Z0-9._-]+$/|max:20|unique:users',
+                'email' => 'required|string|email|max:256|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
 
-                $credentials = $request->only('email', 'password');
-                Auth::attempt($credentials);
-                $request->session()->regenerate();
+            User::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => $request->password,
+                'display_name' => $request->username
+            ]);
 
-                // Redirect to the welcome page with success message
-                return redirect()->route('homepage')
-                    ->withSuccess('You have successfully registered and logged in!');
-            } catch (Exception $e) {
-                // Handle the exception
-                Log::error('Registration error: ' . $e->getMessage());
+            $credentials = $request->only('email', 'password');
+            Auth::attempt($credentials);
+            $request->session()->regenerate();
 
-                return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-            }
+            // Redirect to the welcome page with success message
+            return redirect()->route('homepage')
+                ->withSuccess('You have successfully registered and logged in!');
+        }
+        catch (Exception $e) {
+            // Handle the exception
+            return redirect()->back()
+                ->withErrors($e->getMessage());
         }
     }
 }

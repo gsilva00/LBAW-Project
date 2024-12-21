@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AppealToUnban;
 use App\Models\ArticlePage;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class ProfileController extends Controller
             'profileUser' => $user,
             'isAdmin' => $authUser ? $authUser->is_admin : false,
             'isOwner' => $authUser && $user->username === $authUser->username,
-            'ownedArticles' => $ownedArticles,
+            'ownedArticles' => $ownedArticles
         ]);
     }
 
@@ -56,8 +57,12 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         $user = User::find($username);
 
-        if (Auth::guest() || $authUser->cant('update', $user)) {
-            return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
+        try {
+            $this->authorize('update', $user);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('Unauthorized. You do not possess the valid credentials to access that page.');
         }
 
         return view('pages.edit_profile', [
@@ -76,8 +81,12 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         $user = User::find($username);
 
-        if (Auth::guest() || $authUser->cant('update', $user)) {
-            return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to edit that profile.');
+        try {
+            $this->authorize('update', $user);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('Unauthorized. You do not possess the valid credentials to perform that action.');
         }
 
         $validator = Validator::make(request()->all(), [
@@ -89,16 +98,17 @@ class ProfileController extends Controller
             'new_password' => 'nullable|string|min:8|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()
+                ->withErrors($validator)->withInput();
         }
 
         if (!$authUser->is_admin && !Hash::check(request('cur_password'), $user->password)) {
-            return redirect()->back()->withErrors(['cur_password' => 'Current password is incorrect'])->withInput();
+            return redirect()->back()
+                ->withErrors(['cur_password' => 'Current password is incorrect'])->withInput();
         }
 
-        Log::info("Request: ", [
+        /*Log::info("Request: ", [
             'username' => request('username'),
             'email' => request('email'),
             'display_name' => request('display_name'),
@@ -108,8 +118,8 @@ class ProfileController extends Controller
             'upvote_notification' => request('upvote-notifications'),
             'comment_notification' => request('comment-notifications'),
             'tupvote_notification' => request('upvote-notifications') === 'on',
-            'tcomment_notification' => request('comment-notifications') === 'on',
-        ]);
+            'tcomment_notification' => request('comment-notifications') === 'on'
+        ]);*/
 
         $user->username = request('username');
         $user->email = request('email');
@@ -137,7 +147,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        Log::info("User updated: ", [
+        /*Log::info("User updated: ", [
             'username' => $user->username,
             'email' => $user->email,
             'display_name' => $user->display_name,
@@ -145,9 +155,10 @@ class ProfileController extends Controller
             'profile_picture' => $user->profile_picture,
             'upvote_notification' => $user->upvote_notification,
             'comment_notification' => $user->comment_notification,
-        ]);
+        ]);*/
 
-        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile', ['username' => $user->username])
+            ->withSuccess('Profile updated successfully!');
     }
 
     public function delete(Request $request, $targetUserId): View|RedirectResponse
@@ -173,10 +184,12 @@ class ProfileController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect('/')->with('success', 'Your account has been deleted successfully.');
+            return redirect('homepage')
+                ->withSuccess('Your account has been deleted successfully.');
         }
 
-        return redirect()->route('adminPanel')->with('success', 'User account deleted successfully!');
+        return redirect()->route('adminPanel')
+            ->withSuccess('User account deleted successfully!');
     }
 
     public function appealUnbanShow(): View

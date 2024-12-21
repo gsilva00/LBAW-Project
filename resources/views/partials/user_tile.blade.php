@@ -12,7 +12,14 @@
                 <div>
                     @csrf
                     @if (Auth::user()->isFollowing($user))
-                        <button type="button" class="unfollow-user-button-profile large-rectangle small-text greyer" data-user-id="{{ Auth::id() }}" data-profile-id="{{ $user->id }}" data-url="{{route('unfollowUserAction')}}">Unfollow User</button>
+                        <button type="button"
+                                class="unfollow-user-button-profile large-rectangle small-text greyer"
+                                data-user-id="{{ Auth::id() }}"
+                                data-profile-id="{{ $user->id }}"
+                                data-url="{{route('unfollowUserAction')}}"
+                        >
+                            Unfollow User
+                        </button>
                     @endif
                 </div>
             @endif
@@ -22,7 +29,11 @@
                 </a>
                 <form action="{{ route('deleteProfile', ['id' => $user->id]) }}" method="POST" style="display:inline;">
                     @csrf
-                    <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
+                    <button type="submit"
+                            class="large-rectangle small-text greyer"
+                    >
+                        Delete This Account
+                    </button>
                 </form>
             @endif
         </div>

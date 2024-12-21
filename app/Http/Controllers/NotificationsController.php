@@ -4,16 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class NotificationsController extends Controller
 {
-    public function showNotificationsPage(): View
+    public function showNotificationsPage(): View|RedirectResponse
     {
+        try {
+            $this->authorize('viewAny', Notification::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to access your notifications.');
+        }
+
         /**
          * @var User $user
          * Return type of Auth::user() guaranteed on config/auth.php's User Providers
@@ -27,8 +37,16 @@ class NotificationsController extends Controller
         ]);
     }
 
-    public function newNotifications(): View
+    public function newNotifications(): View|RedirectResponse
     {
+        try {
+            $this->authorize('viewAny', Notification::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to access your notifications.');
+        }
+
         /** @var User $user */
         $user = Auth::user();
         $notifications = Notification::getNewNotificationsForUser($user);
@@ -38,8 +56,16 @@ class NotificationsController extends Controller
         ]);
     }
 
-    public function archivedNotifications(): View
+    public function archivedNotifications(): View|RedirectResponse
     {
+        try {
+            $this->authorize('viewAny', Notification::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to access your notifications.');
+        }
+
         /** @var User $user */
         $user = Auth::user();
         $notifications = Notification::getArchivedNotificationsForUser($user);
@@ -49,8 +75,16 @@ class NotificationsController extends Controller
         ]);
     }
 
-    public function newNotificationsUpvotes(): View
+    public function newNotificationsUpvotes(): View|RedirectResponse
     {
+        try {
+            $this->authorize('viewAny', Notification::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to access your notifications.');
+        }
+
         /** @var User $user */
         $user = Auth::user();
         $notifications = Notification::getNotificationsForUserByType($user, 2, false);
@@ -61,8 +95,16 @@ class NotificationsController extends Controller
         ]);
     }
 
-    public function newNotificationsComments(): View
+    public function newNotificationsComments(): View|RedirectResponse
     {
+        try {
+            $this->authorize('viewAny', Notification::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to access your notifications.');
+        }
+
         /** @var User $user */
         $user = Auth::user();
         $notifications = Notification::getNotificationsForUserByType($user, 1, false);
@@ -72,8 +114,16 @@ class NotificationsController extends Controller
         ]);
     }
 
-    public function archivedNotificationsUpvotes(): View
+    public function archivedNotificationsUpvotes(): View|RedirectResponse
     {
+        try {
+            $this->authorize('viewAny', Notification::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to access your notifications.');
+        }
+
         /** @var User $user */
         $user = Auth::user();
         $notifications = Notification::getNotificationsForUserByType($user, 2, true);
@@ -83,8 +133,16 @@ class NotificationsController extends Controller
         ]);
     }
 
-    public function archivedNotificationsComments(): View
+    public function archivedNotificationsComments(): View|RedirectResponse
     {
+        try {
+            $this->authorize('viewAny', Notification::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to access your notifications.');
+        }
+
         /** @var User $user */
         $user = Auth::user();
         $notifications = Notification::getNotificationsForUserByType($user, 1, true);
@@ -94,8 +152,16 @@ class NotificationsController extends Controller
         ]);
     }
 
-    public function archivingNotification($id): JsonResponse
+    public function archivingNotification($id): JsonResponse|RedirectResponse
     {
+        try {
+            $this->authorize('archive', Notification::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to perform that action.');
+        }
+
         $notification = Notification::find($id);
         $notification->is_viewed = true;
         $notification->save();
