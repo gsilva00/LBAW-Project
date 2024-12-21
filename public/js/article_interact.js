@@ -663,15 +663,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
         })
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Unauthorized');
+                }
+                return response.text();
+            })
             .then(html => {
                 const popupContainer = document.createElement('div');
                 popupContainer.innerHTML = html;
                 document.body.appendChild(popupContainer);
                 openPopup();
                 submitArticleReport();
-            })
-            .catch(error => console.error('Error loading pop-up:', error));
+            }
     });
 });
 
@@ -768,7 +772,12 @@ function reportCommentShow() {
                     isReply: isReply
                 })
             })
-                .then(response => response.text())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Unauthorized');
+                    }
+                    return response.text();
+                })
                 .then(html => {
                     const popupContainer = document.createElement('div');
                     popupContainer.innerHTML = html;
@@ -776,7 +785,7 @@ function reportCommentShow() {
                     openPopup();
                     submitCommentReport();
                 })
-                .catch(error => console.error('Error loading pop-up:', error));
+
         });
     });
 }
