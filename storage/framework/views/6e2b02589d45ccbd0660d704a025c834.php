@@ -1,6 +1,6 @@
 <a href="<?php echo e(route('showArticle', ['id' => $article->id])); ?>">
     <div class="long-article-container news-tile">
-        <img src="<?php echo e(asset('images/article/' . $article->article_image)); ?>" alt="News Image">
+        <img src="<?php echo e(asset('images/article/' . $article->article_image)); ?>" alt="Article's main image">
         <div class="long-article-title-subtitle">
             <span class="article-title" ><?php echo e($article->title); ?></span>
             <div class="article-meta-container">

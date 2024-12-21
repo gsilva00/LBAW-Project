@@ -32,12 +32,12 @@
                         <?php endif; ?>
                     </p>
                     <button class="small-text small-rectangle" title="report article" id="report-article-button" data-article-id="<?php echo e($article->id); ?>">
-                        <span>Report Article</span> <!-- Needs to be implemented -->
+                        <span>Report Article</span>
                     </button>
                 </div>
                 <p class="title"><?php echo e($article->is_deleted ? '[Deleted]' : $article->subtitle); ?></p>
                 <div>
-                    <img class="article-image" src="<?php echo e($article->is_deleted ? asset('images/article/default.jpg') : asset('images/article/' . $article->article_image)); ?>" alt="News Image">
+                    <img class="article-image" src="<?php echo e($article->is_deleted ? asset('images/article/default.jpg') : asset('images/article/' . $article->article_image)); ?>" alt="Article's main image">
                 </div>
                 <?php if($article->is_deleted): ?>
                     <p class="thin">[Deleted]</p>

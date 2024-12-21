@@ -27,6 +27,11 @@
             <div class="profile-info">
                 <label for="tag-create-article-input"><span>Tags</span></label>
                 <input type="text" id="tag-create-article-input" placeholder="Type to search tags...">
+                <div id="propose-tag-container">
+                    <label id="propose-tag-label" for="propose a tag" data-url="<?php echo e(route('showProposeTag')); ?>">
+                        <span>Couldn't find your tag? Propose it</span>
+                    </label>
+                </div>
                 <div id="tag-create-article-suggestions" class="suggestions"></div>
             </div>
             <div id="selected-create-article-tags" class="selected selected-maxwidth"></div>

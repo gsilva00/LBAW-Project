@@ -2,6 +2,8 @@
     const followUrl = '/following/user/action/follow';
     const unfollowUrl = '/following/user/action/unfollow';
 
+    if (followButton !== null) {
+        
     followButton.addEventListener('click', function () {
         console.log('clicked');
         const isFollowing = followButton.textContent.trim() === 'Unfollow User';
@@ -35,3 +37,5 @@
                 alert('An error occurred. Please try again.');
             });
     });
+
+}

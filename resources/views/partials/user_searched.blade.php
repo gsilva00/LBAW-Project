@@ -1,11 +1,7 @@
-<div class="profile-container-admin">
-    <img src="{{ asset('images/profile/' . $user->profile_picture) }}" class="user-profile-picture-admin" alt="Searched user's profile picture">
-
-    <div class="profile-info">
-        <h2>
-            <a href="{{ route('profile', ['username' => $user->username]) }}">
-                {{ $user->display_name }}
-            </a>
-        </h2>
+<a href="{{ route('profile', ['username' => $user->username]) }}">
+    <div class="user-search-container">
+        <img src="{{ asset('images/profile/' . $user->profile_picture) }}" class="user-profile-picture-admin" alt="Searched user's profile picture">
+        <p> {{ $user->display_name }} </p>
+        <span class="small-text">{{ $user->username }}</span>
     </div>
-</div>
+</a>

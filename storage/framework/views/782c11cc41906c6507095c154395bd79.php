@@ -1,5 +1,5 @@
 <div class="comment" data-is-reply="<?php echo e($isReply ? 'true' : 'false'); ?>" id="<?php echo e($isReply ? 'reply-' . $comment->id : 'comment-' . $comment->id); ?>">
-    <img src="<?php echo e($comment->is_deleted ? asset('images/profile/default.jpg') : asset('images/profile/' . $comment->author->profile_picture)); ?>" alt="<?php echo e($comment->author->display_name); ?>'s profile picture">
+    <img src="<?php echo e($comment->is_deleted ? asset('images/profile/default.jpg') : asset('images/profile/' . $comment->author->profile_picture)); ?>" alt="Comment's author profile picture">
     <div class="profile-info name-date">
         <p><strong>
                 <?php if($comment->is_deleted || $comment->author->is_deleted): ?>
@@ -44,19 +44,18 @@
                 </button>
             <?php endif; ?>
         </div>
-        <?php if(!$comment->is_deleted && Auth::check()): ?>
-            <?php if(!$isReply): ?>
-                <button class="small-rectangle" title="reply comment">
-                    <i class='bx bx-message remove-position'></i>
-                    <span>Reply</span>
-                </button>
-            <?php endif; ?>
-            <button class="small-rectangle" title="report comment">
-                <i class='bx bx-flag remove-position' ></i>
-                <span>Report</span>
+        <?php if(!$isReply): ?>
+            <button class="small-rectangle" onclick="window.location.href='<?php echo e(route('showArticle', ['id' => $comment->article_id])); ?>'">
+                <i class='bx bx-show remove-position' ></i>
+                View Article
+            </button>
+        <?php else: ?>
+            <button class="small-rectangle" onclick="window.location.href='<?php echo e(route('showArticle', ['id' => $comment->comment->article_id])); ?>'">
+                <i class='bx bx-show remove-position' ></i>
+                View Article
             </button>
         <?php endif; ?>
 
     </div>
 </div>
-<?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/partials/comment.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/partials/comment_searched.blade.php ENDPATH**/ ?>

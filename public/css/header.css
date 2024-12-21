@@ -29,6 +29,10 @@ h2 a{
   top: 0.3em;
 }
 
+a.active{
+  color:rgb(255, 0, 0);
+}
+
 header{
   color: rgb(0, 0, 0);
   text-align: center;
@@ -90,6 +94,12 @@ header{
 #profile-button h2, .dropdown-item h2, #all-topics-button span{
   margin: 0;
   font-size: 0.9em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#profile-button h2{
+  max-width: 10em;
 }
 
 .dropdown-menu {

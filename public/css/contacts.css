@@ -15,13 +15,17 @@
 
 #contacts-content{
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
+    row-gap: 3em;
     column-gap: 3em;
     margin-inline: 5em;
     margin-bottom: 2em;
 }
 
-#contacts-content div{
+#contacts-content > div{
+    display: grid;
+    align-content: space-between;
     width: 30%;
     padding-block: 2em;
     border-color: var(--secondary-color);
@@ -31,6 +35,15 @@
     position: relative;
     top: -3em;
     text-align: center;
+    flex-grow: 1;
+}
+
+#contacts-content div p, #contacts-content div h2 {
+    padding-inline: 1em;
+}
+
+#contacts-content div button{
+    justify-self: center;
 }
 
 #contacts-content div .bx{

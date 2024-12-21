@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Notifications')
 
-@section('content')
+<?php $__env->startSection('title', 'Notifications'); ?>
+
+<?php $__env->startSection('content'); ?>
     <div class="recent-news-wrapper">
         <h1 class="large-rectangle"> Notifications</h1>
         <div class="search-comments-options-container" data-toggle="buttons">
@@ -29,8 +29,10 @@
         </div>
         <br>
         <div id="notificationTabsContent">
-            @include('partials.notification_list', ['notifications' => $notifications])
+            <?php echo $__env->make('partials.notification_list', ['notifications' => $notifications], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/pages/notifications_page.blade.php ENDPATH**/ ?>

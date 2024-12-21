@@ -30,6 +30,8 @@
         <link href="<?php echo e(url('css/popup.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/app.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/modal.css')); ?>" rel="stylesheet">
+        <link href="<?php echo e(url('css/user_search.css')); ?>" rel="stylesheet">
+        <link href="<?php echo e(url('css/notification_card.css')); ?>" rel="stylesheet">
         <!-- Scripts -->
         <script src="<?php echo e(url('js/dropdown.js')); ?>" defer> </script>
         <script src="<?php echo e(url('js/dropdown_tag_filter.js')); ?>" defer> </script>
@@ -37,16 +39,20 @@
         <script src="<?php echo e(url('js/admin_panel.js')); ?>" defer></script>
         <script src="<?php echo e(url('js/user_feed.js')); ?>" defer></script>
         <script src="<?php echo e(url('js/popup.js')); ?>" defer> </script>
-        <script src="<?php echo e(url('js/unfollow_tag.js')); ?>" defer> </script>
-        <script src="<?php echo e(url('js/unfollow_topic.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/unfollow_profile_user.js')); ?>" defer> </script>
         <script src="<?php echo e(url('js/tag_create_article.js')); ?>" defer></script>
         <script src="<?php echo e(url('js/tag_edit_article.js')); ?>" defer></script>
         <script src="<?php echo e(url('js/article_interact.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/notifications_interect.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/comment_search_interact.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/follow_user.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/porpose_tag.js')); ?>" defer> </script>
     </head>
     <body>
+        <a href="#main-content" class="skip-link">Skip to main content</a>
         <div class="wrapper">
             <?php echo $__env->make('layouts.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-            <main class="content">
+            <main id="main-content" class="content">
                 <?php echo $__env->yieldContent('content'); ?>
             </main>
             <?php echo $__env->make('layouts.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

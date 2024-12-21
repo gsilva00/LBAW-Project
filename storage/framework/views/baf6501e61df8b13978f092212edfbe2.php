@@ -11,25 +11,23 @@
 <?php $__env->startSection('content'); ?>
     <div class="profile-wrapper" data-user-id="<?php echo e($profileUser->id); ?>">
         <section class="profile-container">
-            <img src="<?php echo e(asset('images/profile/' . $profileUser->profile_picture)); ?>" alt="profile_picture">
+            <img src="<?php echo e(asset('images/profile/' . $profileUser->profile_picture)); ?>" alt="Your profile picture">
             <div class="profile-info">
                 <h1><?php echo e($profileUser->display_name); ?>'s Profile</h1>
                 <?php if($isOwner || $isAdmin): ?>
-                    <a href="<?php echo e(route('editProfile', ['username' => $profileUser->username])); ?>">
-                        <button class="large-rectangle small-text greyer">Edit Profile</button>
+                    <a href="<?php echo e(route('editProfile', ['username' => $profileUser->username])); ?>" class="large-rectangle small-text greyer">
+                        Edit Profile
                     </a>
                 <?php endif; ?>
                 <?php if(Auth::check() && !$isOwner): ?>
-                <form id="follow-user-form" method="POST">
-                    <?php echo csrf_field(); ?>
-                    <button type="button" id="follow-user-button" class="large-rectangle small-text greyer">
-                        <?php echo e(Auth::user()->isFollowing($user) ? 'Unfollow User' : 'Follow User'); ?>
+                    <button type="button" id="follow-user-button" class="large-rectangle small-text greyer"
+                            data-user-id="<?php echo e($user->id); ?>" data-profile-id="<?php echo e($profileUser->id); ?>">
+                        <?php echo e(Auth::user()->isFollowingUser($profileUser->id) ? 'Unfollow User' : 'Follow User'); ?>
 
                     </button>
-                </form>
-                <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
-                        Report User
-                </button>
+                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                            Report User
+                    </button>
                 <?php endif; ?>
             </div>
             <div id="rest-profile-info">
@@ -84,11 +82,11 @@
                     </div>
                 <?php else: ?>
                 <div id="users-section">
-                <div id="user-list">
-                        <?php $__currentLoopData = $profileUser->following; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fav_author): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php echo $__env->make('partials.user_tile', ['user' => $fav_author], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                </div>
+                    <div id="user-list">
+                            <?php $__currentLoopData = $profileUser->following; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fav_author): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php echo $__env->make('partials.user_tile', ['user' => $fav_author, 'isAdminPanel' => false], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </div>
                 </div>
                 <?php endif; ?>
             </section>
@@ -101,9 +99,9 @@
             <?php endif; ?>
 
             <?php if($isOwner): ?>
-                <a href="<?php echo e(route('createArticle')); ?>">
-                    <button class="large-rectangle small-text">Create New Article</button>
-                </a>
+                <button type="button" onclick="window.location='<?php echo e(route('createArticle')); ?>'" class="large-rectangle small-text">
+                    Create New Article
+                </button>
             <?php endif; ?>
 
         </div>
