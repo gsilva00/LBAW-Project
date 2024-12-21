@@ -55,5 +55,6 @@
             </main>
             @include('layouts.footer')
         </div>
+        @include('layouts.user_feedback')
     </body>
 </html>

@@ -42,9 +42,6 @@
                 <label for="article_picture"><span>Upload Article Picture</span></label>
                 <input type="file" name="file" id="article_picture">
             </div>
-            @if ($errors->has('article_picture'))
-                @include('partials.error_popup', ['field' => 'article_picture'])
-            @endif
             <br>
             <br>
             <br>

@@ -3,7 +3,7 @@
 @section('content')
     <div class="recover-password-container">
         <form method="POST" action="{{ route('resetPasswordAction') }}">
-            {{ csrf_field() }}
+            @csrf
             <h1>Recover Password</h1>
             <div class="">
                 <label for="password"><span>New Password</span></label>

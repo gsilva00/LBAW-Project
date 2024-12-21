@@ -1,4 +1,4 @@
-.pop-up, .success{
+.error-pop-up, .success-pop-up{
     position: fixed;
     bottom: 0;
     left:0;

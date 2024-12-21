@@ -9,6 +9,8 @@ class ContactsController extends Controller
 {
     public function show(): View
     {
-        return view('pages.contacts', ['user' => Auth::user()]);
+        return view('pages.contacts', [
+            'user' => Auth::user()
+        ]);
     }
 }

@@ -11,9 +11,6 @@
             maxlength="30"
         >
     </div>
-    @if ($errors->has('name'))
-        @include('partials.error_popup', ['field' => 'name'])
-    @endif
     <br>
     <div class="profile-info">
         <input type="checkbox" name="is_trending" id="is_trending" value="1">

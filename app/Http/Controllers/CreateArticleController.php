@@ -7,6 +7,7 @@ use App\Models\ProposeNewTag;
 use App\Models\Tag;
 use App\Models\Topic;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -39,7 +40,8 @@ class CreateArticleController extends Controller
 
         $topics = $request->input('topics');
         if (in_array('No_Topic', $topics)) {
-            return redirect()->back()->withErrors(['topics' => 'Please choose a valid topic.'])->withInput();
+            return redirect()->back()
+                ->withErrors(['topics' => 'Please choose a valid topic.'])->withInput();
         }
 
         $topicId = intval($topics[0]);
@@ -62,7 +64,8 @@ class CreateArticleController extends Controller
         $tagIds = Tag::searchByArrayNames($request->input('tags', []));
         $article->tags()->sync($tagIds);
 
-        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article created successfully!');
+        return redirect()->route('profile', ['username' => $user->username])
+            ->withSuccess('Article created successfully!');
     }
 
     public function create(): View|RedirectResponse
@@ -70,8 +73,12 @@ class CreateArticleController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (Auth::guest() || $user->cant('create', ArticlePage::class)) {
-            return redirect()->route('login')->with('error', 'Unauthorized. You do not possess the credentials to create an article.');
+        try {
+            $this->authorize('create', ArticlePage::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to create an article.');
         }
 
         return view('pages.create_article', [
@@ -153,7 +160,8 @@ class CreateArticleController extends Controller
         $tagIds = Tag::searchByArrayNames($request->input('tags', []));
         $article->tags()->sync($tagIds);
 
-        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article updated successfully!');
+        return redirect()->route('profile', ['username' => $user->username])
+            ->withSuccess('Article updated successfully!');
     }
 
     public function delete(Request $request, $id): View|RedirectResponse
@@ -171,11 +179,12 @@ class CreateArticleController extends Controller
         $article->is_deleted = true;
         $article->save();
 
-        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Article deleted successfully!');
+        return redirect()->route('profile', ['username' => $user->username])
+            ->withSuccess('Article deleted successfully!');
     }
 
 
-    public function porposeNewTagShow(): \Illuminate\Contracts\View\View
+    public function porposeNewTagShow(): View
     {
         return view('partials.porpose_new_tag');
     }
@@ -191,9 +200,9 @@ class CreateArticleController extends Controller
         $tag->user_id = Auth::id();
         $tag->save();
 
-        Log::info('CreateArticleController@porposeNewTag', [
+        /*Log::info('CreateArticleController@porposeNewTag', [
             'name' => $request->input('name'),
-        ]);
+        ]);*/
 
         return response()->json([
             'success' => true,

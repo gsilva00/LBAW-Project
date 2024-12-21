@@ -5,33 +5,21 @@
         <label for="username"><span>Username</span></label>
         <input type="text" name="username" id="username" value="{{ old('username') }}" placeholder="Enter username" autocomplete="off" required>
     </div>
-    @if ($errors->has('username'))
-        @include('partials.error_popup', ['field' => 'username'])
-    @endif
     <br>
     <div class="profile-info">
         <label for="email"><span>Email</span></label>
         <input type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Enter email" autocomplete="email" required>
     </div>
-    @if ($errors->has('email'))
-        @include('partials.error_popup', ['field' => 'email'])
-    @endif
     <br>
     <div class="profile-info">
         <label for="display_name"><span>Display Name</span></label>
         <input type="text" name="display_name" id="display_name" value="{{ old('display_name') }}" placeholder="Enter display name" autocomplete="name">
     </div>
-    @if ($errors->has('display_name'))
-        @include('partials.error_popup', ['field' => 'display_name'])
-    @endif
     <br>
     <div class="profile-info">
         <label for="description"><span>Description</span></label>
         <textarea name="description" id="description" placeholder="Enter description">{{ old('description') }}</textarea>
     </div>
-    @if ($errors->has('description'))
-        @include('partials.error_popup', ['field' => 'description'])
-    @endif
     <br>
     <div class="profile-info">
         <label for="password"><span>Password</span></label>
@@ -43,17 +31,11 @@
         <label for="profile_picture"><span>Upload Profile Picture</span></label>
         <input type="file" name="file" id="profile_picture">
     </div>
-    @if ($errors->has('profile_picture'))
-        @include('partials.error_popup', ['field' => 'profile_picture'])
-    @endif
     <br>
     <div class="profile-info">
         <label for="reputation"><span>Reputation (0-5)</span></label>
         <input type="number" name="reputation" id="reputation" value="{{ old('reputation', 3) }}" min="0" max="5">
     </div>
-    @if ($errors->has('reputation'))
-        @include('partials.error_popup', ['field' => 'reputation'])
-    @endif
     <br>
     <div class="profile-info">
         <input type="checkbox" name="upvote_notification" id="upvote_notification" value="1" {{ old('upvote_notification', true) ? 'checked' : '' }}>

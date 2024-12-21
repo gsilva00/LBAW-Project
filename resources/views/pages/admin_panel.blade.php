@@ -8,7 +8,7 @@
         <h2 class="large-rectangle">List of User Accounts</h2>
         <div id="users-section">
             <div id="user-list">
-                @include('partials.user_tile_list', ['users' => $usersPaginated])
+                @include('partials.user_tile_list', ['users' => $usersPaginated, 'isAdminPanel' => true])
             </div>
             <button id="load-more-users"
                     class="large-rectangle small-text greyer"
@@ -86,11 +86,6 @@
         <h2 class="large-rectangle">List of Pending Unban Appeals</h2>
         <div id="another-section">
 
-        </div>
-        <br>
-        <h2 class="large-rectangle">List of Pending Fact Checker Requests</h2>
-        <div id="another-section">
-            <!-- TODO maybe -->
         </div>
     </div>
 @endsection

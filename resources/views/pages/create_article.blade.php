@@ -43,20 +43,12 @@
                         <option value="{{ $topic->id }}">{{ $topic->name }}</option>
                     @endforeach
                 </select>
-                @if ($errors->has('topics'))
-                    <div class="error-message">
-                        {{ $errors->first('topics') }}
-                    </div>
-                @endif
             </div>
             <br>
             <div class="profile-info">
                 <label for="article_picture"><span>Upload Article Picture</span></label>
                 <input type="file" name="file" id="article_picture">
             </div>
-            @if ($errors->has('article_picture'))
-                @include('partials.error_popup', ['field' => 'article_picture'])
-            @endif
             <br>
             <br>
             <br>

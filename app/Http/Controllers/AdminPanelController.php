@@ -6,6 +6,7 @@ use App\Models\Tag;
 use App\Models\Topic;
 use App\Models\User;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -28,8 +29,12 @@ class AdminPanelController extends Controller
          */
         $user = Auth::user();
 
-        if (Auth::guest() || $user->cant('viewAdminPanel', User::class)) {
-            return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
+        try {
+            $this->authorize('viewAdminPanel', User::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('Unauthorized. You do not possess the valid credentials to access that page.');
         }
 
         $users = User::where([
@@ -99,7 +104,8 @@ class AdminPanelController extends Controller
         );
 
         $view = view('partials.user_tile_list', [
-            'usersPaginated' => $users
+            'usersPaginated' => $users,
+            'isAdminPanel' => true,
         ])->render();
 
         return response()->json([
@@ -113,7 +119,7 @@ class AdminPanelController extends Controller
         $this->authorize('create', User::class);
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:20|unique:users',
+            'username' => 'required|string|regex:/^[a-zA-Z0-9._-]+$/|max:20|unique:users',
             'email' => 'required|string|email|max:256|unique:users',
             'display_name' => 'nullable|string|max:20',
             'description' => 'nullable|string|max:300',
@@ -206,7 +212,6 @@ class AdminPanelController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:30|unique:topic',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -268,7 +273,6 @@ class AdminPanelController extends Controller
             'name' => 'required|string|max:30|unique:tag',
             'is_trending' => 'nullable|boolean',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,

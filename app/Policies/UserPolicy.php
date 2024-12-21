@@ -69,6 +69,29 @@ class UserPolicy
     }
 
 
+
+    public function login(?User $authUser): bool
+    {
+        // Only unauthenticated users can log in
+        return !Auth::check();
+    }
+    public function logout(User $authUser): bool
+    {
+        // Only authenticated users can log out
+        return Auth::check();
+    }
+    public function register(?User $authUser): bool
+    {
+        // Only unauthenticated users can register
+        return !Auth::check();
+    }
+    public function recoverPassword(?User $authUser): bool
+    {
+        // Only unauthenticated users can recover their password
+        return !Auth::check();
+    }
+
+
     public function viewUserFeed(User $authUser): bool
     {
         return Auth::check();
@@ -96,6 +119,15 @@ class UserPolicy
     {
         // Only admins can view the administrator panel.
         return false;
+    }
+
+    public function followUser(User $authUser, User $targetUser): bool
+    {
+        return Auth::check() && !$authUser->is_banned && !$targetUser->is_banned;
+    }
+    public function unfollowUser(User $authUser, User $targetUser): bool
+    {
+        return Auth::check() && !$authUser->is_banned && !$targetUser->is_banned;
     }
 
     public function report(User $authUser, User $targetUser): bool
