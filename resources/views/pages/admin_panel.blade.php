@@ -97,6 +97,7 @@
             @include('partials.create_tag_form')
         </div>
         <br>
+        <br>
         <h2 class="large-rectangle">List of Pending Tag Proposals</h2>
         <div id="tag-proposals-section">
             @if(!$tagProposalsPaginated->isEmpty())
@@ -116,16 +117,38 @@
                 >
                     Load More
                 </button>
+                <br>
+                <br>
             @else
                 <div class="not-available-container">
                     <p>No pending tag proposals to list.</p>
                 </div>
             @endif
         </div>
-        <br>
         <h2 class="large-rectangle">List of Pending Unban Appeals</h2>
-        <div id="another-section">
-
+        <div id="unban-appeals-section">
+            @if(!$unbanAppealsPaginated->isEmpty())
+                <div id="unban-appeal-list">
+                    @include('partials.unban_appeal_tile_list', ['unbanAppealsPaginated' => $unbanAppealsPaginated])
+                </div>
+                <button id="load-more-unban-appeals"
+                        class="large-rectangle small-text greyer"
+                        data-entity="unban-appeal"
+                        data-page-num="{{ $unbanAppealCurrPageNum+1 }}"
+                        data-url="{{ route('moreUnbanAppeals') }}"
+                        @if(!$unbanAppealHasMorePages)
+                            style="display: none"
+                        @else
+                            style="display: block"
+                        @endif
+                >
+                    Load More
+                </button>
+            @else
+                <div class="not-available-container">
+                    <p>No pending unban appeals to list.</p>
+                </div>
+            @endif
         </div>
     </div>
 @endsection

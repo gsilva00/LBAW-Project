@@ -21,4 +21,9 @@ return [
      * Number of tag proposals per page in the admin's panel
      */
     'tag_proposals_per_page' => 10,
+
+    /**
+     * Number of unban appeals per page in the admin's panel
+     */
+    'unban_appeals_per_page' => 10,
 ];

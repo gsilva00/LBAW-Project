@@ -236,7 +236,7 @@ CREATE TABLE propose_new_tag(
 --R21
 CREATE TABLE appeal_to_unban(
     id SERIAL PRIMARY KEY,
-    description TEXT,
+    description VARCHAR(300),
     user_id INTEGER REFERENCES users (id) ON UPDATE CASCADE NOT NULL
 );
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppealToUnban;
 use App\Models\ProposeNewTag;
 use App\Models\Tag;
 use App\Models\Topic;
@@ -48,7 +49,7 @@ class AdminPanelController extends Controller
 
         $tag_proposals = ProposeNewTag::paginate(config('pagination.tag_proposals_per_page'));
 
-        // TODO expand for more administrator features
+        $unban_appeals = AppealToUnban::paginate(config('pagination.unban_appeals_per_page'));
 
         return view('pages.admin_panel', [
             'user' => $user,
@@ -64,6 +65,9 @@ class AdminPanelController extends Controller
             'tagProposalCurrPageNum' => 1, // Tag proposal pagination
             'tagProposalHasMorePages' => $tag_proposals->hasMorePages(),
             'tagProposalsPaginated' => $tag_proposals,
+            'unbanAppealCurrPageNum' => 1, // Unban appeal pagination
+            'unbanAppealHasMorePages' => $unban_appeals->hasMorePages(),
+            'unbanAppealsPaginated' => $unban_appeals,
         ]);
     }
 
@@ -378,6 +382,59 @@ class AdminPanelController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Tag proposal rejected.',
+        ]);
+    }
+
+
+    public function moreUnbanAppeals(Request $request): JsonResponse
+    {
+        $this->authorize('viewAdminPanel', User::class);
+
+        $page = $request->get('page', 1);
+        $appeals = AppealToUnban::paginate(
+            config('pagination.unban_appeals_per_page'),
+            ['*'],
+            'page',
+            $page
+        );
+
+        $view = view('partials.unban_appeal_tile_list', [
+            'unbanAppealsPaginated' => $appeals
+        ])->render();
+
+        return response()->json([
+            'newHtml' => $view,
+            'unbanAppealHasMorePages' => $appeals->hasMorePages(),
+        ]);
+    }
+
+    public function acceptUnbanAppeal(int $id): JsonResponse
+    {
+        $this->authorize('accept', AppealToUnban::class);
+
+        $appeal = AppealToUnban::findOrFail($id);
+        $appeal->delete();
+
+        $user = $appeal->user;
+        $user->is_banned = false;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Unban appeal accepted and user unbanned.',
+        ]);
+    }
+
+    public function rejectUnbanAppeal(int $id): JsonResponse
+    {
+        $this->authorize('reject', AppealToUnban::class);
+
+        $appeal = AppealToUnban::findOrFail($id);
+        $appeal->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Unban appeal rejected.',
         ]);
     }
 }

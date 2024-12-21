@@ -256,42 +256,6 @@ function toggleTrendingTag() {
 }
 
 
-function seeMoreProposals(listId, buttonId) {
-    const proposalList = document.getElementById(listId);
-    const button = document.getElementById(buttonId);
-
-    if (!proposalList || !button) {
-        console.warn(`Missing elements for \'proposals\'`);
-        return;
-    }
-
-    button.addEventListener('click', function () {
-        const url = button.getAttribute('data-url');
-        const pageNum = button.getAttribute('data-page-num');
-
-        fetch(`${url}?page=${pageNum}`, {
-            method: "GET"
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.newHtml) {
-                    proposalList.insertAdjacentHTML('beforeend', data.newHtml);
-                    button.setAttribute('data-page-num', (parseInt(pageNum) + 1).toString());
-
-                    if (!data.hasMoreTagProposalPages) {
-                        button.style.display = 'none';
-                        proposalList.insertAdjacentHTML('afterend', '<p>No more entries to show.</p>');
-                    }
-                }
-                else {
-                    console.error(`Error: No 'html' content returned for '${listId}'`); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-                }
-            })
-            .catch(error => console.error(`Error fetching more data for '${listId}':`, error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-    });
-}
-
-
 // Handle tag proposal actions (accept/reject) for
 function handleProposal() {
     const proposalList = document.getElementById('tag-proposal-list');
@@ -339,6 +303,48 @@ function handleProposal() {
     });
 }
 
+
+function handleUnbanAppeal() {
+    const appealList = document.getElementById('unban-appeal-list');
+
+    if (!appealList) {
+        console.warn('Missing elements for \'handleUnbanAppeal\'');
+        return;
+    }
+
+    appealList.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'Accept': 'application/json',
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    form.closest('.unban-appeal-tile').remove();
+
+                    if (appealList.children.length === 0) {
+                        appealList.insertAdjacentElement('afterend', notAvailableContainer('No pending unban appeals to list.'));
+                    }
+                }
+                else {
+                    alert('Failed to process the appeal.');
+                }
+            })
+            .catch(error => console.error('Error processing appeal:', error));
+    });
+}
+
+
 seeMoreEntities(
     'user-list',
     'load-more-users'
@@ -351,9 +357,13 @@ seeMoreEntities(
     'tag-list',
     'load-more-tags'
 );
-seeMoreProposals(
+seeMoreEntities(
     'tag-proposal-list',
     'load-more-tag-proposals'
+);
+seeMoreEntities(
+    'unban-appeal-list',
+    'load-more-unban-appeals'
 );
 
 createWithPagination(
@@ -381,3 +391,4 @@ createWithPagination(
 toggleTrendingTag();
 
 handleProposal();
+handleUnbanAppeal();

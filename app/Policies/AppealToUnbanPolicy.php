@@ -66,4 +66,22 @@ class AppealToUnbanPolicy
         return Auth::check() && $user->is_banned && $appealToUnban->user()->is($user);
     }
 
+
+    /**
+     * Determine whether the user can accept the model.
+     */
+    public function accept(User $user, AppealToUnban $appealToUnban): bool
+    {
+        // Only admins can accept tag proposals
+        return false;
+    }
+
+    /**
+     * Determine whether the user can reject the model.
+     */
+    public function reject(User $user, AppealToUnban $appealToUnban): bool
+    {
+        // Only admins can reject tag proposals
+        return false;
+    }
 }
