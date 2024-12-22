@@ -220,14 +220,6 @@ class User extends Authenticatable
 
 
     // Querying
-    public static function find(string $username): ?self
-    {
-        $user = self::where('username', $username)->first();
-        if (!$user) {
-            throw new ModelNotFoundException("User not found");
-        }
-        return $user;
-    }
 
     public function hasFollowedTopic($topic) {
         return $this->followedTopics->contains($topic);

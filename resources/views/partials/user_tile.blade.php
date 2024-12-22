@@ -8,21 +8,6 @@
                     {{ $user->display_name }}
                 </a>
             </h2>
-            @if(!$isAdminPanel)
-                <div>
-                    @csrf
-                    @if(Auth::user()->isFollowing($user))
-                        <button type="button"
-                                class="unfollow-user-button-profile large-rectangle small-text greener"
-                                data-user-id="{{ Auth::id() }}"
-                                data-profile-id="{{ $user->id }}"
-                                data-url="{{route('unfollowUserAction')}}"
-                        >
-                            Unfollow User
-                        </button>
-                    @endif
-                </div>
-            @endif
             @if(Auth::user()->is_admin)
                 <a href="{{ route('editProfile', ['username' => $user->username]) }}">
                     <button class="large-rectangle small-text greener">Edit Profile</button>
