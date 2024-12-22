@@ -32,27 +32,33 @@
                 $isUpvoted = $user ? $comment->isUpvotedBy($user) : false;
                 $isDownvoted = $user ? $comment->isDownvotedBy($user) : false;
             @endphp
-            @if(!$comment->is_deleted && !$user->is_banned)
-                <button class="upvote-comment-button" data-comment-id="{{ $comment->id }}">
-                    <i class='bx {{ $isUpvoted ? "bxs-upvote" : "bx-upvote" }}' title="upvote comment"></i>
-                </button>
-                <span id="comment-{{ $comment->id }}" class="upvote-count">{{ $comment->upvotes - $comment->downvotes }}</span>
-                <button class="downvote-comment-button" data-comment-id="{{ $comment->id }}" title="downvote comment">
-                    <i class='bx {{ $isDownvoted ? "bxs-downvote" : "bx-downvote" }}' title="downvote comment"></i>
-                </button>
+            @if($user != null)
+                @if(!$comment->is_deleted && !$user->is_banned)
+                    <button class="upvote-comment-button" data-comment-id="{{ $comment->id }}">
+                        <i class='bx {{ $isUpvoted ? "bxs-upvote" : "bx-upvote" }}' title="upvote comment"></i>
+                    </button>
+                    <span id="comment-{{ $comment->id }}" class="upvote-count">{{ $comment->upvotes - $comment->downvotes }}</span>
+                    <button class="downvote-comment-button" data-comment-id="{{ $comment->id }}" title="downvote comment">
+                        <i class='bx {{ $isDownvoted ? "bxs-downvote" : "bx-downvote" }}' title="downvote comment"></i>
+                    </button>
+                @endif
             @endif
         </div>
-        @if(!$comment->is_deleted && Auth::check())
-            @if(!$isReply)
-                <button class="small-rectangle yellow-button" title="reply comment">
-                    <i class='bx bx-message remove-position'></i>
-                    <span>Reply</span>
-                </button>
+        @if($user != null)
+            @if(!$user->is_banned)
+                @if(!$comment->is_deleted && Auth::check())
+                    @if(!$isReply)
+                        <button class="small-rectangle yellow-button" title="reply comment">
+                            <i class='bx bx-message remove-position'></i>
+                            <span>Reply</span>
+                        </button>
+                    @endif
+                    <button class="small-rectangle red-button" title="report comment">
+                        <i class='bx bx-flag remove-position' ></i>
+                        <span>Report</span>
+                    </button>
+                @endif
             @endif
-            <button class="small-rectangle red-button" title="report comment">
-                <i class='bx bx-flag remove-position' ></i>
-                <span>Report</span>
-            </button>
         @endif
 
     </div>
