@@ -65,6 +65,9 @@ Route::controller(UserFollowingController::class)->group(function () {
     Route::get('/following/tags', 'showFollowingTags')->name('showFollowingTags');
     Route::get('/following/topics', 'showFollowingTopics')->name('showFollowingTopics');
     Route::get('/following/authors', 'showFollowingAuthors')->name('showFollowingAuthors');
+    // Following users
+    Route::post('/user/follow', 'followUser')->name('followUserAction');
+    Route::post('/user/unfollow', 'unfollowUser')->name('unfollowUserAction');
 });
 
 Route::controller(ArticlePageController::class)->group(function () {
@@ -79,26 +82,23 @@ Route::controller(TagController::class)->group(function () {
     Route::get('/trending-tags', 'showTrendingTags')->name('showTrendingTags');
     Route::get('/tag/{name}', 'showTag')->name('showTag');
     // Following
-    Route::post('/tag/{name}/follow', 'followTag')->name('followTag');
-    Route::post('/tag/{name}/unfollow', 'unfollowTag')->name('unfollowTag');
+    Route::post('/tag/follow/{name}', 'followTag')->name('followTag');
+    Route::post('/tag/unfollow/{name}', 'unfollowTag')->name('unfollowTag');
 });
 
 Route::controller(TopicController::class)->group(function () {
     Route::get('/topic/{name}', 'showTopic')->name('showTopic');
     // Following
-    Route::post('/topic/{topic}/follow', 'followTopic')->name('followTopic');
-    Route::post('/topic/{topic}/unfollow', 'unfollowTopic')->name('unfollowTopic');
+    Route::post('/topic/follow/{name}', 'followTopic')->name('followTopic');
+    Route::post('/topic/unfollow/{name}', 'unfollowTopic')->name('unfollowTopic');
 });
 
 // Profile
 Route::prefix('profile')->controller(ProfileController::class)->group(function () {
     Route::get('/{username}', 'showProfile')->name('profile');
-    Route::get('/{username}/edit', 'showEdit')->name('editProfile');
-    Route::post('/{username}/edit', 'update')->name('updateProfile');
-    Route::post('/{id}/delete', 'delete')->name('deleteProfile');
-    // Following users
-    Route::post('/user/follow', 'followUser')->name('followUserAction');
-    Route::post('/user/unfollow', 'unfollowUser')->name('unfollowUserAction');
+    Route::get('/edit/{username}', 'showEdit')->name('editProfile');
+    Route::post('/edit/{username}', 'update')->name('updateProfile');
+    Route::post('/delete/{id}', 'delete')->name('deleteProfile');
     // Appeals
     Route::post('/appeal-unban', 'appealUnbanShow')->name('appealUnbanShow');
     Route::post('/appeal-unban', 'appealUnbanSubmit')->name('appealUnbanSubmit');
@@ -125,23 +125,23 @@ Route::prefix('admin-panel')->controller
     // User management
     Route::get('/users', 'moreUsers')->name('moreUsers');
     Route::post('/users/create', 'createFullUser')->name('adminCreateUser');
-    Route::post('/users/{id}/ban', 'banUser')->name('adminBanUser');
-    Route::post('/users/{id}/unban', 'unbanUser')->name('adminUnbanUser');
+    Route::post('/users/ban/{id}', 'banUser')->name('adminBanUser');
+    Route::post('/users/unban/{id}', 'unbanUser')->name('adminUnbanUser');
     // Topic management
     Route::get('/topics', 'moreTopics')->name('moreTopics');
     Route::post('/topics/create', 'createTopic')->name('adminCreateTopic');
     // Tag management
     Route::get('/tags', 'moreTags')->name('moreTags');
     Route::post('/tags/create', 'createTag')->name('createTag');
-    Route::post('/tags/trending/{id}/toggle', 'toggleTrending')->name('toggleTrendingTag');
+    Route::post('/tags/trending/toggle/{id}', 'toggleTrending')->name('toggleTrendingTag');
     // Tag proposal management
     Route::get('/tag-proposals', 'moreTagProposals')->name('moreTagProposals');
-    Route::post('/tag-proposals/{id}/accept', 'acceptTagProposal')->name('acceptTagProposal');
-    Route::post('/tag-proposals/{id}/reject', 'rejectTagProposal')->name('rejectTagProposal');
+    Route::post('/tag-proposals/accept/{id}', 'acceptTagProposal')->name('acceptTagProposal');
+    Route::post('/tag-proposals/reject/{id}', 'rejectTagProposal')->name('rejectTagProposal');
     // Unban appeal management
     Route::get('/unban-appeals', 'moreUnbanAppeals')->name('moreUnbanAppeals');
-    Route::post('/unban-appeals/{id}/accept', 'acceptUnbanAppeal')->name('acceptUnbanAppeal');
-    Route::post('/unban-appeals/{id}/reject', 'rejectUnbanAppeal')->name('rejectUnbanAppeal');
+    Route::post('/unban-appeals/accept/{id}', 'acceptUnbanAppeal')->name('acceptUnbanAppeal');
+    Route::post('/unban-appeals/reject/{id}', 'rejectUnbanAppeal')->name('rejectUnbanAppeal');
 });
 
 // Article
@@ -155,14 +155,14 @@ Route::prefix('article/{id}')->controller
 });
 
 Route::controller(CreateArticleController::class)->group(function () {
-    Route::get('/article/create', 'create')->name('createArticle');
-    Route::post('/article/create', 'store')->name('submitArticle');
-    Route::get('/article/{id}/edit', 'edit')->name('editArticle');
-    Route::post('/article/{id}/edit', 'update')->name('updateArticle');
-    Route::post('/article/{id}/delete', 'delete')->name('deleteArticle');
+    Route::get('/create-article', 'create')->name('createArticle');
+    Route::post('/create-article', 'store')->name('submitArticle');
+    Route::get('/article/edit/{id}', 'edit')->name('editArticle');
+    Route::post('/article/edit/{id}', 'update')->name('updateArticle');
+    Route::post('/article/delete/{id}', 'delete')->name('deleteArticle');
 
-    Route::post('article/create/tag/propose', 'proposeNewTagShow')->name('showProposeTag');
-    Route::post('/article/create/tag/propose', 'proposeNewTag')->name('proposeTagSubmit');
+    Route::post('propose-tag/show', 'proposeNewTagShow')->name('showProposeTag');
+    Route::post('/propose-tag/submit', 'proposeNewTag')->name('proposeTagSubmit');
 });
 
 // Article Comments

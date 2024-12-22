@@ -134,4 +134,66 @@ class UserFollowingController extends Controller
             'articles' => []
         ]);
     }
+
+    public function followUser(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $targetUser = User::findorFail($request->user_id);
+
+        Log::info("TESTE");
+
+        /*Log::info('UserFollowingController@followUser', [
+            'user' => $user,
+            'request' => $request->input(),
+        ]);*/
+
+        try {
+            $this->authorize('followUser', $targetUser);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to perform that action.');
+        }
+
+        // Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
+
+        $user->following()->attach($request->user_id);
+
+        $ownedArticles = $targetUser->ownedArticles()->get();
+        $ownedArticles = ArticlePage::filterDeletedArticles($ownedArticles);
+
+        return view('pages.profile', [
+            'user' => $user,
+            'profileUser' => $targetUser,
+            'isAdmin' => $user ? $user->is_admin : false,
+            'ownedArticles' => $ownedArticles
+        ]);
+    }
+
+    public function unfollowUser(Request $request)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $targetUser = User::findorFail($request->user_id);
+
+        try {
+            $this->authorize('unfollowUser', $targetUser);
+        } catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to perform that action.');
+        }
+
+        $user->following()->detach($request->user_id);
+
+        $ownedArticles = $targetUser->ownedArticles()->get();
+        $ownedArticles = ArticlePage::filterDeletedArticles($ownedArticles);
+
+        return view('pages.profile', [
+            'user' => $user,
+            'profileUser' => $targetUser,
+            'isAdmin' => $user ? $user->is_admin : false,
+            'ownedArticles' => $ownedArticles
+        ]);
+    }
 }

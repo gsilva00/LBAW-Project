@@ -154,15 +154,16 @@ class NotificationsController extends Controller
 
     public function archivingNotification($id): JsonResponse|RedirectResponse
     {
+        $notification = Notification::find($id);
+
         try {
-            $this->authorize('archive', Notification::class);
+            $this->authorize('archive', $notification);
         }
         catch (AuthorizationException $e) {
             return redirect()->route('login')
                 ->withErrors('Unauthorized. You need to login to perform that action.');
         }
 
-        $notification = Notification::find($id);
         $notification->is_viewed = true;
         $notification->save();
 
