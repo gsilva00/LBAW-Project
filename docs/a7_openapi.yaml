@@ -510,6 +510,237 @@ paths:
         '403':
           description: 'You do not possess the credentials for this action.'
 
+  /profile/user/follow:
+    post:
+      operationId: R205
+      summary: 'R205: Follow User'
+      description: 'Follow a user action. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. User followed.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
+  /profile/user/unfollow:
+    post:
+      operationId: R206
+      summary: 'R206: Unfollow User'
+      description: 'Unfollow a user action. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. User unfollowed.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
+  /notifications:
+    get:
+      operationId: R207
+      summary: 'R207: View Notifications'
+      description: 'Show the notifications page. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      responses:
+        '200':
+          description: 'Success. Display notifications.'
+
+  /notifications/new/all:
+    get:
+      operationId: R208
+      summary: 'R208: View all new notifications'
+      description: 'Show all new notifications. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      responses:
+        '200':
+          description: 'Success. Display notifications.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
+  /notifications/new/upvotes:
+    get:
+      operationId: R209
+      summary: 'R209: View new upvote notifications'
+      description: 'Show new upvote notifications. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      responses:
+        '200':
+          description: 'Success. Display notifications.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
+  /notifications/new/comments:
+    get:
+      operationId: R210
+      summary: 'R210: View new comment notifications'
+      description: 'Show new comment notifications. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      responses:
+        '200':
+          description: 'Success. Display notifications.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
+  /notifications/archived/all:
+    get:
+      operationId: R211
+      summary: 'R211: View all archived notifications'
+      description: 'Show all archived notifications. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      responses:
+        '200':
+          description: 'Success. Display notifications.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
+  /notifications/archived/upvotes:
+    get:
+      operationId: R212
+      summary: 'R212: View archived upvote notifications'
+      description: 'Show archived upvote notifications. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      responses:
+        '200':
+          description: 'Success. Display notifications.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
+  /notifications/archived/comments:
+    get:
+      operationId: R213
+      summary: 'R213: View archived comment notifications'
+      description: 'Show archived comment notifications. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      responses:
+        '200':
+          description: 'Success. Display notifications.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
+  /notifications/{id}/archive:
+    get:
+      operationId: R214
+      summary: 'R214: Archive a notifications'
+      description: 'Archive a notification action. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Archive notification.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
 ######################################### News #########################################
 
   /homepage:
@@ -896,17 +1127,584 @@ paths:
         '200':
           description: 'Success. Display trending tags page.'
 
+  /tag/{name}/follow:
+    post:
+      operationId: R507
+      summary: 'R507: Follow Tag'
+      description: 'Follow a tag action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the tag'
+
+      responses:
+        '200':
+            description: 'Success. Tag followed.'
+
+  /tag/{name}/unfollow:
+    post:
+      operationId: R508
+      summary: 'R508: Unfollow Tag'
+      description: 'Unfollow a tag action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the tag'
+
+      responses:
+        '200':
+            description: 'Success. Tag unfollowed.'
+
+  /topic/{name}/follow:
+    post:
+      operationId: R509
+      summary: 'R509: Follow Topic'
+      description: 'Follow a topic action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the topic'
+
+      responses:
+        '200':
+            description: 'Success. Topic followed.'
+
+  /topic/{name}/unfollow:
+    post:
+      operationId: R510
+      summary: 'R510: Unfollow Topic'
+      description: 'Unfollow a topic action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the topic'
+
+      responses:
+        '200':
+            description: 'Success. Topic unfollowed.'
+
+  /article/create/tag/propose:
+    get:
+        operationId: R511
+        summary: 'R511: Propose Tag Form'
+        description: 'Show the propose tag form. Access: USR'
+        tags:
+            - 'M05: Topics and Tags'
+
+        responses:
+            '200':
+              description: 'Ok. Show Propose Tag Form.'
+
+    post:
+      operationId: R512
+      summary: 'R512: Propose Tag for Article'
+      description: 'Propose a tag for an article action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                tag:
+                  type: string
+              required:
+                - tag
+
+      responses:
+        '200':
+          description: 'Success. Tag proposed.'
+
 ####################################### Comments #######################################
 
-# not part of the vertical prototype
+  /article/{id}/comment/write:
+    post:
+      operationId: R601
+      summary: 'R601: Write Comment'
+      description: 'Write a comment action. Access: USR'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+
+      responses:
+        '200':
+          description: 'Success. Comment written.'
+
+  /comment/{id}/edit:
+    post:
+      operationId: R602
+      summary: 'R602: Edit Comment'
+      description: 'Edit a comment action. Access: OWN'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+
+      responses:
+        '200':
+          description: 'Success. Comment edited.'
+
+  /comment/{id}/delete:
+    post:
+      operationId: R603
+      summary: 'R603: Delete Comment'
+      description: 'Delete a comment action. Access: OWN'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Comment deleted.'
+
+  /comment/{id}/reply:
+    post:
+      operationId: R604
+      summary: 'R604: Reply to Comment'
+      description: 'Reply to a comment action. Access: USR'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+
+      responses:
+        '200':
+          description: 'Success. Comment replied.'
+
+  /reply/{id}/delete:
+    post:
+      operationId: R605
+      summary: 'R605: Delete Reply'
+      description: 'Delete a reply action. Access: OWN'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Reply deleted.'
+
+  /comment/{id}/form:
+    get:
+      operationId: R606
+      summary: 'R606: Comment Form'
+      description: 'Show the comment form. Access: USR'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Ok. Show Comment Form.'
 
 ######################################### Votes ########################################
 
-# not part of the vertical prototype
+  /article/{id}/upvote:
+    post:
+      operationId: R601
+      summary: 'R601: Upvote Article'
+      description: 'Upvote an article action. Access: USR'
+      tags:
+        - 'M06: Votes'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Article upvoted.'
+
+  /article/{id}/downvote:
+    post:
+      operationId: R602
+      summary: 'R602: Downvote Article'
+      description: 'Downvote an article action. Access: USR'
+      tags:
+        - 'M06: Votes'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Article downvoted.'
+
+  /comment/{id}/upvote:
+    post:
+      operationId: R603
+      summary: 'R603: Upvote Comment'
+      description: 'Upvote a comment action. Access: USR'
+      tags:
+        - 'M06: Votes'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Comment upvoted.'
+
+  /comment/{id}/downvote:
+    post:
+      operationId: R604
+      summary: 'R604: Downvote Comment'
+      description: 'Downvote a comment action. Access: USR'
+      tags:
+        - 'M06: Votes'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Comment downvoted.'
+
+  /article/favourite:
+    post:
+      operationId: R605
+      summary: 'R605: Favourite Article'
+      description: 'Favourite an article action. Access: USR'
+      tags:
+        - 'M06: Votes'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Article favourited.'
+
+  /reply/{id}/upvote:
+    post:
+      operationId: R606
+      summary: 'R606: Upvote Reply'
+      description: 'Upvote a reply action. Access: USR'
+      tags:
+        - 'M06: Votes'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Reply upvoted.'
+
+  /reply/{id}/downvote:
+    post:
+      operationId: R607
+      summary: 'R607: Downvote Reply'
+      description: 'Downvote a reply action. Access: USR'
+      tags:
+        - 'M06: Votes'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Reply downvoted.'
 
 ############################### Report and Fact Checking ###############################
 
-# not part of the vertical prototype
+  /profile/appeal-unban:
+    get:
+        operationId: R801
+        summary: 'R801: Appeal Unban Form'
+        description: 'Show the appeal unban form. Access: USR'
+        tags:
+            - 'M08: Report and Fact Checking'
+        responses:
+            '200':
+              description: 'Ok. Show Appeal Unban Form.'
+
+    post:
+        operationId: R802
+        summary: 'R802: Appeal Unban Action'
+        description: 'Processes the appeal unban form submission. Access: USR'
+        tags:
+            - 'M08: Report and Fact Checking'
+
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  description:
+                    type: string
+                required:
+                  - description
+
+        responses:
+          '200':
+            description: 'Success. Appeal unban request submitted.'
+
+  /article/{id}/report-modal:
+    post:
+      operationId: R803
+      summary: 'R803: Show Report Article Modal'
+      description: 'Displays the modal for reporting an article. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the article to report'
+      responses:
+        '200':
+          description: 'Success. Display report article modal.'
+
+  /comment/{id}/report-modal:
+    post:
+      operationId: R804
+      summary: 'R804: Show Report Comment Modal'
+      description: 'Displays the modal for reporting a comment. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the comment to report'
+      responses:
+        '200':
+          description: 'Success. Display report comment modal.'
+
+  /user/{id}/report-modal:
+    post:
+      operationId: R805
+      summary: 'R805: Show Report User Modal'
+      description: 'Displays the modal for reporting a user. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the user to report'
+      responses:
+        '200':
+          description: 'Success. Display report user modal.'
+
+  /article/{id}/report:
+    post:
+      operationId: R806
+      summary: 'R806: Report Article'
+      description: 'Submits a report for an article. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the article to report'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+              required:
+                - reason
+      responses:
+        '200':
+          description: 'Success. Article report submitted.'
+
+  /comment/{id}/report:
+    post:
+      operationId: R807
+      summary: 'R807: Report Comment'
+      description: 'Submits a report for a comment. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the comment to report'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+              required:
+                - reason
+      responses:
+        '200':
+          description: 'Success. Comment report submitted.'
+
+  /user/{id}/report:
+    post:
+      operationId: R808
+      summary: 'R808: Report User'
+      description: 'Submits a report for a user. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the user to report'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+              required:
+                - reason
+      responses:
+        '200':
+          description: 'Success. User report submitted.'
 
 ############################ Administration and Static Pages ###########################
 
@@ -931,7 +1729,7 @@ paths:
                   description: 'Redirecting to home page.'
                   value: '/homepage'
 
-  /users:
+  /admin-panel/users:
     get:
       operationId: R902
       summary: 'R902: View More Users'
@@ -942,7 +1740,7 @@ paths:
         '200':
           description: 'Success. Display more users in admin panel.'
 
-  /users/create:
+  /admin-panel/users/create:
     post:
       operationId: R903
       summary: 'R903: Create Custom User Action'
@@ -1004,10 +1802,279 @@ paths:
         '403':
           description: 'You do not possess the credentials for this action.'
 
+  /admin-panel/users/{id}/ban:
+    post:
+      operationId: R904
+      summary: 'R904: Ban User'
+      description: 'Ban a user action. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. User has been banned'
+
+  /users/{id}/unban:
+    post:
+      operationId: R905
+      summary: 'R905: Unban User'
+      description: 'Unban a user action. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. User has been unbanned'
+
+  /admin-panel/topics:
+    get:
+      operationId: R906
+      summary: 'R906: View More Topics'
+      description: 'Show more topics for the admin panel page. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more topics in admin panel.'
+
+  /admin-panel/topics/create:
+    post:
+      operationId: R907
+      summary: 'R907: Create Topic Action'
+      description: 'Create a new topic. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new topic information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. Redirect to admin panel.'
+                  value: '/admin-panel'
+                302Failure:
+                  description: 'Failed. Redirect to admin panel.'
+                  value: '/admin-panel'
+        '403':
+          description: 'You do not possess the credentials for this action.'
+
+  /admin-panel/tags:
+    get:
+      operationId: R908
+      summary: 'R908: View More Tags'
+      description: 'Show more tags for the admin panel page. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more tags in admin panel.'
+
+  /admin-panel/tags/create:
+    post:
+      operationId: R909
+      summary: 'R909: Create Tag Action'
+      description: 'Create a new tag. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                isTrending:
+                  type: boolean
+              required:
+                - name
+                - isTrending
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new tag information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. Redirect to admin panel.'
+                  value: '/admin-panel'
+                302Failure:
+                  description: 'Failed. Redirect to admin panel.'
+                  value: '/admin-panel'
+        '403':
+          description: 'You do not possess the credentials for this action.'
+
+  /admin-panel/tags/trending/{id}/toggle:
+    post:
+      operationId: R910
+      summary: 'R910: Toggle Trending Tag'
+      description: 'Toggles the trending status of a tag. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the tag to toggle'
+
+      responses:
+        '200':
+          description: 'Success. The trending status of the tag has been toggled.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
+  /admin-panel/tag-proposals:
+    get:
+      operationId: R911
+      summary: 'R911: View More Tag Proposals'
+      description: 'Displays more tag proposals. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more tag proposals.'
+
+  /admin-panel/tag-proposals/{id}/accept:
+    post:
+      operationId: R912
+      summary: 'R912: Accept Tag Proposal'
+      description: 'Accepts a tag proposal. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the tag proposal to accept'
+
+      responses:
+        '200':
+          description: 'Success. The tag proposal has been accepted.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
+  /admin-panel/tag-proposals/{id}/reject:
+    post:
+      operationId: R913
+      summary: 'R913: Reject Tag Proposal'
+      description: 'Rejects a tag proposal. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the tag proposal to reject'
+
+      responses:
+        '200':
+          description: 'Success. The tag proposal has been rejected.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
+  /admin-panel/unban-appeals:
+    get:
+      operationId: R914
+      summary: 'R914: View More Unban Appeals'
+      description: 'Displays more unban appeals. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more unban appeals.'
+
+  /admin-panel/unban-appeals/{id}/accept:
+    post:
+      operationId: R915
+      summary: 'R915: Accept Unban Appeal'
+      description: 'Accepts an unban appeal. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the unban appeal to accept'
+
+      responses:
+        '200':
+          description: 'Success. The unban appeal has been accepted.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
+  /admin-panel/unban-appeals/{id}/reject:
+    post:
+      operationId: R916
+      summary: 'R916: Reject Unban Appeal'
+      description: 'Rejects an unban appeal. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the unban appeal to reject'
+
+      responses:
+        '200':
+          description: 'Success. The unban appeal has been rejected.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
   /contacts:
     get:
-      operationId: R904
-      summary: 'R904: View Contacts'
+      operationId: R917
+      summary: 'R917: View Contacts'
       description: 'Show the contacts page. Access: GUE, USR'
       tags:
         - 'M09: Administration and Static Pages'
@@ -1017,11 +2084,22 @@ paths:
 
   /about-us:
     get:
-      operationId: R905
-      summary: 'R905: View About Us'
+      operationId: R918
+      summary: 'R918: View About Us'
       description: 'Show the about us page. Access: GUE, USR'
       tags:
         - 'M09: Administration and Static Pages'
       responses:
         '200':
           description: 'Success. Display about us page.'
+
+  /features:
+    get:
+      operationId: R919
+      summary: 'R919: View Features'
+      description: 'Show the features page. Access: GUE, USR'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display features page.'
