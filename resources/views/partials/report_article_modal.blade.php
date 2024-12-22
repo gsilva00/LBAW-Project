@@ -1,6 +1,6 @@
 <div id="reportArticlePopup" class="popup" @if($state === 'reportComment' || $state === 'reportReply') data-is-reply="{{$state === "reportComment" ? "false" : "true"}}"@endif>
     <div class="popup-content">
-        <span class="remove" onclick="closePopup()">&times;</span>
+        <span class="remove" onclick="closePopUp()">&times;</span>
         @if($state === 'reportArticle')
             <h2>Report Article</h2>
         @elseif($state === 'reportComment' || $state === 'reportReply')

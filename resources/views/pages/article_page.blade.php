@@ -19,7 +19,11 @@
                         @if($article->is_deleted)
                             Anonymous
                         @else
-                            <a href="{{ route('profile', ['username' => $article->author->username]) }}">{{ $authorDisplayName }}</a>
+                            @if($article->author->is_deleted)
+                                [Deleted]
+                            @else
+                                <a href="{{ route('profile', ['username' => $article->author->username]) }}">{{ $authorDisplayName }}</a>
+                            @endif
                         @endif
                     </p>
                     <p class="small-text">

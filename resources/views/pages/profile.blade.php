@@ -26,9 +26,10 @@
                 @endif
                 @if(Auth::check() && !$isOwner)
                     <button type="button" id="follow-user-button" class="large-rectangle small-text greener"
-                            data-user-id="{{ $user->id }}" data-profile-id="{{ $profileUser->id }}">
+                            data-user-id="{{ $user->id }}" data-profile-id="{{ $profileUser->id }}" data-url="{{Auth::user()->isFollowingUser($profileUser->id) ? route('unfollowUserAction') : route('followUserAction')}}">
                         {{ Auth::user()->isFollowingUser($profileUser->id) ? 'Unfollow User' : 'Follow User' }}
                     </button>
+                    <meta name="csrf-token" content="{{ csrf_token() }}">
                 @endif
                 @if(Auth::check() && !$isOwner && !$isAdmin)
                     <button type="button" id="report-user-button" class="large-rectangle small-text greener">

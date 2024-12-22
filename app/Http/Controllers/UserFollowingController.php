@@ -141,6 +141,8 @@ class UserFollowingController extends Controller
         $user = Auth::user();
         $targetUser = User::find($request->profile_id);
 
+        Log::info("TESTE");
+
         /*Log::info('UserFollowingController@followUser', [
             'user' => $user,
             'request' => $request->input(),

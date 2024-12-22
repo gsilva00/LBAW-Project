@@ -654,7 +654,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const popupContainer = document.createElement('div');
                 popupContainer.innerHTML = html;
                 document.body.appendChild(popupContainer);
-                openPopup();
+                openPopUp();
                 submitArticleReport();
             })
             .catch(error => {
@@ -682,6 +682,8 @@ function submitArticleReport() {
         document.getElementById('charCountFeedback').textContent = `${charCount}/${maxLength} characters`;
         });
 
+
+
     submitButton.addEventListener('click', function () {
         const charCount = reportReason.value.length;
         if (charCount > maxLength) {
@@ -708,7 +710,7 @@ function submitArticleReport() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    closePopup();
+                    closePopUp();
                 } else {
                     alert('Failed to submit report. Please try again.');
                 }
@@ -720,7 +722,7 @@ function submitArticleReport() {
     });
 }
 
-function openPopup() {
+function openPopUp() {
     const popup = document.getElementById('reportArticlePopup');
     if (popup) {
         popup.style.display = 'flex';
@@ -729,7 +731,8 @@ function openPopup() {
     }
 }
 
-function closePopup() {
+function closePopUp() {
+    console.log('Close popup button clicked');
     const popup = document.getElementById('reportArticlePopup');
     if (popup) {
         popup.style.display = 'none';
@@ -770,7 +773,7 @@ function reportCommentShow() {
                     const popupContainer = document.createElement('div');
                     popupContainer.innerHTML = html;
                     document.body.appendChild(popupContainer);
-                    openPopup();
+                    openPopUp();
                     submitCommentReport();
                 })
 
@@ -820,7 +823,7 @@ function submitCommentReport() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    closePopup();
+                    closePopUp();
                 } else {
                     alert('Failed to submit report. Please try again.');
                 }

@@ -73,8 +73,8 @@ Route::prefix('following')->controller
     Route::get('/topics','showFollowingTopics')->name('showFollowingTopics');
     Route::get('/authors','showFollowingAuthors')->name('showFollowingAuthors');
 
-    Route::post('/user/action/follow','followUser')->name('followUserAction');
-    Route::post('/user/action/unfollow','unfollowUser')->name('unfollowUserAction');
+    Route::post('/user/follow','followUser')->name('followUserAction');
+    Route::post('/user/unfollow','unfollowUser')->name('unfollowUserAction');
 });
 
 Route::get('/favourite-articles', [ArticlePageController::class, 'showFavouriteArticles'])->name('showFavouriteArticles');
