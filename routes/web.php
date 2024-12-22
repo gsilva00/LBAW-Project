@@ -86,8 +86,8 @@ Route::controller(TagController::class)->group(function () {
 Route::controller(TopicController::class)->group(function () {
     Route::get('/topic/{name}', 'showTopic')->name('showTopic');
     // Following
-    Route::post('/topic/{topic}/follow', 'followTopic')->name('followTopic');
-    Route::post('/topic/{topic}/unfollow', 'unfollowTopic')->name('unfollowTopic');
+    Route::post('/topic/{name}/follow', 'followTopic')->name('followTopic');
+    Route::post('/topic/{name}/unfollow', 'unfollowTopic')->name('unfollowTopic');
 });
 
 // Profile
