@@ -151,7 +151,7 @@ function handleCommentSubmission(form, csrfToken) {
     const commentText = commentInput.value.trim();
 
     if (commentText === '') {
-        alert('Comment cannot be empty.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+        alert('Comment cannot be empty.');
         return;
     }
 
@@ -484,41 +484,22 @@ function handleReplyClick(event) {
     const commentElement = this.closest('.comment');
     const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
     const articleId = document.querySelector('meta[name="article-id"]').getAttribute('content');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const url = `/comment/${commentId}/commentForm`;
 
-    // Check if the user is banned
-    fetch('/check-user-status', {
-        method: 'GET',
+    fetch(url, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        }
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ state: 'reply', articleId: articleId })
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.isBanned) {
-                alert('You are banned from replying to comments.');
-            } else {
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                    body: JSON.stringify({ state: 'reply', articleId: articleId })
-                })
-                    .then(response => response.text())
-                    .then(html => {
-                        displayReplyForm(html, commentElement, this);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching the reply form:', error);
-                    });
-            }
+        .then(response => response.text())
+        .then(html => {
+            displayReplyForm(html, commentElement, this);
         })
         .catch(error => {
-            console.error('Error checking user status:', error);
+            console.error('Error fetching the reply form:', error);
         });
 }
 
@@ -652,11 +633,10 @@ function toggleReplies() {
     repliesContainer.classList.toggle('show');
 }
 
-
-
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('report-article-button').addEventListener('click', function () {
         const articleId = this.getAttribute('data-article-id');
+        console.log('Report article button clicked');
         fetch(`/report-article-modal/${articleId}`, {
             method: 'POST',
             headers: {
@@ -674,7 +654,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const popupContainer = document.createElement('div');
                 popupContainer.innerHTML = html;
                 document.body.appendChild(popupContainer);
-                openPopup();
+                openPopUp();
                 submitArticleReport();
             })
             .catch(error => {
@@ -702,6 +682,8 @@ function submitArticleReport() {
         document.getElementById('charCountFeedback').textContent = `${charCount}/${maxLength} characters`;
         });
 
+
+
     submitButton.addEventListener('click', function () {
         const charCount = reportReason.value.length;
         if (charCount > maxLength) {
@@ -728,7 +710,7 @@ function submitArticleReport() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    closePopup();
+                    closePopUp();
                 } else {
                     alert('Failed to submit report. Please try again.');
                 }
@@ -740,7 +722,7 @@ function submitArticleReport() {
     });
 }
 
-function openPopup() {
+function openPopUp() {
     const popup = document.getElementById('reportArticlePopup');
     if (popup) {
         popup.style.display = 'flex';
@@ -749,7 +731,8 @@ function openPopup() {
     }
 }
 
-function closePopup() {
+function closePopUp() {
+    console.log('Close popup button clicked');
     const popup = document.getElementById('reportArticlePopup');
     if (popup) {
         popup.style.display = 'none';
@@ -790,7 +773,7 @@ function reportCommentShow() {
                     const popupContainer = document.createElement('div');
                     popupContainer.innerHTML = html;
                     document.body.appendChild(popupContainer);
-                    openPopup();
+                    openPopUp();
                     submitCommentReport();
                 })
 
@@ -840,7 +823,7 @@ function submitCommentReport() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    closePopup();
+                    closePopUp();
                 } else {
                     alert('Failed to submit report. Please try again.');
                 }

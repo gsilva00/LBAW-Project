@@ -118,9 +118,8 @@ filterNotifications();
 
 
 function archiveNotification() {
-    document.querySelectorAll('.archive-button').forEach(button => {
+    document.querySelectorAll('button.small-rectangle.greener#archive-button').forEach(button => {
         button.addEventListener('click', function(event) {
-            console.log('notification_id = ', this.getAttribute('data-notification-id'));
             event.preventDefault();
             const notificationId = this.getAttribute('data-notification-id');
             fetch(`/notifications/archiving/${notificationId}`, {

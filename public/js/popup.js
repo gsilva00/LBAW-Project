@@ -22,7 +22,7 @@ function showReportUserPopup(userId) {
             var popupContainer = document.createElement('div');
             popupContainer.innerHTML = html;
             document.body.appendChild(popupContainer);
-            openPopup();
+            openPopUp();
             submitReportUser();
         })
         .catch(error => {
@@ -71,7 +71,7 @@ function submitReportUser() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    closePopup();
+                    closePopUp();
                 } else {
                     alert('Failed to submit report. Please try again.');
                 }
@@ -89,7 +89,7 @@ document.getElementById('report-user-button').addEventListener('click', function
 });
 
 
-function openPopup() {
+function openPopUp() {
     const popup = document.getElementById('reportArticlePopup');
     if (popup) {
         popup.style.display = 'flex';
@@ -98,7 +98,7 @@ function openPopup() {
     }
 }
 
-function closePopup() {
+function closePopUp() {
     const popup = document.getElementById('reportArticlePopup');
     if (popup) {
         popup.style.display = 'none';
