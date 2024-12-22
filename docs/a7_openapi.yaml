@@ -1209,7 +1209,155 @@ paths:
 
 ####################################### Comments #######################################
 
-# not part of the vertical prototype
+  /article/{id}/comment/write:
+    post:
+      operationId: R601
+      summary: 'R601: Write Comment'
+      description: 'Write a comment action. Access: USR'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+
+      responses:
+        '200':
+          description: 'Success. Comment written.'
+
+  /comment/{id}/edit:
+    post:
+      operationId: R602
+      summary: 'R602: Edit Comment'
+      description: 'Edit a comment action. Access: OWN'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+
+      responses:
+        '200':
+          description: 'Success. Comment edited.'
+
+  /comment/{id}/delete:
+    post:
+      operationId: R603
+      summary: 'R603: Delete Comment'
+      description: 'Delete a comment action. Access: OWN'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Comment deleted.'
+
+  /comment/{id}/reply:
+    post:
+      operationId: R604
+      summary: 'R604: Reply to Comment'
+      description: 'Reply to a comment action. Access: USR'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+
+      responses:
+        '200':
+          description: 'Success. Comment replied.'
+
+  /reply/{id}/delete:
+    post:
+      operationId: R605
+      summary: 'R605: Delete Reply'
+      description: 'Delete a reply action. Access: OWN'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Reply deleted.'
+
+  /comment/{id}/form:
+    get:
+      operationId: R606
+      summary: 'R606: Comment Form'
+      description: 'Show the comment form. Access: USR'
+      tags:
+        - 'M06: Comments'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Ok. Show Comment Form.'
 
 ######################################### Votes ########################################
 
