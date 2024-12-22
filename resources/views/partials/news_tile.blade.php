@@ -5,10 +5,10 @@
     </a>
     @if(!$article->is_deleted && Auth::check() && Auth::user()->id === $article->author_id)
         <div class="float-container">
-            <button type="button" class="large-rectangle small-text" onclick="window.location='{{ route('editArticle', ['id' => $article->id]) }}'"><span>Edit</span></button>
+            <button type="button" class="large-rectangle small-text greener" onclick="window.location='{{ route('editArticle', ['id' => $article->id]) }}'">Edit</button>
             <form action="{{ route('deleteArticle', ['id' => $article->id]) }}" method="POST" style="display:inline;">
                 @csrf
-                <button type="submit" class="large-rectangle small-text greyer"><span>Delete</span></button>
+                <button type="submit" class="large-rectangle small-text greener">Delete</button>
             </form>
         </div>
     @endif

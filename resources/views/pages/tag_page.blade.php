@@ -11,7 +11,7 @@
         @if(Auth::check())
         <form method="POST" action="{{ Auth::user()->hasFollowedTag($tag) ? route('unfollowTag', $tag->name) : route('followTag', $tag->name) }}">
             @csrf
-            <button type="submit" class="large-rectangle small-text greyer">
+            <button type="submit" class="large-rectangle small-text greener">
                 {{ Auth::user()->hasFollowedTag($tag) ? 'Unfollow Tag' : 'Follow Tag' }}
             </button>
         </form>

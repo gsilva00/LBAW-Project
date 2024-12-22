@@ -81,7 +81,7 @@
                 <br>
                 <div class="profile-info">
                     <span>Don't forget to save after alterations:</span>
-                    <button type="submit" class="large-rectangle small-text greyer">Save</button>
+                    <button type="submit" class="large-rectangle small-text greener">Save</button>
                 </div>
             </form>
         </section>
@@ -100,7 +100,7 @@
                 <br>
                 <div class="profile-info">
                     <span>Do you want to erase this account?</span>
-                    <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
+                    <button type="submit" class="large-rectangle small-text greener">Delete This Account</button>
                 </div>
                 <br>
             </form>

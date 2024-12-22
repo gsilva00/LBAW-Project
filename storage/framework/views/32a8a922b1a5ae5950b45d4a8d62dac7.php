@@ -1,0 +1,3 @@
+<?php $__currentLoopData = $tagProposalsPaginated; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <?php echo $__env->make('partials.propose_tag_tile', ['tagProposal' => $tp], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/partials/propose_tag_tile_list.blade.php ENDPATH**/ ?>

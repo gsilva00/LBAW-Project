@@ -1,11 +1,8 @@
-<div class="pop-up">
+<div class="error-pop-up">
     <i class='bx bx-error-circle'></i>
     <span class="error">
-        <?php if(isset($field) && $errors->has($field)): ?>
-            <?php echo e($errors->first($field)); ?>
-
-        <?php elseif(session('error')): ?>
-            <?php echo e(session('error')); ?>
+        <?php if($errors->any()): ?>
+            <?php echo e($errors->first()); ?>
 
         <?php endif; ?>
     </span>

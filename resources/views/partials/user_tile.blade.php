@@ -13,7 +13,7 @@
                     @csrf
                     @if (Auth::user()->isFollowing($user))
                         <button type="button"
-                                class="unfollow-user-button-profile large-rectangle small-text greyer"
+                                class="unfollow-user-button-profile large-rectangle small-text greener"
                                 data-user-id="{{ Auth::id() }}"
                                 data-profile-id="{{ $user->id }}"
                                 data-url="{{route('unfollowUserAction')}}"
@@ -25,12 +25,12 @@
             @endif
             @if(Auth::user()->is_admin)
                 <a href="{{ route('editProfile', ['username' => $user->username]) }}">
-                    <button class="large-rectangle small-text greyer">Edit Profile</button>
+                    <button class="large-rectangle small-text greener">Edit Profile</button>
                 </a>
                 <form action="{{ route('deleteProfile', ['id' => $user->id]) }}" method="POST" style="display:inline;">
                     @csrf
                     <button type="submit"
-                            class="large-rectangle small-text greyer"
+                            class="large-rectangle small-text greener"
                     >
                         Delete This Account
                     </button>

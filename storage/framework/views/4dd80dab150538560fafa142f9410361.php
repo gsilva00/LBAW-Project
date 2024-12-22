@@ -24,7 +24,7 @@
         <link href="<?php echo e(url('css/recent_news.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/trending_tag.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/article_page.css')); ?>" rel="stylesheet">
-        <link href="<?php echo e(url('css/contacts.css')); ?>" rel="stylesheet">
+        <link href="<?php echo e(url('css/footer_pages.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/profile.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/filter.css')); ?>" rel="stylesheet">
         <link href="<?php echo e(url('css/popup.css')); ?>" rel="stylesheet">
@@ -47,6 +47,7 @@
         <script src="<?php echo e(url('js/comment_search_interact.js')); ?>" defer> </script>
         <script src="<?php echo e(url('js/follow_user.js')); ?>" defer> </script>
         <script src="<?php echo e(url('js/porpose_tag.js')); ?>" defer> </script>
+        <script src="<?php echo e(url('js/appeal_unban.js')); ?>" defer> </script>
     </head>
     <body>
         <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -57,5 +58,6 @@
             </main>
             <?php echo $__env->make('layouts.footer', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         </div>
+        <?php echo $__env->make('layouts.user_feedback', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </body>
 </html><?php /**PATH C:\Users\Utiizador\Desktop\LBAW\lbaw24124\resources\views/layouts/app.blade.php ENDPATH**/ ?>

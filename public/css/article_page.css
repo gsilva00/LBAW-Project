@@ -169,7 +169,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     column-gap: 1em;
-    align-items: end;
+    align-items: center;
 }
 
 .comment-input{

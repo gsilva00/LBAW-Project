@@ -1,11 +1,13 @@
-<div class="unban-appeal-tile">
+<div class="notification-card">
+    <div class="profile-info appeal-wrapper">
     <p>{{ $unbanAppeal->description }}</p>
-    <form class="accept-appeal-form" method="POST" action="{{ route('acceptUnbanAppeal', ['id' => $unbanAppeal->id]) }}">
+    <form method="POST" action="{{ route('acceptUnbanAppeal', ['id' => $unbanAppeal->id]) }}">
         @csrf
-        <button type="submit" class="accept-appeal">Unban</button>
+        <button type="submit" class="large-rectangle small-text greener">Unban</button>
     </form>
-    <form class="reject-appeal-form" method="POST" action="{{ route('rejectUnbanAppeal', ['id' => $unbanAppeal->id]) }}">
+    <form method="POST" action="{{ route('rejectUnbanAppeal', ['id' => $unbanAppeal->id]) }}">
         @csrf
-        <button type="submit" class="reject-appeal">Reject</button>
+        <button type="submit" class="large-rectangle small-text red-button">Reject</button>
     </form>
+    </div>
 </div>

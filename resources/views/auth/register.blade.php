@@ -4,6 +4,7 @@
     <div class="login-register-container">
         <form method="POST" action="{{ route('register') }}">
             @csrf
+            <br>
             <h1>Register</h1>
             <div class="profile-info space-between">
                 <label for="username"><span>Username</span></label>
@@ -26,12 +27,18 @@
                 <input id="password-confirm" type="password" name="password_confirmation" required>
             </div>
             <br>
-            <div class="profile-info">
+            <br>
                 <button type="submit" class="large-rectangle small-text">
                     Register
                 </button>
-                <a class="large-rectangle small-text" href="{{ route('login') }}">Login</a>
-            </div>
+            <br>
+            <br>
         </form>
+    </div>
+    <div class="login-register-container">
+        <div class="profile-info">
+            <p>Already have an account?</p>
+            <a class="large-rectangle small-text" href="{{ route('login') }}">Login</a>
+        </div>
     </div>
 @endsection

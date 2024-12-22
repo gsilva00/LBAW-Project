@@ -21,7 +21,7 @@
                 <span>Filters</span>
             </button>
             <input type="search" name="search" placeholder="Search" aria-label="Search">
-            <button class="p" type="submit"><span>Search</span></button>
+            <button class="p greener" type="submit"><span>Search</span></button>
         </div>
         <div id="filter-options">
             <div class="filter-option">

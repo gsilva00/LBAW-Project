@@ -5,7 +5,7 @@
 @section('content')
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Edit a New Article</h1>
-        <form class="large-rectangle" action="{{ route('updateArticle', ['id' => $article->id]) }}" method="POST" enctype="multipart/form-data">
+        <form class="large-rectangle yellow" action="{{ route('updateArticle', ['id' => $article->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <br>
             <div class="profile-info">
@@ -52,7 +52,7 @@
             <br>
             <div class="profile-info">
                 <span>Save your article before leaving: </span>
-                <button type="submit" class="large-rectangle small-text greyer">Save Changes</button>
+                <button type="submit" class="large-rectangle small-text greener">Save Changes</button>
             </div>
             <br>
         </form>

@@ -8,7 +8,7 @@
 ?>
 <?php if($first_condition || $second_condition): ?>
     <?php if($notification->is_viewed): ?>
-        <div class="notification-card greyer" notification_id="<?php echo e($notification->id); ?>">
+        <div class="notification-card archived" notification_id="<?php echo e($notification->id); ?>">
     <?php else: ?>
         <div class="notification-card" notification_id="<?php echo e($notification->id); ?>">
     <?php endif; ?>
@@ -42,7 +42,7 @@
             </button>      
         <?php elseif($notification_specifics[0] === 3): ?>
             <div class="profile-info">
-            <p><i class='bx bx-comment'></i>
+            <p><i class='bx bx-upvote'></i>
             <?php if($pair_users[1][0] === $user->display_name): ?>
                 <a href="<?php echo e(route('profile', ['username' => $pair_users[1][1]])); ?>">You</a>
             <?php else: ?>
@@ -56,7 +56,7 @@
             </button>       
         <?php elseif($notification_specifics[0] === 4): ?>
             <div class="profile-info">
-            <p><i class='bx bx-comment'></i>
+            <p><i class='bx bx-upvote'></i>
             <?php if($pair_users[1][0] === $user->display_name): ?>
                 <a href="<?php echo e(route('profile', ['username' => $pair_users[1][1]])); ?>">You</a>
             <?php else: ?>
@@ -70,7 +70,7 @@
             </button>    
         <?php elseif($notification_specifics[0] === 5): ?>
             <div class="profile-info">
-            <p><i class='bx bx-comment'></i>
+            <p><i class='bx bx-upvote'></i>
             <?php if($pair_users[1][0] === $user->display_name): ?>
                 <a href="<?php echo e(route('profile', ['username' => $pair_users[1][1]])); ?>">You</a>
             <?php else: ?>

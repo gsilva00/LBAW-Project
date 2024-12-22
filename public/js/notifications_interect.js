@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('new-tab').addEventListener('click', function() {
+    const newTab = document.getElementById('new-tab');
+
+    if (newTab) {
+
+    newTab.addEventListener('click', function() {
         if (!this.parentElement.classList.contains('active')) {
             fetch('/notifications/new/all')
                 .then(response => response.text())
@@ -17,9 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         allTab.parentElement.classList.add('active');
                         allTab.setAttribute('aria-selected', 'true');
                         document.getElementById('upvotes-tab').parentElement.classList.remove('active');
-                        document.getElementById('upvotes-tab').setAttribute('aria-selected', 'false');
                         document.getElementById('comments-tab').parentElement.classList.remove('active');
-                        document.getElementById('comments-tab').setAttribute('aria-selected', 'false');
                         archiveNotification();
                     } else {
                         console.error('Error: Content div not found');
@@ -30,8 +32,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
     });
+}
 
-    document.getElementById('archived-tab').addEventListener('click', function() {
+    const archivedTab = document.getElementById('archived-tab');
+
+    if (archivedTab) {
+        
+    archivedTab.addEventListener('click', function() {
         if (!this.parentElement.classList.contains('active')) {
             fetch('/notifications/archived/all')
                 .then(response => response.text())
@@ -49,9 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         allTab.parentElement.classList.add('active');
                         allTab.setAttribute('aria-selected', 'true');
                         document.getElementById('upvotes-tab').parentElement.classList.remove('active');
-                        document.getElementById('upvotes-tab').setAttribute('aria-selected', 'false');
                         document.getElementById('comments-tab').parentElement.classList.remove('active');
-                        document.getElementById('comments-tab').setAttribute('aria-selected', 'false');
                         archiveNotification();
                     } else {
                         console.error('Error: Content div not found');
@@ -62,7 +67,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
     });
+}
+
 });
+
+
 
 
 function filterNotifications() {
@@ -89,7 +98,6 @@ function filterNotifications() {
                             contentDiv.innerHTML = data;
                             tabs.forEach(t => {
                                 document.getElementById(`${t}-tab`).parentElement.classList.remove('active');
-                                document.getElementById(`${t}-tab`).setAttribute('aria-selected', 'false');
                             });
                             this.parentElement.classList.add('active');
                             this.setAttribute('aria-selected', 'true');
