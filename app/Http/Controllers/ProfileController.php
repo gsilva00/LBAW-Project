@@ -161,7 +161,7 @@ class ProfileController extends Controller
             ->withSuccess('Profile updated successfully!');
     }
 
-    public function delete(Request $request, $targetUserId): View|RedirectResponse
+    public function delete(Request $request, $targetUserId): View|RedirectResponse|JsonResponse
     {
         /** @var User $authUser */
         $authUser = Auth::user();
@@ -169,12 +169,20 @@ class ProfileController extends Controller
 
         $this->authorize('delete', $targetUser);
 
+        if ($targetUser->is_admin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete an admin account.'
+            ], 403);
+        }
+
         $request->validate([
             'cur_password_delete' => $authUser->is_admin ? 'nullable|string' : 'required|string',
         ]);
 
         if (!$authUser->is_admin && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
-            return redirect()->back()->withErrors(['cur_password_delete' => 'Current password is incorrect'])->withInput();
+            return redirect()->back()
+                ->withErrors('Current password is incorrect')->withInput();
         }
 
         $targetUser->deleteUserTransaction($targetUserId);
@@ -188,8 +196,10 @@ class ProfileController extends Controller
                 ->withSuccess('Your account has been deleted successfully.');
         }
 
-        return redirect()->route('adminPanel')
-            ->withSuccess('User account deleted successfully!');
+        return response()->json([
+            'success' => true,
+            'message' => 'User account deleted successfully.'
+        ]);
     }
 
     public function appealUnbanShow(): View

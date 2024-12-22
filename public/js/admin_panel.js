@@ -176,6 +176,55 @@ function validateTagForm(formData) {
     return true;
 }
 
+// For AJAX delete and ban actions
+function userAction() {
+    const userList = document.getElementById('user-list');
+
+    if (!userList) {
+        console.warn('User list element not found.');
+        return;
+    }
+
+    userList.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const action = form.getAttribute('data-action');
+
+        if (action === 'delete') {
+            if (!confirm('Are you sure you want to delete this account?')) {
+                return;
+            }
+        }
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    if (action === 'delete') {
+                        form.closest('.profile-container-admin').remove();
+                    }
+                    else if (action === 'ban') {
+                        const button = form.querySelector('button');
+                        button.textContent = data.is_banned ? 'Unban User' : 'Ban User';
+                        form.setAttribute('data-action', data.is_banned ? 'unban' : 'ban');
+                    }
+                }
+                else {
+                    alert(data.message || 'Action failed.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+}
 
 function seeMoreEntities(listId, buttonId) {
     const list = document.getElementById(listId);
@@ -388,7 +437,7 @@ createWithPagination(
     'Error creating tag.',
 );
 
+userAction();
 toggleTrendingTag();
-
 handleProposal();
 handleUnbanAppeal();
