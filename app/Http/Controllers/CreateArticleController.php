@@ -122,13 +122,6 @@ class CreateArticleController extends Controller
 
         $topicId = intval($request->input('topics')[0]);
 
-
-        /*Log::info('CreateArticleController@show', [
-            'title' => $request->input('title'),
-            'subtitle' => $request->input('subtitle'),
-            'content' => $request->input('content')
-        ]);*/
-
         $article->title = $request->input('title');
         $article->subtitle = $request->input('subtitle');
         $article->content = str_replace("\n", "<?n?n>", $request->input('content'));
@@ -146,15 +139,6 @@ class CreateArticleController extends Controller
         }
 
         $article->save();
-
-        /*Log::info('EditArticleController@show', [
-            'title' => $request->input('title'),
-            'subtitle' => $request->input('subtitle'),
-            'content' => $request->input('content'),
-            'tags' => $request->input('tags'),
-            'topics' => $request->input('topics'),
-            'article_picture' => $request->file('article_picture'),
-        ]);*/
 
         Tag::removeAllTagsByArticleId($id);
         $tagIds = Tag::searchByArrayNames($request->input('tags', []));
@@ -199,10 +183,6 @@ class CreateArticleController extends Controller
         $tag->name = $request->input('name');
         $tag->user_id = Auth::id();
         $tag->save();
-
-        /*Log::info('CreateArticleController@proposeNewTag', [
-            'name' => $request->input('name'),
-        ]);*/
 
         return response()->json([
             'success' => true,

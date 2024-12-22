@@ -47,8 +47,6 @@ class ArticlePageController extends Controller
         $favourite = $user ? $user->isFavouriteArticle($article) : false;
         $comments = Comment::removeBannedComments($article->comments);
 
-        /*Log::info('Paragraphs: ' . json_encode($paragraphs));*/
-
         return view('pages.article_page', [
             'user' => $user,
             'article' => $article,
@@ -186,16 +184,12 @@ class ArticlePageController extends Controller
     {
         $article = ArticlePage::findOrFail($id);
 
-        // TODO SPECIAL FEEDBACK WHEN ARTICLE IS DELETED (NO INTERACTIONS ALLOWED)
-
-        $this->authorize('favourite', $article); // TODO REDIRECT TO LOGIN
+        $this->authorize('favourite', $article);
 
         /** @var User $user */
         $user = Auth::user();
         // Get "true" or "false" sent in request (convert to boolean)
         $isFavourite = filter_var($request->input('isFavourite'), FILTER_VALIDATE_BOOLEAN);
-
-        // Log::info("The isFavourite value is: " . var_export($isFavourite, true));
 
         if ($isFavourite) {
             $user->favouriteArticles()->detach($id);
@@ -213,7 +207,6 @@ class ArticlePageController extends Controller
 
     public function writeComment(Request $request, $id): JsonResponse
     {
-        // Log::info('Comment request: ' . json_encode($request->all()));
         /** @var User $user */
         $user = auth()->user();
         $article = ArticlePage::findOrFail($id);
@@ -433,15 +426,11 @@ class ArticlePageController extends Controller
 
     public function editComment($id, Request $request): JsonResponse
     {
-        // Log::info('Edit comment request: ' . json_encode($request->all()));
         $comment = $request->isReply === 'true' ? Reply::findOrFail($id) : Comment::findOrFail($id);
-        // Log::info('Comment found: ' . json_encode($comment));
         $comment->content = $request->comment;
         $comment->save();
 
         $this->authorize('update', $comment);
-
-        // Log::info('Comment edited: ' . json_encode($comment));
 
         $commentsView = view('partials.comment', [
             'comment' => $comment,
@@ -505,8 +494,6 @@ class ArticlePageController extends Controller
 
     public function reportArticleSubmit($id, Request $request): JsonResponse
     {
-        // Log::info('Report request: ' . json_encode($request->all()));
-        
         $author = Auth::user();
         $article = ArticlePage::findOrFail($id);
 
@@ -543,8 +530,6 @@ class ArticlePageController extends Controller
 
     public function reportCommentSubmit($id, Request $request): JsonResponse
     {
-        // Log::info('Report request: ' . json_encode($request->all()));
-
         $author = Auth::user();
 
         if ($request->isReply) {
@@ -595,9 +580,6 @@ class ArticlePageController extends Controller
 
     public function reportUserSubmit($id, Request $request): JsonResponse
     {
-        // Log::info('Report request: ' . json_encode($request->all()));
-        // Log::info('User id: ' . $id);
-
         $author = Auth::user();
 
         $report = new Report();

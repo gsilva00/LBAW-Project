@@ -28,14 +28,7 @@ class UserFollowingController extends Controller
         $articles = ArticlePage::all();
         $articles_followed_tags = ArticlePage::filterByTags($articles, $tags);
 
-        /*Log::info('UserFollowingController@followTags', [
-            'tags' => $tags,
-            'articles' => $articles_followed_tags,
-        ]);*/
-
         if ($request->ajax()) {
-            /*Log::info("AJAX request");*/
-
             return view('partials.articles_list', [
                 'articles' => $articles_followed_tags
             ]);
@@ -58,14 +51,7 @@ class UserFollowingController extends Controller
         $articles = ArticlePage::all();
         $articles_followed_topics = ArticlePage::filterByTopics($articles, $topics);
 
-        /*Log::info('UserFollowingController@followTopics', [
-            'tags' => $topics,
-            'articles' => $articles_followed_topics,
-        ]);*/
-
         if ($request->ajax()) {
-            /*Log::info("AJAX request");*/
-
             return view('partials.articles_list', [
                 'articles' => $articles_followed_topics
             ]);
@@ -87,14 +73,7 @@ class UserFollowingController extends Controller
         $authors = $user->following()->where('is_deleted', false)->where('is_banned', false)->get();
         $articles = User::filterByFollowingUsers($authors);
 
-        /*Log::info('UserFollowingController@followAuthors', [
-            'authors' => $authors,
-            'articles' => $articles,
-        ]);*/
-
         if ($request->ajax()) {
-            /*Log::info("AJAX request");*/
-
             return view('partials.articles_list', [
                 'articles' => $articles
             ]);
@@ -121,7 +100,6 @@ class UserFollowingController extends Controller
 
 
         if ($request->ajax()) {
-            /*Log::info("AJAX request");*/
             $articles = ArticlePage::all();
 
             return view('partials.articles_list', [
@@ -141,13 +119,6 @@ class UserFollowingController extends Controller
         $user = Auth::user();
         $targetUser = User::findorFail($request->user_id);
 
-        Log::info("TESTE");
-
-        /*Log::info('UserFollowingController@followUser', [
-            'user' => $user,
-            'request' => $request->input(),
-        ]);*/
-
         try {
             $this->authorize('followUser', $targetUser);
         }
@@ -155,8 +126,6 @@ class UserFollowingController extends Controller
             return redirect()->route('login')
                 ->withErrors('Unauthorized. You need to login to perform that action.');
         }
-
-        // Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
 
         $user->following()->attach($request->user_id);
 

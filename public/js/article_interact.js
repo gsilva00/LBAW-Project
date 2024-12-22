@@ -62,7 +62,7 @@ function handleFavourite(button, csrfToken) {
 // Update visuals of upvote and downvotes buttons and count
 function updateVoteUI(data) {
     if (data.message) {
-        alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+        alert(data.message);
     }
     else {
         document.querySelector('.article-votes p strong').textContent = (data.article.upvotes - data.article.downvotes).toString();

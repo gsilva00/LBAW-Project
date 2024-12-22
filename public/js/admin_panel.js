@@ -24,7 +24,7 @@ function createWithPagination(formId, listId, buttonId, successMsg, errorMsg) {
         const entity = button.getAttribute('data-entity');
         const isValid = validateForm(formData, entity);
         if (!isValid) {
-            alert('Invalid form data.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+            alert('Invalid form data.');
             return;
         }
 
@@ -43,7 +43,7 @@ function createWithPagination(formId, listId, buttonId, successMsg, errorMsg) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(successMsg); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    alert(successMsg);
                     form.reset(); // Clear the form fields
 
                     if (data.newHtml) {
@@ -119,7 +119,7 @@ function validateUserForm(formData) {
         return false;
     }
     if (!usernameRegex.test(username)) {
-        alert('Username should only contain letters, numbers, dashes, and underscores.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+        alert('Username should only contain letters, numbers, dashes, and underscores.');
         return false;
     }
 
@@ -127,7 +127,7 @@ function validateUserForm(formData) {
         alert('Display name must be between 3 and 20 characters.');
     }
     if (!displayNameRegex.test(displayName)) {
-        alert('Display Name should only contain letters, numbers, spaces, dashes, and underscores.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+        alert('Display Name should only contain letters, numbers, spaces, dashes, and underscores.');
         return false;
     }
 
@@ -255,10 +255,10 @@ function seeMoreEntities(listId, buttonId) {
                     }
                 }
                 else {
-                    console.error(`Error: No 'html' content returned for '${listId}'`); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    console.error(`Error: No 'html' content returned for '${listId}'`);
                 }
             })
-            .catch(error => console.error(`Error fetching more data for '${listId}':`, error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+            .catch(error => console.error(`Error fetching more data for '${listId}':`, error));
     });
 }
 
@@ -293,12 +293,12 @@ function toggleTrendingTag() {
                     button.textContent = data.is_trending ? 'Remove from Trending' : 'Add to Trending';
                     button.setAttribute('data-is-trending', data.is_trending);
 
-                    alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    alert(data.message);
                 } else {
-                    alert(data.message || 'Failed to toggle trending.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    alert(data.message || 'Failed to toggle trending.');
                 }
             })
-            .catch((error) => console.error('Error toggling trending status:', error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+            .catch((error) => console.error('Error toggling trending status:', error));
 
     });
 }
@@ -332,7 +332,7 @@ function handleProposal() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    alert(data.message);
                     form.closest('.notification-card').remove();
 
                     if (data.newHtml) {
@@ -344,10 +344,10 @@ function handleProposal() {
                     }
                 }
                 else {
-                    alert('Failed to process the proposal.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    alert('Failed to process the proposal.');
                 }
             })
-            .catch(error => console.error('Error processing proposal:', error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+            .catch(error => console.error('Error processing proposal:', error));
     });
 }
 

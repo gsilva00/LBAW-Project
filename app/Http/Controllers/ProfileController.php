@@ -34,11 +34,6 @@ class ProfileController extends Controller
         $ownedArticles = $user->ownedArticles()->get();
         $ownedArticles = ArticlePage::filterDeletedArticles($ownedArticles);
 
-        /*Log::info('ProfileController@show called', [
-            'user' => $user,
-            'ownedArticles' => $ownedArticles,
-        ]);*/
-
         return view('pages.profile', [
             'user' => $authUser,
             'profileUser' => $user,
@@ -108,19 +103,6 @@ class ProfileController extends Controller
                 ->withErrors(['cur_password' => 'Current password is incorrect'])->withInput();
         }
 
-        /*Log::info("Request: ", [
-            'username' => request('username'),
-            'email' => request('email'),
-            'display_name' => request('display_name'),
-            'description' => request('description'),
-            'new_password' => request('new_password'),
-            'profile_picture' => request('profile_picture'),
-            'upvote_notification' => request('upvote-notifications'),
-            'comment_notification' => request('comment-notifications'),
-            'tupvote_notification' => request('upvote-notifications') === 'on',
-            'tcomment_notification' => request('comment-notifications') === 'on'
-        ]);*/
-
         $user->username = request('username');
         $user->email = request('email');
         $user->display_name = request('display_name');
@@ -146,16 +128,6 @@ class ProfileController extends Controller
         }
 
         $user->save();
-
-        /*Log::info("User updated: ", [
-            'username' => $user->username,
-            'email' => $user->email,
-            'display_name' => $user->display_name,
-            'description' => $user->description,
-            'profile_picture' => $user->profile_picture,
-            'upvote_notification' => $user->upvote_notification,
-            'comment_notification' => $user->comment_notification,
-        ]);*/
 
         return redirect()->route('profile', ['username' => $user->username])
             ->withSuccess('Profile updated successfully!');
@@ -210,10 +182,6 @@ class ProfileController extends Controller
 
     public function appealUnbanSubmit(Request $request): JsonResponse
     {
-        Log::info("Request: ", [
-            'request' => $request->all(),
-        ]);
-
         $appeal = new AppealToUnban();
         $appeal->description = $request->input('appealReason');
         $appeal->user_id = Auth::id();

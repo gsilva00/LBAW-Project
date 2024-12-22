@@ -17,8 +17,6 @@ class SearchController extends Controller
 {
     public function show(Request $request): View
     {
-        // Log::info('Request', $request->input());
-
         if($request->input('search-select') === 'article'){
             $result = $this->searchArticle($request);
         }
