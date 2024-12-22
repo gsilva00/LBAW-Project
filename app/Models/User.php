@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -260,7 +260,7 @@ class User extends Authenticatable
         return $this->favouriteArticles()->where('article_id', $article->id)->exists();
     }
 
-    public function getFollowedTags()
+    public function getFollowedTags(): Collection
     {
         return $this->followedTags()->get();
     }
@@ -304,7 +304,7 @@ class User extends Authenticatable
     }
 
     //TRAN01
-    public function deleteUserTransaction($userId)
+    public function deleteUserTransaction($userId): void
     {
         DB::transaction(function () use ($userId) {
             DB::table('users')

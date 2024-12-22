@@ -68,7 +68,7 @@ class ProfileController extends Controller
         return view('pages.edit_profile', [
             'user' => $authUser,
             'profileUser' => $user,
-            'isOwner' => $user->username === $authUser->username,
+            'isOwner' => $user->id === $authUser->id,
         ]);
     }
 
@@ -166,10 +166,11 @@ class ProfileController extends Controller
         /** @var User $authUser */
         $authUser = Auth::user();
         $targetUser = User::findOrFail($targetUserId);
+        $isOwner = $authUser->id === $targetUser->id;
 
         $this->authorize('delete', $targetUser);
 
-        if ($targetUser->is_admin) {
+        if (!$isOwner && $targetUser->is_admin) {
             return response()->json([
                 'success' => false,
                 'message' => 'Cannot delete an admin account.'
@@ -180,14 +181,14 @@ class ProfileController extends Controller
             'cur_password_delete' => $authUser->is_admin ? 'nullable|string' : 'required|string',
         ]);
 
-        if (!$authUser->is_admin && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
+        if ($isOwner && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
             return redirect()->back()
                 ->withErrors('Current password is incorrect')->withInput();
         }
 
         $targetUser->deleteUserTransaction($targetUserId);
 
-        if ($authUser->id === $targetUser->id) {
+        if ($isOwner) {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();

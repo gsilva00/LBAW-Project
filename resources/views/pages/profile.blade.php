@@ -35,10 +35,10 @@
                             Report User
                     </button>
                 @endif
-                @if($isAdmin)
-                    <form action="{{ route('deleteProfile', ['id' => $user->id]) }}" method="POST" data-action="delete" style="display:inline;">
+                @if(!$isOwner && $isAdmin)
+                    <form action="{{ route('deleteProfile', ['id' => $profileUser->id]) }}" method="POST" data-action="delete" style="display:inline;">
                         @csrf
-                        <input type="hidden" name="user_id" value="{{ $user->id }}">
+                        <input type="hidden" name="user_id" value="{{ $profileUser->id }}">
                         <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
                     </form>
                 @endif
