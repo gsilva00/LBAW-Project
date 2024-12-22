@@ -174,11 +174,21 @@ paths:
       responses:
         '200':
           description: 'Ok. Show Recover Password UI'
+        '403':
+          description: 'You are already logged in and do not need to recover your password.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to home page.'
+                  value: '/homepage'
 
     post:
       operationId: R107
       summary: 'R107: Recover Password Action'
-      description: 'Processes the password recovery form submition. Access: GUE'
+      description: 'Processes the password recovery form submission. Access: GUE'
       tags:
         - 'M01: Authentication'
   
@@ -210,6 +220,16 @@ paths:
                 302Failure:
                   description: 'The email provided is not registered in our system or is unreachable! Please try again.'
                   value: '/password/recover'
+        '403':
+          description: 'You are already logged in and do not need to recover your password.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to home page.'
+                  value: '/homepage'
 
   /password/verification-code/check:
 
@@ -247,6 +267,16 @@ paths:
                 302Failure:
                   description: 'Fail. The provided verification code is incorrect. Redirect to recover password form'
                   value: '/password/recover'
+        '403':
+          description: 'You are already logged in and do not need to recover your password.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to home page.'
+                  value: '/homepage'
 
   /password/reset:
   
@@ -260,11 +290,21 @@ paths:
       responses:
         '200':
           description: 'Ok. Show Reset Password UI'
+        '403':
+          description: 'You are already logged in and do not need to recover your password.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to home page.'
+                  value: '/homepage'
 
     post:
       operationId: R110
       summary: 'R110: Reset Password Action'
-      description: 'Processes the password reset form submition. Access: GUE'
+      description: 'Processes the password reset form submission. Access: GUE'
       tags:
         - 'M01: Authentication'
   
@@ -300,6 +340,16 @@ paths:
                 302Failure:
                   description: 'Fail. The passwords do not match! Try again.'
                   value: '/password/reset'
+        '403':
+          description: 'You are already logged in and do not need to recover your password.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                403Success:
+                  description: 'Redirecting to home page.'
+                  value: '/homepage'
 
 ################################## Individual Profile ##################################
 
