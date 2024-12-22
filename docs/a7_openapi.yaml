@@ -510,6 +510,44 @@ paths:
         '403':
           description: 'You do not possess the credentials for this action.'
 
+  /profile/user/follow:
+    post:
+      operationId: R205
+      summary: 'R205: Follow User'
+      description: 'Follow a user action. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+            description: 'Success. User followed.'
+
+  /profile/user/unfollow:
+    post:
+      operationId: R206
+      summary: 'R206: Unfollow User'
+      description: 'Unfollow a user action. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+
+      responses:
+        '200':
+            description: 'Success. User unfollowed.'
+
 ######################################### News #########################################
 
   /homepage:
