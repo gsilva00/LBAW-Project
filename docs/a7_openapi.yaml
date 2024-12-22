@@ -896,6 +896,46 @@ paths:
         '200':
           description: 'Success. Display trending tags page.'
 
+  /tag/{name}/follow:
+    post:
+      operationId: R507
+      summary: 'R507: Follow Tag'
+      description: 'Follow a tag action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the tag'
+
+      responses:
+        '200':
+            description: 'Success. Tag followed.'
+
+  /tag/{name}/unfollow:
+    post:
+      operationId: R508
+      summary: 'R508: Unfollow Tag'
+      description: 'Unfollow a tag action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the tag'
+
+      responses:
+        '200':
+            description: 'Success. Tag unfollowed.'
+
 ####################################### Comments #######################################
 
 # not part of the vertical prototype
