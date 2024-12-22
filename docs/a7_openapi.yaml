@@ -527,7 +527,17 @@ paths:
 
       responses:
         '200':
-            description: 'Success. User followed.'
+          description: 'Success. User followed.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
 
   /profile/user/unfollow:
     post:
@@ -546,7 +556,17 @@ paths:
 
       responses:
         '200':
-            description: 'Success. User unfollowed.'
+          description: 'Success. User unfollowed.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
 
 ######################################### News #########################################
 
