@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Favourite Articles')
+
 @section('content')
 <div class="recent-news-wrapper">
     <h1 class="large-rectangle">Favourite Articles</h1>
@@ -8,7 +10,7 @@
             <p>You have no favourite articles yet.</p>
         </div>
     @else
-        <div class="articles-list">
+        <div class="recent-news-container">
             @foreach($favArticles as $article)
                 @include('partials.long_news_tile', [
                         'article' => $article,

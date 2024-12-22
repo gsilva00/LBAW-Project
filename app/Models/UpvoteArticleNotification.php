@@ -23,6 +23,11 @@ class UpvoteArticleNotification extends Model
         return $this->belongsTo(Notification::class, 'ntf_id');
     }
 
+    public function article(): BelongsTo
+    {
+        return $this->belongsTo(ArticlePage::class, 'article_id');
+    }
+
     // Querying
     // ...
 

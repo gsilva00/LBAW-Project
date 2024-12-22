@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppealToUnban;
 use App\Models\ArticlePage;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -41,7 +44,7 @@ class ProfileController extends Controller
             'profileUser' => $user,
             'isAdmin' => $authUser ? $authUser->is_admin : false,
             'isOwner' => $authUser && $user->username === $authUser->username,
-            'ownedArticles' => $ownedArticles,
+            'ownedArticles' => $ownedArticles
         ]);
     }
 
@@ -54,14 +57,18 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         $user = User::find($username);
 
-        if (Auth::guest() || $authUser->cant('update', $user)) {
-            return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
+        try {
+            $this->authorize('update', $user);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('Unauthorized. You do not possess the valid credentials to access that page.');
         }
 
         return view('pages.edit_profile', [
             'user' => $authUser,
             'profileUser' => $user,
-            'isOwner' => $user->username === $authUser->username,
+            'isOwner' => $user->id === $authUser->id,
         ]);
     }
 
@@ -74,8 +81,12 @@ class ProfileController extends Controller
         $authUser = Auth::user();
         $user = User::find($username);
 
-        if (Auth::guest() || $authUser->cant('update', $user)) {
-            return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to edit that profile.');
+        try {
+            $this->authorize('update', $user);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('Unauthorized. You do not possess the valid credentials to perform that action.');
         }
 
         $validator = Validator::make(request()->all(), [
@@ -87,16 +98,17 @@ class ProfileController extends Controller
             'new_password' => 'nullable|string|min:8|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()->back()
+                ->withErrors($validator)->withInput();
         }
 
         if (!$authUser->is_admin && !Hash::check(request('cur_password'), $user->password)) {
-            return redirect()->back()->withErrors(['cur_password' => 'Current password is incorrect'])->withInput();
+            return redirect()->back()
+                ->withErrors(['cur_password' => 'Current password is incorrect'])->withInput();
         }
 
-        Log::info("Request: ", [
+        /*Log::info("Request: ", [
             'username' => request('username'),
             'email' => request('email'),
             'display_name' => request('display_name'),
@@ -106,8 +118,8 @@ class ProfileController extends Controller
             'upvote_notification' => request('upvote-notifications'),
             'comment_notification' => request('comment-notifications'),
             'tupvote_notification' => request('upvote-notifications') === 'on',
-            'tcomment_notification' => request('comment-notifications') === 'on',
-        ]);
+            'tcomment_notification' => request('comment-notifications') === 'on'
+        ]);*/
 
         $user->username = request('username');
         $user->email = request('email');
@@ -135,7 +147,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        Log::info("User updated: ", [
+        /*Log::info("User updated: ", [
             'username' => $user->username,
             'email' => $user->email,
             'display_name' => $user->display_name,
@@ -143,51 +155,75 @@ class ProfileController extends Controller
             'profile_picture' => $user->profile_picture,
             'upvote_notification' => $user->upvote_notification,
             'comment_notification' => $user->comment_notification,
-        ]);
+        ]);*/
 
-        return redirect()->route('profile', ['username' => $user->username])->with('success', 'Profile updated successfully!');
+        return redirect()->route('profile', ['username' => $user->username])
+            ->withSuccess('Profile updated successfully!');
     }
 
-    public function delete(Request $request, $targetUserId): View|RedirectResponse
+    public function delete(Request $request, $targetUserId): View|RedirectResponse|JsonResponse
     {
         /** @var User $authUser */
         $authUser = Auth::user();
         $targetUser = User::findOrFail($targetUserId);
+        $isOwner = $authUser->id === $targetUser->id;
 
         $this->authorize('delete', $targetUser);
+
+        if (!$isOwner && $targetUser->is_admin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete an admin account.'
+            ], 403);
+        }
 
         $request->validate([
             'cur_password_delete' => $authUser->is_admin ? 'nullable|string' : 'required|string',
         ]);
 
-        // Check the password if the user is not an admin
-        if (!$authUser->is_admin && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
-            return redirect()->back()->withErrors(['cur_password_delete' => 'Current password is incorrect'])->withInput();
+        if ($isOwner && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
+            return redirect()->back()
+                ->withErrors('Current password is incorrect')->withInput();
         }
 
-        $targetUser->display_name = '[Deleted User]';
-        $targetUser->username = '[deleted_user_' . $targetUserId . ']';
-        $targetUser->email = '[deleted_user_' . $targetUserId . ']@example.com';
-        $targetUser->password = '<PASSWORD>';
-        $targetUser->profile_picture = 'images/profile/default.jpg';
-        $targetUser->description = 'This user account has been deleted.';
-        $targetUser->reputation = 0;
-        $targetUser->upvote_notification = false;
-        $targetUser->comment_notification = false;
-        $targetUser->is_banned = false;
-        $targetUser->is_admin = false;
-        $targetUser->is_fact_checker = false;
-        $targetUser->is_deleted = true;
-        $targetUser->save();
+        $targetUser->deleteUserTransaction($targetUserId);
 
-        if ($authUser->id === $targetUser->id) {
-            Auth::logout();  // Log out the user
+        if ($isOwner) {
+            Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect('/')->with('success', 'Your account has been deleted successfully.');
+            return redirect('homepage')
+                ->withSuccess('Your account has been deleted successfully.');
         }
 
-        return redirect()->route('adminPanel')->with('success', 'User account deleted successfully!');
+        return response()->json([
+            'success' => true,
+            'message' => 'User account deleted successfully.'
+        ]);
     }
+
+    public function appealUnbanShow(): View
+    {
+        return view('partials.appeal_unban');
+    }
+
+    public function appealUnbanSubmit(Request $request): JsonResponse
+    {
+        Log::info("Request: ", [
+            'request' => $request->all(),
+        ]);
+
+        $appeal = new AppealToUnban();
+        $appeal->description = $request->input('appealReason');
+        $appeal->user_id = Auth::id();
+
+        $appeal->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Appeal submitted successfully!'
+        ]);
+    }
+
 }

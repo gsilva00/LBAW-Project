@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $article->is_deleted ? '[Deleted]' : $article->title)
+@section('title', $article->is_deleted ? '[Deleted Article]' : $article->title)
 
 @section('content')
     <meta name="article-id" content="{{ $article->id }}">
@@ -29,13 +29,13 @@
                             Created at: {{ $article->create_date }}
                         @endif
                     </p>
-                    <button class="small-text small-rectangle" title="report article" id="report-article-button" data-article-id="{{ $article->id }}">
-                        <span>Report Article</span> <!-- Needs to be implemented -->
+                    <button class="small-text small-rectangle red-button" title="report article" id="report-article-button" data-article-id="{{ $article->id }}">
+                        <span>Report Article</span>
                     </button>
                 </div>
                 <p class="title">{{ $article->is_deleted ? '[Deleted]' : $article->subtitle }}</p>
                 <div>
-                    <img class="article-image" src="{{ $article->is_deleted ? asset('images/article/default.jpg') : asset('images/article/' . $article->article_image) }}" alt="News Image">
+                    <img class="article-image" src="{{ $article->is_deleted ? asset('images/article/default.jpg') : asset('images/article/' . $article->article_image) }}" alt="Article's main image">
                 </div>
                 @if($article->is_deleted)
                     <p class="thin">[Deleted]</p>
@@ -53,7 +53,7 @@
                     @endforeach
                 </div>
                 <div class="article-actions">
-                    <button class="small-rectangle fit-block favourite" title="Favourite Article" data-favourite-url="{{ route('favouriteArticle', ['id' => $article->id]) }}">
+                    <button class="small-rectangle fit-block favourite yellow-button" title="Favourite Article" data-favourite-url="{{ route('favouriteArticle', ['id' => $article->id]) }}">
                         @if(Auth::check() && $favourite)
                             <i class='bx bxs-star'></i>
                             <span>Favourited</span>
@@ -62,7 +62,7 @@
                             <span>Favourite Article</span>
                         @endif
                     </button>
-                    <div class="fit-block large-rectangle article-votes">
+                    <div class="fit-block large-rectangle ligth-green article-votes">
                         <button id="upvote-button" data-upvote-url="{{ route('upvoteArticle', ['id' => $article->id]) }}">
                             @if($voteArticle == 1)
                                 <i class='bx bxs-upvote'></i>
@@ -89,6 +89,9 @@
                     <div class="comments-list">
                         @include('partials.comments', ['comments' => $comments, 'user' => $user, 'article' => $article])
                     </div>
+                    <br>
+                    <br>
+                    <br>
                 </div>
             </div>
         </section>

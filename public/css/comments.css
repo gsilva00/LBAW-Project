@@ -3,7 +3,7 @@
     grid-template-areas: "image name-date"
                           "image comment-content"
                           "image comment-actions"
-                          "comment-form comment-form";
+                          "image comment-form";
     grid-template-columns: auto 1fr;
     column-gap: 1em;
     margin-top: 2em;

@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const tags = window.tags;
     const tagInput = document.getElementById('tag-create-article-input');
     const tagSuggestions = document.getElementById('tag-create-article-suggestions');
     const selectedTags = document.getElementById('selected-create-article-tags');
 
-    tagInput.addEventListener('input', function() {
+    tagInput.addEventListener('input', function () {
         const query = tagInput.value.toLowerCase();
         tagSuggestions.innerHTML = '';
 
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 tagSpan.innerText = tag.name;
                 suggestion.appendChild(tagSpan);
 
-                suggestion.addEventListener('click', function(event) {
+                suggestion.addEventListener('click', function (event) {
                     event.preventDefault();
                     event.stopPropagation();
                     addTag(tag);
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const tagBlock = document.createElement('div');
         tagBlock.classList.add('tag-block');
         tagBlock.classList.add('block');
-        tagBlock.classList.add('greyer');
+        tagBlock.classList.add('greener');
         const tagSpan = document.createElement('span');
         tagSpan.classList.add('small-text');
         tagSpan.innerText = tag.name;
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const removeButton = document.createElement('button');
         removeButton.classList.add('remove');
         removeButton.innerHTML = '&times;';
-        removeButton.addEventListener('click', function(event) {
+        removeButton.addEventListener('click', function (event) {
             event.stopPropagation();
             selectedTags.removeChild(tagBlock);
 

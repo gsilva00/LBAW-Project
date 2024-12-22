@@ -22,12 +22,13 @@
         <link href="{{ url('css/recent_news.css') }}" rel="stylesheet">
         <link href="{{ url('css/trending_tag.css') }}" rel="stylesheet">
         <link href="{{ url('css/article_page.css') }}" rel="stylesheet">
-        <link href="{{ url('css/contacts.css') }}" rel="stylesheet">
+        <link href="{{ url('css/footer_pages.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/filter.css') }}" rel="stylesheet">
         <link href="{{ url('css/popup.css') }}" rel="stylesheet">
         <link href="{{ url('css/app.css') }}" rel="stylesheet">
         <link href="{{ url('css/modal.css') }}" rel="stylesheet">
+        <link href="{{ url('css/user_search.css') }}" rel="stylesheet">
         <link href="{{ url('css/notification_card.css') }}" rel="stylesheet">
         <!-- Scripts -->
         <script src="{{ url('js/dropdown.js') }}" defer> </script>
@@ -36,22 +37,25 @@
         <script src="{{ url('js/admin_panel.js') }}" defer></script>
         <script src="{{ url('js/user_feed.js') }}" defer></script>
         <script src="{{ url('js/popup.js') }}" defer> </script>
-        <script src="{{ url('js/unfollow_tag.js') }}" defer> </script>
-        <script src="{{ url('js/unfollow_topic.js') }}" defer> </script>
+        <script src="{{ url('js/unfollow_profile_user.js') }}" defer> </script>
         <script src="{{ url('js/tag_create_article.js') }}" defer></script>
         <script src="{{ url('js/tag_edit_article.js') }}" defer></script>
         <script src="{{ url('js/article_interact.js') }}" defer> </script>
         <script src="{{ url('js/notifications_interect.js') }}" defer> </script>
         <script src="{{ url('js/comment_search_interact.js') }}" defer> </script>
         <script src="{{ url('js/follow_user.js') }}" defer> </script>
+        <script src="{{ url('js/porpose_tag.js') }}" defer> </script>
+        <script src="{{ url('js/appeal_unban.js') }}" defer> </script>
     </head>
     <body>
+        <a href="#main-content" class="skip-link">Skip to main content</a>
         <div class="wrapper">
             @include('layouts.header')
-            <main class="content">
+            <main id="main-content" class="content">
                 @yield('content')
             </main>
             @include('layouts.footer')
         </div>
+        @include('layouts.user_feedback')
     </body>
 </html>

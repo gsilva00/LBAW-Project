@@ -1,0 +1,53 @@
+#footer-page-header{
+    background-color: var(--yellow-muted);
+    padding-block: 6em;
+}
+
+#footer-page-header h1{
+    margin: 0;
+}
+
+#footer-page-header div{
+    width: 50%;
+   position: relative;
+   left: 10em;
+}
+
+#footer-page-content{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 3em;
+    column-gap: 3em;
+    margin-inline: 5em;
+    margin-bottom: 2em;
+}
+
+#footer-page-content > div{
+    display: grid;
+    align-content: space-between;
+    width: 30%;
+    padding-block: 2em;
+    border-color: var(--border-color);
+    border-radius: var(--radius-size);
+    border-width: 1px;
+    border-style: solid;
+    background-color: var(--light-white);
+    position: relative;
+    top: -3em;
+    text-align: center;
+    flex-grow: 1;
+}
+
+#footer-page-content div p, #footer-page-content div h2 {
+    padding-inline: 1em;
+}
+
+#footer-page-content div button{
+    justify-self: center;
+}
+
+#footer-page-content div .bx{
+    font-size: 3em;
+    color: var(--black);
+}

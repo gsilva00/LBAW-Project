@@ -21,8 +21,10 @@
   padding-bottom: 2em;
   padding-inline: 2em;
   margin-block: 2em;
-  background-color: var(--secondary-color);
+  background-color: var(--yellow-muted);
+  border-radius: var(--radius-size);
   justify-content: start;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-container-admin{
@@ -31,8 +33,10 @@
   column-gap: 2em;
   padding: 1em;
   margin-block: 1em;
-  background-color: var(--secondary-color);
+  background-color: var(--yellow-muted);
   justify-content: start;
+  border-radius: var(--radius-size);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-container-admin div{
@@ -45,6 +49,7 @@
   height: 5em;
   object-fit: cover;
   object-position: center;
+  border-radius: var(--radius-size);
 }
 
 .profile-container img{
@@ -53,14 +58,15 @@
   height: 10em;
   object-fit: cover;
   object-position: center;
-  padding-top: 2em ;
+  margin-top: 2em ;
+  border-radius: var(--radius-size);
 }
 
 #rest-profile-info{
   grid-area: rest_profile_info;
-  overflow-wrap: break-word; /* Break long words */
-  white-space: normal; /* Allow text to wrap */
-  max-width: 40em; /* Ensure the text does not overflow the container */
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 40em;
   text-overflow: ellipsis;
   display: block;
 }

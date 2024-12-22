@@ -67,4 +67,22 @@ class ProposeNewTagPolicy
         return Auth::check() && !$user->is_banned && $proposeNewTag->user()->is($user);
     }
 
+
+    /**
+     * Determine whether the user can accept the model.
+     */
+    public function accept(User $user, ProposeNewTag $proposeNewTag): bool
+    {
+        // Only admins can accept tag proposals
+        return false;
+    }
+
+    /**
+     * Determine whether the user can reject the model.
+     */
+    public function reject(User $user, ProposeNewTag $proposeNewTag): bool
+    {
+        // Only admins can reject tag proposals
+        return false;
+    }
 }

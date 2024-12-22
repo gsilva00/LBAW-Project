@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 class Reply extends Model
 {
@@ -116,5 +117,67 @@ class Reply extends Model
         }
     }
 
+    //TRAN04
+    public function voteReplyTransaction($userId, $replyId, $voteType, $userTo, $userFrom, $ntfDate)
+    {
+        DB::transaction(function () use ($userId, $replyId, $voteType, $userTo, $userFrom, $ntfDate) {
+            $existingVote = DB::table('vote_reply')
+                ->where('user_id', $userId)
+                ->where('reply_id', $replyId)
+                ->first();
+
+            if ($existingVote) {
+                DB::table('vote_reply')
+                    ->where('user_id', $userId)
+                    ->where('reply_id', $replyId)
+                    ->delete();
+
+                if ($existingVote->type === 'Upvote') {
+                    $this->where('id', $replyId)->decrement('upvotes');
+                } else {
+                    $this->where('id', $replyId)->decrement('downvotes');
+                }
+            }
+
+            DB::table('vote_reply')->insert([
+                'user_id' => $userId,
+                'reply_id' => $replyId,
+                'type' => $voteType
+            ]);
+
+            if ($voteType === 'Upvote') {
+                $this->where('id', $replyId)->increment('upvotes');
+            } else {
+                $this->where('id', $replyId)->increment('downvotes');
+            }
+
+            $isNtfy = DB::table('users')->where('id', $userTo)->value('upvote_notification');
+
+            if ($isNtfy) {
+                $ntfId = DB::table('notifications')->insertGetId([
+                    'ntf_date' => $ntfDate,
+                    'user_to' => $userTo,
+                    'user_from' => $userFrom
+                ]);
+
+                DB::table('upvote_reply_notification')->insert([
+                    'ntf_id' => $ntfId,
+                    'reply_id' => $replyId
+                ]);
+            }
+        }, 5);
+    }
+
+    public static function checkIsBanned($reply)
+    {
+        return $reply->author->is_banned;
+    }
+
+    public static function removeBannedAndDeletedReplies($replies)
+    {
+        return $replies->filter(function ($reply) {
+            return !$reply->author->is_banned && !$reply->is_deleted;
+        });
+    }
 
 }

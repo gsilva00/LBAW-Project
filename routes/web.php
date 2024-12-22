@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ContactsController;
+use App\Http\Controllers\FeaturesController;
 use App\Http\Controllers\CreateArticleController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\NotificationsController;
@@ -85,6 +86,9 @@ Route::prefix('profile')->controller
     Route::get('/edit/{username}', 'showEdit')->name('editProfile');
     Route::post('/edit/{username}', 'update')->name('updateProfile');
     Route::post('/delete/{id}', 'delete')->name('deleteProfile');
+
+    Route::post('/appeal-unban/show', 'appealUnbanShow')->name('appealUnbanShow');
+    Route::post('/appeal-unban/submit', 'appealUnbanSubmit')->name('appealUnbanSubmit');
 });
 
 Route::get('/notifications', [NotificationsController::class, 'showNotificationsPage'])->name('notifications.show.page');
@@ -106,6 +110,8 @@ Route::prefix('admin-panel')->controller
     // User management
     Route::get('/more-users', 'moreUsers')->name('moreUsers');
     Route::post('/create-user', 'createFullUser')->name('adminCreateUser');
+    Route::post('/ban-user/{id}', 'banUser')->name('adminBanUser');
+    Route::post('/unban-user/{id}', 'unbanUser')->name('adminUnbanUser');
     // Topic management
     Route::get('/more-topics', 'moreTopics')->name('moreTopics');
     Route::post('/create-topic', 'createTopic')->name('adminCreateTopic');
@@ -113,6 +119,14 @@ Route::prefix('admin-panel')->controller
     Route::get('/more-tags', 'moreTags')->name('moreTags');
     Route::post('/create-tag', 'createTag')->name('createTag');
     Route::post('/toggle-trending-tag/{id}', 'toggleTrending')->name('toggleTrendingTag');
+    // Tag proposal management
+    Route::get('/more-tag-proposals', 'moreTagProposals')->name('moreTagProposals');
+    Route::post('/accept-tag-proposal/{id}', 'acceptTagProposal')->name('acceptTagProposal');
+    Route::post('/reject-tag-proposal/{id}', 'rejectTagProposal')->name('rejectTagProposal');
+    // Unban appeal management
+    Route::get('/more-unban-appeals', 'moreUnbanAppeals')->name('moreUnbanAppeals');
+    Route::post('/accept-unban-appeal/{id}', 'acceptUnbanAppeal')->name('acceptUnbanAppeal');
+    Route::post('/reject-unban-appeal/{id}', 'rejectUnbanAppeal')->name('rejectUnbanAppeal');
 });
 
 // Article
@@ -131,6 +145,9 @@ Route::controller(CreateArticleController::class)->group(function () {
     Route::get('/edit-article/{id}', 'edit')->name('editArticle');
     Route::post('/edit-article/{id}', 'update')->name('updateArticle');
     Route::post('/delete-article/{id}', 'delete')->name('deleteArticle');
+
+    Route::post('porpose-tag/show', 'porposeNewTagShow')->name('showProposeTag');
+    Route::post('/propose-tag/submit', 'porposeNewTag')->name('proposeTagSubmit');
 });
 
 Route::post('/comment/{id}/upvote-comment', [ArticlePageController::class, 'upvoteComment'])->name('upvoteComment');
@@ -164,6 +181,7 @@ Route::post('/topic/{topic}/follow', [TopicController::class, 'followTopic'])->n
 Route::post('/topic/{topic}/unfollow', [TopicController::class, 'unfollowTopic'])->name('unfollowTopic');
 
 // Static Pages
+Route::get('/features', [FeaturesController::class, 'show'])->name('features');
 Route::get('/contacts', [ContactsController::class, 'show'])->name('contacts');
 Route::get('/about-us', [AboutUsController::class, 'show'])->name('aboutUs');
 

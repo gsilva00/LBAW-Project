@@ -1,10 +1,8 @@
-<div class="pop-up">
+<div class="error-pop-up">
     <i class='bx bx-error-circle'></i>
     <span class="error">
-        @if(isset($field) && $errors->has($field))
-            {{ $errors->first($field) }}
-        @elseif(session('error'))
-            {{ session('error') }}
+        @if($errors->any())
+            {{ $errors->first() }}
         @endif
     </span>
     <button type="button" id="close-message-button" onclick="closeMessage()">

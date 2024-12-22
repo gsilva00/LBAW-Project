@@ -16,6 +16,8 @@ class AboutUsController extends Controller
          */
         $user = Auth::user();
 
-        return view('pages.about_us', ['user' => $user]);
+        return view('pages.about_us', [
+            'user' => $user
+        ]);
     }
 }

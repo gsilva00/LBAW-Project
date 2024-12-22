@@ -1,10 +1,18 @@
-function createWithPagination(formId, listId, buttonId, successMessage, errorMessage) {
+function notAvailableContainer(message) {
+    const container = document.createElement('div');
+    container.className = 'not-available-container';
+    container.innerHTML = `<p>${message}</p>`;
+    return container;
+}
+
+function createWithPagination(formId, listId, buttonId, successMsg, errorMsg) {
     const form = document.getElementById(formId);
     const list = document.getElementById(listId);
     const button = document.getElementById(buttonId);
 
     // If any of the required elements are missing, return early
     if (!form || !list || !button) {
+        console.warn('Missing elements for \'createWithPagination\'');
         return;
     }
 
@@ -37,7 +45,7 @@ function createWithPagination(formId, listId, buttonId, successMessage, errorMes
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(successMessage); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    alert(successMsg); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
                     form.reset(); // Clear the form fields
 
                     if (data.newHtml) {
@@ -60,7 +68,7 @@ function createWithPagination(formId, listId, buttonId, successMessage, errorMes
                         displayErrors(data.errors);
                     }
                     else {
-                        alert(data.message || errorMessage);
+                        alert(data.message || errorMsg);
                     }
                 }
             })
@@ -168,13 +176,62 @@ function validateTagForm(formData) {
     return true;
 }
 
+// For AJAX delete and ban actions
+function userAction() {
+    const userList = document.getElementById('user-list');
 
-function seeMoreEntities(buttonId, listId) {
-    const button = document.getElementById(buttonId);
+    if (!userList) {
+        console.warn('User list element not found.');
+        return;
+    }
+
+    userList.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const action = form.getAttribute('data-action');
+
+        if (action === 'delete') {
+            if (!confirm('Are you sure you want to delete this account?')) {
+                return;
+            }
+        }
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    if (action === 'delete') {
+                        form.closest('.profile-container-admin').remove();
+                    }
+                    else if (action === 'ban') {
+                        const button = form.querySelector('button');
+                        button.textContent = data.is_banned ? 'Unban User' : 'Ban User';
+                        form.setAttribute('data-action', data.is_banned ? 'unban' : 'ban');
+                    }
+                }
+                else {
+                    alert(data.message || 'Action failed.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+}
+
+function seeMoreEntities(listId, buttonId) {
     const list = document.getElementById(listId);
+    const button = document.getElementById(buttonId);
 
-    if (!button || !list) {
-        console.error(`Missing elements for '${listId}'`);
+    if (!list || !button) {
+        console.warn('Missing elements for \'seeMoreEntities\'');
         return;
     }
 
@@ -206,73 +263,181 @@ function seeMoreEntities(buttonId, listId) {
     });
 }
 
+// Setup toggle trending tag for the whole list
 function toggleTrendingTag() {
     const tagList = document.getElementById('tag-list');
 
     if (!tagList) {
-        console.error('Missing element: #tag-list');
+        console.warn('Missing element for \'toggleTrendingTag\'');
         return;
     }
 
     // Handle click events for toggling trending status
-    tagList.addEventListener('click', function (event) {
-        const button = event.target;
+    tagList.addEventListener('submit', function (event) {
+        event.preventDefault()
 
-        if (button.matches('.trending-tag-action')) {
-            const form = button.closest('form');
-            const url = form.action;
-            const formData = new FormData(form);
+        const form = event.target;
+        const button = form.querySelector('.trending-tag-action');
+        const formData = new FormData(form);
 
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': formData.get('_token'),
-                    'Accept': 'application/json',
-                },
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'Accept': 'application/json',
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    // Update button text and attribute based on the new trending status
+                    button.textContent = data.is_trending ? 'Remove from Trending' : 'Add to Trending';
+                    button.setAttribute('data-is-trending', data.is_trending);
+
+                    alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                } else {
+                    alert(data.message || 'Failed to toggle trending.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                }
             })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        // Update button text and attribute based on the new trending status
-                        button.textContent = data.is_trending ? 'Remove from Trending' : 'Add to Trending';
-                        button.setAttribute('data-is-trending', data.is_trending);
+            .catch((error) => console.error('Error toggling trending status:', error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
 
-                        alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-                    } else {
-                        alert(data.message || 'Failed to toggle trending.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-                    }
-                })
-                .catch((error) => console.error('Error toggling trending status:', error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-        }
     });
 }
 
 
-seeMoreEntities('load-more-users', 'user-list');
-seeMoreEntities('load-more-topics', 'topic-list');
-seeMoreEntities('load-more-tags', 'tag-list');
+// Handle tag proposal actions (accept/reject) for
+function handleProposal() {
+    const proposalList = document.getElementById('tag-proposal-list');
+    const tagList = document.getElementById('tag-list');
+
+    if (!proposalList || !tagList) {
+        console.warn('Missing elements for \'handleProposal\'');
+        return;
+    }
+
+
+    proposalList.addEventListener('submit', function (event) {
+        event.preventDefault()
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'Accept': 'application/json',
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                    form.closest('.propose-tag-tile').remove();
+
+                    if (data.newHtml) {
+                        tagList.insertAdjacentHTML('beforeend', data.newHtml);
+                    }
+
+                    if (proposalList.children.length === 0) {
+                        proposalList.insertAdjacentElement('afterend', notAvailableContainer('No pending tag proposals to list.'));
+                    }
+                }
+                else {
+                    alert('Failed to process the proposal.'); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+                }
+            })
+            .catch(error => console.error('Error processing proposal:', error)); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
+    });
+}
+
+
+function handleUnbanAppeal() {
+    const appealList = document.getElementById('unban-appeal-list');
+
+    if (!appealList) {
+        console.warn('Missing elements for \'handleUnbanAppeal\'');
+        return;
+    }
+
+    appealList.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': formData.get('_token'),
+                'Accept': 'application/json',
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    form.closest('.unban-appeal-tile').remove();
+
+                    if (appealList.children.length === 0) {
+                        appealList.insertAdjacentElement('afterend', notAvailableContainer('No pending unban appeals to list.'));
+                    }
+                }
+                else {
+                    alert('Failed to process the appeal.');
+                }
+            })
+            .catch(error => console.error('Error processing appeal:', error));
+    });
+}
+
+
+seeMoreEntities(
+    'user-list',
+    'load-more-users'
+);
+seeMoreEntities(
+    'topic-list',
+    'load-more-topics'
+);
+seeMoreEntities(
+    'tag-list',
+    'load-more-tags'
+);
+seeMoreEntities(
+    'tag-proposal-list',
+    'load-more-tag-proposals'
+);
+seeMoreEntities(
+    'unban-appeal-list',
+    'load-more-unban-appeals'
+);
 
 createWithPagination(
     'createFullUserForm',
     'user-list',
     'load-more-users',
     'User created successfully!',
-    'Error creating user.'
+    'Error creating user.',
 );
 createWithPagination(
     'createTopicForm',
     'topic-list',
     'load-more-topics',
     'Topic created successfully!',
-    'Error creating topic.'
+    'Error creating topic.',
 );
 createWithPagination(
     'createTagForm',
     'tag-list',
     'load-more-tags',
     'Tag created successfully!',
-    'Error creating tag.'
+    'Error creating tag.',
 );
 
+userAction();
 toggleTrendingTag();
-
+handleProposal();
+handleUnbanAppeal();

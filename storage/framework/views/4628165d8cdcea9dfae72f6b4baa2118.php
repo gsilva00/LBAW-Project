@@ -12,7 +12,7 @@
         <?php if(Auth::check()): ?>
         <form method="POST" action="<?php echo e(Auth::user()->hasFollowedTag($tag) ? route('unfollowTag', $tag->name) : route('followTag', $tag->name)); ?>">
             <?php echo csrf_field(); ?>
-            <button type="submit" class="large-rectangle small-text greyer">
+            <button type="submit" class="large-rectangle small-text greener">
                 <?php echo e(Auth::user()->hasFollowedTag($tag) ? 'Unfollow Tag' : 'Follow Tag'); ?>
 
             </button>

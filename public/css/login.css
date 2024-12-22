@@ -3,8 +3,14 @@
     justify-content: center;
     margin-inline: auto;
     margin-block: 4em;
-    padding-top: 2em;
-    padding-bottom: 4em;
+    padding-top: 1em;
+    padding-bottom: 1em;
     width: 30em;
     border: 1px solid var(--secondary-color);
+    background-color: var(--light-white);
+    border-radius: var(--radius-size);
+}
+
+.login-register-container button{
+    margin: auto;
 }

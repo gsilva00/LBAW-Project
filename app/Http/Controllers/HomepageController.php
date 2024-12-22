@@ -16,23 +16,11 @@ class HomepageController extends Controller
      */
     public function show(): View
     {
-        // Log::info('HomepageController show function called');
-
-        /**
-         * @var User $user
-         * Return type of Auth::user() guaranteed on config/auth.php's User Providers
-         */
-        $user = Auth::user();
-
-        $articleItems = ArticlePage::getAllArticlesNonDeleted();
-        $trendingTags = Tag::trending()->take(5)->get();
-        $recentNews = ArticlePage::getMostRecentNews(2);
-
         return view('pages.homepage', [
-            'user' => $user,
-            'articleItems' => $articleItems,
-            'trendingTags' => $trendingTags,
-            'recentNews' => $recentNews,
+            'user' => Auth::user(),
+            'articleItems' => ArticlePage::getAllArticlesNonDeleted(),
+            'trendingTags' => Tag::trending()->take(5)->get(),
+            'recentNews' => ArticlePage::getMostRecentNews(2),
             'isHomepage' => true
         ]);
     }

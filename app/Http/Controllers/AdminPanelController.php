@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppealToUnban;
+use App\Models\ProposeNewTag;
 use App\Models\Tag;
 use App\Models\Topic;
 use App\Models\User;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -28,8 +31,11 @@ class AdminPanelController extends Controller
          */
         $user = Auth::user();
 
-        if (Auth::guest() || $user->cant('viewAdminPanel', User::class)) {
-            return redirect()->route('homepage')->with('error', 'Unauthorized. You do not possess the valid credentials to access that page.');
+        try {
+            $this->authorize('viewAdminPanel', User::class);
+        } catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('Unauthorized. You do not possess the valid credentials to access that page.');
         }
 
         $users = User::where([
@@ -41,7 +47,9 @@ class AdminPanelController extends Controller
 
         $tags = Tag::paginate(config('pagination.tags_per_page'));
 
-        // TODO expand for more administrator features
+        $tag_proposals = ProposeNewTag::paginate(config('pagination.tag_proposals_per_page'));
+
+        $unban_appeals = AppealToUnban::paginate(config('pagination.unban_appeals_per_page'));
 
         return view('pages.admin_panel', [
             'user' => $user,
@@ -54,6 +62,12 @@ class AdminPanelController extends Controller
             'tagCurrPageNum' => 1, // Tag pagination
             'tagHasMorePages' => $tags->hasMorePages(),
             'tagsPaginated' => $tags,
+            'tagProposalCurrPageNum' => 1, // Tag proposal pagination
+            'tagProposalHasMorePages' => $tag_proposals->hasMorePages(),
+            'tagProposalsPaginated' => $tag_proposals,
+            'unbanAppealCurrPageNum' => 1, // Unban appeal pagination
+            'unbanAppealHasMorePages' => $unban_appeals->hasMorePages(),
+            'unbanAppealsPaginated' => $unban_appeals,
         ]);
     }
 
@@ -99,12 +113,13 @@ class AdminPanelController extends Controller
         );
 
         $view = view('partials.user_tile_list', [
-            'usersPaginated' => $users
+            'usersPaginated' => $users,
+            'isAdminPanel' => true,
         ])->render();
 
         return response()->json([
             'newHtml' => $view,
-            'hasMoreUserPages' => $users->hasMorePages(),
+            'userHasMorePages' => $users->hasMorePages(),
         ]);
     }
 
@@ -113,7 +128,7 @@ class AdminPanelController extends Controller
         $this->authorize('create', User::class);
 
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:20|unique:users',
+            'username' => 'required|string|regex:/^[a-zA-Z0-9._-]+$/|max:20|unique:users',
             'email' => 'required|string|email|max:256|unique:users',
             'display_name' => 'nullable|string|max:20',
             'description' => 'nullable|string|max:300',
@@ -175,6 +190,36 @@ class AdminPanelController extends Controller
         ]);
     }
 
+    public function banUser(int $id): JsonResponse
+    {
+        $this->authorize('ban', User::class);
+
+        $user = User::findOrFail($id);
+        $user->is_banned = true;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'is_banned' => true,
+            'message' => 'User banned successfully.'
+        ]);
+    }
+
+    public function unbanUser(int $id): JsonResponse
+    {
+        $this->authorize('unban', User::class);
+
+        $user = User::findOrFail($id);
+        $user->is_banned = false;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'is_banned' => false,
+            'message' => 'User unbanned successfully.'
+        ]);
+    }
+
 
     public function moreTopics(Request $request): JsonResponse
     {
@@ -195,7 +240,7 @@ class AdminPanelController extends Controller
 
         return response()->json([
             'newHtml' => $view,
-            'hasMoreTopicPages' => $topics->hasMorePages(),
+            'topicHasMorePages' => $topics->hasMorePages(),
         ]);
     }
 
@@ -206,7 +251,6 @@ class AdminPanelController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:30|unique:topic',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -256,7 +300,7 @@ class AdminPanelController extends Controller
 
         return response()->json([
             'newHtml' => $view,
-            'hasMoreTagPages' => $tags->hasMorePages(),
+            'tagHasMorePages' => $tags->hasMorePages(),
         ]);
     }
 
@@ -268,7 +312,6 @@ class AdminPanelController extends Controller
             'name' => 'required|string|max:30|unique:tag',
             'is_trending' => 'nullable|boolean',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -300,7 +343,7 @@ class AdminPanelController extends Controller
         ]);
     }
 
-    public function toggleTrending($id): JsonResponse
+    public function toggleTrending(int $id): JsonResponse
     {
         $tag = Tag::findOrFail($id);
 
@@ -313,6 +356,115 @@ class AdminPanelController extends Controller
             'success' => true,
             'is_trending' => $tag->is_trending,
             'message' => $tag->is_trending ? 'Tag added to trending.' : 'Tag removed from trending.',
+        ]);
+    }
+
+
+    public function moreTagProposals(Request $request): JsonResponse
+    {
+        $this->authorize('viewAdminPanel', User::class);
+
+        $page = $request->get('page', 1);
+        $proposals = ProposeNewTag::paginate(
+            config('pagination.tag_proposals_per_page'),
+            ['*'],
+            'page',
+            $page
+        );
+
+        $view = view('partials.propose_tag_tile_list', [
+            'tagProposalsPaginated' => $proposals
+        ])->render();
+
+        return response()->json([
+            'newHtml' => $view,
+            'tagProposalHasMorePages' => $proposals->hasMorePages(),
+        ]);
+    }
+
+    public function acceptTagProposal(int $id): JsonResponse
+    {
+        $this->authorize('accept', ProposeNewTag::class);
+
+        $proposal = ProposeNewTag::findOrFail($id);
+        $proposal->delete();
+
+        $tag = Tag::create([
+            'name' => $proposal->name
+        ]);
+
+        $tagHtml = view('partials.tag_tile', ['tag' => $tag])->render();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tag proposal accepted and added to tags.',
+            'newHtml' => $tagHtml,
+        ]);
+    }
+
+    public function rejectTagProposal(int $id): JsonResponse
+    {
+        $this->authorize('reject', ProposeNewTag::class);
+
+        $proposal = ProposeNewTag::findOrFail($id);
+        $proposal->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tag proposal rejected.',
+        ]);
+    }
+
+
+    public function moreUnbanAppeals(Request $request): JsonResponse
+    {
+        $this->authorize('viewAdminPanel', User::class);
+
+        $page = $request->get('page', 1);
+        $appeals = AppealToUnban::paginate(
+            config('pagination.unban_appeals_per_page'),
+            ['*'],
+            'page',
+            $page
+        );
+
+        $view = view('partials.unban_appeal_tile_list', [
+            'unbanAppealsPaginated' => $appeals
+        ])->render();
+
+        return response()->json([
+            'newHtml' => $view,
+            'unbanAppealHasMorePages' => $appeals->hasMorePages(),
+        ]);
+    }
+
+    public function acceptUnbanAppeal(int $id): JsonResponse
+    {
+        $this->authorize('accept', AppealToUnban::class);
+
+        $appeal = AppealToUnban::findOrFail($id);
+        $appeal->delete();
+
+        $user = $appeal->user;
+        $user->is_banned = false;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Unban appeal accepted and user unbanned.',
+        ]);
+    }
+
+    public function rejectUnbanAppeal(int $id): JsonResponse
+    {
+        $this->authorize('reject', AppealToUnban::class);
+
+        $appeal = AppealToUnban::findOrFail($id);
+        $appeal->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Unban appeal rejected.',
         ]);
     }
 }

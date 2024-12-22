@@ -1,29 +1,31 @@
 <?php
- 
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
-
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\View\View;
 
 class LoginController extends Controller
 {
-
     /**
      * Display a login form.
      */
     public function showLoginForm(): View|RedirectResponse
     {
-        if (Auth::check()) {
-            return redirect()->route('homepage');
+        try {
+            $this->authorize('login', User::class);
         }
-        else {
-            return view('auth.login');
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('You are already logged in.');
         }
+
+        return view('auth.login');
     }
 
     /**
@@ -31,6 +33,14 @@ class LoginController extends Controller
      */
     public function authenticate(Request $request): RedirectResponse
     {
+        try {
+            $this->authorize('login', User::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('You are already logged in.');
+        }
+
         $credentials = $request->validate([
             'login' => ['required'],
             'password' => ['required'],
@@ -45,12 +55,12 @@ class LoginController extends Controller
         if (Auth::attempt([$fieldType => $login, 'password' => $password], $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('homepage'));
+            return redirect()->intended(route('homepage'))
+                ->withSuccess('You have logged in successfully!');
         }
 
-        return back()->withErrors([
-            'login' => 'The provided credentials do not match our records.',
-        ])->onlyInput('login');
+        return redirect()->back()
+            ->withErrors('The provided credentials do not match our records.');
     }
 
     /**
@@ -58,17 +68,17 @@ class LoginController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
-        if (!Auth::check()) {
+        try {
+            $this->authorize('logout', User::class);
+        }
+        catch (AuthorizationException $e) {
             return redirect()->route('login');
         }
-        else {
 
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect()->route('login')
-                ->withSuccess('You have logged out successfully!');
-        }
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('homepage')
+            ->withSuccess('You have logged out successfully!');
     }
-
 }

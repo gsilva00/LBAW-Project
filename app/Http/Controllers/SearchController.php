@@ -17,7 +17,7 @@ class SearchController extends Controller
 {
     public function show(Request $request): View
     {
-        Log::info('Request', $request->input());
+        // Log::info('Request', $request->input());
 
         if($request->input('search-select') === 'article'){
             $result = $this->searchArticle($request);
@@ -32,7 +32,7 @@ class SearchController extends Controller
         return $result;
     }
 
-    private function searchArticle(Request $request):view
+    private function searchArticle(Request $request): View
     {
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
@@ -62,13 +62,16 @@ class SearchController extends Controller
         ]);
     }
 
-    private function searchCommentsPrivate(Request $request):view
+    private function searchCommentsPrivate(Request $request): View
     {
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
 
         $comments = Comment::filterBySearchQuery($searchQuery);
         $replies = Reply::filterBySearchQuery($searchQuery);
+
+        $comments = Comment::removeBannedAndDeletedComments($comments);
+        $replies = Reply::removeBannedAndDeletedReplies($replies);
 
         return view('pages.search_comments', [
             'user' => $authUser,
@@ -78,12 +81,13 @@ class SearchController extends Controller
         ]);
     }
 
-    private function searchUsers(Request $request):view
+    private function searchUsers(Request $request): View
     {
         $authUser = Auth::user();
         $searchQuery = $this->sanitizeSearchQuery(trim($request->input('search')));
 
         $users = User::filterBySearchQuery($searchQuery);
+        $users = User::removeBannedAndDeletedUsers($users);
 
         return view('pages.search_users', [
             'user' => $authUser,

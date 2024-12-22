@@ -37,7 +37,7 @@ class UserPolicy
      */
     public function view(?User $authUser, User $targetUser): bool
     {
-        // Any user can view profiles
+        // Any user can view profiles of non-deleted users
         return !$targetUser->is_deleted;
     }
 
@@ -66,6 +66,29 @@ class UserPolicy
     {
         // Users can delete their own profile
         return Auth::check() && $authUser->is($targetUser);
+    }
+
+
+
+    public function login(?User $authUser): bool
+    {
+        // Only unauthenticated users can log in
+        return !Auth::check();
+    }
+    public function logout(User $authUser): bool
+    {
+        // Only authenticated users can log out
+        return Auth::check();
+    }
+    public function register(?User $authUser): bool
+    {
+        // Only unauthenticated users can register
+        return !Auth::check();
+    }
+    public function recoverPassword(?User $authUser): bool
+    {
+        // Only unauthenticated users can recover their password
+        return !Auth::check();
     }
 
 
@@ -98,9 +121,29 @@ class UserPolicy
         return false;
     }
 
+    public function followUser(User $authUser, User $targetUser): bool
+    {
+        return Auth::check() && !$authUser->is_banned && !$targetUser->is_banned;
+    }
+    public function unfollowUser(User $authUser, User $targetUser): bool
+    {
+        return Auth::check() && !$authUser->is_banned && !$targetUser->is_banned;
+    }
+
     public function report(User $authUser, User $targetUser): bool
     {
         return Auth::check() && !$authUser->is_banned && !$targetUser->is_banned;
     }
 
+    public function ban(User $authUser, User $targetUser): bool
+    {
+        // Only admins can ban users
+        return false;
+    }
+
+    public function unban(User $authUser, User $targetUser): bool
+    {
+        // Only admins can unban users
+        return false;
+    }
 }

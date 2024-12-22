@@ -1,5 +1,5 @@
 <div class="comment" data-is-reply="<?php echo e($isReply ? 'true' : 'false'); ?>" id="<?php echo e($isReply ? 'reply-' . $comment->id : 'comment-' . $comment->id); ?>">
-    <img src="<?php echo e($comment->is_deleted ? asset('images/profile/default.jpg') : asset('images/profile/' . $comment->author->profile_picture)); ?>" alt="profile_picture">
+    <img src="<?php echo e($comment->is_deleted ? asset('images/profile/default.jpg') : asset('images/profile/' . $comment->author->profile_picture)); ?>" alt="<?php echo e($comment->author->display_name); ?>'s profile picture">
     <div class="profile-info name-date">
         <p><strong>
                 <?php if($comment->is_deleted || $comment->author->is_deleted): ?>
@@ -34,7 +34,7 @@
                 $isUpvoted = $user ? $comment->isUpvotedBy($user) : false;
                 $isDownvoted = $user ? $comment->isDownvotedBy($user) : false;
             ?>
-            <?php if(!$comment->is_deleted): ?>
+            <?php if(!$comment->is_deleted && !$user->is_banned): ?>
                 <button class="upvote-comment-button" data-comment-id="<?php echo e($comment->id); ?>">
                     <i class='bx <?php echo e($isUpvoted ? "bxs-upvote" : "bx-upvote"); ?>' title="upvote comment"></i>
                 </button>
@@ -44,14 +44,14 @@
                 </button>
             <?php endif; ?>
         </div>
-        <?php if(!$comment->is_deleted): ?>
+        <?php if(!$comment->is_deleted && Auth::check()): ?>
             <?php if(!$isReply): ?>
-                <button class="small-rectangle" title="reply comment">
+                <button class="small-rectangle yellow-button" title="reply comment">
                     <i class='bx bx-message remove-position'></i>
                     <span>Reply</span>
                 </button>
             <?php endif; ?>
-            <button class="small-rectangle" title="report comment">
+            <button class="small-rectangle red-button" title="report comment">
                 <i class='bx bx-flag remove-position' ></i>
                 <span>Report</span>
             </button>

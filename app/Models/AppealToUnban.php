@@ -12,6 +12,8 @@ class AppealToUnban extends Model
 
     protected $table = 'appeal_to_unban';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'description',
         'user_id',

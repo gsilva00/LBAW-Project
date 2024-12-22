@@ -148,7 +148,7 @@
 .float-container{
     position: relative;
     justify-content: space-between;
-    top: -14.2em;
+    top: -15.0em;
 }
 
 .news-tile .float-container{
@@ -169,7 +169,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     column-gap: 1em;
-    align-items: end;
+    align-items: center;
 }
 
 .comment-input{

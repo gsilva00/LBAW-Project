@@ -1,25 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('new-tab').addEventListener('click', function() {
-        if (!this.classList.contains('active')) {
+    const newTab = document.getElementById('new-tab');
+
+    if (newTab) {
+
+    newTab.addEventListener('click', function() {
+        if (!this.parentElement.classList.contains('active')) {
             fetch('/notifications/new/all')
                 .then(response => response.text())
                 .then(data => {
                     const contentDiv = document.getElementById('notificationTabsContent');
                     if (contentDiv) {
                         contentDiv.innerHTML = data;
-                        this.classList.add('active');
+                        this.parentElement.classList.add('active');
                         this.setAttribute('aria-selected', 'true');
-                        document.getElementById('archived-tab').classList.remove('active');
+                        document.getElementById('archived-tab').parentElement.classList.remove('active');
                         document.getElementById('archived-tab').setAttribute('aria-selected', 'false');
 
                         // Set "All" button as active
                         const allTab = document.getElementById('all-tab');
-                        allTab.classList.add('active');
+                        allTab.parentElement.classList.add('active');
                         allTab.setAttribute('aria-selected', 'true');
-                        document.getElementById('upvotes-tab').classList.remove('active');
-                        document.getElementById('upvotes-tab').setAttribute('aria-selected', 'false');
-                        document.getElementById('comments-tab').classList.remove('active');
-                        document.getElementById('comments-tab').setAttribute('aria-selected', 'false');
+                        document.getElementById('upvotes-tab').parentElement.classList.remove('active');
+                        document.getElementById('comments-tab').parentElement.classList.remove('active');
                         archiveNotification();
                     } else {
                         console.error('Error: Content div not found');
@@ -30,28 +32,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
     });
+}
 
-    document.getElementById('archived-tab').addEventListener('click', function() {
-        if (!this.classList.contains('active')) {
+    const archivedTab = document.getElementById('archived-tab');
+
+    if (archivedTab) {
+        
+    archivedTab.addEventListener('click', function() {
+        if (!this.parentElement.classList.contains('active')) {
             fetch('/notifications/archived/all')
                 .then(response => response.text())
                 .then(data => {
                     const contentDiv = document.getElementById('notificationTabsContent');
                     if (contentDiv) {
                         contentDiv.innerHTML = data;
-                        this.classList.add('active');
+                        this.parentElement.classList.add('active');
                         this.setAttribute('aria-selected', 'true');
-                        document.getElementById('new-tab').classList.remove('active');
+                        document.getElementById('new-tab').parentElement.classList.remove('active');
                         document.getElementById('new-tab').setAttribute('aria-selected', 'false');
 
                         // Set "All" button as active
                         const allTab = document.getElementById('all-tab');
-                        allTab.classList.add('active');
+                        allTab.parentElement.classList.add('active');
                         allTab.setAttribute('aria-selected', 'true');
-                        document.getElementById('upvotes-tab').classList.remove('active');
-                        document.getElementById('upvotes-tab').setAttribute('aria-selected', 'false');
-                        document.getElementById('comments-tab').classList.remove('active');
-                        document.getElementById('comments-tab').setAttribute('aria-selected', 'false');
+                        document.getElementById('upvotes-tab').parentElement.classList.remove('active');
+                        document.getElementById('comments-tab').parentElement.classList.remove('active');
                         archiveNotification();
                     } else {
                         console.error('Error: Content div not found');
@@ -62,7 +67,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
     });
+}
+
 });
+
+
 
 
 function filterNotifications() {
@@ -71,10 +80,10 @@ function filterNotifications() {
     tabs.forEach(tab => {
         document.getElementById(`${tab}-tab`).addEventListener('click', function() {
             console.log('clicked');
-            if (!this.classList.contains('active')) {
+            if (!this.parentElement.classList.contains('active')) {
                 newTab = document.getElementById('new-tab');
 
-                if(newTab.classList.contains('active')) {
+                if(newTab.parentElement.classList.contains('active')) {
                     type = 'new';
                 }
                 else{
@@ -88,10 +97,9 @@ function filterNotifications() {
                         if (contentDiv) {
                             contentDiv.innerHTML = data;
                             tabs.forEach(t => {
-                                document.getElementById(`${t}-tab`).classList.remove('active');
-                                document.getElementById(`${t}-tab`).setAttribute('aria-selected', 'false');
+                                document.getElementById(`${t}-tab`).parentElement.classList.remove('active');
                             });
-                            this.classList.add('active');
+                            this.parentElement.classList.add('active');
                             this.setAttribute('aria-selected', 'true');
                             archiveNotification();
                         } else {

@@ -19,6 +19,11 @@
         <br>
         <div id="articles">
             <div id="comment-form" class="recent-news-container">
+                <?php if(empty($articles)): ?>
+                    <div class="not-available-container">
+                        <p>You have no favourite articles yet.</p>
+                    </div>
+                <?php endif; ?>
                 <?php $__currentLoopData = $articles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <?php echo $__env->make('partials.long_news_tile', [
                         'article' => $article,

@@ -23,7 +23,4 @@
             @include('partials.recent_news',['recentNews' => $recentNews])
         </nav>
     </div>
-    @if(session('error'))
-        @include('partials.error_popup', ['field' => 'error'])
-    @endif
 @endsection

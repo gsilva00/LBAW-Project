@@ -1,8 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
     const followButton = document.getElementById('follow-user-button');
     const followUrl = '/following/user/action/follow';
     const unfollowUrl = '/following/user/action/unfollow';
 
+    if (followButton !== null) {
+        
     followButton.addEventListener('click', function () {
         console.log('clicked');
         const isFollowing = followButton.textContent.trim() === 'Unfollow User';
@@ -36,4 +37,5 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('An error occurred. Please try again.');
             });
     });
-});
+
+}

@@ -3,35 +3,33 @@
 @section('title', 'Notifications')
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Notifications</h1>
-                <ul class="nav nav-tabs" id="notificationTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="new-tab" data-bs-toggle="tab" data-bs-target="#new" type="button" role="tab" aria-controls="new" aria-selected="true">New</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="archived-tab" data-bs-toggle="tab" data-bs-target="#archived" type="button" role="tab" aria-controls="archived" aria-selected="false">Archived</button>
-                    </li>
-                </ul>
-                <ul class="nav nav-tabs different-class" id="notificationTabs" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="upvotes-tab" data-bs-toggle="tab" data-bs-target="#upvotes" type="button" role="tab" aria-controls="upvotes" aria-selected="false">Upvotes</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="comments-tab" data-bs-toggle="tab" data-bs-target="#comments" type="button" role="tab" aria-controls="comments" aria-selected="false">Comments</button>
-                    </li>
-                </ul>
+    <div class="recent-news-wrapper">
+        <h1 class="large-rectangle"> Notifications</h1>
+        <div class="search-comments-options-container" data-toggle="buttons">
+            <label class="active" tabindex="0">
+                <input type="radio" name="search-comment-options" id="new-tab" checked aria-controls="notificationTabsContent"> <i class='bx bx-sun'></i>New
+            </label>
+            <label tabindex="0">
+                <input type="radio" name="search-comment-options" id="archived-tab" aria-controls="notificationTabsContent"> <i class='bx bx-box'></i>Archived
+            </label>
+        </div>
 
+        <br>
 
-                <div class="tab-content" id="notificationTabsContent">
-                    @include('partials.notification_list', ['notifications' => $notifications])
-                </div>
-            </div>
+        <div class="search-comments-options-container" data-toggle="buttons">
+            <label class="active" tabindex="0">
+                <input type="radio" name="search-comment-options" id="all-tab" checked aria-controls="notificationTabsContent"><i class='bx bx-collection'></i>All
+            </label>
+            <label tabindex="0">
+                <input type="radio" name="search-comment-options" id="upvotes-tab" aria-controls="notificationTabsContent"> <i class='bx bx-sort'></i>Upvotes
+            </label>
+            <label tabindex="0">
+                <input type="radio" name="search-comment-options" id="comments-tab" aria-controls="notificationTabsContent"><i class='bx bx-chat'></i>Comments
+            </label>
+        </div>
+        <br>
+        <div id="notificationTabsContent">
+            @include('partials.notification_list', ['notifications' => $notifications])
         </div>
     </div>
 @endsection

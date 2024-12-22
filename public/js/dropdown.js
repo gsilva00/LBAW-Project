@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
             searchSelectUser.parentElement.style.right = "24.5em";
         } else {
             filterButton.style.display = 'flex';
-            searchSelectUser.parentElement.style.right = "29.5em";
+            searchSelectUser.parentElement.style.right = "30.1em";
         }
     }
 

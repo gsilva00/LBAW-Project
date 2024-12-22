@@ -1,5 +1,5 @@
 footer{
-    background-color: #696969;
+    background-color: var(--blue-muted);
     justify-content: space-between;
     display: flex;
     column-gap: 5em;
@@ -10,6 +10,10 @@ footer{
 
 footer h2{
     font-size: var(--h2-header-footer-size);
+}
+
+footer h2:hover{
+    color: var(--light-yellow);
 }
 
 #rights-reserved{

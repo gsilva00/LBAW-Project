@@ -6,7 +6,7 @@
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Create a New Article</h1>
 
-        <form id="create-article" class="large-rectangle" action="<?php echo e(route('submitArticle')); ?>" method="POST" enctype="multipart/form-data">
+        <form id="create-article" class="large-rectangle yellow" action="<?php echo e(route('submitArticle')); ?>" method="POST" enctype="multipart/form-data">
             <?php echo csrf_field(); ?>
             <br>
             <div class="profile-info">
@@ -27,6 +27,11 @@
             <div class="profile-info">
                 <label for="tag-create-article-input"><span>Tags</span></label>
                 <input type="text" id="tag-create-article-input" placeholder="Type to search tags...">
+                <div id="propose-tag-container">
+                    <label id="propose-tag-label" for="propose a tag" data-url="<?php echo e(route('showProposeTag')); ?>">
+                        <span class="small-text">Couldn't find your tag? Propose it</span>
+                    </label>
+                </div>
                 <div id="tag-create-article-suggestions" class="suggestions"></div>
             </div>
             <div id="selected-create-article-tags" class="selected selected-maxwidth"></div>
@@ -38,27 +43,18 @@
                         <option value="<?php echo e($topic->id); ?>"><?php echo e($topic->name); ?></option>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
-                <?php if($errors->has('topics')): ?>
-                    <div class="error-message">
-                        <?php echo e($errors->first('topics')); ?>
-
-                    </div>
-                <?php endif; ?>
             </div>
             <br>
             <div class="profile-info">
                 <label for="article_picture"><span>Upload Article Picture</span></label>
                 <input type="file" name="file" id="article_picture">
             </div>
-            <?php if($errors->has('article_picture')): ?>
-                <?php echo $__env->make('partials.error_popup', ['field' => 'article_picture'], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-            <?php endif; ?>
             <br>
             <br>
             <br>
             <div class="profile-info">
                 <span>Save your article before leaving: </span>
-                <button type="submit" class="large-rectangle small-text greyer">Submit</button>
+                <button type="submit" class="large-rectangle small-text greener">Submit</button>
             </div>
             <br>
         </form>

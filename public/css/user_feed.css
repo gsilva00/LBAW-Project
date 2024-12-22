@@ -1,30 +1,31 @@
-.feed-options-container{
+.feed-options-container, .search-comments-options-container{
     display: flex;
     width: fit-content;
     margin-inline: auto;
     column-gap: 0.5em;
 }
 
-.feed-options-container label input{
+.feed-options-container label input, .search-comments-options-container label input {
     display: none;
 }
 
-.feed-options-container label{
-    background-color: var(--secondary-color);
+.feed-options-container label, .search-comments-options-container label{
+    background-color: var(--lighter-yellow);
     padding-inline: 1em;
     padding-block: 0.75em;
     align-self: center;
+    border-radius: var(--radius-size);
 }
 
-.feed-options-container label:hover{
-    background-color: var(--primary-color);
+.feed-options-container label:hover, .search-comments-options-container label:hover{
+    background-color: var(--dark-yellow);
 }
 
-.feed-options-container label.active{
-    border: 3px solid var(--primary-color);
+.feed-options-container label.active, .search-comments-options-container label.active{
+    border: 3px solid var(--dark-yellow);
 }
 
-.feed-options-container label .bx{
+.feed-options-container label .bx, .search-comments-options-container label .bx{
     font-size: 1.2em;
     padding-right: 0.5em;
 }

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Mail\MailModel;
 use Illuminate\Support\Facades\Mail;
@@ -12,13 +15,29 @@ use Symfony\Component\Mailer\Exception\TransportException;
 
 class MailController extends Controller
 {
-    public function showRecoverPasswordForm()
+    public function showRecoverPasswordForm(): View|RedirectResponse
     {
+        try {
+            $this->authorize('recoverPassword', User::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('You are already logged in and do not need to recover your password.');
+        }
+
         return view('pages.recover_password');
     }
 
     public function sendRecoverPasswordEmail(Request $request)
     {
+        try {
+            $this->authorize('recoverPassword', User::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('You are already logged in and do not need to recover your password.');
+        }
+
         $user = User::where('email', $request->email)->first();
 
         if (!$user) {
@@ -41,10 +60,12 @@ class MailController extends Controller
             Mail::to($request->email)->send(new MailModel($mailData));
             $status = 'Success!';
             $message = 'An email has been sent to ' . $request->email . ' with a verification code.';
-        } catch (TransportException $e) {
+        }
+        catch (TransportException $e) {
             $status = 'Error!';
             $message = 'SMTP connection error occurred during the email sending process to ' . $request->email;
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $status = 'Error!';
             $message = 'An unhandled exception occurred during the email sending process to ' . $request->email . ' ' . $e->getMessage();
         }
@@ -64,6 +85,14 @@ class MailController extends Controller
 
     public function checkResetPassword(Request $request)
     {
+        try {
+            $this->authorize('recoverPassword', User::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('You are already logged in and do not need to recover your password.');
+        }
+
         $verificationCode = $request->real_code;
         $enteredCode = $request->code;
         $email = $request->email;
@@ -79,15 +108,33 @@ class MailController extends Controller
 
     public function showResetPasswordForm(Request $request)
     {
+        try {
+            $this->authorize('recoverPassword', User::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('You are already logged in and do not need to recover your password.');
+        }
+
         if (!$request->session()->has('email')) {
             return redirect()->route('recoverPasswordForm');
         }
 
-        return view('pages.reset_password')->with('email', $request->session()->get('email'));
+        return view('pages.reset_password')->with(
+            'email', $request->session()->get('email')
+        );
     }
 
     public function resetPassword(Request $request)
     {
+        try {
+            $this->authorize('recoverPassword', User::class);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('homepage')
+                ->withErrors('You are already logged in and do not need to recover your password.');
+        }
+
         $email = $request->email;
         $password = $request->password;
         $confirmPassword = $request->confirm_password;

@@ -16,11 +16,16 @@ body{
 span,a,p,button,input, textarea, label{
   font-family: 'Inter', sans-serif;
   font-weight: 400;
+  color: var(--black);
 }
 
 h2{
   font-family: 'Inter', sans-serif;
   font-weight: 600;
+}
+
+h2 i{
+  margin-right: 5px;
 }
 
 h2 a{
@@ -29,8 +34,16 @@ h2 a{
   top: 0.3em;
 }
 
+a.active{
+  color: var(--light-yellow);
+}
+
+a.active-secondary{
+  color: var(--darker-yellow);
+}
+
 header{
-  color: rgb(0, 0, 0);
+  color: var(--black);
   text-align: center;
   display: grid;
   grid-template-rows: auto auto;
@@ -44,10 +57,10 @@ header{
 }
 
 #top-part-header{
-  background-color: var(--primary-color);
+  background-color: var(--blue-muted);
 }
 #bottom-part-header{
-  background-color: var(--secondary-color);
+  background-color: var(--ligth-blue-muted);
   justify-content: space-between;
 }
 
@@ -60,6 +73,10 @@ header{
 
 #top-part-header h2, #bottom-part-header h2{
   font-size: var(--h2-header-footer-size);
+}
+
+#top-part-header h2:hover, #bottom-part-header h2:hover, #top-part-header a:hover, #bottom-part-header a:hover, #all-topics-button:hover span{
+  color: var(--light-yellow);
 }
 
 @media (max-width: 768px) {
@@ -90,6 +107,12 @@ header{
 #profile-button h2, .dropdown-item h2, #all-topics-button span{
   margin: 0;
   font-size: 0.9em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#profile-button h2{
+  max-width: 10em;
 }
 
 .dropdown-menu {
@@ -97,7 +120,7 @@ header{
   position: absolute;
   top: 3.25em;
   right: 0;
-  background-color: white;
+  background-color: var(--light-white);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
@@ -142,23 +165,6 @@ header{
   top: 5.9em;
 }
 
-.dropdown-item:hover {
-  background-color: #f1f1f1;
-}
-
-#filter-box {
-  position: absolute;
-  top: 50px; /* Adjust based on your layout */
-  left: 0;
-  width: 300px; /* Adjust the width as needed */
-  height: 400px; /* Adjust the height as needed */
-  background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  z-index: 1000;
-}
-
 .search-container{
   display: flex;
   justify-content: center;
@@ -167,11 +173,16 @@ header{
 }
 
 .search-container button{
-  background-color: var(--secondary-color);
+  background-color: var(--green-muted);
+  border-radius: var(--radius-size);
 }
 
 .search-container button:hover{
-  background-color: var(--primary-color);
+  background-color: var(--dark-green-muted);
+}
+
+.search-container button:hover span{
+  color: var(--light-yellow);
 }
 
 .search-container button i{
@@ -184,6 +195,7 @@ header{
 }
 
 #search-select-menu{
+  background-color: var(--light-white);
   list-style-type: none;
   width: max-content;
   padding: 0.5em 1em 0.1em 0.5em ;
@@ -192,9 +204,6 @@ header{
   top: 0em;
 }
 
-#search-select-menu:hover{
-  background-color: #f1f1f1;
-}
 
 #search-select-menu label{
   position: relative;

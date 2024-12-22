@@ -67,4 +67,11 @@ class NotificationPolicy
         // User cannot delete a notification
         return false;
     }
+
+
+    public function archive(User $user, Notification $notification): bool
+    {
+        // The recipient user can archive the notification
+        return Auth::check() && !$user->is_banned && $user->id === $notification->user_to;
+    }
 }
