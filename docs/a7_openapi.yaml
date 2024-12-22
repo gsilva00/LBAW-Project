@@ -1024,7 +1024,39 @@ paths:
 
 ############################### Report and Fact Checking ###############################
 
-# not part of the vertical prototype
+  /profile/appeal-unban:
+    get:
+        operationId: R801
+        summary: 'R801: Appeal Unban Form'
+        description: 'Show the appeal unban form. Access: USR'
+        tags:
+            - 'M08: Report and Fact Checking'
+        responses:
+            '200':
+              description: 'Ok. Show Appeal Unban Form.'
+
+    post:
+        operationId: R802
+        summary: 'R802: Appeal Unban Action'
+        description: 'Processes the appeal unban form submission. Access: USR'
+        tags:
+            - 'M08: Report and Fact Checking'
+
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  description:
+                    type: string
+                required:
+                  - description
+
+        responses:
+          '200':
+            description: 'Success. Appeal unban request submitted.'
 
 ############################ Administration and Static Pages ###########################
 
