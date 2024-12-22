@@ -198,7 +198,7 @@ function handleUpvoteClick(event) {
     const isReply = commentElement.dataset.isReply === 'true';
     const commentId = this.dataset.commentId;
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const url = isReply ? `/reply/${commentId}/upvote-reply` : `/comment/${commentId}/upvote-comment`;
+    const url = isReply ? `/reply/${commentId}/upvote` : `/comment/${commentId}/upvote`;
 
     fetch(url, {
         method: 'POST',
@@ -262,7 +262,7 @@ function handleDownvoteClick(event) {
     const isReply = commentElement.dataset.isReply === 'true';
     const commentId = this.dataset.commentId;
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const url = isReply ? `/reply/${commentId}/downvote-reply` : `/comment/${commentId}/downvote-comment`;
+    const url = isReply ? `/reply/${commentId}/downvote` : `/comment/${commentId}/downvote`;
 
     fetch(url, {
         method: 'POST',
@@ -336,7 +336,7 @@ function handleDeleteClick(event) {
     }
     const isReply = commentElement.dataset.isReply === 'true';
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const url = isReply ? `/reply/${commentId}/delete-reply` : `/comment/${commentId}/delete-comment`;
+    const url = isReply ? `/reply/${commentId}/delete` : `/comment/${commentId}/delete`;
 
     fetch(url, {
         method: 'POST',
@@ -380,7 +380,7 @@ function handleEditClick(event) {
     const isReply = commentElement.dataset.isReply === 'true';
     const articleId = document.querySelector('meta[name="article-id"]').getAttribute('content');
 
-    const url = `/comment/${commentId}/commentForm`;
+    const url = `/comment/${commentId}/form`;
     const state = isReply ? 'editReply' : 'editComment';
 
     fetch(url, {
@@ -438,7 +438,7 @@ function submitEditForm(form, commentElement, editButton, icon, text, cancelEdit
     const formData = new FormData(form);
     const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
     const isReply = commentElement.dataset.isReply === 'true';
-    const editUrl = `/comment/${commentId}/edit-comment`;
+    const editUrl = `/comment/${commentId}/edit`;
 
     formData.append('isReply', isReply);
 
@@ -484,7 +484,7 @@ function handleReplyClick(event) {
     const commentElement = this.closest('.comment');
     const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
     const articleId = document.querySelector('meta[name="article-id"]').getAttribute('content');
-    const url = `/comment/${commentId}/commentForm`;
+    const url = `/comment/${commentId}/form`;
 
     fetch(url, {
         method: 'POST',
@@ -637,7 +637,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('report-article-button').addEventListener('click', function () {
         const articleId = this.getAttribute('data-article-id');
         console.log('Report article button clicked');
-        fetch(`/report-article-modal/${articleId}`, {
+        fetch(`/article/${articleId}/report-modal`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -750,7 +750,7 @@ function reportCommentShow() {
             const isReply = commentElement.dataset.isReply === 'true';
             const commentId = commentElement.id.match(/(?:comment-|reply-)(\d+)/)[1];
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const url = `/report-comment-modal/${commentId}`;
+            const url = `/comment/${commentId}/report-modal`;
 
             fetch(url, {
                 method: 'POST',

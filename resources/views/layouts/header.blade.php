@@ -12,7 +12,7 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
                     <a class="dropdown-item {{ Route::currentRouteName() == 'profile' ? 'active-secondary' : '' }}" href="{{ route('profile', ['username' => $user->username]) }}"><h2>See Profile</h2></a>
-                    <a class="dropdown-item {{ Route::currentRouteName() == 'notifications.show.page' ? 'active-secondary' : '' }}" href="{{ route('notifications.show.page') }}"><h2>Notifications</h2></a>
+                    <a class="dropdown-item {{ Route::currentRouteName() == showNotificationsPage ? 'active-secondary' : '' }}" href="{{ route(showNotificationsPage) }}"><h2>Notifications</h2></a>
                     <a class="dropdown-item {{ Route::currentRouteName() == 'showFavouriteArticles' ? 'active-secondary' : '' }}" href="{{ route('showFavouriteArticles') }}"><h2>Favourite Articles</h2></a>
                     @if($user->is_admin)
                         <a class="dropdown-item {{ Route::currentRouteName() == 'adminPanel' ? 'active-secondary' : '' }}" href="{{ route('adminPanel') }}"><h2>Administrator Panel</h2></a>

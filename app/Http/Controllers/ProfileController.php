@@ -203,6 +203,62 @@ class ProfileController extends Controller
         ]);
     }
 
+
+    public function followUser(Request $request): JsonResponse|RedirectResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $targetUser = User::find($request->profile_id);
+
+        Log::info("TESTE");
+
+        /*Log::info('UserFollowingController@followUser', [
+            'user' => $user,
+            'request' => $request->input(),
+        ]);*/
+
+        try {
+            $this->authorize('followUser', $targetUser);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to perform that action.');
+        }
+
+        // Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
+
+        $user->following()->attach($request->profile_id);
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+    public function unfollowUser(Request $request): JsonResponse|RedirectResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        $targetUser = User::find($request->profile_id);
+
+
+        try {
+            $this->authorize('unfollowUser', $targetUser);
+        }
+        catch (AuthorizationException $e) {
+            return redirect()->route('login')
+                ->withErrors('Unauthorized. You need to login to perform that action.');
+        }
+
+        // Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
+
+        $user->following()->detach($request->profile_id);
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+
     public function appealUnbanShow(): View
     {
         return view('partials.appeal_unban');

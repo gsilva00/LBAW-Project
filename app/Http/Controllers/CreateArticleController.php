@@ -184,12 +184,12 @@ class CreateArticleController extends Controller
     }
 
 
-    public function porposeNewTagShow(): View
+    public function proposeNewTagShow(): View
     {
-        return view('partials.porpose_new_tag');
+        return view('partials.propose_new_tag');
     }
 
-    public function porposeNewTag(Request $request): JsonResponse
+    public function proposeNewTag(Request $request): JsonResponse
     {
         $request->validate([
             'name' => 'required|string|max:50',
@@ -200,7 +200,7 @@ class CreateArticleController extends Controller
         $tag->user_id = Auth::id();
         $tag->save();
 
-        /*Log::info('CreateArticleController@porposeNewTag', [
+        /*Log::info('CreateArticleController@proposeNewTag', [
             'name' => $request->input('name'),
         ]);*/
 

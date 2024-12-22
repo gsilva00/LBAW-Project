@@ -44,10 +44,10 @@
         <script src="{{ url('js/tag_create_article.js') }}" defer></script>
         <script src="{{ url('js/tag_edit_article.js') }}" defer></script>
         <script src="{{ url('js/article_interact.js') }}" defer> </script>
-        <script src="{{ url('js/notifications_interect.js') }}" defer> </script>
+        <script src="{{ url('js/notifications_interact.js') }}" defer> </script>
         <script src="{{ url('js/comment_search_interact.js') }}" defer> </script>
         <script src="{{ url('js/follow_user.js') }}" defer> </script>
-        <script src="{{ url('js/porpose_tag.js') }}" defer> </script>
+        <script src="{{ url('js/propose_tag.js') }}" defer> </script>
         <script src="{{ url('js/appeal_unban.js') }}" defer> </script>
     </head>
     <body>

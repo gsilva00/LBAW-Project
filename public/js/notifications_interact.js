@@ -122,7 +122,7 @@ function archiveNotification() {
         button.addEventListener('click', function(event) {
             event.preventDefault();
             const notificationId = this.getAttribute('data-notification-id');
-            fetch(`/notifications/archiving/${notificationId}`, {
+            fetch(`/notifications/${notificationId}/archive`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

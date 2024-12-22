@@ -9,7 +9,7 @@ function closeMessage() {
 
 function showReportUserPopup(userId) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const url = `/report-user-modal/${userId}`;
+    const url = `/user/${userId}/report-modal`;
     fetch(url, {
         method: 'POST',
         headers: {

@@ -162,7 +162,7 @@ paths:
                   description: 'Failed registration. Redirect to register form.'
                   value: '/register'
 
-  /recover-password:
+  /password/recover:
 
     get:
       operationId: R106
@@ -205,13 +205,13 @@ paths:
               example:
                 302Success:
                   description: 'Successful. An email has been sent with the verification code to reset your password.'
-                  value: '/recover-password'
+                  value: '/password/recover'
 
                 302Failure:
                   description: 'The email provided is not registered in our system or is unreachable! Please try again.'
-                  value: '/recover-password'
+                  value: '/password/recover'
 
-  /reset-password-check:
+  /password/verification-code/check:
 
     post:
       operationId: R108
@@ -242,13 +242,13 @@ paths:
               example:
                 302Success:
                   description: 'Successful. The provided verification code is correct. Redirect to reset password form'
-                  value: '/reset-password'
+                  value: '/password/reset'
 
                 302Failure:
                   description: 'Fail. The provided verification code is incorrect. Redirect to recover password form'
-                  value: '/recover-password'
+                  value: '/password/recover'
 
-  /reset-password:
+  /password/reset:
   
     get:
       operationId: R109
@@ -299,11 +299,11 @@ paths:
 
                 302Failure:
                   description: 'Fail. The passwords do not match! Try again.'
-                  value: '/reset-password'
+                  value: '/password/reset'
 
 ################################## Individual Profile ##################################
 
-  /profile/user/{username}:
+  /profile/{username}:
 
     get:
       operationId: R201
@@ -325,7 +325,7 @@ paths:
         '404':
           description: 'Not Found. This user does not exist.'
 
-  /profile/edit/{username}:
+  /profile/{username}/edit:
 
     get:
       operationId: R202
@@ -412,10 +412,10 @@ paths:
               example:
                 302Success:
                   description: 'Edit successful. Redirect to individual user profile.'
-                  value: '/profile/user/{username}'
+                  value: '/profile/{username}'
                 302Failure:
                   description: 'Edit failed. Redirect to edit individual user profile.'
-                  value: '/profile/edit/{username}'
+                  value: '/profile/{username}/edit'
         '403':
           description: 'Unauthorized. You do not possess the valid credentials to edit that profile.'
           headers:
@@ -427,7 +427,7 @@ paths:
                   description: 'Redirecting to home page.'
                   value: '/homepage'
 
-  /profile/delete/{id}:
+  /profile/{id}/delete:
     post:
       operationId: R204
       summary: 'R204: Delete user profile'
@@ -543,7 +543,7 @@ paths:
         '404':
           description: 'Not Found. This article does not exist.'
 
-  /create-article:
+  /article/create:
 
     get:
       operationId: R306
@@ -603,13 +603,13 @@ paths:
               example:
                 302Success:
                   description: 'Successful. Redirect to the user profile.'
-                  value: '/profile/user/{username}'
+                  value: '/profile/{username}'
 
                 302Failure:
                   description: 'Failed. Redirect to create article form.'
                   value: '/create_article'
 
-  /edit-article/{id}:
+  /article/{id}/edit:
 
     get:
       operationId: R308
@@ -675,12 +675,12 @@ paths:
               example:
                 302Success:
                   description: 'Edit successful. Redirect to the user profile.'
-                  value: '/profile/user/{username}'
+                  value: '/profile/{username}'
                 302Failure:
                   description: 'Edit failed. Redirect to edit article page.'
-                  value: '/edit-article/{id}'
+                  value: '/article/{id}/edit'
 
-  /delete-article/{id}:
+  /article/{id}/delete:
 
     post:
       operationId: R310
@@ -718,7 +718,7 @@ paths:
               example:
                 302Success:
                   description: 'Successful delete. Redirect to user profile'
-                  value: '/profile/user/{username}'
+                  value: '/profile/{username}'
         '403':
           description: 'You do not possess the credentials for this action.'
 
@@ -881,7 +881,7 @@ paths:
                   description: 'Redirecting to home page.'
                   value: '/homepage'
 
-  /more-users:
+  /users:
     get:
       operationId: R902
       summary: 'R902: View More Users'
@@ -892,7 +892,7 @@ paths:
         '200':
           description: 'Success. Display more users in admin panel.'
 
-  /create-user:
+  /users/create:
     post:
       operationId: R903
       summary: 'R903: Create Custom User Action'
