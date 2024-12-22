@@ -161,7 +161,7 @@ Route::controller(CreateArticleController::class)->group(function () {
     Route::post('/article/{id}/edit', 'update')->name('updateArticle');
     Route::post('/article/{id}/delete', 'delete')->name('deleteArticle');
 
-    Route::post('article/create/tag/propose', 'proposeNewTagShow')->name('showProposeTag');
+    Route::post('/article/create/tag/propose', 'proposeNewTagShow')->name('showProposeTag');
     Route::post('/article/create/tag/propose', 'proposeNewTag')->name('proposeTagSubmit');
 });
 
