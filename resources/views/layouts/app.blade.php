@@ -4,7 +4,8 @@
         <!-- Metadata -->
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- CSRF Token No clue if needed it was on layout.app -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <title>
             @hasSection('title')
                 @yield('title') - {{ config('app.name', 'Laravel') }}
@@ -12,6 +13,7 @@
                 {{ config('app.name', 'Laravel') }}
             @endif
         </title>
+
         <!-- Styles -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link href="{{ url('css/user_feed.css') }}" rel="stylesheet">
@@ -30,6 +32,7 @@
         <link href="{{ url('css/modal.css') }}" rel="stylesheet">
         <link href="{{ url('css/user_search.css') }}" rel="stylesheet">
         <link href="{{ url('css/notification_card.css') }}" rel="stylesheet">
+
         <!-- Scripts -->
         <script src="{{ url('js/dropdown.js') }}" defer> </script>
         <script src="{{ url('js/dropdown_tag_filter.js') }}" defer> </script>

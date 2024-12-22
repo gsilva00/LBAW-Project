@@ -19,8 +19,6 @@ function createWithPagination(formId, listId, buttonId, successMsg, errorMsg) {
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
-        console.log('Form submitted');
-
         const formData = new FormData(form);
 
         const entity = button.getAttribute('data-entity');
@@ -212,10 +210,11 @@ function userAction() {
                     if (action === 'delete') {
                         form.closest('.profile-container-admin').remove();
                     }
-                    else if (action === 'ban') {
+                    else if (action === 'ban' || action === 'unban') {
                         const button = form.querySelector('button');
                         button.textContent = data.is_banned ? 'Unban User' : 'Ban User';
-                        form.setAttribute('data-action', data.is_banned ? 'unban' : 'ban');
+                        form.setAttribute('action', data.new_action_route);
+                        form.setAttribute('data-action', data.new_action);
                     }
                 }
                 else {
@@ -334,7 +333,7 @@ function handleProposal() {
             .then(data => {
                 if (data.success) {
                     alert(data.message); // TODO BETTER ERROR HANDLING AND USER FEEDBACK
-                    form.closest('.propose-tag-tile').remove();
+                    form.closest('.notification-card').remove();
 
                     if (data.newHtml) {
                         tagList.insertAdjacentHTML('beforeend', data.newHtml);
@@ -379,7 +378,7 @@ function handleUnbanAppeal() {
             .then(data => {
                 if (data.success) {
                     alert(data.message);
-                    form.closest('.unban-appeal-tile').remove();
+                    form.closest('.notification-card').remove();
 
                     if (appealList.children.length === 0) {
                         appealList.insertAdjacentElement('afterend', notAvailableContainer('No pending unban appeals to list.'));

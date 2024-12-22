@@ -71,7 +71,7 @@
   display: block;
 }
 
-#users-section{
+#users-section, #tags-section, #topics-section{
   height: 550px;
   overflow-y: scroll;
 }

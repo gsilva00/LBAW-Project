@@ -41,11 +41,11 @@ class AdminPanelController extends Controller
         $users = User::where([
             ['is_admin', false],
             ['is_deleted', false]
-        ])->paginate(config('pagination.users_per_page'));
+        ])->orderBy('display_name')->paginate(config('pagination.users_per_page'));
 
-        $topics = Topic::paginate(config('pagination.topics_per_page'));
+        $topics = Topic::orderBy('name')->paginate(config('pagination.topics_per_page'));
 
-        $tags = Tag::paginate(config('pagination.tags_per_page'));
+        $tags = Tag::orderBy('name')->paginate(config('pagination.tags_per_page'));
 
         $tag_proposals = ProposeNewTag::paginate(config('pagination.tag_proposals_per_page'));
 
@@ -105,7 +105,7 @@ class AdminPanelController extends Controller
         $users = User::where([
             ['is_admin', false],
             ['is_deleted', false]
-        ])->paginate(
+        ])->orderBy('display_name')->paginate(
             config('pagination.users_per_page'),
             ['*'],
             'page',
@@ -201,7 +201,9 @@ class AdminPanelController extends Controller
         return response()->json([
             'success' => true,
             'is_banned' => true,
-            'message' => 'User banned successfully.'
+            'message' => 'User banned successfully.',
+            'new_action' => 'unban',
+            'new_action_route' => route('adminUnbanUser', ['id' => $user->id]),
         ]);
     }
 
@@ -216,7 +218,9 @@ class AdminPanelController extends Controller
         return response()->json([
             'success' => true,
             'is_banned' => false,
-            'message' => 'User unbanned successfully.'
+            'message' => 'User unbanned successfully.',
+            'new_action' => 'ban',
+            'new_action_route' => route('adminBanUser', ['id' => $user->id]),
         ]);
     }
 
@@ -226,7 +230,7 @@ class AdminPanelController extends Controller
         $this->authorize('viewAdminPanel', User::class);
 
         $page = $request->get('page', 1);
-        $topics = Topic::paginate(
+        $topics = Topic::orderBy('name')->paginate(
             config('pagination.topics_per_page'),
             ['*'],
             'page',
@@ -287,7 +291,7 @@ class AdminPanelController extends Controller
         $this->authorize('viewAdminPanel', User::class);
 
         $page = $request->get('page', 1);
-        $tags = Tag::paginate(
+        $tags = Tag::orderBy('name')->paginate(
             config('pagination.tags_per_page'),
             ['*'],
             'page',
@@ -365,7 +369,7 @@ class AdminPanelController extends Controller
         $this->authorize('viewAdminPanel', User::class);
 
         $page = $request->get('page', 1);
-        $proposals = ProposeNewTag::paginate(
+        $proposals = ProposeNewTag::orderBy('name')->paginate(
             config('pagination.tag_proposals_per_page'),
             ['*'],
             'page',

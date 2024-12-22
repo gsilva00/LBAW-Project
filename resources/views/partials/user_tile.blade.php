@@ -1,6 +1,6 @@
 @if(!$user->is_deleted)
     <div class="profile-container-admin">
-        <img src="{{ asset('images/profile/' . $user->profile_picture) }}" alt="profile_picture" class="user-profile-picture-admin">
+        <img src="{{ asset('images/profile/' . $user->profile_picture) }}" alt="{{ $user->display_name }}'s profile picture" class="user-profile-picture-admin">
 
         <div class="profile-info">
             <h2>

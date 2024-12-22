@@ -5,7 +5,7 @@
 @section('content')
     <div class="recent-news-wrapper">
         <h1 class="large-rectangle">Administrator Panel</h1>
-        <h2 class="large-rectangle ligth-green">List of User Accounts</h2>
+        <h2 class="large-rectangle light-green">List of User Accounts</h2>
         <div id="users-section">
             @if(!$usersPaginated->isEmpty())
                 <div id="user-list">
@@ -30,16 +30,16 @@
                 </div>
             @endif
         </div>
-        <h2 class="large-rectangle ligth-green">Create New User</h2>
+        <h2 class="large-rectangle light-green">Create New User</h2>
         <div id="user-form-section">
             @include('partials.create_user_form')
         </div>
         <br>
         <br>
-        <h2 class="large-rectangle ligth-green">List of Topics</h2>
+        <h2 class="large-rectangle light-green">List of Topics</h2>
         <div id="topics-section">
             @if(!$topicsPaginated->isEmpty())
-                <div id="topic-list" class="profile-info">
+                <div id="topic-list">
                     @include('partials.topic_tile_list', ['topics' => $topicsPaginated])
                 </div>
                 <button id="load-more-topics"
@@ -61,13 +61,13 @@
                 </div>
             @endif
         </div>
-        <h2 class="large-rectangle ligth-green">Create a New Topic</h2>
+        <h2 class="large-rectangle light-green">Create a New Topic</h2>
         <div id="topic-form-section">
             @include('partials.create_topic_form')
         </div>
         <br>
         <br>
-        <h2 class="large-rectangle ligth-green">List of Tags</h2>
+        <h2 class="large-rectangle light-green">List of Tags</h2>
         <div id="tags-section">
             @if(!$tagsPaginated->isEmpty())
                 <div id="tag-list">
@@ -92,15 +92,13 @@
                 </div>
             @endif
         </div>
-        <br>
-        <br>
-        <h2 class="large-rectangle ligth-green">Create a New Tag</h2>
+        <h2 class="large-rectangle light-green">Create a New Tag</h2>
         <div id="tag-form-section">
             @include('partials.create_tag_form')
         </div>
         <br>
         <br>
-        <h2 class="large-rectangle ligth-green">List of Pending Tag Proposals</h2>
+        <h2 class="large-rectangle light-green">List of Pending Tag Proposals</h2>
         <div id="tag-proposals-section">
             @if(!$tagProposalsPaginated->isEmpty())
                 <div id="tag-proposal-list">
@@ -127,7 +125,8 @@
                 </div>
             @endif
         </div>
-        <h2 class="large-rectangle ligth-green">List of Pending Unban Appeals</h2>
+        <br>
+        <h2 class="large-rectangle light-green">List of Pending Unban Appeals</h2>
         <div id="unban-appeals-section">
             @if(!$unbanAppealsPaginated->isEmpty())
                 <div id="unban-appeal-list">
