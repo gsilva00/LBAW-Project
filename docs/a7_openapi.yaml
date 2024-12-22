@@ -1207,6 +1207,41 @@ paths:
         '200':
             description: 'Success. Topic unfollowed.'
 
+  /article/create/tag/propose:
+    get:
+        operationId: R511
+        summary: 'R511: Propose Tag Form'
+        description: 'Show the propose tag form. Access: USR'
+        tags:
+            - 'M05: Topics and Tags'
+
+        responses:
+            '200':
+              description: 'Ok. Show Propose Tag Form.'
+
+    post:
+      operationId: R512
+      summary: 'R512: Propose Tag for Article'
+      description: 'Propose a tag for an article action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                tag:
+                  type: string
+              required:
+                - tag
+
+      responses:
+        '200':
+          description: 'Success. Tag proposed.'
+
 ####################################### Comments #######################################
 
   /article/{id}/comment/write:
