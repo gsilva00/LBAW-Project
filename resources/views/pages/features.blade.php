@@ -151,7 +151,7 @@
             <br>
             <button type="button" class="large-rectangle" onclick="
                     @if(Auth::check())
-                        window.location='{{ route(showNotificationsPage) }}'
+                        window.location='{{ route('showNotificationsPage') }}'
                     @else
                         window.location='{{ route('login') }}'
                     @endif
