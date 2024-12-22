@@ -11,7 +11,7 @@
             @if(!$isAdminPanel)
                 <div>
                     @csrf
-                    @if (Auth::user()->isFollowing($user))
+                    @if(Auth::user()->isFollowing($user))
                         <button type="button"
                                 class="unfollow-user-button-profile large-rectangle small-text greener"
                                 data-user-id="{{ Auth::id() }}"

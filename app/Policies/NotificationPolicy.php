@@ -29,7 +29,6 @@ class NotificationPolicy
      */
     public function viewAny(User $user): bool
     {
-        // TODO review this
         return Auth::check() && !$user->is_banned;
     }
 

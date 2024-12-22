@@ -1,5 +1,5 @@
 @if(session('success'))
-    @include('partials.success_message') <!-- TODO: Change to success_popup -->
+    @include('partials.success_popup')
 @endif
 
 @if($errors->any())

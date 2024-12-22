@@ -218,7 +218,7 @@ class ArticlePageController extends Controller
         $user = auth()->user();
         $article = ArticlePage::findOrFail($id);
 
-        if ($article->is_deleted) { // TODO review
+        if ($article->is_deleted) {
             return response()->json([
                 'error' => 'Article is deleted'
             ], 404);

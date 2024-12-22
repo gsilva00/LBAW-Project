@@ -37,7 +37,7 @@
                     <input type="file" name="file" id="profile_picture">
                 </div>
                 <br>
-                @if ($user->is_admin && !$isOwner)
+                @if($user->is_admin && !$isOwner)
                     <p class="small-text">* Admins don't need to confirm the password to make any changes to the profile</p>
                     <div class="profile-info">
                         <label for="cur_password"><span>Current Password</span></label>
