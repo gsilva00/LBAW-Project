@@ -1,3 +1,37 @@
+:root {
+  --h2-header-footer-size: 0.75em;
+  --secondary-color: #b7b7b7;
+  --primary-color: #696969;
+
+  /* Base Colors */
+  --light-yellow: #ffff78;
+  --dark-yellow: #caca49;
+  --darker-yellow: #eeee33;
+  --lighter-yellow: #fafa9e;
+  --light-white: #fcfcfa;
+  --white: #f9f9f6;
+  --black: #1a1a1a;
+  --gray-light: #d3d3d3;
+  --gray-medium: #8f8e8e;
+
+  /* Accent Colors */
+  --dark-red-muted: #913434;
+  --red-muted: #ea0a0a;
+  --blue-muted: #4a708b;
+  --light-blue-muted: #7598b1;
+  --dark-green-muted: #416b53;
+  --green-muted: #739d84;
+  --light-green-muted: #97cdac;
+  --yellow-muted: #ecead5;
+  --ochre-muted: #c19a6b;
+
+  /* Miscellaneous */
+  --border-color: #e9e8e8;
+
+  --radius-size: 5px;
+  --small-text-size: 0.75em;
+}
+
 body {
     background-color: var(--white);
 }
@@ -9,42 +43,6 @@ a {
 h1{
   color: var(--black);
 }
-
-:root {
-  --h2-header-footer-size: 0.75em;
-  --secondary-color: #b7b7b7;
-  --primary-color: #696969;
-
-  /* Base Colors */
-  --light-yellow: #ffff78;
-  --dark-yellow: #caca49;
-  --darker-yellow: #91912c;
-  --lighter-yellow: #fafa9e;
-  --light-white: #fcfcfa;
-  --white: #f9f9f6; /* Off-white background, simulating newsprint */
-  --black: #1a1a1a; /* Almost-black for strong contrast */
-  --gray-light: #d3d3d3; /* Light gray for borders or dividers */
-  --gray-medium: #8f8e8e; /* Medium gray for metadata or less prominent text */
-  --gray-dark: #333333; /* Dark gray for body text */
-
-  /* Accent Colors */
-  --dark-red-muted: #913434;
-  --red-muted: #b54b4b; /* Bold red for active navigation links */
-  --blue-muted: #4a708b; /* Muted slate blue for headers or subtle accents */
-  --ligth-blue-muted: #7598b1; /* Muted slate blue for headers or subtle accents */
-  --dark-green-muted: #416b53; /* Muted sage green for highlights or tags */
-  --green-muted: #739d84; /* Muted sage green for highlights or tags */
-  --light-green-muted: #97cdac;
-  --yellow-muted: #ecead5;
-  --ochre-muted: #c19a6b; /* Soft ochre for subtle design elements */
-
-  /* Miscellaneous */
-  --border-color: #e9e8e8; /* Borders and dividers */
-  --shadow-color: rgba(0, 0, 0, 0.1); /* For box shadows, if needed */
-
-  --radius-size: 5px;
-  --small-text-size: 0.75em;
-}  
 
 .bx{
   font-size: 1.75em;

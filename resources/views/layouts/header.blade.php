@@ -8,7 +8,7 @@
             @if(Auth::check())
                 <button type="button" id="profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class='bx bx-user-circle'></i>
-                    <h2>{{$user->username}}</h2>
+                    <span class="thick">{{$user->username}}</span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
                     <a class="dropdown-item {{ Route::currentRouteName() == 'profile' ? 'active-secondary' : '' }}" href="{{ route('profile', ['username' => $user->username]) }}"><h2>See Profile</h2></a>
@@ -24,7 +24,8 @@
                 </form>
             @else
                 <button type="button" id="profile-button" onclick="window.location='{{ route('login') }}'">
-                    <i class='bx bx-user-circle'></i><h2>Login</h2>
+                    <i class='bx bx-user-circle'></i>
+                    <span class="thick">Login</span>
                 </button>
             @endif
         </div>
