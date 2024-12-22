@@ -1,16 +1,48 @@
 body {
-    background-color: #ffffff;
+    background-color: var(--white);
 }
 
 a {
-  color: black;
   text-decoration: none;
+}
+
+h1{
+  color: var(--black);
 }
 
 :root {
   --h2-header-footer-size: 0.75em;
   --secondary-color: #b7b7b7;
   --primary-color: #696969;
+
+  /* Base Colors */
+  --light-yellow: #ffff78;
+  --dark-yellow: #caca49;
+  --darker-yellow: #91912c;
+  --lighter-yellow: #fafa9e;
+  --light-white: #fcfcfa;
+  --white: #f9f9f6; /* Off-white background, simulating newsprint */
+  --black: #1a1a1a; /* Almost-black for strong contrast */
+  --gray-light: #d3d3d3; /* Light gray for borders or dividers */
+  --gray-medium: #8f8e8e; /* Medium gray for metadata or less prominent text */
+  --gray-dark: #333333; /* Dark gray for body text */
+
+  /* Accent Colors */
+  --dark-red-muted: #913434;
+  --red-muted: #b54b4b; /* Bold red for active navigation links */
+  --blue-muted: #4a708b; /* Muted slate blue for headers or subtle accents */
+  --ligth-blue-muted: #7598b1; /* Muted slate blue for headers or subtle accents */
+  --dark-green-muted: #416b53; /* Muted sage green for highlights or tags */
+  --green-muted: #739d84; /* Muted sage green for highlights or tags */
+  --light-green-muted: #97cdac;
+  --yellow-muted: #ecead5;
+  --ochre-muted: #c19a6b; /* Soft ochre for subtle design elements */
+
+  /* Miscellaneous */
+  --border-color: #e9e8e8; /* Borders and dividers */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* For box shadows, if needed */
+
+  --radius-size: 5px;
   --small-text-size: 0.75em;
 }  
 
@@ -28,10 +60,12 @@ a {
 }
 
 .news-tile {
-  border: 1px solid #f5f5f5;
+  border: 1px solid var(--border-color);
   padding-bottom: 10px;
-
+  border-radius: var(--radius-size);
   height: 12em;
+  background-color: var(--light-white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .news-tile a{
@@ -48,7 +82,7 @@ a {
   font-weight: 700;
   padding-left: 1em;
 
-  background-color: white;
+  background-color: var(--light-white);
   flex-shrink: 0;
   flex-grow: 1;
   overflow: hidden;
@@ -60,10 +94,12 @@ a {
   max-width: 100%;
   object-fit: cover;
   object-position: center;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--gray-light);
   margin-bottom: 10px;
   flex-shrink: 0;
   height: 68%;
+  border-top-left-radius: var(--radius-size);
+  border-top-right-radius: var(--radius-size);
 }
 
 #recent-news-section .news-tile a img{
@@ -111,8 +147,17 @@ button{
   cursor: pointer;
 }
 
+button i{
+  margin-right: 5px;
+}
+
 button[type="button"]:hover{
-  background-color: var(--primary-color);
+  background-color: var(--dark-green-muted);
+  color: var(--light-yellow);
+}
+
+button[type="button"]:hover span{
+  color: var(--light-yellow);
 }
 
 .title{
@@ -123,21 +168,30 @@ button[type="button"]:hover{
 .not-available-container{
   width: 100%;
   height: 20em;
-  border: 3px dashed #f5f5f5;
+  border: 3px dashed var(--border-color);
+  border-radius: var(--radius-size);
   align-content: center;
   justify-items: center;
   margin-inline: auto;
   margin-bottom: 2em;
 }
 
-input{
+input, textarea{
   height: 3.3em;
-  border: 1px solid var(--primary-color);
+  border: 1px solid var(--gray-medium);
+  border-radius: var(--radius-size);
+  background-color: var(--white);
+  color:var(--black)
+}
+
+input:focus{
+  border-bottom: 2px solid  var(--black);
+  outline: none;
 }
 
 input[type="file"]{
   display: flex;
-  background-color: white;
+  background-color: var(--light-white);
   align-items: center;
   padding-right: 0.5em;
 }
@@ -149,17 +203,37 @@ input[type="file"]::file-selector-button{
   height: 100%;
 }
 
+.large-rectangle{
+  border-radius: var(--radius-size);
+}
+
 .large-rectangle, input[type="file"]::file-selector-button{
-  background-color: var(--secondary-color);
+  background-color: var(--green-muted);
   padding: 0.75rem 1rem;
   list-style: none;
 }
 
+
+input[type="file"]::file-selector-button:hover{
+  background-color: var(--dark-green-muted);
+  color: var(--light-yellow);
+}
+
 .small-rectangle{
-  background-color: var(--secondary-color);
+  background-color: var(--light-green-muted);
   padding-block: 0.5em;
   height: fit-content;
   list-style: none;
+  border-radius: var(--radius-size);
+  padding-inline: 0.75em;
+}
+
+.small-rectangle > i{
+ margin-right: 5px;
+}
+
+.ligth-green{
+  background-color: var(--light-green-muted);
 }
 
 .wrapper {
@@ -172,8 +246,8 @@ input[type="file"]::file-selector-button{
   position: absolute;
   top: auto;
   left: -10000px;
-  background: #000;
-  color: #fff;
+  background: var(--black);
+  color: var(--white);
   padding: 8px;
   z-index: 100;
   text-decoration: none;
@@ -198,19 +272,54 @@ textarea{
   width: 100%;
 }
 
-.greyer{
-  background-color: var(--primary-color);
+.ligth-green{
+  background-color: var(--light-green-muted);
+}
+
+.greener{
+  background-color: var(--green-muted);
   font-weight: 400;
 }
 
-.greyer:hover{
-  background-color: white;
+.greener:hover{
+  background-color: var(--dark-green-muted);
+  color: var(--light-yellow);
+}
+
+.yellow{
+  background-color: var(--yellow-muted);
+}
+
+.yellow-button{
+  background-color: var(--dark-yellow);
+  font-weight: 400;
+}
+
+.red-button{
+  background-color: var(--red-muted);
+  font-weight: 400;
+}
+
+.red-button:hover{
+  background-color: var(--dark-red-muted);
+  color: var(--light-yellow);
 }
 
 select{
-  background-color: white;
+  background-color: var(--white);
   height: 3em;
   width: 15em;
+  border: 1px solid var(--gray-medium);
+  border-radius: var(--radius-size);
+  color: var(--black);
+}
+
+select option:checked{
+  background-color: var(--dark-yellow);
+}
+
+select option:hover{
+  background-color: var(--dark-yellow);
 }
 
 button.h2 span{

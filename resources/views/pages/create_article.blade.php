@@ -6,7 +6,7 @@
     <div class="profile-wrapper">
         <h1 class="large-rectangle">Create a New Article</h1>
 
-        <form id="create-article" class="large-rectangle" action="{{ route('submitArticle') }}" method="POST" enctype="multipart/form-data">
+        <form id="create-article" class="large-rectangle yellow" action="{{ route('submitArticle') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <br>
             <div class="profile-info">
@@ -29,7 +29,7 @@
                 <input type="text" id="tag-create-article-input" placeholder="Type to search tags...">
                 <div id="propose-tag-container">
                     <label id="propose-tag-label" for="propose a tag" data-url="{{ route('showProposeTag') }}">
-                        <span>Couldn't find your tag? Propose it</span>
+                        <span class="small-text">Couldn't find your tag? Propose it</span>
                     </label>
                 </div>
                 <div id="tag-create-article-suggestions" class="suggestions"></div>
@@ -54,7 +54,7 @@
             <br>
             <div class="profile-info">
                 <span>Save your article before leaving: </span>
-                <button type="submit" class="large-rectangle small-text greyer">Submit</button>
+                <button type="submit" class="large-rectangle small-text greener">Submit</button>
             </div>
             <br>
         </form>

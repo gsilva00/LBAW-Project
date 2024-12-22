@@ -8,7 +8,7 @@
 @endphp
 @if($first_condition || $second_condition)
     @if($notification->is_viewed)
-        <div class="notification-card greyer" notification_id="{{ $notification->id }}">
+        <div class="notification-card archived" notification_id="{{ $notification->id }}">
     @else
         <div class="notification-card" notification_id="{{ $notification->id }}">
     @endif
@@ -42,7 +42,7 @@
             </button>      
         @elseif($notification_specifics[0] === 3)
             <div class="profile-info">
-            <p><i class='bx bx-comment'></i>
+            <p><i class='bx bx-upvote'></i>
             @if($pair_users[1][0] === $user->display_name)
                 <a href="{{ route('profile', ['username' => $pair_users[1][1]]) }}">You</a>
             @else
@@ -56,7 +56,7 @@
             </button>       
         @elseif($notification_specifics[0] === 4)
             <div class="profile-info">
-            <p><i class='bx bx-comment'></i>
+            <p><i class='bx bx-upvote'></i>
             @if($pair_users[1][0] === $user->display_name)
                 <a href="{{ route('profile', ['username' => $pair_users[1][1]]) }}">You</a>
             @else
@@ -70,7 +70,7 @@
             </button>    
         @elseif($notification_specifics[0] === 5)
             <div class="profile-info">
-            <p><i class='bx bx-comment'></i>
+            <p><i class='bx bx-upvote'></i>
             @if($pair_users[1][0] === $user->display_name)
                 <a href="{{ route('profile', ['username' => $pair_users[1][1]]) }}">You</a>
             @else
@@ -78,14 +78,14 @@
             @endif
              upvoted on the reply "{{$notification_specifics[1]->reply->content}}" from your article</p>
             
-            <button type="button" class="small-rectangle" onclick="window.location.href='{{ route('showArticle', ['id' => $notification_specifics[1]->reply->comment->article_id]) }}'">
+            <button type="button" class="small-rectangle greener" onclick="window.location.href='{{ route('showArticle', ['id' => $notification_specifics[1]->reply->comment->article_id]) }}'">
                 <i class='bx bx-show remove-position' ></i>
                 View Reply
             </button>
         @endif
 
         @if(!$notification->is_viewed)
-            <button type="button" class="small-rectangle" data-notification-id="{{ $notification->id }}" id="archive-button">
+            <button type="button" class="small-rectangle greener" data-notification-id="{{ $notification->id }}" id="archive-button">
                 <i class='bx bx-archive-in remove-position'></i>Archive
             </button>
         @endif

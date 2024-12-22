@@ -15,17 +15,22 @@
             <div class="profile-info">
                 <h1><?php echo e($profileUser->display_name); ?>'s Profile</h1>
                 <?php if($isOwner || $isAdmin): ?>
-                    <a href="<?php echo e(route('editProfile', ['username' => $profileUser->username])); ?>" class="large-rectangle small-text greyer">
+                    <a href="<?php echo e(route('editProfile', ['username' => $profileUser->username])); ?>" class="large-rectangle small-text greener">
                         Edit Profile
                     </a>
                 <?php endif; ?>
+                <?php if($isOwner && $user->is_banned): ?>
+                    <button type="button" id="unban-appeal-button" class="large-rectangle small-text greener" data-action-url="<?php echo e(route('appealUnbanShow')); ?>">
+                        Appeal Unban
+                    </button>
+                <?php endif; ?>
                 <?php if(Auth::check() && !$isOwner): ?>
-                    <button type="button" id="follow-user-button" class="large-rectangle small-text greyer"
+                    <button type="button" id="follow-user-button" class="large-rectangle small-text greener"
                             data-user-id="<?php echo e($user->id); ?>" data-profile-id="<?php echo e($profileUser->id); ?>">
                         <?php echo e(Auth::user()->isFollowingUser($profileUser->id) ? 'Unfollow User' : 'Follow User'); ?>
 
                     </button>
-                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                    <button type="button" id="report-user-button" class="large-rectangle small-text greener">
                             Report User
                     </button>
                 <?php endif; ?>
@@ -35,7 +40,22 @@
                     <span class="small-text"> Your username:</span>
                     <span><strong> <?php echo e($profileUser->username); ?> </strong></span>
                 <?php endif; ?>
-
+                <div class="profile-info">
+                <p class="small-text">Reputation:</p>
+                <?php if( $profileUser->reputation == 0): ?>
+                    <i class='bx bx-dice-1'></i>
+                <?php elseif($profileUser->reputation == 1): ?>
+                    <i class='bx bx-dice-2'></i>
+                <?php elseif($profileUser->reputation == 2): ?>
+                    <i class='bx bx-dice-3'></i>
+                <?php elseif($profileUser->reputation == 3): ?>
+                    <i class='bx bx-dice-4'></i>
+                <?php elseif($profileUser->reputation == 4): ?>
+                    <i class='bx bx-dice-5'></i>
+                <?php else: ?>
+                    <i class='bx bx-dice-6'></i>
+                <?php endif; ?>
+                </div>
                 <p class="small-text">Description:</p>
                 <span><?php echo e($profileUser->description); ?></span>
             </div>

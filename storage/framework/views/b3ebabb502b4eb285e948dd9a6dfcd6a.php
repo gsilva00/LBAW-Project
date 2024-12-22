@@ -9,7 +9,7 @@
         <?php if(Auth::check()): ?>
         <form method="POST" action="<?php echo e(Auth::user()->hasFollowedTopic($topic) ? route('unfollowTopic', $topic->name) : route('followTopic', $topic->name)); ?>">
             <?php echo csrf_field(); ?>
-            <button type="submit" class="large-rectangle small-text greyer">
+            <button type="submit" class="large-rectangle small-text greener">
                 <?php echo e(Auth::user()->hasFollowedTopic($topic) ? 'Unfollow topic' : 'Follow topic'); ?>
 
             </button>

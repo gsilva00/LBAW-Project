@@ -34,7 +34,7 @@
                 $isUpvoted = $user ? $comment->isUpvotedBy($user) : false;
                 $isDownvoted = $user ? $comment->isDownvotedBy($user) : false;
             ?>
-            <?php if(!$comment->is_deleted): ?>
+            <?php if(!$comment->is_deleted && !$user->is_banned): ?>
                 <button class="upvote-comment-button" data-comment-id="<?php echo e($comment->id); ?>">
                     <i class='bx <?php echo e($isUpvoted ? "bxs-upvote" : "bx-upvote"); ?>' title="upvote comment"></i>
                 </button>
@@ -46,12 +46,12 @@
         </div>
         <?php if(!$comment->is_deleted && Auth::check()): ?>
             <?php if(!$isReply): ?>
-                <button class="small-rectangle" title="reply comment">
+                <button class="small-rectangle yellow-button" title="reply comment">
                     <i class='bx bx-message remove-position'></i>
                     <span>Reply</span>
                 </button>
             <?php endif; ?>
-            <button class="small-rectangle" title="report comment">
+            <button class="small-rectangle red-button" title="report comment">
                 <i class='bx bx-flag remove-position' ></i>
                 <span>Report</span>
             </button>

@@ -10,6 +10,10 @@
     background-color: #fff;
 }
 
+.notification-card.archived{
+    background-color: #eee;
+}
+
 .date{
     text-align: right;
     color: #666;
@@ -19,10 +23,18 @@
     width: 85%;
 }
 
+.notification-card .profile-info.appeal-wrapper{
+    width: 100%;
+}
+
 .notification-card .profile-info p {
     position: relative;
     bottom: 0.2em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.notification-card .profile-info.appeal-wrapper p {
+    white-space: pre-wrap;
 }

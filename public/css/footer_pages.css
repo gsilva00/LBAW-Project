@@ -1,19 +1,19 @@
-#contacts-header{
-    background-color: #f1f1f1;
+#footer-page-header{
+    background-color: var(--yellow-muted);
     padding-block: 6em;
 }
 
-#contacts-header h1{
+#footer-page-header h1{
     margin: 0;
 }
 
-#contacts-header div{
+#footer-page-header div{
     width: 50%;
    position: relative;
    left: 10em;
 }
 
-#contacts-content{
+#footer-page-content{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -23,29 +23,31 @@
     margin-bottom: 2em;
 }
 
-#contacts-content > div{
+#footer-page-content > div{
     display: grid;
     align-content: space-between;
     width: 30%;
     padding-block: 2em;
-    border-color: var(--secondary-color);
+    border-color: var(--border-color);
+    border-radius: var(--radius-size);
     border-width: 1px;
     border-style: solid;
-    background-color: white;
+    background-color: var(--light-white);
     position: relative;
     top: -3em;
     text-align: center;
     flex-grow: 1;
 }
 
-#contacts-content div p, #contacts-content div h2 {
+#footer-page-content div p, #footer-page-content div h2 {
     padding-inline: 1em;
 }
 
-#contacts-content div button{
+#footer-page-content div button{
     justify-self: center;
 }
 
-#contacts-content div .bx{
+#footer-page-content div .bx{
     font-size: 3em;
+    color: var(--black);
 }

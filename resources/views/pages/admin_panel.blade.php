@@ -5,14 +5,14 @@
 @section('content')
     <div class="recent-news-wrapper">
         <h1 class="large-rectangle">Administrator Panel</h1>
-        <h2 class="large-rectangle">List of User Accounts</h2>
+        <h2 class="large-rectangle ligth-green">List of User Accounts</h2>
         <div id="users-section">
             @if(!$usersPaginated->isEmpty())
                 <div id="user-list">
                     @include('partials.user_tile_list', ['users' => $usersPaginated, 'isAdminPanel' => true])
                 </div>
                 <button id="load-more-users"
-                        class="large-rectangle small-text greyer"
+                        class="large-rectangle small-text greener"
                         data-entity="user"
                         data-page-num="{{ $userCurrPageNum+1 }}"
                         data-url="{{ route('moreUsers') }}"
@@ -30,20 +30,20 @@
                 </div>
             @endif
         </div>
-        <h2 class="large-rectangle">Create New User</h2>
+        <h2 class="large-rectangle ligth-green">Create New User</h2>
         <div id="user-form-section">
             @include('partials.create_user_form')
         </div>
         <br>
         <br>
-        <h2 class="large-rectangle">List of Topics</h2>
+        <h2 class="large-rectangle ligth-green">List of Topics</h2>
         <div id="topics-section">
             @if(!$topicsPaginated->isEmpty())
-                <div id="topic-list">
+                <div id="topic-list" class="profile-info">
                     @include('partials.topic_tile_list', ['topics' => $topicsPaginated])
                 </div>
                 <button id="load-more-topics"
-                        class="large-rectangle small-text greyer"
+                        class="large-rectangle small-text greener"
                         data-entity="topic"
                         data-page-num="{{ $topicCurrPageNum+1 }}"
                         data-url="{{ route('moreTopics') }}"
@@ -61,20 +61,20 @@
                 </div>
             @endif
         </div>
-        <h2 class="large-rectangle">Create a New Topic</h2>
+        <h2 class="large-rectangle ligth-green">Create a New Topic</h2>
         <div id="topic-form-section">
             @include('partials.create_topic_form')
         </div>
         <br>
         <br>
-        <h2 class="large-rectangle">List of Tags</h2>
+        <h2 class="large-rectangle ligth-green">List of Tags</h2>
         <div id="tags-section">
             @if(!$tagsPaginated->isEmpty())
                 <div id="tag-list">
                     @include('partials.tag_tile_list', ['tags' => $tagsPaginated])
                 </div>
                 <button id="load-more-tags"
-                        class="large-rectangle small-text greyer"
+                        class="large-rectangle small-text greener"
                         data-entity="tag"
                         data-page-num="{{ $tagCurrPageNum+1 }}"
                         data-url="{{ route('moreTags') }}"
@@ -92,20 +92,22 @@
                 </div>
             @endif
         </div>
-        <h2 class="large-rectangle">Create a New Tag</h2>
+        <br>
+        <br>
+        <h2 class="large-rectangle ligth-green">Create a New Tag</h2>
         <div id="tag-form-section">
             @include('partials.create_tag_form')
         </div>
         <br>
         <br>
-        <h2 class="large-rectangle">List of Pending Tag Proposals</h2>
+        <h2 class="large-rectangle ligth-green">List of Pending Tag Proposals</h2>
         <div id="tag-proposals-section">
             @if(!$tagProposalsPaginated->isEmpty())
                 <div id="tag-proposal-list">
                     @include('partials.propose_tag_tile_list', ['tagProposalsPaginated' => $tagProposalsPaginated])
                 </div>
                 <button id="load-more-tag-proposals"
-                        class="large-rectangle small-text greyer"
+                        class="large-rectangle small-text greener"
                         data-entity="tag-proposal"
                         data-page-num="{{ $tagProposalCurrPageNum+1 }}"
                         data-url="{{ route('moreTagProposals') }}"
@@ -125,14 +127,14 @@
                 </div>
             @endif
         </div>
-        <h2 class="large-rectangle">List of Pending Unban Appeals</h2>
+        <h2 class="large-rectangle ligth-green">List of Pending Unban Appeals</h2>
         <div id="unban-appeals-section">
             @if(!$unbanAppealsPaginated->isEmpty())
                 <div id="unban-appeal-list">
                     @include('partials.unban_appeal_tile_list', ['unbanAppealsPaginated' => $unbanAppealsPaginated])
                 </div>
                 <button id="load-more-unban-appeals"
-                        class="large-rectangle small-text greyer"
+                        class="large-rectangle small-text greener"
                         data-entity="unban-appeal"
                         data-page-num="{{ $unbanAppealCurrPageNum+1 }}"
                         data-url="{{ route('moreUnbanAppeals') }}"

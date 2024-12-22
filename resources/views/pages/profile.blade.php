@@ -15,23 +15,23 @@
             <div class="profile-info">
                 <h1>{{ $profileUser->display_name }}'s Profile</h1>
                 @if($isOwner || $isAdmin)
-                    <a href="{{ route('editProfile', ['username' => $profileUser->username]) }}" class="large-rectangle small-text greyer">
+                    <a href="{{ route('editProfile', ['username' => $profileUser->username]) }}" class="large-rectangle small-text greener">
                         Edit Profile
                     </a>
                 @endif
                 @if($isOwner && $user->is_banned)
-                    <button type="button" id="unban-appeal-button" class="large-rectangle small-text greyer" data-action-url="{{ route('appealUnbanShow') }}">
+                    <button type="button" id="unban-appeal-button" class="large-rectangle small-text greener" data-action-url="{{ route('appealUnbanShow') }}">
                         Appeal Unban
                     </button>
                 @endif
                 @if(Auth::check() && !$isOwner)
-                    <button type="button" id="follow-user-button" class="large-rectangle small-text greyer"
+                    <button type="button" id="follow-user-button" class="large-rectangle small-text greener"
                             data-user-id="{{ $user->id }}" data-profile-id="{{ $profileUser->id }}">
                         {{ Auth::user()->isFollowingUser($profileUser->id) ? 'Unfollow User' : 'Follow User' }}
                     </button>
                 @endif
                 @if(Auth::check() && !$isOwner && !$isAdmin)
-                    <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
+                    <button type="button" id="report-user-button" class="large-rectangle small-text greener">
                             Report User
                     </button>
                 @endif
@@ -48,7 +48,22 @@
                     <span class="small-text"> Your username:</span>
                     <span><strong> {{ $profileUser->username }} </strong></span>
                 @endif
-
+                <div class="profile-info">
+                <p class="small-text">Reputation:</p>
+                @if( $profileUser->reputation == 0)
+                    <i class='bx bx-dice-1'></i>
+                @elseif($profileUser->reputation == 1)
+                    <i class='bx bx-dice-2'></i>
+                @elseif($profileUser->reputation == 2)
+                    <i class='bx bx-dice-3'></i>
+                @elseif($profileUser->reputation == 3)
+                    <i class='bx bx-dice-4'></i>
+                @elseif($profileUser->reputation == 4)
+                    <i class='bx bx-dice-5'></i>
+                @else
+                    <i class='bx bx-dice-6'></i>
+                @endif
+                </div>
                 <p class="small-text">Description:</p>
                 <span>{{ $profileUser->description }}</span>
             </div>

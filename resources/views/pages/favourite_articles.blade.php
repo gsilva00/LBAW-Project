@@ -10,7 +10,7 @@
             <p>You have no favourite articles yet.</p>
         </div>
     @else
-        <div class="articles-list">
+        <div class="recent-news-container">
             @foreach($favArticles as $article)
                 @include('partials.long_news_tile', [
                         'article' => $article,

@@ -3,7 +3,15 @@
     bottom: 0;
     left:0;
     padding: 2em;
-    background-color: var(--secondary-color);
+    border-radius: var(--radius-size);
+}
+
+.error-pop-up{
+    background-color: var(--red-muted);
+}
+
+.success-pop-up{
+    background-color: var(--green-muted);
 }
 
 #close-message-button{

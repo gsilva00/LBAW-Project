@@ -8,7 +8,7 @@
             <p>You have no favourite articles yet.</p>
         </div>
     <?php else: ?>
-        <div class="articles-list">
+        <div class="recent-news-container">
             <?php $__currentLoopData = $favArticles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $article): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php echo $__env->make('partials.long_news_tile', [
                         'article' => $article,

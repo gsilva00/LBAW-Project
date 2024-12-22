@@ -10,18 +10,19 @@
 }
 
 .feed-options-container label, .search-comments-options-container label{
-    background-color: var(--secondary-color);
+    background-color: var(--lighter-yellow);
     padding-inline: 1em;
     padding-block: 0.75em;
     align-self: center;
+    border-radius: var(--radius-size);
 }
 
 .feed-options-container label:hover, .search-comments-options-container label:hover{
-    background-color: var(--primary-color);
+    background-color: var(--dark-yellow);
 }
 
 .feed-options-container label.active, .search-comments-options-container label.active{
-    border: 3px solid var(--primary-color);
+    border: 3px solid var(--dark-yellow);
 }
 
 .feed-options-container label .bx, .search-comments-options-container label .bx{

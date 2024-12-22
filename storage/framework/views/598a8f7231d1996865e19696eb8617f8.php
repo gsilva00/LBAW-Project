@@ -11,11 +11,11 @@
                     <h2><?php echo e($user->username); ?></h2>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="profile-button">
-                    <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'profile' ? 'active' : ''); ?>" href="<?php echo e(route('profile', ['username' => $user->username])); ?>"><h2>See Profile</h2></a>
-                    <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'notifications.show.page' ? 'active' : ''); ?>" href="<?php echo e(route('notifications.show.page')); ?>"><h2>Notifications</h2></a>
-                    <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'showFavouriteArticles' ? 'active' : ''); ?>" href="<?php echo e(route('showFavouriteArticles')); ?>"><h2>Favourite Articles</h2></a>
+                    <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'profile' ? 'active-secondary' : ''); ?>" href="<?php echo e(route('profile', ['username' => $user->username])); ?>"><h2>See Profile</h2></a>
+                    <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'notifications.show.page' ? 'active-secondary' : ''); ?>" href="<?php echo e(route('notifications.show.page')); ?>"><h2>Notifications</h2></a>
+                    <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'showFavouriteArticles' ? 'active-secondary' : ''); ?>" href="<?php echo e(route('showFavouriteArticles')); ?>"><h2>Favourite Articles</h2></a>
                     <?php if($user->is_admin): ?>
-                        <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'adminPanel' ? 'active' : ''); ?>" href="<?php echo e(route('adminPanel')); ?>"><h2>Administrator Panel</h2></a>
+                        <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'adminPanel' ? 'active-secondary' : ''); ?>" href="<?php echo e(route('adminPanel')); ?>"><h2>Administrator Panel</h2></a>
                     <?php endif; ?>
                     <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><h2>Logout</h2></a>
                 </div>
@@ -30,9 +30,9 @@
         </div>
     </div>
     <div id="bottom-part-header">
-        <a class="<?php echo e(Route::currentRouteName() == 'homepage' ? 'active' : ''); ?>" href="<?php echo e(route('homepage')); ?>"><h2><i class='bx bx-home-alt'></i> Homepage</h2></a>
+        <a class="<?php echo e(Route::currentRouteName() == 'homepage' ? 'active' : ''); ?>" href="<?php echo e(route('homepage')); ?>"><h2><i class='bx bx-home-alt'></i>Homepage</h2></a>
         <a class="<?php echo e(Route::currentRouteName() == 'showRecentNews' ? 'active' : ''); ?>" href="<?php echo e(route('showRecentNews')); ?>"><h2><i class='bx bx-stopwatch'></i>Most Recent News</h2></a>
-        <a class="<?php echo e(Route::currentRouteName() == 'showMostVotedNews' ? 'active' : ''); ?>" href="<?php echo e(route('showMostVotedNews')); ?>"><h2><i class='bx bx-sort'></i> Most Voted News</h2></a>
+        <a class="<?php echo e(Route::currentRouteName() == 'showMostVotedNews' ? 'active' : ''); ?>" href="<?php echo e(route('showMostVotedNews')); ?>"><h2><i class='bx bx-sort'></i>Most Voted News</h2></a>
         <a class="<?php echo e(Route::currentRouteName() == 'showTrendingTags' ? 'active' : ''); ?>" href="<?php echo e(route('showTrendingTags')); ?>"><h2><i class='bx bx-trending-up'></i>Trending Tags</h2></a>
         <h2 class="topic">
             <a href="<?php echo e(route('showTopic', ['name' => 'Politics'])); ?>" class="<?php echo e(Route::currentRouteName() == 'showTopic' && Route::input('name') == 'Politics' ? 'active' : ''); ?>">Politics</a>
@@ -52,7 +52,7 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="all-topics-button">
             <?php $__currentLoopData = $topics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $topic): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'showTopic' && Route::input('name') == $topic->name ? 'active' : ''); ?>" href="<?php echo e(route('showTopic', ['name' => $topic->name])); ?>"><h2><?php echo e($topic->name); ?></h2></a>
+                <a class="dropdown-item <?php echo e(Route::currentRouteName() == 'showTopic' && Route::input('name') == $topic->name ? 'active-secondary' : ''); ?>" href="<?php echo e(route('showTopic', ['name' => $topic->name])); ?>"><h2><?php echo e($topic->name); ?></h2></a>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
         <?php echo $__env->make('partials.search',['tags' => $tags, 'topics' => $topics], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

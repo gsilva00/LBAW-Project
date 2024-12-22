@@ -1,4 +1,4 @@
-<form class="large-rectangle" id="createFullUserForm" method="POST" action="{{ route('adminCreateUser') }}" enctype="multipart/form-data">
+<form class="large-rectangle yellow" id="createFullUserForm" method="POST" action="{{ route('adminCreateUser') }}" enctype="multipart/form-data">
     @csrf
     <br>
     <div class="profile-info">
@@ -60,6 +60,7 @@
     <br>
     <br>
     <div class="profile-info">
-        <button type="submit" class="large-rectangle small-text greyer">Create</button>
+        <button type="submit" class="large-rectangle small-text greener">Create User</button>
     </div>
+    <br>
 </form>

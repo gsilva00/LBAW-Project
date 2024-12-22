@@ -22,7 +22,7 @@
         <link href="{{ url('css/recent_news.css') }}" rel="stylesheet">
         <link href="{{ url('css/trending_tag.css') }}" rel="stylesheet">
         <link href="{{ url('css/article_page.css') }}" rel="stylesheet">
-        <link href="{{ url('css/contacts.css') }}" rel="stylesheet">
+        <link href="{{ url('css/footer_pages.css') }}" rel="stylesheet">
         <link href="{{ url('css/profile.css') }}" rel="stylesheet">
         <link href="{{ url('css/filter.css') }}" rel="stylesheet">
         <link href="{{ url('css/popup.css') }}" rel="stylesheet">
