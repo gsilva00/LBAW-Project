@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Favourite Articles')
+
 @section('content')
 <div class="recent-news-wrapper">
     <h1 class="large-rectangle">Favourite Articles</h1>

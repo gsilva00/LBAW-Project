@@ -110,6 +110,8 @@ Route::prefix('admin-panel')->controller
     // User management
     Route::get('/more-users', 'moreUsers')->name('moreUsers');
     Route::post('/create-user', 'createFullUser')->name('adminCreateUser');
+    Route::post('/ban-user/{id}', 'banUser')->name('adminBanUser');
+    Route::post('/unban-user/{id}', 'unbanUser')->name('adminUnbanUser');
     // Topic management
     Route::get('/more-topics', 'moreTopics')->name('moreTopics');
     Route::post('/create-topic', 'createTopic')->name('adminCreateTopic');

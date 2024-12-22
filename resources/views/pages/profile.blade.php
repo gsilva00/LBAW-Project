@@ -2,7 +2,7 @@
 
 @section('title')
     @if($isOwner)
-        Your Profile
+        My Profile
     @else
         {{ $profileUser->display_name }}'s Profile
     @endif
@@ -29,9 +29,18 @@
                             data-user-id="{{ $user->id }}" data-profile-id="{{ $profileUser->id }}">
                         {{ Auth::user()->isFollowingUser($profileUser->id) ? 'Unfollow User' : 'Follow User' }}
                     </button>
+                @endif
+                @if(Auth::check() && !$isOwner && !$isAdmin)
                     <button type="button" id="report-user-button" class="large-rectangle small-text greyer">
                             Report User
                     </button>
+                @endif
+                @if(!$isOwner && $isAdmin)
+                    <form action="{{ route('deleteProfile', ['id' => $profileUser->id]) }}" method="POST" data-action="delete" style="display:inline;">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{ $profileUser->id }}">
+                        <button type="submit" class="large-rectangle small-text greyer">Delete This Account</button>
+                    </form>
                 @endif
             </div>
             <div id="rest-profile-info">
@@ -43,8 +52,8 @@
                 <p class="small-text">Description:</p>
                 <span>{{ $profileUser->description }}</span>
             </div>
-            </section>
-            @if($isOwner || $isAdmin)
+        </section>
+        @if($isOwner || $isAdmin)
             <section>
                 <h2 id="favouriteTopicTitle">Favourite Topics</h2>
                 @if($profileUser->followedTopics->isEmpty())
@@ -52,13 +61,13 @@
                         <p>No favourite topics.</p>
                     </div>
                 @else
-                        <div class="selected">
-                    @foreach($profileUser->followedTopics as $topic)
-                        <div class="block">
-                            <span>{{ $topic->name }}</span><button class="remove" data-url="{{ route('unfollowTopic', $topic->name) }}" data-topic-id="{{ $topic->id }}">&times;</button>
-                        </div>
-                    @endforeach
-                        </div>
+                    <div class="selected">
+                        @foreach($profileUser->followedTopics as $topic)
+                            <div class="block">
+                                <span>{{ $topic->name }}</span><button class="remove" data-url="{{ route('unfollowTopic', $topic->name) }}" data-topic-id="{{ $topic->id }}">&times;</button>
+                            </div>
+                        @endforeach
+                    </div>
                 @endif
             </section>
             <section>
@@ -77,7 +86,6 @@
                     </div>
                 @endif
             </section>
-
             <section>
                 <h2>Favourite Authors</h2>
                 @if($profileUser->following->isEmpty())
@@ -109,7 +117,6 @@
             @endif
 
         </div>
-
         @if($ownedArticles->isNotEmpty())
             <div class="sec-articles profile-page">
                 @foreach($ownedArticles as $article)

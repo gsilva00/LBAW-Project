@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Contacts')
+@section('title', 'Features')
 
 @section('content')
     <div id="contacts-header">

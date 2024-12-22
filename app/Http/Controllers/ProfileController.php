@@ -68,7 +68,7 @@ class ProfileController extends Controller
         return view('pages.edit_profile', [
             'user' => $authUser,
             'profileUser' => $user,
-            'isOwner' => $user->username === $authUser->username,
+            'isOwner' => $user->id === $authUser->id,
         ]);
     }
 
@@ -161,25 +161,34 @@ class ProfileController extends Controller
             ->withSuccess('Profile updated successfully!');
     }
 
-    public function delete(Request $request, $targetUserId): View|RedirectResponse
+    public function delete(Request $request, $targetUserId): View|RedirectResponse|JsonResponse
     {
         /** @var User $authUser */
         $authUser = Auth::user();
         $targetUser = User::findOrFail($targetUserId);
+        $isOwner = $authUser->id === $targetUser->id;
 
         $this->authorize('delete', $targetUser);
+
+        if (!$isOwner && $targetUser->is_admin) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete an admin account.'
+            ], 403);
+        }
 
         $request->validate([
             'cur_password_delete' => $authUser->is_admin ? 'nullable|string' : 'required|string',
         ]);
 
-        if (!$authUser->is_admin && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
-            return redirect()->back()->withErrors(['cur_password_delete' => 'Current password is incorrect'])->withInput();
+        if ($isOwner && !Hash::check($request->input('cur_password_delete'), $authUser->password)) {
+            return redirect()->back()
+                ->withErrors('Current password is incorrect')->withInput();
         }
 
         $targetUser->deleteUserTransaction($targetUserId);
 
-        if ($authUser->id === $targetUser->id) {
+        if ($isOwner) {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -188,8 +197,10 @@ class ProfileController extends Controller
                 ->withSuccess('Your account has been deleted successfully.');
         }
 
-        return redirect()->route('adminPanel')
-            ->withSuccess('User account deleted successfully!');
+        return response()->json([
+            'success' => true,
+            'message' => 'User account deleted successfully.'
+        ]);
     }
 
     public function appealUnbanShow(): View

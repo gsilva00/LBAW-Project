@@ -37,7 +37,7 @@ class UserPolicy
      */
     public function view(?User $authUser, User $targetUser): bool
     {
-        // Any user can view profiles
+        // Any user can view profiles of non-deleted users
         return !$targetUser->is_deleted;
     }
 
@@ -135,4 +135,15 @@ class UserPolicy
         return Auth::check() && !$authUser->is_banned && !$targetUser->is_banned;
     }
 
+    public function ban(User $authUser, User $targetUser): bool
+    {
+        // Only admins can ban users
+        return false;
+    }
+
+    public function unban(User $authUser, User $targetUser): bool
+    {
+        // Only admins can unban users
+        return false;
+    }
 }

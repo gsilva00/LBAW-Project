@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Recover Password')
+
 @section('content')
     @if(session('status'))
         @if(session('status') === 'Success!')

@@ -190,6 +190,36 @@ class AdminPanelController extends Controller
         ]);
     }
 
+    public function banUser(int $id): JsonResponse
+    {
+        $this->authorize('ban', User::class);
+
+        $user = User::findOrFail($id);
+        $user->is_banned = true;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'is_banned' => true,
+            'message' => 'User banned successfully.'
+        ]);
+    }
+
+    public function unbanUser(int $id): JsonResponse
+    {
+        $this->authorize('unban', User::class);
+
+        $user = User::findOrFail($id);
+        $user->is_banned = false;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'is_banned' => false,
+            'message' => 'User unbanned successfully.'
+        ]);
+    }
+
 
     public function moreTopics(Request $request): JsonResponse
     {
