@@ -712,6 +712,35 @@ paths:
                     description: 'Redirecting to login page'
                     value: '/login'
 
+  /notifications/{id}/archive:
+    get:
+      operationId: R214
+      summary: 'R214: Archive a notifications'
+      description: 'Archive a notification action. Access: USR'
+      tags:
+        - 'M02: Individual Profile'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. Archive notification.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials to access that page.'
+          headers:
+            Location:
+              schema:
+                type: string
+                example:
+                  403Success:
+                    description: 'Redirecting to login page'
+                    value: '/login'
+
 ######################################### News #########################################
 
   /homepage:
