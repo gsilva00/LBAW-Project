@@ -1274,7 +1274,7 @@ paths:
                   description: 'Redirecting to home page.'
                   value: '/homepage'
 
-  /users:
+  /admin-panel/users:
     get:
       operationId: R902
       summary: 'R902: View More Users'
@@ -1285,7 +1285,7 @@ paths:
         '200':
           description: 'Success. Display more users in admin panel.'
 
-  /users/create:
+  /admin-panel/users/create:
     post:
       operationId: R903
       summary: 'R903: Create Custom User Action'
@@ -1347,10 +1347,279 @@ paths:
         '403':
           description: 'You do not possess the credentials for this action.'
 
+  /admin-panel/users/{id}/ban:
+    post:
+      operationId: R904
+      summary: 'R904: Ban User'
+      description: 'Ban a user action. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. User has been banned'
+
+  /users/{id}/unban:
+    post:
+      operationId: R905
+      summary: 'R905: Unban User'
+      description: 'Unban a user action. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+
+      responses:
+        '200':
+          description: 'Success. User has been unbanned'
+
+  /admin-panel/topics:
+    get:
+      operationId: R906
+      summary: 'R906: View More Topics'
+      description: 'Show more topics for the admin panel page. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more topics in admin panel.'
+
+  /admin-panel/topics/create:
+    post:
+      operationId: R907
+      summary: 'R907: Create Topic Action'
+      description: 'Create a new topic. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+                - name
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new topic information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. Redirect to admin panel.'
+                  value: '/admin-panel'
+                302Failure:
+                  description: 'Failed. Redirect to admin panel.'
+                  value: '/admin-panel'
+        '403':
+          description: 'You do not possess the credentials for this action.'
+
+  /admin-panel/tags:
+    get:
+      operationId: R908
+      summary: 'R908: View More Tags'
+      description: 'Show more tags for the admin panel page. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more tags in admin panel.'
+
+  /admin-panel/tags/create:
+    post:
+      operationId: R909
+      summary: 'R909: Create Tag Action'
+      description: 'Create a new tag. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                isTrending:
+                  type: boolean
+              required:
+                - name
+                - isTrending
+
+      responses:
+        '302':
+          description: 'Redirect after processing the new tag information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Success:
+                  description: 'Successful. Redirect to admin panel.'
+                  value: '/admin-panel'
+                302Failure:
+                  description: 'Failed. Redirect to admin panel.'
+                  value: '/admin-panel'
+        '403':
+          description: 'You do not possess the credentials for this action.'
+
+  /admin-panel/tags/trending/{id}/toggle:
+    post:
+      operationId: R910
+      summary: 'R910: Toggle Trending Tag'
+      description: 'Toggles the trending status of a tag. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the tag to toggle'
+
+      responses:
+        '200':
+          description: 'Success. The trending status of the tag has been toggled.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
+  /admin-panel/tag-proposals:
+    get:
+      operationId: R911
+      summary: 'R911: View More Tag Proposals'
+      description: 'Displays more tag proposals. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more tag proposals.'
+
+  /admin-panel/tag-proposals/{id}/accept:
+    post:
+      operationId: R912
+      summary: 'R912: Accept Tag Proposal'
+      description: 'Accepts a tag proposal. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the tag proposal to accept'
+
+      responses:
+        '200':
+          description: 'Success. The tag proposal has been accepted.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
+  /admin-panel/tag-proposals/{id}/reject:
+    post:
+      operationId: R913
+      summary: 'R913: Reject Tag Proposal'
+      description: 'Rejects a tag proposal. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the tag proposal to reject'
+
+      responses:
+        '200':
+          description: 'Success. The tag proposal has been rejected.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
+  /admin-panel/unban-appeals:
+    get:
+      operationId: R914
+      summary: 'R914: View More Unban Appeals'
+      description: 'Displays more unban appeals. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display more unban appeals.'
+
+  /admin-panel/unban-appeals/{id}/accept:
+    post:
+      operationId: R915
+      summary: 'R915: Accept Unban Appeal'
+      description: 'Accepts an unban appeal. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the unban appeal to accept'
+
+      responses:
+        '200':
+          description: 'Success. The unban appeal has been accepted.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
+  /admin-panel/unban-appeals/{id}/reject:
+    post:
+      operationId: R916
+      summary: 'R916: Reject Unban Appeal'
+      description: 'Rejects an unban appeal. Access: ADM'
+      tags:
+        - 'M09: Administration and Static Pages'
+
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the unban appeal to reject'
+
+      responses:
+        '200':
+          description: 'Success. The unban appeal has been rejected.'
+        '403':
+          description: 'Unauthorized. You do not possess the credentials for this action.'
+
   /contacts:
     get:
-      operationId: R904
-      summary: 'R904: View Contacts'
+      operationId: R917
+      summary: 'R917: View Contacts'
       description: 'Show the contacts page. Access: GUE, USR'
       tags:
         - 'M09: Administration and Static Pages'
@@ -1360,8 +1629,8 @@ paths:
 
   /about-us:
     get:
-      operationId: R905
-      summary: 'R905: View About Us'
+      operationId: R918
+      summary: 'R918: View About Us'
       description: 'Show the about us page. Access: GUE, USR'
       tags:
         - 'M09: Administration and Static Pages'
