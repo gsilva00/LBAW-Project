@@ -1565,6 +1565,147 @@ paths:
           '200':
             description: 'Success. Appeal unban request submitted.'
 
+  /article/{id}/report-modal:
+    post:
+      operationId: R803
+      summary: 'R803: Show Report Article Modal'
+      description: 'Displays the modal for reporting an article. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the article to report'
+      responses:
+        '200':
+          description: 'Success. Display report article modal.'
+
+  /comment/{id}/report-modal:
+    post:
+      operationId: R804
+      summary: 'R804: Show Report Comment Modal'
+      description: 'Displays the modal for reporting a comment. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the comment to report'
+      responses:
+        '200':
+          description: 'Success. Display report comment modal.'
+
+  /user/{id}/report-modal:
+    post:
+      operationId: R805
+      summary: 'R805: Show Report User Modal'
+      description: 'Displays the modal for reporting a user. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the user to report'
+      responses:
+        '200':
+          description: 'Success. Display report user modal.'
+
+  /article/{id}/report:
+    post:
+      operationId: R806
+      summary: 'R806: Report Article'
+      description: 'Submits a report for an article. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the article to report'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+              required:
+                - reason
+      responses:
+        '200':
+          description: 'Success. Article report submitted.'
+
+  /comment/{id}/report:
+    post:
+      operationId: R807
+      summary: 'R807: Report Comment'
+      description: 'Submits a report for a comment. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the comment to report'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+              required:
+                - reason
+      responses:
+        '200':
+          description: 'Success. Comment report submitted.'
+
+  /user/{id}/report:
+    post:
+      operationId: R808
+      summary: 'R808: Report User'
+      description: 'Submits a report for a user. Access: USR'
+      tags:
+        - 'M08: Report and Fact Checking'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: 'The ID of the user to report'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+              required:
+                - reason
+      responses:
+        '200':
+          description: 'Success. User report submitted.'
+
 ############################ Administration and Static Pages ###########################
 
   /admin-panel:
@@ -1951,3 +2092,14 @@ paths:
       responses:
         '200':
           description: 'Success. Display about us page.'
+
+  /features:
+    get:
+      operationId: R919
+      summary: 'R919: View Features'
+      description: 'Show the features page. Access: GUE, USR'
+      tags:
+        - 'M09: Administration and Static Pages'
+      responses:
+        '200':
+          description: 'Success. Display features page.'
