@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
+@php
+    $isOwner = Auth::check() && $user->id == $profileUser->id;
+    $isAdmin = Auth::check() && $user->is_admin;
+@endphp
+
 @section('title')
-    @if($isOwner)
+    @if($user->id == $profileUser->id)
         My Profile
     @else
         {{ $profileUser->display_name }}'s Profile
@@ -25,10 +30,15 @@
                     </button>
                 @endif
                 @if(Auth::check() && !$isOwner)
-                    <button type="button" id="follow-user-button" class="large-rectangle small-text greener"
-                            data-user-id="{{ $user->id }}" data-profile-id="{{ $profileUser->id }}" data-url="{{Auth::user()->isFollowingUser($profileUser->id) ? route('unfollowUserAction') : route('followUserAction')}}">
-                        {{ Auth::user()->isFollowingUser($profileUser->id) ? 'Unfollow User' : 'Follow User' }}
-                    </button>
+                    <form method="POST" action="{{ Auth::user()->isFollowingUser($profileUser->id) ? route('unfollowUserAction') : route('followUserAction') }}">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{ $profileUser->id }}">
+                        <button type="submit" id="follow-user-button" class="large-rectangle small-text greener"
+                                data-user-id="{{ $user->id }}" data-profile-id="{{ $profileUser->id }}" data-url="{{ Auth::user()->isFollowingUser($profileUser->id) ? route('unfollowUserAction') : route('followUserAction') }}">
+                            {{ Auth::user()->isFollowingUser($profileUser->id) ? 'Unfollow User' : 'Follow User' }}
+                        </button>
+                    </form>
+
                     <meta name="csrf-token" content="{{ csrf_token() }}">
                 @endif
                 @if(Auth::check() && !$isOwner && !$isAdmin)

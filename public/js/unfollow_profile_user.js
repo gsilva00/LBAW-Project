@@ -46,7 +46,7 @@ function unfollow_topic() {
 
 unfollow_topic();
 
-//unfollow tag
+
 function unfollow_profile_user() {
     const removeButtons = document.querySelectorAll('.remove');
 

@@ -27,7 +27,7 @@ class ProfileController extends Controller
          * Return type of Auth::user() guaranteed on config/auth.php's User Providers
          */
         $authUser = Auth::user();
-        $user = User::find($username);
+        $user = User::where('username', $username)->firstOrFail();
 
         $this->authorize('view', $user);
 

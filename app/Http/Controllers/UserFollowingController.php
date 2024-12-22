@@ -139,7 +139,7 @@ class UserFollowingController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        $targetUser = User::find($request->profile_id);
+        $targetUser = User::findorFail($request->user_id);
 
         Log::info("TESTE");
 
@@ -158,10 +158,16 @@ class UserFollowingController extends Controller
 
         // Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
 
-        $user->following()->attach($request->profile_id);
+        $user->following()->attach($request->user_id);
 
-        return response()->json([
-            'success' => true
+        $ownedArticles = $targetUser->ownedArticles()->get();
+        $ownedArticles = ArticlePage::filterDeletedArticles($ownedArticles);
+
+        return view('pages.profile', [
+            'user' => $user,
+            'profileUser' => $targetUser,
+            'isAdmin' => $user ? $user->is_admin : false,
+            'ownedArticles' => $ownedArticles
         ]);
     }
 
@@ -169,23 +175,25 @@ class UserFollowingController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        $targetUser = User::find($request->profile_id);
-
+        $targetUser = User::findorFail($request->user_id);
 
         try {
             $this->authorize('unfollowUser', $targetUser);
-        }
-        catch (AuthorizationException $e) {
+        } catch (AuthorizationException $e) {
             return redirect()->route('login')
                 ->withErrors('Unauthorized. You need to login to perform that action.');
         }
 
-        // Log::info('Test ' . ($user->isFollowingUser($request->profile_id) ? 'true' : 'false'));
+        $user->following()->detach($request->user_id);
 
-        $user->following()->detach($request->profile_id);
+        $ownedArticles = $targetUser->ownedArticles()->get();
+        $ownedArticles = ArticlePage::filterDeletedArticles($ownedArticles);
 
-        return response()->json([
-            'success' => true
+        return view('pages.profile', [
+            'user' => $user,
+            'profileUser' => $targetUser,
+            'isAdmin' => $user ? $user->is_admin : false,
+            'ownedArticles' => $ownedArticles
         ]);
     }
 }
