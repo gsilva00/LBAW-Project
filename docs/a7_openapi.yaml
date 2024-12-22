@@ -936,6 +936,46 @@ paths:
         '200':
             description: 'Success. Tag unfollowed.'
 
+  /topic/{name}/follow:
+    post:
+      operationId: R509
+      summary: 'R509: Follow Topic'
+      description: 'Follow a topic action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the topic'
+
+      responses:
+        '200':
+            description: 'Success. Topic followed.'
+
+  /topic/{name}/unfollow:
+    post:
+      operationId: R510
+      summary: 'R510: Unfollow Topic'
+      description: 'Unfollow a topic action. Access: USR'
+      tags:
+        - 'M05: Topics and Tags'
+
+      parameters:
+        - in: path
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 'The name of the topic'
+
+      responses:
+        '200':
+            description: 'Success. Topic unfollowed.'
+
 ####################################### Comments #######################################
 
 # not part of the vertical prototype
