@@ -2,7 +2,7 @@
 
 @section('title')
     @if($isOwner)
-        Your Profile
+        My Profile
     @else
         {{ $profileUser->display_name }}'s Profile
     @endif

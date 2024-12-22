@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $article->is_deleted ? '[Deleted]' : $article->title)
+@section('title', $article->is_deleted ? '[Deleted Article]' : $article->title)
 
 @section('content')
     <meta name="article-id" content="{{ $article->id }}">
