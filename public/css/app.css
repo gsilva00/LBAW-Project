@@ -230,10 +230,6 @@ input[type="file"]::file-selector-button:hover{
  margin-right: 5px;
 }
 
-.ligth-green{
-  background-color: var(--light-green-muted);
-}
-
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -270,7 +266,7 @@ textarea{
   width: 100%;
 }
 
-.ligth-green{
+.light-green{
   background-color: var(--light-green-muted);
 }
 
@@ -328,5 +324,4 @@ button.p span{
   display: block;
   margin-block: 1em;
   margin-inline: 0px;
-  
 }
