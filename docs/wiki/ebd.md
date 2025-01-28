@@ -14,7 +14,7 @@ This section will showcase and describe the entities that compose the New Flow's
 
 ### 1. Class Diagram
 
-The UML diagram below highlights the main components of our system and respective atributes, along with the relationships between them and their corresponding multiplicity.
+The UML diagram below highlights the main components of our system and respective attributes, along with the relationships between them and their corresponding multiplicity.
 
 ![ClassDiagram](uploads/14b049204c974bc334ce7ff6ce2aaf95/ClassDiagram.png)
 
@@ -462,7 +462,7 @@ This last artifact is composed of PostgreSQL code and other aspects of the datab
 
 ### 1. Database Workload
 
-The project workload demonstrates the predicted evolution of the database growth over the days. As a consequence, the tables from the database will eventually reach an estimate order of magnitude. Thus, it is important to design a good database from its roots, since the decisions in the development and maintnance stages will be directly affected by how the system will be over time. The following table depicts the expected numbers for each relation:
+The project workload demonstrates the predicted evolution of the database growth over the days. As a consequence, the tables from the database will eventually reach an estimate order of magnitude. Thus, it is important to design a good database from its roots, since the decisions in the development and maintenance stages will be directly affected by how the system will be over time. The following table depicts the expected numbers for each relation:
 
 | **Relation reference** | **Relation Name**         | **Order of magnitude** | **Estimated growth** |
 | ---------------------- | ------------------------- | ---------------------- | -------------------- |
@@ -510,22 +510,22 @@ In this section, it is displayed the indexes we will use for acquiring performan
 | **Index relation**  | ArticlePage                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | **Index attribute** | id_author                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | **Index type**      | B-tree                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| **Cadinality**      | Medium                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| **Cardinality**     | Medium                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | **Clustering**      | No                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | **Justification**   | Table ‘ArticlePage’ is large due to the increasing number of users signing up for the application. It is important for users to see the articles posted by a specific author (user). A hash table would be useful if the table weren't subject to constant additions and deletions. The B-tree supports efficient lookups. Clustering is not recommended, as entries of users would disrupt the physical order of articles. |
 | **SQL Code**        | `CREATE INDEX i_article_author ON ArticlePage (author_id);`                                                                                                                                                                                                                                                                                                                                                                 |
 
 Table 44: Article Page Author Index
 
-| Index               | IDX02                                                                                                                                                                                                                         |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Index relation**  | Notifications                                                                                                                                                                                                                 |
-| **Index attribute** | ntf_date                                                                                                                                                                                                                      |
-| **Index type**      | B-tree                                                                                                                                                                                                                        |
-| **Cadinality**      | Medium                                                                                                                                                                                                                        |
-| **Clustering**      | No                                                                                                                                                                                                                            |
-| **Justification**   | Indexing the ntf_date atribute will improves performance for queries that filter or sort notifications by date. This will be useful, especially when retrieving recent notifications and searching for their respective date. |
-| **SQL Code**        | `CREATE INDEX i_notifications_date ON Notifications(ntf_date DESC);`                                                                                                                                                          |
+| Index               | IDX02                                                                                                                                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Index relation**  | Notifications                                                                                                                                                                                                                  |
+| **Index attribute** | ntf_date                                                                                                                                                                                                                       |
+| **Index type**      | B-tree                                                                                                                                                                                                                         |
+| **Cardinality**     | Medium                                                                                                                                                                                                                         |
+| **Clustering**      | No                                                                                                                                                                                                                             |
+| **Justification**   | Indexing the ntf_date attribute will improves performance for queries that filter or sort notifications by date. This will be useful, especially when retrieving recent notifications and searching for their respective date. |
+| **SQL Code**        | `CREATE INDEX i_notifications_date ON Notifications(ntf_date DESC);`                                                                                                                                                           |
 
 Table 45: Notifications Date Index
 
@@ -534,7 +534,7 @@ Table 45: Notifications Date Index
 | **Index relation**  | ArticlePage                                                                                                                                                                                                                                                                                                                                                              |
 | **Index attribute** | create_date                                                                                                                                                                                                                                                                                                                                                              |
 | **Index type**      | B-tree                                                                                                                                                                                                                                                                                                                                                                   |
-| **Cadinality**      | Medium                                                                                                                                                                                                                                                                                                                                                                   |
+| **Cardinality**     | Medium                                                                                                                                                                                                                                                                                                                                                                   |
 | **Clustering**      | No                                                                                                                                                                                                                                                                                                                                                                       |
 | **Justification**   | The table will increase in number the same as table ‘ArticlePage’, thus clustering wouldn’t be a good idea, even though it would’ve been useful as dates follow an order. B-tree would ensure data is organized equally, in particular, searching for a specific data or range will be fast. Hash type index would have trouble ordering dates, so not recommended here. |
 | **SQL Code**        | `CREATE INDEX i_article_cdate ON ArticlePage(create_date DESC);`                                                                                                                                                                                                                                                                                                         |
@@ -543,7 +543,7 @@ Table 46: Article Page Date Index
 
 #### 2.2: Full-Text Search indexes
 
-Letting the user search through multiple options is required on the development of the project. Thus, to improve retrieval time, and, as consequence, the user experience, we depicted below how full-text search would be obtainable in certaint tables and attributes.
+Letting the user search through multiple options is required on the development of the project. Thus, to improve retrieval time, and, as consequence, the user experience, we depicted below how full-text search would be obtainable in certain tables and attributes.
 
 <table>
   <tr>
@@ -573,7 +573,7 @@ Letting the user search through multiple options is required on the development 
   <tr>
     <td><strong>SQL Code</strong></td>
     <td>
-      
+
 ```php
 -- Store a column with the full text from ArticlePage
 ALTER TABLE ArticlePage
@@ -663,7 +663,6 @@ CREATE INDEX i_comment_tsv ON Comment USING GIN(full_text_vector);
   </tr>
 </table>
 
-
 Table 48: Comment Full Text Search Index
 
 <table>
@@ -724,7 +723,6 @@ CREATE INDEX i_reply_tsv ON Reply USING GIN(full_text_vector_r);
 
 Table 49: Reply Full Text Search Index
 
-
 ### 3. Triggers
 
 In order to enforce the integrity rules that cannot be achieved through a simple restriction in the class diagram, we identified and described the necessary triggers by outlining their event, condition, and activation code. Triggers were also used to maintain updated full-text indexes.
@@ -748,7 +746,7 @@ Notify a user if someone has commented under their article.
 
 <td><b>Justification</b></td>
 <td>
-In order to simplify the process of notifiyng users about interactions in their articles.
+In order to simplify the process of notifying users about interactions in their articles.
 </td>
 
 </tr>
@@ -790,6 +788,7 @@ CREATE TRIGGER comment_notify_trigger
 AFTER INSERT ON Comment
 FOR EACH ROW EXECUTE FUNCTION notify_comment();
 ```
+
 </td>
 
 </tr>
@@ -816,7 +815,7 @@ Notify a user if someone has replied to their comment.
 
 <td><b>Justification</b></td>
 <td>
-In order to simplify the process of notifiyng users about interactions in their comments.
+In order to simplify the process of notifying users about interactions in their comments.
 </td>
 
 </tr>
@@ -858,6 +857,7 @@ CREATE TRIGGER reply_notify_trigger
 AFTER INSERT ON Reply
 FOR EACH ROW EXECUTE FUNCTION notify_reply();
 ```
+
 </td>
 
 </tr>
@@ -917,6 +917,7 @@ WHEN (OLD.title IS DISTINCT FROM NEW.title OR
       OLD.content IS DISTINCT FROM NEW.content)
 EXECUTE FUNCTION update_edit_date();
 ```
+
 </td>
 
 </tr>
@@ -974,6 +975,7 @@ CREATE TRIGGER prevent_self_follow_trigger
 BEFORE INSERT ON FollowUser
 FOR EACH ROW EXECUTE FUNCTION prevent_self_follow();
 ```
+
 </td>
 
 </tr>
@@ -1031,6 +1033,7 @@ CREATE TRIGGER prevent_multiple_likes_trigger_article
 BEFORE INSERT ON VoteArticle
 FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_article();
 ```
+
 </td>
 
 </tr>
@@ -1088,6 +1091,7 @@ CREATE TRIGGER prevent_multiple_likes_trigger_comment
 BEFORE INSERT ON VoteComment
 FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_comment();
 ```
+
 </td>
 
 </tr>
@@ -1145,6 +1149,7 @@ CREATE TRIGGER prevent_multiple_likes_trigger_reply
 BEFORE INSERT ON VoteReply
 FOR EACH ROW EXECUTE FUNCTION prevent_multiple_likes_reply();
 ```
+
 </td>
 
 </tr>
@@ -1206,6 +1211,7 @@ CREATE TRIGGER handle_report_trigger
 AFTER UPDATE ON Report
 FOR EACH ROW EXECUTE FUNCTION handle_report();
 ```
+
 </td>
 
 </tr>
@@ -1219,37 +1225,37 @@ This section will aboard the transactions used on our system to ensure the integ
 
 <table>
 <tr>
-	<td><b>Transaction</b></td>
-	<td>TRAN01</td>
+    <td><b>Transaction</b></td>
+    <td>TRAN01</td>
 </tr>
 <tr>
-	<td><b>Description</b></td>
-	<td>
-	Delete User
-	</td>
+    <td><b>Description</b></td>
+    <td>
+    Delete User
+    </td>
 </tr>
 <tr>
-	<td><b>Justification</b></td>
-	<td>
-	Deleting a user is an extremely importent process in our data base, as a failure to complete
+    <td><b>Justification</b></td>
+    <td>
+    Deleting a user is an extremely important process in our data base, as a failure to complete
         this process puts the reputation of our system at risk. Therefore, it is of utmost importance
         that we ensure the integrity of our data by using REPEATABLE READ.
-	</td>
+    </td>
 </tr>
 <tr>
-	<td><b>Isolation Level</b></td>
-	<td>
-	REPEATABLE READ
-	</td>
+    <td><b>Isolation Level</b></td>
+    <td>
+    REPEATABLE READ
+    </td>
 <tr>
 </tr>
-	<td colspan = "2"><b>SQL Code</b></td>
+    <td colspan = "2"><b>SQL Code</b></td>
 </tr>
 <tr>
 
 <td colspan="2">
 
-``` php
+```php
 BEGIN;
 
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
@@ -1283,40 +1289,40 @@ Table 58: Delete user transaction
 
 <table>
 <tr>
-	<td><b>Transaction</b></td>
-	<td>TRAN02</td>
+    <td><b>Transaction</b></td>
+    <td>TRAN02</td>
 </tr>
 <tr>
-	<td><b>Description</b></td>
-	<td>
-	Article Vote and Notification
-	</td>
+    <td><b>Description</b></td>
+    <td>
+    Article Vote and Notification
+    </td>
 </tr>
 <tr>
-	<td><b>Justification</b></td>
-	<td>
-	The voting and notification process is an extensive one and of high importence, due to helping
+    <td><b>Justification</b></td>
+    <td>
+    The voting and notification process is an extensive one and of high importance, due to helping
         with user interaction and retention. Because of this, it is vital that all our notifications
         and votes are sent without fail, which made us opt to use a transaction to achieve a
         process without errors. Due to the high amount of notifications and votes being sent, we
         decided to make this process safer by using `REPEATABLE READ` to ensure that no same row is
         ever read with different values.
-	</td>
+    </td>
 </tr>
 <tr>
-	<td><b>Isolation Level</b></td>
-	<td>
-	REPEATABLE READ
-	</td>
+    <td><b>Isolation Level</b></td>
+    <td>
+    REPEATABLE READ
+    </td>
 <tr>
 </tr>
-	<td colspan = "2"><b>SQL Code</b></td>
+    <td colspan = "2"><b>SQL Code</b></td>
 </tr>
 <tr>
 
 <td colspan="2">
 
-``` php
+```php
 BEGIN;
 
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
@@ -1361,7 +1367,7 @@ END $$;
 
 COMMIT;
 
-````
+```
 
 </td>
 
@@ -1372,40 +1378,40 @@ Table 59: Article vote and notification transaction
 
 <table>
 <tr>
-	<td><b>Transaction</b></td>
-	<td>TRAN03</td>
+    <td><b>Transaction</b></td>
+    <td>TRAN03</td>
 </tr>
 <tr>
-	<td><b>Description</b></td>
-	<td>
-	Comment Vote and Notification
-	</td>
+    <td><b>Description</b></td>
+    <td>
+    Comment Vote and Notification
+    </td>
 </tr>
 <tr>
-	<td><b>Justification</b></td>
-	<td>
-	The voting and notification process is an extensive one and of high importence, due to helping
+    <td><b>Justification</b></td>
+    <td>
+    The voting and notification process is an extensive one and of high importance, due to helping
         with user interaction and retention. Because of this, it is vital that all our notifications
         and votes are sent without fail, which made us opt to use a transaction to achieve a
         process without errors. Due to the high amount of notifications and votes being sent, we
         decided to make this process safer by using REPEATABLE READ to ensure that no same row is
         ever read with different values.
-	</td>
+    </td>
 </tr>
 <tr>
-	<td><b>Isolation Level</b></td>
-	<td>
-	REPEATABLE READ
-	</td>
+    <td><b>Isolation Level</b></td>
+    <td>
+    REPEATABLE READ
+    </td>
 <tr>
 </tr>
-	<td colspan = "2"><b>SQL Code</b></td>
+    <td colspan = "2"><b>SQL Code</b></td>
 </tr>
 <tr>
 
 <td colspan="2">
 
-``` php
+```php
 BEGIN;
 
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
@@ -1447,7 +1453,7 @@ BEGIN
 END $$;
 
 COMMIT;
-````
+```
 
 </td>
 
@@ -1458,34 +1464,34 @@ Table 60: Comment vote and notification transaction
 
 <table>
 <tr>
-	<td><b>Transaction</b></td>
-	<td>TRAN04</td>
+    <td><b>Transaction</b></td>
+    <td>TRAN04</td>
 </tr>
 <tr>
-	<td><b>Description</b></td>
-	<td>
-	Reply Vote and Notification
-	</td>
+    <td><b>Description</b></td>
+    <td>
+    Reply Vote and Notification
+    </td>
 </tr>
 <tr>
-	<td><b>Justification</b></td>
-	<td>
-	The voting and notification process is an extensive one and of high importence, due to helping 
-        with user interaction and retention. Because of this, it is vital that all our notifications 
-        and votes are sent without fail, which made us opt to use a transaction to achieve a 
-        process without errors. Due to the high amount of notifications and votes being sent, we 
-        decided to make this process safer by using REPEATABLE READ to ensure that no same row is 
+    <td><b>Justification</b></td>
+    <td>
+    The voting and notification process is an extensive one and of high importance, due to helping
+        with user interaction and retention. Because of this, it is vital that all our notifications
+        and votes are sent without fail, which made us opt to use a transaction to achieve a
+        process without errors. Due to the high amount of notifications and votes being sent, we
+        decided to make this process safer by using REPEATABLE READ to ensure that no same row is
         ever read with different values.
-	</td>
+    </td>
 </tr>
 <tr>
-	<td><b>Isolation Level</b></td>
-	<td>
-	REPEATABLE READ
-	</td>
+    <td><b>Isolation Level</b></td>
+    <td>
+    REPEATABLE READ
+    </td>
 <tr>
 </tr>
-	<td colspan = "2"><b>SQL Code</b></td>
+    <td colspan = "2"><b>SQL Code</b></td>
 </tr>
 <tr>
 
@@ -2062,7 +2068,7 @@ FOR EACH ROW EXECUTE FUNCTION handle_report();
 
 ### A.2. Database population
 
-Here is a snipet of our populate database file:
+Here is a snippet of our populate database file:
 
 ```php
 -- password: password123

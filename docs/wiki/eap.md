@@ -39,7 +39,7 @@ To better understand how the vertical prototype will be designed, the web resour
   </tr>
   <tr>
     <td><strong>M07: Votes</strong></td>
-    <td>Web resources for liking and disliking comments and articles. Features include liking and disliking content, annulating likes/dislikes, and viewing total vote difference.</td>
+    <td>Web resources for liking and disliking comments and articles. Features include liking and disliking content, annulling likes/dislikes, and viewing total vote difference.</td>
   </tr>
   <tr>
     <td><strong>M08: Report and Fact Checking</strong></td>
@@ -1012,9 +1012,9 @@ This section will list all the features and web resources currently implemented 
 
 <tr>
 <td>US15</td>
-<td>View the “About Us” Page</td>
+<td>View the "About Us" Page</td>
 <td>Medium</td>
-<td>As a User, I want to view the “About Us” page, so that I can learn more about the platform origins, goals and objectives.</td>
+<td>As a User, I want to view the "About Us" page, so that I can learn more about the platform origins, goals and objectives.</td>
 </tr>
 
 <tr>
@@ -1028,7 +1028,7 @@ This section will list all the features and web resources currently implemented 
 <td>US18</td>
 <td>View Other Users' Profiles</td>
 <td>Medium</td>
-<td>As a User, I want to view other users’ profiles, so that I access more information about people in the website.</td>
+<td>As a User, I want to view other users' profiles, so that I access more information about people in the website.</td>
 </tr>
 
 <tr>

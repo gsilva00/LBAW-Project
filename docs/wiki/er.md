@@ -15,7 +15,7 @@ The NewFlow is a news website created by a small-sized developer team in FEUP, w
 
 In summary, the website not only defines a means to cycle through numerous news for any user - guest or otherwise - but it is also possible to filter and search through different topics, authors, timelines, number of votes, tags, and more.
 
-Beyond that, if an account is created on the website, the user can add, delete or edit their own news article, which will be shared in the Home Page. Then other authenticated members comments and vote on the article. These votes will help create the author's reputation, hence establishing an official trustworthy source. However, the ‘fact-checker’, a verified person who has the ability to moderate information, can disclose the news as fake. This decreases the news page visibility and removes its votes. Consequently, it is important to know that after 3 strikes, the journalist will get banned from the platform, needing to appeal to rejoin the community.
+Beyond that, if an account is created on the website, the user can add, delete or edit their own news article, which will be shared in the Home Page. Then other authenticated members comments and vote on the article. These votes will help create the author's reputation, hence establishing an official trustworthy source. However, the 'fact-checker', a verified person who has the ability to moderate information, can disclose the news as fake. This decreases the news page visibility and removes its votes. Consequently, it is important to know that after 3 strikes, the journalist will get banned from the platform, needing to appeal to rejoin the community.
 
 Additionally, if a person really loves a specific author's articles, or a topic, or a tag, they can follow any of them and check their news personally on each of their respective pages, which showcase personalized news feeds.
 
@@ -46,15 +46,16 @@ NewFlow's actors and their respective descriptions are documented below.
 ![Actors](uploads/5126a5ff9cd57b1a033a7997ab496493/Actors.png)
 
 Figure 1: NewFlow actors
-| Identifier | Description |
-|------------|-------------|
-| User | Generic user that has access to public information, such as news and comments as well as search and filter requests |
-| Guest | Unauthenticated user that can register itself (sign-up), login or request to recover their password |
-| Authenticated User | Authenticated user that can write news and comments as well as upvote or downvote other users’ articles and comments |
-| News Author | Author of a news article with the ability to edit or delete it and receive notifications about comments and upvotes/downvotes |
-| Comment Author | Author of a comment with the ability to edit or delete it and receive notifications about replies and upvotes/downvotes |
-| Fact Checker | Trusted user with a high reputation that can flag a news article for fake news and warn other users |
-| Admin | Administrator that will moderate the website by banning/unbanning users, deleting news and comments and appointing fact checkers |
+
+| Identifier         | Description                                                                                                                      |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| User               | Generic user that has access to public information, such as news and comments as well as search and filter requests              |
+| Guest              | Unauthenticated user that can register itself (sign-up), login or request to recover their password                              |
+| Authenticated User | Authenticated user that can write news and comments as well as upvote or downvote other users' articles and comments             |
+| News Author        | Author of a news article with the ability to edit or delete it and receive notifications about comments and upvotes/downvotes    |
+| Comment Author     | Author of a comment with the ability to edit or delete it and receive notifications about replies and upvotes/downvotes          |
+| Fact Checker       | Trusted user with a high reputation that can flag a news article for fake news and warn other users                              |
+| Admin              | Administrator that will moderate the website by banning/unbanning users, deleting news and comments and appointing fact checkers |
 
 Table 1: NewFlow actors description
 
@@ -196,10 +197,10 @@ The user stories for each NewFlow actor are detailed in the following sections.
 </tr>
 <tr>
 <td>US15</td>
-<td>View the “About Us” Page</td>
+<td>View the "About Us" Page</td>
 <td>Medium</td>
 <td>---</td>
-<td>As a User, I want to view the “About Us” page, so that I can learn more about the platform origins, goals and objectives.</td>
+<td>As a User, I want to view the "About Us" page, so that I can learn more about the platform origins, goals and objectives.</td>
 </tr>
 <tr>
 <td>US16</td>
@@ -221,7 +222,7 @@ The user stories for each NewFlow actor are detailed in the following sections.
 <td>View Other Users' Profiles</td>
 <td>Medium</td>
 <td>---</td>
-<td>As a User, I want to view other users’ profiles, so that I access more information about people in the website.</td>
+<td>As a User, I want to view other users' profiles, so that I access more information about people in the website.</td>
 </tr>
 
 <tr>
@@ -229,7 +230,7 @@ The user stories for each NewFlow actor are detailed in the following sections.
 <td>View Reputation of Other Users</td>
 <td>Medium</td>
 <td>---</td>
-<td>As a User, I want to view other users’ reputation so that I know who I can trust and can’t.</td>
+<td>As a User, I want to view other users' reputation so that I know who I can trust and can't.</td>
 </tr>
 
 <tr>
@@ -429,7 +430,7 @@ Table 3: User Stories for the Guest
 <td>Vote on Comment (create, change, remove)</td>
 <td>Medium</td>
 <td>---</td>
-<td>As an Authenticated User, I want to vote on other users’ comments, so that I may be able to show my opinion about that specific comment.</td>
+<td>As an Authenticated User, I want to vote on other users' comments, so that I may be able to show my opinion about that specific comment.</td>
 </tr>
 
 <tr>
@@ -461,7 +462,7 @@ Table 3: User Stories for the Guest
 <td>Follow/Unfollow Tags/Topics</td>
 <td>Medium</td>
 <td>---</td>
-<td>As an Authenticated User, I want to be able to follow and unfollow tags/topics so that they match my current news’ interests.</td>
+<td>As an Authenticated User, I want to be able to follow and unfollow tags/topics so that they match my current news' interests.</td>
 </tr>
 
 <tr>
@@ -681,7 +682,7 @@ Table 6: User Stories for the Comment Author
 <td>Ban and Unban User Accounts</td>
 <td>Medium</td>
 <td>---</td>
-<td>As an Admin, I want to ban or unban, so that users don’t behave inappropriately.</td>
+<td>As an Admin, I want to ban or unban, so that users don't behave inappropriately.</td>
 </tr>
 
 <tr>
@@ -726,7 +727,7 @@ Table 6: User Stories for the Comment Author
 
 <tr>
 <td>US59</td>
-<td>Can promote the users to “fact checkers”</td>
+<td>Can promote the users to "fact checkers"</td>
 <td>Low</td>
 <td>---</td>
 <td>As an Admin, I want to promote users to Fact Checkers, so that they help keep the platform.</td>
@@ -781,7 +782,7 @@ Table 7: User Stories for the Admin
 <td>Can check the articles more flagged with potential fake news</td>
 <td>Low</td>
 <td>---</td>
-<td>As a Fact Checker, I want to be able to filter my feed in order to see the most flagged articles, so that I don’t have to search for those articles myself.</td>
+<td>As a Fact Checker, I want to be able to filter my feed in order to see the most flagged articles, so that I don't have to search for those articles myself.</td>
 </tr>
 
 <tr>
@@ -821,7 +822,7 @@ Table 8: User Stories for the Fact Checker
 <tr>
 <td>BR2</td>
 <td>User Reputation</td>
-<td>Users will have a reputation associated with them, which will be a number between 0 (lowest) and 5 (highest). This value will increase periodically when a user hasn’t committed any misconduct or has received high praise for recent posts, and it will decrease when a user commits any misconduct.</td>
+<td>Users will have a reputation associated with them, which will be a number between 0 (lowest) and 5 (highest). This value will increase periodically when a user hasn't committed any misconduct or has received high praise for recent posts, and it will decrease when a user commits any misconduct.</td>
 </tr>
 
 <tr>
@@ -949,7 +950,7 @@ Table 9: NewFlow Business Rules
 <tr>
 <td>TR7</td>
 <td>Security</td>
-<td>The system must protect sensitive user’s information from unauthorized access through the authentication process.</td>
+<td>The system must protect sensitive user's information from unauthorized access through the authentication process.</td>
 </tr>
 
 <tr>
@@ -963,7 +964,7 @@ Table 9: NewFlow Business Rules
 
 Table 10: NewFlow Technical requirements
 
-Our group decided that from this list of requirements it would be important to highlight the Accessibility and Security especially, as they are the backbone of every website and our top priority should always be to make the user feel safe and that our design is intuitive. Besides that, we believe that Scalibility should also be one of our main concerns to ensure that our website is prepared to handle a high volume of both new articles and users.
+Our group decided that from this list of requirements it would be important to highlight the Accessibility and Security especially, as they are the backbone of every website and our top priority should always be to make the user feel safe and that our design is intuitive. Besides that, we believe that Scalability should also be one of our main concerns to ensure that our website is prepared to handle a high volume of both new articles and users.
 
 #### 2.3.3 Restrictions
 

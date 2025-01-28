@@ -20,7 +20,7 @@ The release with the final version of the source code in the group's Git reposit
 
 The Docker commands to get and launch the image available in the group's GitLab Container Registry using the production database are as follows:
 
-```
+```bash
 docker pull gitlab.up.pt:5050/lbaw/lbaw2425/lbaw24124:latest
 docker run -d --name lbaw24124 -p 8001:80 gitlab.up.pt:5050/lbaw/lbaw2425/lbaw24124:latest
 ```
@@ -255,7 +255,7 @@ Revisions made in EAP:
 | US01          | View News Item                                        | M03    | High     | **Vasco Melo**, Valentina Cadime, Guilherme Silva                   | 100%  |
 | US06          | View News Item Details                                | M03    | High     | **Vasco Melo**, Valentina Cadime                                    | 100%  |
 | US07          | View Comment Details                                  | M03    | High     | **Vasco Melo**, Valentina Cadime                                    | 100%  |
-| US15          | View the “About Us” Page                              | M09    | Medium   | **Valentina Cadime**                                                | 100%  |
+| US15          | View the "About Us" Page                              | M09    | Medium   | **Valentina Cadime**                                                | 100%  |
 | US17          | View the "Platform Contacts" Page                     | M09    | Medium   | **Valentina Cadime**                                                | 100%  |
 | US20          | View News Items Tags                                  | M03    | Medium   | **Vasco Melo**, Valentina Cadime                                    | 100%  |
 | US27          | View Personal Profile                                 | M02    | High     | **Vasco Melo**, Gabriel Carvalho, Valentina Cadime, Guilherme Silva | 100%  |
